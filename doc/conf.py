@@ -81,7 +81,20 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+
+html_theme_options = {
+    'github_user': 'asmeurer',
+    'github_repo': 'brown-water-python',
+    'github_banner': True,
+    'logo_name': True,
+    'show_related': True,
+    }
+
+html_sidebars = {
+    '**': ['globaltoc.html', 'searchbox.html'],
+    'index': ['localtocindex.html', 'globaltocindex.html',
+           'searchbox.html'],
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
