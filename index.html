@@ -15,6 +15,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="What is tokenization?" href="intro.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,305 +38,18 @@ its <a class="reference external" href="LINK">documentation</a> is somewhat limi
 Tree Snakes</a> project, which provides similar extended documentation
 for the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module, I am providing here some extended documentation for
 effectively working with the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module.</p>
-<div class="section" id="what-is-tokenization">
-<h2>What is tokenization?<a class="headerlink" href="#what-is-tokenization" title="Permalink to this headline">¶</a></h2>
-<p>In the field of parsing, a <a class="reference external" href="https://en.wikipedia.org/wiki/Lexical_analysis">*tokenizer*</a>, also called a <em>lexer</em>,
-takes a string of characters and splits it into tokens. A token is a substring
-that has semantic meaning in the grammar of the language.</p>
-<p>An example should clarify things. Consider the string of Python code, <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span>
-<span class="pre">True</span> <span class="pre">-</span></code>.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;(&quot;a&quot;) + True -&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(1, 0), end=(1, 1), line=&#39;(&quot;a&quot;) + True -&#39;)</span>
-<span class="go">TokenInfo(type=3 (STRING), string=&#39;&quot;a&quot;&#39;, start=(1, 1), end=(1, 4), line=&#39;(&quot;a&quot;) + True -&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(1, 4), end=(1, 5), line=&#39;(&quot;a&quot;) + True -&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 6), end=(1, 7), line=&#39;(&quot;a&quot;) + True -&#39;)</span>
-<span class="go">TokenInfo(type=1 (NAME), string=&#39;True&#39;, start=(1, 8), end=(1, 12), line=&#39;(&quot;a&quot;) + True -&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;-&#39;, start=(1, 13), end=(1, 14), line=&#39;(&quot;a&quot;) + True -&#39;)</span>
-<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
-</pre></div>
-</div>
-<p>The string is split into the following tokens: <code class="docutils literal notranslate"><span class="pre">(</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">+</span></code>,
-<code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">)</span></code> (ignore the <code class="docutils literal notranslate"><span class="pre">BytesIO</span></code> bit and the <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> and
-<code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code> tokens for now).</p>
-<p>I chose this example to demonstrate a few things:</p>
-<ul>
-<li><p class="first"><em>Tokens</em> are parentheses, strings, operators, keywords, and variable names.</p>
-</li>
-<li><p class="first">Every token is a named tuple which has a <code class="docutils literal notranslate"><span class="pre">type</span></code>, which is represented by
-an integer constant, and a <code class="docutils literal notranslate"><span class="pre">string</span></code>, which is the substring of the input
-representing the given token. The namedtuple also gives line and column
-information that indicates exactly where in the input string the token was
-found.</p>
-</li>
-<li><p class="first">The input does not need to be valid Python. Out input string, <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span>
-<span class="pre">-</span></code> is not valid Python. It is however, a potential beginning of a valid
-Python. If a valid Python expression were to be added to the end of the
-input, completing the subtraction operator, such as <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span> <span class="pre">x</span></code> it
-would become valid Python. <strong>This illustrates an important aspect of
-``tokenize``, which is that it fundamentally works on a stream of
-characters.</strong>. This means that tokens are output as they are seen, without
-regard to what comes later (the tokenize module does do lookahead on the
-input stream internally to ensure that the correct tokens are output, but
-from the point of view of a user of <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, each token can be
-processed as it is seen. This is why <code class="docutils literal notranslate"><span class="pre">tokenize.tokenize</span></code> produces a
-generator.</p>
-<p>However, it should be noted that tokenize does raise an exception on certain
-incomplete Python statements. For example, if we omit the closing
-parenthesis, tokenize produces all the tokens as before, but then raises
-<code class="docutils literal notranslate"><span class="pre">TokenError</span></code>:</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;(&quot;a&quot; + True -&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> 
-<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(1, 0), end=(1, 1), line=&#39;(&quot;a&quot; + True -&#39;)</span>
-<span class="go">TokenInfo(type=3 (STRING), string=&#39;&quot;a&quot;&#39;, start=(1, 1), end=(1, 4), line=&#39;(&quot;a&quot; + True -&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 5), end=(1, 6), line=&#39;(&quot;a&quot; + True -&#39;)</span>
-<span class="go">TokenInfo(type=1 (NAME), string=&#39;True&#39;, start=(1, 7), end=(1, 11), line=&#39;(&quot;a&quot; + True -&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;-&#39;, start=(1, 12), end=(1, 13), line=&#39;(&quot;a&quot; + True -&#39;)</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">tokenize.TokenError</span>: <span class="n">(&#39;EOF in multi-line statement&#39;, (2, 0))</span>
-</pre></div>
-</div>
-<p>One of the goals of this guide is to quantify exactly when these error
-conditions can occur, so that code that attempts to tokenize partial Python
-code can deal with them properly.</p>
-</li>
-<li><p class="first">Syntactically irrelevant aspects of the input such as redundant parentheses
-are maintained. The parentheses around the <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> in the input string are
-completely unnecessary, but they are included as tokens anyway. This does
-not apply to whitespace, however (indentation is an exception to this, as we
-will see later), although the whitespace between tokens can generally be
-deduced from the column information in the namedtuple.</p>
-</li>
-<li><p class="first">The input need not be semantically meaningful in anyway. The input string,
-even if completed, can only raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> because <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span> <span class="pre">+</span> <span class="pre">True</span></code> is
-not allowed by Python. The tokenize module does not know or care about
-objects, types, or any high-level Python constructs.</p>
-</li>
-<li><p class="first">Some tokens can be right next to one another in the input string. Other
-tokens must be separated by a space (for instance, <code class="docutils literal notranslate"><span class="pre">foriinrange(10)</span></code> will
-tokenize differently from <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">range(10)</span></code>). The complete set of rules
-for when spaces are required or not required to separate Python tokens is
-quite complicated, especially when multiline statements with indentation are
-considered (as an example, consider that <code class="docutils literal notranslate"><span class="pre">1jand2</span></code> is valid Python and is
-tokenized into three tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1j</span></code>), <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">and</span></code>), and
-<code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code>)). One potential use-case of <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> is to combine
-tokens into valid Python using the <code class="docutils literal notranslate"><span class="pre">untokenize</span></code> function, which handles
-whitespace between tokens automatically.</p>
-</li>
-<li><p class="first">All parentheses and operators are tokenized as <code class="docutils literal notranslate"><span class="pre">OP</span></code>. Both variable names
-and keywords are tokenized as <code class="docutils literal notranslate"><span class="pre">NAME</span></code>. To determine the exact type of a
-token often requires further inspection than simply looking at the <code class="docutils literal notranslate"><span class="pre">type</span></code>
-(this guide will detail exactly how to do this).</p>
-</li>
-<li><p class="first">The above example does not show it, but even code that can never be valid
-Python is often tokenized. For example:</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;a$b&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=1 (NAME), string=&#39;a&#39;, start=(1, 0), end=(1, 1), line=&#39;a$b&#39;)</span>
-<span class="go">TokenInfo(type=56 (ERRORTOKEN), string=&#39;$&#39;, start=(1, 1), end=(1, 2), line=&#39;a$b&#39;)</span>
-<span class="go">TokenInfo(type=1 (NAME), string=&#39;b&#39;, start=(1, 2), end=(1, 3), line=&#39;a$b&#39;)</span>
-<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
-</pre></div>
-</div>
-<p>This can be useful for dealing with code that has minor typos that make if
-invalid. It can also be used to build modules that extend the Python
-language in limited ways, but be warned that the tokenize module makes no
-guarantees about how it tokenizes invalid Python. For example, if a future
-version of Python added <code class="docutils literal notranslate"><span class="pre">$</span></code> as an operator, the above string could
-tokenize completely differently. This exactly thing happened, for instance,
-with f-strings. <code class="docutils literal notranslate"><span class="pre">f&quot;{a}&quot;</span></code> tokenizes as two tokens, <code class="docutils literal notranslate"><span class="pre">NAME</span></code> and <code class="docutils literal notranslate"><span class="pre">STRING</span></code>,
-in Python 3.5, and as one token, <code class="docutils literal notranslate"><span class="pre">STRING</span></code>, in Python 3.6.</p>
-</li>
-</ul>
-</div>
-<div class="section" id="tokenize-vs-alternatives">
-<h2><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives<a class="headerlink" href="#tokenize-vs-alternatives" title="Permalink to this headline">¶</a></h2>
-<p>There are generally three methods one might use when trying to find or modify
-syntatic constructs in Python source code:</p>
-<ul class="simple">
-<li>Naive matching with regular expression</li>
-<li>Using a lexical tokenizer (i.e., the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module)</li>
-<li>Using an abstract syntax tree (AST) (i.e, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module)</li>
-</ul>
-<p>Suppose you wanted to write a tool that takes a piece of Python code and
-prints the line number of every function definition, that is, every occurrence
-of the <code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. Such a tool could be used by a text editor to aid in
-jumping to function definitions.</p>
-<div class="section" id="regular-expressions">
-<h3>Regular expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h3>
-<p>Using naive regular expression parsing, you might start with something like</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">re</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">FUNCTION</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;def &#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>then use the <code class="docutils literal notranslate"><span class="pre">finditer</span></code> method to find all instances and print their line
-numbers.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_regex</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">for</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="mi">1</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="n">FUNCTION</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">lineno</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
-<span class="gp">... </span><span class="s2">def f(x):</span>
-<span class="gp">... </span><span class="s2">    pass</span>
-<span class="gp">...</span><span class="s2"></span>
-<span class="gp">... </span><span class="s2">class MyClass:</span>
-<span class="gp">... </span><span class="s2">    def g(self):</span>
-<span class="gp">... </span><span class="s2">        pass</span>
-<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_regex</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-<span class="go">1</span>
-<span class="go">5</span>
-</pre></div>
-</div>
-<p>You might notice some issues with this approach. First off, the regular
-expression is not correct. It will also match lines like <code class="docutils literal notranslate"><span class="pre">indef</span> <span class="pre">+</span> <span class="pre">1</span></code>. You
-could modify the regex to make it more correct, for instance, <code class="docutils literal notranslate"><span class="pre">r'^</span> <span class="pre">*def</span> <span class="pre">'</span></code>
-(this is still not completely right; do you see why?).</p>
-<p>But there is a more serious issue. Say you had a string template to generate
-some Python code.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">code_tricky</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
-<span class="gp">... </span><span class="s1">FUNCTION_SKELETON = &quot;&quot;&quot;</span>
-<span class="gp">... </span><span class="s1">def {name}({args}):</span>
-<span class="gp">... </span><span class="s1">    {body}</span>
-<span class="gp">... </span><span class="s1">&quot;&quot;&quot;</span>
-<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
-</pre></div>
-</div>
-<p>The regular expression would detect this as a function.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_regex</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span>
-<span class="go">2</span>
-</pre></div>
-</div>
-<p>In general, it’s impossible for a regular expression to distinguish between a
-block of code that is in a string and a block of code that is syntactically
-actually code.</p>
-</div>
-<div class="section" id="tokenize">
-<h3>Tokenize<a class="headerlink" href="#tokenize" title="Permalink to this headline">¶</a></h3>
-<p>Now let’s consider the tokenize module. Let’s look at what it produces for the
-above code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_tokenize</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">and</span> <span class="n">token</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="s1">&#39;def&#39;</span><span class="p">:</span>
-<span class="gp">... </span>            <span class="nb">print</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_tokenize</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-<span class="go">1</span>
-<span class="go">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_tokenize</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>We see that it isn’t fooled by the code that is in a string, because strings
-are tokenized as separate entities.</p>
-<p>As noted above, tokenize can handle incomplete or invalid Python. Our regex solution is
-also capable of this. This can be a boon (code that is being input into a text
-editor is generally incomplete if the user hasn’t finished typing it yet), or
-a bane (incorrect Python code, such as <code class="docutils literal notranslate"><span class="pre">def</span></code> used as a variable, could trick
-the above function). It really depends on what your use-case is and what
-trade-offs you are willing to accept.</p>
-<p>It should also be note that the above function is not fully correct, as it
-does not properly handle <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>s or exceptions. We will see later how
-to fix it.</p>
-</div>
-<div class="section" id="ast">
-<h3>AST<a class="headerlink" href="#ast" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">ast</span></code> module can also be used to avoid the pitfalls of detecting false
-positives. In fact, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module will have NO false positives. The price
-that is paid for this is that the input code to the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module must be
-completely valid Python code. Incomplete code will cause <code class="docutils literal notranslate"><span class="pre">ast.parse</span></code> to
-raise a <code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_number_ast</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">p</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inputcode</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">):</span>
-<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-<span class="go">1</span>
-<span class="go">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
-<span class="gp">... </span><span class="s2">def test():</span>
-<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-  File <span class="nb">&quot;&lt;unknown&gt;&quot;</span>, line <span class="m">1</span>
-    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-              <span class="o">^</span>
-<span class="gr">SyntaxError</span>: <span class="n">unexpected EOF while parsing</span>
-</pre></div>
-</div>
-<p>Another thing to note about the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module is that certain semantically
-irrelevant constructs such as redundant parentheses and extraneous whitespace
-are lost in the AST representation. This can be an advantage if you don’t care
-about them, or a disadvantage if you do. <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> does not remove
-redundant parentheses. It does remove whitespace, but it can easily be
-reconstructed from the column offsets.</p>
-<p>The following table outlines the differences regular expression matching,
-<code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, and <code class="docutils literal notranslate"><span class="pre">ast</span></code>. No one is the correct solution. It depends on what
-trade-offs you want to make between false positives, false negatives,
-maintainability, and the ability or inability to work with invalid or
-incomplete code. The table is not organized as “pros and cons” because
-something may be a pro (like, ability to work with incomplete code) or a con
-(like, accepts invalid Python).</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Regular expressions</th>
-<th class="head"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code></th>
-<th class="head"><code class="docutils literal notranslate"><span class="pre">ast</span></code></th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Can work with incomplete or invalid Python</td>
-<td>Can work with incomplete or invalid Python, though you may need to
-watch for <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> and exceptions.</td>
-<td>Requires syntactically valid Python (with a few minor exceptions)</td>
-</tr>
-<tr class="row-odd"><td>Regular expressions can be difficult to write correctly and maintain</td>
-<td>Token types are easy to detect. Larger patterns must be amalgamated
-from the tokens.</td>
-<td>AST has high-level abstractions such as <code class="docutils literal notranslate"><span class="pre">ast.walk</span></code> and
-<code class="docutils literal notranslate"><span class="pre">NodeTransformer</span></code> that make visiting and transforming nodes easy,
-even in complicated ways.</td>
-</tr>
-<tr class="row-even"><td>Regular expressions work directly on the source code, so it is trivial
-to do lossless transformations with them.</td>
-<td>Lossless transformations are possible with <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, as all the
-whitespace can be inferred from the column offsets. However, it can
-often be tricky to do in practice (the <code class="docutils literal notranslate"><span class="pre">untokenize</span></code> function is not
-lossless).</td>
-<td>Lossless transformations are impossible with <code class="docutils literal notranslate"><span class="pre">ast</span></code>, as it completely
-drops whitespace, redundant parentheses, and comments (among other
-things).</td>
-</tr>
-<tr class="row-odd"><td>Impossible to detect edge cases in all circumstances, such as code that
-actually is inside of a string.</td>
-<td>Edge cases can be avoided. Differentiates between actual code and code
-inside a string. Can still be fooled by invalid Python (though this can
-often be considered a <a class="reference external" href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out">garbage in, garbage out</a> scenario).</td>
-<td>Edge cases can be avoided without effort, as only valid Python can even
-be parsed, and each node class represents that syntactic construct
-exactly.</td>
-</tr>
-</tbody>
-</table>
 <div class="toctree-wrapper compound">
-</div>
-</div>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#regular-expressions">Regular expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#tokenize">Tokenize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#ast">AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -355,19 +69,15 @@ exactly.</td>
         <div class="sphinxsidebarwrapper">
 <h3><a href="#">Table Of Contents</a></h3>
 <ul>
-<li><a class="reference internal" href="#">Brown Water Python</a><ul>
-<li><a class="reference internal" href="#what-is-tokenization">What is tokenization?</a></li>
-<li><a class="reference internal" href="#tokenize-vs-alternatives"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a><ul>
-<li><a class="reference internal" href="#regular-expressions">Regular expressions</a></li>
-<li><a class="reference internal" href="#tokenize">Tokenize</a></li>
-<li><a class="reference internal" href="#ast">AST</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Brown Water Python</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a></li>
+</ul>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>

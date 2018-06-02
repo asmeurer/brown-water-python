@@ -1,4 +1,6 @@
+./_sources/alternatives.rst.txt
 ./_sources/index.rst.txt
+./_sources/intro.rst.txt
 ./_static/ajax-loader.gif
 ./_static/alabaster.css
 ./_static/basic.css
@@ -22,8 +24,10 @@
 ./_static/up-pressed.png
 ./_static/up.png
 ./_static/websupport.js
+./alternatives.html
 ./genindex.html
 ./index.html
+./intro.html
 ./objects.inv
 ./search.html
 ./searchindex.js
