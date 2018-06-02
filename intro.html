@@ -151,10 +151,10 @@ with f-strings. In Python 3.5, <code class="docutils literal notranslate"><span 
 and <code class="docutils literal notranslate"><span class="pre">STRING</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;{a}&quot;</span></code>). In Python 3.6, it tokenizes as one token,
 <code class="docutils literal notranslate"><span class="pre">STRING</span></code> (<code class="docutils literal notranslate"><span class="pre">f&quot;{a}&quot;</span></code>).</p>
 </li>
-<li><p class="first">Finally, the key thing to understand about tokenization is that the tokens
+<li><p class="first">Finally, the key thing to understand about tokenization is that tokens
 are a very low level abstraction of the Python syntax. The same token may
 have different meanings in different contexts. For example, in <code class="docutils literal notranslate"><span class="pre">[1]</span></code>, the
-<code class="docutils literal notranslate"><span class="pre">[</span></code> token is part of a list literal, whereas <code class="docutils literal notranslate"><span class="pre">a[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code> token is
+<code class="docutils literal notranslate"><span class="pre">[</span></code> token is part of a list literal, whereas in <code class="docutils literal notranslate"><span class="pre">a[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code> token is
 part of a slice. If you want to manipulate higher level abstractions, you
 might want to use the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module instead (see the <a class="reference internal" href="alternatives.html#alternatives"><span class="std std-ref">next section</span></a>).</p>
 </li>
