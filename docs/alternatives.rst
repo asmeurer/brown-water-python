@@ -1,3 +1,5 @@
+.. _alternatives:
+
 ``tokenize`` vs. alternatives
 -----------------------------
 
@@ -8,10 +10,11 @@ syntatic constructs in Python source code:
 - Using a lexical tokenizer (i.e., the ``tokenize`` module)
 - Using an abstract syntax tree (AST) (i.e, the ``ast`` module)
 
-Suppose you wanted to write a tool that takes a piece of Python code and
+Let us look at each of these three options to see the strengths and weaknesses
+of each. Suppose you wanted to write a tool that takes a piece of Python code and
 prints the line number of every function definition, that is, every occurrence
 of the ``def`` keyword. Such a tool could be used by a text editor to aid in
-jumping to function definitions.
+jumping to function definitions, for instance.
 
 Regular expressions
 ~~~~~~~~~~~~~~~~~~~
@@ -23,9 +26,8 @@ Using naive regular expression parsing, you might start with something like
    >>> import re
    >>> FUNCTION = re.compile(r'def ')
 
-then use the ``finditer`` method to find all instances and print their line
-numbers.
-
+Then using regular expression matching, find all lines that match and print
+their line numbers.
 
 .. doctest::
 
@@ -71,16 +73,32 @@ The regular expression would detect this as a function.
    >>> line_numbers_regex(code_tricky)
    2
 
-In general, it's impossible for a regular expression to distinguish between a
-block of code that is in a string and a block of code that is syntactically
-actually code.
+In general, it's very difficult, if not impossible, for a regular expression
+to distinguish between a text that is inside a string and text that isn't.
+
+This may or may not actually bother you, depending on your application.
+Function definitions may not appear inside of strings very often, but other
+code constructs appear in strings (and comments) quite often.
+
+To quickly digress to a secondary example, the ``tokenize`` module can be used
+to check if a piece of (incomplete) Python code has any mismatched parentheses
+or braces. In this case, you definitely don't want to do a naive matching of
+parentheses in the source as a whole, as a single "mismatched" parenthesis in
+a string could confuse the entire engine, even if the source as Python is
+itself valid. We will see this example in more detail later.
 
 Tokenize
 ~~~~~~~~
 
-Now let's consider the tokenize module. Let's look at what it produces for the
-above code:
+Now let's consider the tokenize module. It's quite easy to search for the
+``def`` keyword. We just look for ``NAME`` tokens where the token string is
+``'def'``. Let's write a function that does this and look at what it produces
+for the above code examples:
 
+.. doctest::
+
+   >>> import tokenize
+   >>> import io
    >>> def line_numbers_tokenize(inputcode):
    ...     for token in tokenize.tokenize(io.BytesIO(inputcode.encode('utf-8')).readline):
    ...         if token.type == tokenize.NAME and token.string == 'def':
@@ -89,7 +107,7 @@ above code:
    >>> line_numbers_tokenize(code)
    1
    5
-   >>> line_numbers_tokenize(code_tricky)
+   >>> line_numbers_tokenize(code_tricky) # No lines are printed
 
 We see that it isn't fooled by the code that is in a string, because strings
 are tokenized as separate entities.
@@ -112,7 +130,7 @@ The ``ast`` module can also be used to avoid the pitfalls of detecting false
 positives. In fact, the ``ast`` module will have NO false positives. The price
 that is paid for this is that the input code to the ``ast`` module must be
 completely valid Python code. Incomplete code will cause ``ast.parse`` to
-raise a ``SyntaxError``.
+raise a ``SyntaxError``.\ [#]_
 
 .. doctest::
 
@@ -143,14 +161,21 @@ about them, or a disadvantage if you do. ``tokenize`` does not remove
 redundant parentheses. It does remove whitespace, but it can easily be
 reconstructed from the column offsets.
 
+If you want to learn more about the AST module, look at `Green Tree Snakes
+<https://greentreesnakes.readthedocs.io/en/latest/>`_, which is a companion to
+this guide for the Python ``ast`` module.
 
-The following table outlines the differences regular expression matching,
-``tokenize``, and ``ast``. No one is the correct solution. It depends on what
+Summary
+~~~~~~~
+
+The following table outlines the differences between using regular expression
+matching, ``tokenize``, and ``ast`` to find or modify constructs in Python
+source code. No one method is the correct solution. It depends on what
 trade-offs you want to make between false positives, false negatives,
 maintainability, and the ability or inability to work with invalid or
-incomplete code. The table is not organized as "pros and cons" because
-something may be a pro (like, ability to work with incomplete code) or a con
-(like, accepts invalid Python).
+incomplete code. The table is not organized as "pros and cons" because some
+things may be pros (like, the ability to work with incomplete code) or cons
+(like, accepting invalid Python), depending on what you are trying to do.
 
 .. list-table::
    :header-rows: 1
@@ -158,11 +183,11 @@ something may be a pro (like, ability to work with incomplete code) or a con
    * - Regular expressions
      - ``tokenize``
      - ``ast``
-   * - Can work with incomplete or invalid Python
+   * - Can work with incomplete or invalid Python.
      - Can work with incomplete or invalid Python, though you may need to
        watch for ``ERRORTOKEN`` and exceptions.
-     - Requires syntactically valid Python (with a few minor exceptions)
-   * - Regular expressions can be difficult to write correctly and maintain
+     - Requires syntactically valid Python (with a few minor exceptions).
+   * - Regular expressions can be difficult to write correctly and maintain.
      - Token types are easy to detect. Larger patterns must be amalgamated
        from the tokens.
      - AST has high-level abstractions such as ``ast.walk`` and
@@ -186,3 +211,26 @@ something may be a pro (like, ability to work with incomplete code) or a con
      - Edge cases can be avoided without effort, as only valid Python can even
        be parsed, and each node class represents that syntactic construct
        exactly.
+
+As you can see, all three can be valid depending on what you are trying to do.
+With that being said, I hope I can convince you at least that for most
+use-cases where one might want to use naive string matching on Python code
+using regular expressions, writing an equivalent method using the ``tokenize``
+module will be more correct on edge cases, more maintainable, and easier to
+extend.
+
+As a final note, David Halter's `parso
+<https://parso.readthedocs.io/en/latest/>`_ library contains an alternative
+implementation of the standard library ``tokenize`` and ``ast`` modules for
+Python. Parso has many advantages over the standard library, such as
+round-trippable AST, the tokenize function has fewer "gotchas", the ability to
+detect multiple syntax errors in a single block of code, the ability to parse
+Python code for a different version of Python than the one that is running,
+and more. If you don't mind an external dependency and want to save yourself
+potential headaches, it is worth considering using ``parso`` instead of the
+standard library ``tokenize`` or ``ast``.
+
+
+.. [#] Actually there are a handful of syntax errors that cannot be detected
+       by the AST due to their context sensitive nature, such as ``break``
+       outside of a loop. These are found only after compiling the AST.
