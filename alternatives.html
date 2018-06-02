@@ -1,0 +1,309 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tokenize vs. alternatives &#8212; Brown Water Python  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="What is tokenization?" href="intro.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tokenize-vs-alternatives">
+<span id="alternatives"></span><h1><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives<a class="headerlink" href="#tokenize-vs-alternatives" title="Permalink to this headline">¶</a></h1>
+<p>There are generally three methods one might use when trying to find or modify
+syntatic constructs in Python source code:</p>
+<ul class="simple">
+<li>Naive matching with regular expression</li>
+<li>Using a lexical tokenizer (i.e., the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module)</li>
+<li>Using an abstract syntax tree (AST) (i.e, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module)</li>
+</ul>
+<p>Let us look at each of these three options to see the strengths and weaknesses
+of each. Suppose you wanted to write a tool that takes a piece of Python code and
+prints the line number of every function definition, that is, every occurrence
+of the <code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. Such a tool could be used by a text editor to aid in
+jumping to function definitions, for instance.</p>
+<div class="section" id="regular-expressions">
+<h2>Regular expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h2>
+<p>Using naive regular expression parsing, you might start with something like</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">re</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FUNCTION</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;def &#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then using regular expression matching, find all lines that match and print
+their line numbers.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_regex</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">FUNCTION</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">lineno</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="gp">... </span><span class="s2">def f(x):</span>
+<span class="gp">... </span><span class="s2">    pass</span>
+<span class="gp">...</span><span class="s2"></span>
+<span class="gp">... </span><span class="s2">class MyClass:</span>
+<span class="gp">... </span><span class="s2">    def g(self):</span>
+<span class="gp">... </span><span class="s2">        pass</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_regex</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>You might notice some issues with this approach. First off, the regular
+expression is not correct. It will also match lines like <code class="docutils literal notranslate"><span class="pre">indef</span> <span class="pre">+</span> <span class="pre">1</span></code>. You
+could modify the regex to make it more correct, for instance, <code class="docutils literal notranslate"><span class="pre">r'^</span> <span class="pre">*def</span> <span class="pre">'</span></code>
+(this is still not completely right; do you see why?).</p>
+<p>But there is a more serious issue. Say you had a string template to generate
+some Python code.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">code_tricky</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
+<span class="gp">... </span><span class="s1">FUNCTION_SKELETON = &quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s1">def {name}({args}):</span>
+<span class="gp">... </span><span class="s1">    {body}</span>
+<span class="gp">... </span><span class="s1">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The regular expression would detect this as a function.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_regex</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>In general, it’s very difficult, if not impossible, for a regular expression
+to distinguish between a text that is inside a string and text that isn’t.</p>
+<p>This may or may not actually bother you, depending on your application.
+Function definitions may not appear inside of strings very often, but other
+code constructs appear in strings (and comments) quite often.</p>
+<p>To quickly digress to a secondary example, the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module can be used
+to check if a piece of (incomplete) Python code has any mismatched parentheses
+or braces. In this case, you definitely don’t want to do a naive matching of
+parentheses in the source as a whole, as a single “mismatched” parenthesis in
+a string could confuse the entire engine, even if the source as Python is
+itself valid. We will see this example in more detail later.</p>
+</div>
+<div class="section" id="tokenize">
+<h2>Tokenize<a class="headerlink" href="#tokenize" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s consider the tokenize module. It’s quite easy to search for the
+<code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. We just look for <code class="docutils literal notranslate"><span class="pre">NAME</span></code> tokens where the token string is
+<code class="docutils literal notranslate"><span class="pre">'def'</span></code>. Let’s write a function that does this and look at what it produces
+for the above code examples:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_tokenize</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">and</span> <span class="n">token</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="s1">&#39;def&#39;</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_tokenize</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_tokenize</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span> <span class="c1"># No lines are printed</span>
+</pre></div>
+</div>
+<p>We see that it isn’t fooled by the code that is in a string, because strings
+are tokenized as separate entities.</p>
+<p>As noted above, tokenize can handle incomplete or invalid Python. Our regex solution is
+also capable of this. This can be a boon (code that is being input into a text
+editor is generally incomplete if the user hasn’t finished typing it yet), or
+a bane (incorrect Python code, such as <code class="docutils literal notranslate"><span class="pre">def</span></code> used as a variable, could trick
+the above function). It really depends on what your use-case is and what
+trade-offs you are willing to accept.</p>
+<p>It should also be note that the above function is not fully correct, as it
+does not properly handle <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>s or exceptions. We will see later how
+to fix it.</p>
+</div>
+<div class="section" id="ast">
+<h2>AST<a class="headerlink" href="#ast" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ast</span></code> module can also be used to avoid the pitfalls of detecting false
+positives. In fact, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module will have NO false positives. The price
+that is paid for this is that the input code to the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module must be
+completely valid Python code. Incomplete code will cause <code class="docutils literal notranslate"><span class="pre">ast.parse</span></code> to
+raise a <code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>.<a class="footnote-reference" href="#id2" id="id1">[1]</a></p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_number_ast</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">p</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inputcode</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">):</span>
+<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="gp">... </span><span class="s2">def test():</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+  File <span class="nb">&quot;&lt;unknown&gt;&quot;</span>, line <span class="m">1</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+              <span class="o">^</span>
+<span class="gr">SyntaxError</span>: <span class="n">unexpected EOF while parsing</span>
+</pre></div>
+</div>
+<p>Another thing to note about the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module is that certain semantically
+irrelevant constructs such as redundant parentheses and extraneous whitespace
+are lost in the AST representation. This can be an advantage if you don’t care
+about them, or a disadvantage if you do. <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> does not remove
+redundant parentheses. It does remove whitespace, but it can easily be
+reconstructed from the column offsets.</p>
+<p>If you want to learn more about the AST module, look at <a class="reference external" href="https://greentreesnakes.readthedocs.io/en/latest/">Green Tree Snakes</a>, which is a companion to
+this guide for the Python <code class="docutils literal notranslate"><span class="pre">ast</span></code> module.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>The following table outlines the differences between using regular expression
+matching, <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, and <code class="docutils literal notranslate"><span class="pre">ast</span></code> to find or modify constructs in Python
+source code. No one method is the correct solution. It depends on what
+trade-offs you want to make between false positives, false negatives,
+maintainability, and the ability or inability to work with invalid or
+incomplete code. The table is not organized as “pros and cons” because some
+things may be pros (like, the ability to work with incomplete code) or cons
+(like, accepting invalid Python), depending on what you are trying to do.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Regular expressions</th>
+<th class="head"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code></th>
+<th class="head"><code class="docutils literal notranslate"><span class="pre">ast</span></code></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Can work with incomplete or invalid Python.</td>
+<td>Can work with incomplete or invalid Python, though you may need to
+watch for <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> and exceptions.</td>
+<td>Requires syntactically valid Python (with a few minor exceptions).</td>
+</tr>
+<tr class="row-odd"><td>Regular expressions can be difficult to write correctly and maintain.</td>
+<td>Token types are easy to detect. Larger patterns must be amalgamated
+from the tokens.</td>
+<td>AST has high-level abstractions such as <code class="docutils literal notranslate"><span class="pre">ast.walk</span></code> and
+<code class="docutils literal notranslate"><span class="pre">NodeTransformer</span></code> that make visiting and transforming nodes easy,
+even in complicated ways.</td>
+</tr>
+<tr class="row-even"><td>Regular expressions work directly on the source code, so it is trivial
+to do lossless transformations with them.</td>
+<td>Lossless transformations are possible with <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, as all the
+whitespace can be inferred from the column offsets. However, it can
+often be tricky to do in practice (the <code class="docutils literal notranslate"><span class="pre">untokenize</span></code> function is not
+lossless).</td>
+<td>Lossless transformations are impossible with <code class="docutils literal notranslate"><span class="pre">ast</span></code>, as it completely
+drops whitespace, redundant parentheses, and comments (among other
+things).</td>
+</tr>
+<tr class="row-odd"><td>Impossible to detect edge cases in all circumstances, such as code that
+actually is inside of a string.</td>
+<td>Edge cases can be avoided. Differentiates between actual code and code
+inside a string. Can still be fooled by invalid Python (though this can
+often be considered a <a class="reference external" href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out">garbage in, garbage out</a> scenario).</td>
+<td>Edge cases can be avoided without effort, as only valid Python can even
+be parsed, and each node class represents that syntactic construct
+exactly.</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, all three can be valid depending on what you are trying to do.
+With that being said, I hope I can convince you at least that for most
+use-cases where one might want to use naive string matching on Python code
+using regular expressions, writing an equivalent method using the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>
+module will be more correct on edge cases, more maintainable, and easier to
+extend.</p>
+<p>As a final note, David Halter’s <a class="reference external" href="https://parso.readthedocs.io/en/latest/">parso</a> library contains an alternative
+implementation of the standard library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code> modules for
+Python. Parso has many advantages over the standard library, such as
+round-trippable AST, the tokenize function has fewer “gotchas”, the ability to
+detect multiple syntax errors in a single block of code, the ability to parse
+Python code for a different version of Python than the one that is running,
+and more. If you don’t mind an external dependency and want to save yourself
+potential headaches, it is worth considering using <code class="docutils literal notranslate"><span class="pre">parso</span></code> instead of the
+standard library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> or <code class="docutils literal notranslate"><span class="pre">ast</span></code>.</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Actually there are a handful of syntax errors that cannot be detected
+by the AST due to their context sensitive nature, such as <code class="docutils literal notranslate"><span class="pre">break</span></code>
+outside of a loop. These are found only after compiling the AST.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#regular-expressions">Regular expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tokenize">Tokenize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ast">AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Aaron Meurer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/alternatives.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/asmeurer/brown-water-python" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
