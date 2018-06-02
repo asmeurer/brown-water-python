@@ -285,7 +285,7 @@ reconstructed from the column offsets.
 
 
 The following table outlines the differences regular expression matching,
-``tokenize`, and ``ast``. No one is the correct solution. It depends on what
+``tokenize``, and ``ast``. No one is the correct solution. It depends on what
 trade-offs you want to make between false positives, false negatives,
 maintainability, and the ability or inability to work with invalid or
 incomplete code. The table is not organized as "pros and cons" because
