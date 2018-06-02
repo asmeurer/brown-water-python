@@ -20,7 +20,7 @@ that has semantic meaning in the grammar of the language.
 An example should clarify things. Consider the string of Python code, ``("a") +
 True -``.
 
-.. code:: python
+.. doctest::
 
    >>> import tokenize
    >>> import io
@@ -68,10 +68,14 @@ I chose this example to demonstrate a few things:
   parenthesis, tokenize produces all the tokens as before, but then raises
   ``TokenError``:
 
-  .. code:: python
+  .. We have to skip this doctest, as it doesn't support output and an exception
+     in the same snippet.
 
+  .. doctest::
+
+     >>> string = '("a" + True -'
      >>> for token in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
-     ...     print(token)
+     ...     print(token) # doctest: +SKIP
      TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
      TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='("a" + True -')
      TokenInfo(type=3 (STRING), string='"a"', start=(1, 1), end=(1, 4), line='("a" + True -')
@@ -79,9 +83,7 @@ I chose this example to demonstrate a few things:
      TokenInfo(type=1 (NAME), string='True', start=(1, 7), end=(1, 11), line='("a" + True -')
      TokenInfo(type=53 (OP), string='-', start=(1, 12), end=(1, 13), line='("a" + True -')
      Traceback (most recent call last):
-       File "<stdin>", line 1, in <module>
-       File "/Users/aaronmeurer/anaconda3/lib/python3.5/tokenize.py", line 597, in _tokenize
-         raise TokenError("EOF in multi-line statement", (lnum, 0))
+     ...
      tokenize.TokenError: ('EOF in multi-line statement', (2, 0))
 
   One of the goals of this guide is to quantify exactly when these error
@@ -119,7 +121,7 @@ I chose this example to demonstrate a few things:
 - The above example does not show it, but even code that can never be valid
   Python is often tokenized. For example:
 
-  .. code:: python
+  .. doctest::
 
      >>> string = 'a$b'
      >>> for token in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
@@ -159,7 +161,7 @@ Regular expressions
 
 Using naive regular expression parsing, you might start with something like
 
-.. code:: python
+.. doctest::
 
    >>> import re
    >>> FUNCTION = re.compile(r'def ')
@@ -168,11 +170,11 @@ then use the ``finditer`` method to find all instances and print their line
 numbers.
 
 
-.. code:: python
+.. doctest::
 
    >>> def line_numbers_regex(inputcode):
    ...     for lineno, line in enumerate(inputcode.splitlines(), 1):
-   ...         if FUNCTION.match(line):
+   ...         if FUNCTION.search(line):
    ...             print(lineno)
    ...
    >>> code = """\
@@ -186,7 +188,7 @@ numbers.
    ...
    >>> line_numbers_regex(code)
    1
-   4
+   5
 
 You might notice some issues with this approach. First off, the regular
 expression is not correct. It will also match lines like ``indef + 1``. You
@@ -196,7 +198,7 @@ could modify the regex to make it more correct, for instance, ``r'^ *def '``
 But there is a more serious issue. Say you had a string template to generate
 some Python code.
 
-.. code:: python
+.. doctest::
 
    >>> code_tricky = '''\
    ... FUNCTION_SKELETON = """
@@ -207,7 +209,7 @@ some Python code.
 
 The regular expression would detect this as a function.
 
-.. code:: python
+.. doctest::
 
    >>> line_numbers_regex(code_tricky)
    2
@@ -229,7 +231,7 @@ above code:
    ...
    >>> line_numbers_tokenize(code)
    1
-   4
+   5
    >>> line_numbers_tokenize(code_tricky)
 
 We see that it isn't fooled by the code that is in a string, because strings
@@ -255,8 +257,9 @@ that is paid for this is that the input code to the ``ast`` module must be
 completely valid Python code. Incomplete code will cause ``ast.parse`` to
 raise a ``SyntaxError``.
 
-.. code:: python
+.. doctest::
 
+   >>> import ast
    >>> def line_number_ast(inputcode):
    ...     p = ast.parse(inputcode)
    ...     for node in ast.walk(p):
@@ -264,7 +267,7 @@ raise a ``SyntaxError``.
    ...             print(node.lineno)
    >>> line_number_ast(code)
    1
-   4
+   5
    >>> line_number_ast(code_tricky)
    >>> line_number_ast("""\
    ... def test():
