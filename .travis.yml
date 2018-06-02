@@ -1,6 +1,12 @@
 language: python
 
+env:
+  global:
+    # Doctr deploy key for asmeurer/brown-water-python
+    - secure: "X5LvcU411nv7Be+dUk8/YQM+gO0XFbgYMmEInB0eVEhWxajzsXhtvPnhpDQbBItoK1Y7uX3ybGXAYMcw1o4/QYJny1Tn36jKrLyWEBZWbeaQP5vT1xdAz2n/+5O0nsiOGQmVdVwnzug+RfPV1wcABK3jR7nM2OYuv5G2XG1iuZtpVL8Ow5961oelfKxhPbQ9VhIdkYAz4wB3sipOZy0/6+YzLLJs/OiifP/9IwxohXDbPQMMJnKZvgtyhVh+No6/eqY2peCpQa7rzhhURYt7bVqJzDfRW/BY8aRrAOuFOwFzwUuRREoGhvhtAPtmZYpRoihPHWmi1Vc6G6rj7d5STHP8J4LlHsrQ+taLP6QKVqb5PkUaDvK+YoI6BZHs9THx0QOCZRlNlz8y3tJjOQDLa3qUncTAYkg5ndDA9dlTKs0b1lWO0eqj/7r5JkSRbmmjIZs/+lBfk2cj3VRGAFYdGHOrbaz9DOzYuR4j8dC1xpQfV1TQZ5NiMUy6E1petrkwB7fIvbreRxnN9XnnFeSB/lwcC2HEnFl9WBxtAB5BIp5ayzsWBh9pNz4YhELYm/gFKF+fj4vrRJcOKikHH5bL8yFVqobyTcPEcmIZj1eV+S0+yQN87gU4RfdSdG2/v2ND7bMKhSsm3UyaZi9PiuyjA+Opk6vvyyeucll5LrU1D0o="
+
 sudo: false
+
 python:
   - "3.5"
   - "3.6"
@@ -16,7 +22,7 @@ install:
   - conda config --add channels conda-forge
   - conda update -q conda
   - conda info -a
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION sphinx
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION sphinx doctr
   - source activate test-environment
 
 script:
@@ -24,3 +30,4 @@ script:
   - cd docs
   - make doctest
   - make html
+  - doctr deploy --built-docs docs/_build/html .
