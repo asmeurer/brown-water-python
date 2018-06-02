@@ -21,7 +21,6 @@ install:
 
 script:
   - set -e
-  - set -x
   - cd docs
   - make doctest
   - make html
