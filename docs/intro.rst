@@ -136,9 +136,9 @@ I chose this example to demonstrate a few things:
   ``STRING`` (``f"{a}"``).
 
 - Finally, the key thing to understand about tokenization is that the tokens
-  are a lower level abstraction of the Python syntax. The same token may have
-  different meanings in different contexts. For example, in ``[1]``, the ``[``
-  token is part of a list literal, whereas ``a[1]``, the ``[`` token is part
-  of a slice. If you want to manipulate higher level abstractions, you might
-  want to use the ``ast`` module instead (see the :ref:`next section
+  are a very low level abstraction of the Python syntax. The same token may
+  have different meanings in different contexts. For example, in ``[1]``, the
+  ``[`` token is part of a list literal, whereas ``a[1]``, the ``[`` token is
+  part of a slice. If you want to manipulate higher level abstractions, you
+  might want to use the ``ast`` module instead (see the :ref:`next section
   <alternatives>`).
