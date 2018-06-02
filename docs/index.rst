@@ -299,13 +299,33 @@ something may be a pro (like, ability to work with incomplete code) or a con
      - ``tokenize``
      - ``ast``
    * - Can work with incomplete or invalid Python
-     - Can work with incomplete or invalid Python
+     - Can work with incomplete or invalid Python, though you may need to
+       watch for ``ERRORTOKEN`` and exceptions.
      - Requires syntactically valid Python (with a few minor exceptions)
    * - Regular expressions can be difficult to write correctly and maintain
      - Token types are easy to detect. Larger patterns must be amalgamated
        from the tokens.
-     - AST nodes represent high-level syntactic constructs.
-
+     - AST has high-level abstractions such as ``ast.walk`` and
+       ``NodeTransformer`` that make visiting and transforming nodes easy,
+       even in complicated ways.
+   * - Regular expressions work directly on the source code, so it is trivial
+       to do lossless transformations with them.
+     - Lossless transformations are possible with ``tokenize``, as all the
+       whitespace can be inferred from the column offsets. However, it can
+       often be tricky to do in practice (the ``untokenize`` function is not
+       lossless).
+     - Lossless transformations are impossible with ``ast``, as it completely
+       drops whitespace, redundant parentheses, and comments (among other
+       things).
+   * - Impossible to detect edge cases in all circumstances, such as code that
+       actually is inside of a string.
+     - Edge cases can be avoided. Differentiates between actual code and code
+       inside a string. Can still be fooled by invalid Python (though this can
+       often be considered a `garbage in, garbage out
+       <https://en.wikipedia.org/wiki/Garbage_in,_garbage_out>`_ scenario).
+     - Edge cases can be avoided without effort, as only valid Python can even
+       be parsed, and each node class represents that syntactic construct
+       exactly.
 
 .. toctree::
    :maxdepth: 2
