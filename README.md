@@ -12,7 +12,8 @@ https://www.asmeurer.com/brown-water-python/
 **NOTE: This document is currently a work in progress. I plan to add more, but
 any feedback on what I already have or what you'd like to see is welcome. Feel
 free to [open an issue](https://github.com/asmeurer/brown-water-python/issues)
-or pull request about anything.**
+or pull request about anything (questions, comments on what you'd like to see,
+corrections, etc.).**
 
 ## Building the HTML pages
 
