@@ -97,6 +97,26 @@ html_theme_options = {
     'github_banner': True,
     'logo_name': True,
     'show_related': True,
+
+    # Colors
+    #
+    # See https://en.wikipedia.org/wiki/Shades_of_brown and
+    # https://en.wikipedia.org/wiki/Beige.
+
+    # cosmic latte
+    'base_bg': '#FFF8E7',
+    # dark. kobicha
+    'gray_1': '#6B4423',
+    # light. beige
+    'gray_2': '#F5F5DC',
+    # medium. tan
+    'gray_3': '#D2B48C',
+
+    # Fonts
+    'font_family': "Palatino, 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif",
+    'font_size': '17px',
+    'code_font_family': "'Menlo', 'Deja Vu Sans Mono', 'Consolas', 'Bitstream Vera Sans Mono', monospace",
+    'code_font_size': '0.8em',
     }
 
 html_sidebars = {
