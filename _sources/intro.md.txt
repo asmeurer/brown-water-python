@@ -1,12 +1,13 @@
 What is tokenization?
 =====================
 
-In the field of parsing, [*tokenizer*](https://en.wikipedia.org/wiki/Lexical_analysis), also called a *lexer*, is a
-program that takes a string of characters and splits it into tokens. A
-token is a substring that has semantic meaning in the grammar of the
+In the field of parsing, a
+[*tokenizer*](https://en.wikipedia.org/wiki/Lexical_analysis), also called a
+*lexer*, is a program that takes a string of characters and splits it into
+tokens. A token is a substring that has semantic meaning in the grammar of the
 language.
 
-An example should clarify things. Consider the string of Python code,
+An example should clarify things. Consider the string of partial Python code,
 `("a") + True -`.
 
 ``` py
@@ -26,7 +27,7 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
 The string is split into the following tokens: `(`, `"a"`, `+`, `True`,
-`)` (ignore the `BytesIO` bit and the `ENCODING` and `ENDMARKER` tokens
+and `)` (ignore the `BytesIO` bit and the `ENCODING` and `ENDMARKER` tokens
 for now).
 
 I chose this example to demonstrate a few things:

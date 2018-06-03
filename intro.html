@@ -33,11 +33,12 @@
             
   <div class="section" id="what-is-tokenization">
 <span id="what-is-tokenization"></span><h1>What is tokenization?<a class="headerlink" href="#what-is-tokenization" title="Permalink to this headline">¶</a></h1>
-<p>In the field of parsing, <a class="reference external" href="https://en.wikipedia.org/wiki/Lexical_analysis"><em>tokenizer</em></a>, also called a <em>lexer</em>, is a
-program that takes a string of characters and splits it into tokens. A
-token is a substring that has semantic meaning in the grammar of the
+<p>In the field of parsing, a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Lexical_analysis"><em>tokenizer</em></a>, also called a
+<em>lexer</em>, is a program that takes a string of characters and splits it into
+tokens. A token is a substring that has semantic meaning in the grammar of the
 language.</p>
-<p>An example should clarify things. Consider the string of Python code,
+<p>An example should clarify things. Consider the string of partial Python code,
 <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
@@ -55,7 +56,7 @@ language.</p>
 </pre></div>
 </div>
 <p>The string is split into the following tokens: <code class="docutils literal notranslate"><span class="pre">(</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">True</span></code>,
-<code class="docutils literal notranslate"><span class="pre">)</span></code> (ignore the <code class="docutils literal notranslate"><span class="pre">BytesIO</span></code> bit and the <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> and <code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code> tokens
+and <code class="docutils literal notranslate"><span class="pre">)</span></code> (ignore the <code class="docutils literal notranslate"><span class="pre">BytesIO</span></code> bit and the <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> and <code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code> tokens
 for now).</p>
 <p>I chose this example to demonstrate a few things:</p>
 <ul>
