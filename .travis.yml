@@ -22,7 +22,7 @@ install:
   - conda config --add channels conda-forge
   - conda update -q conda
   - conda info -a
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION sphinx doctr
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION sphinx doctr recommonmark
   - source activate test-environment
 
 script:
