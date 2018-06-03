@@ -114,7 +114,7 @@ html_theme_options = {
 
     # Fonts
     'font_family': "Palatino, 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif",
-    'font_size': '17px',
+    'font_size': '18px',
     'code_font_family': "'Menlo', 'Deja Vu Sans Mono', 'Consolas', 'Bitstream Vera Sans Mono', monospace",
     'code_font_size': '0.8em',
     }
