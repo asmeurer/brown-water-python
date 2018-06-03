@@ -55,9 +55,9 @@
 /* -- page layout ----------------------------------------------------------- */
 
 body {
-    font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
+    font-family: Palatino, 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
     font-size: 17px;
-    background-color: #fff;
+    background-color: #FFF8E7;
     color: #000;
     margin: 0;
     padding: 0;
@@ -89,7 +89,7 @@ hr {
 }
 
 div.body {
-    background-color: #fff;
+    background-color: #FFF8E7;
     color: #3E4349;
     padding: 0 30px 0 30px;
 }
@@ -118,7 +118,7 @@ p.caption {
 
 
 div.sphinxsidebar a {
-    color: #444;
+    color: #6B4423;
     text-decoration: none;
     border-bottom: 1px dotted #999;
 }
@@ -156,7 +156,7 @@ div.sphinxsidebarwrapper p.blurb {
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
     font-family: 'Garamond', 'Georgia', serif;
-    color: #444;
+    color: #6B4423;
     font-size: 24px;
     font-weight: normal;
     margin: 0 0 5px 0;
@@ -168,7 +168,7 @@ div.sphinxsidebar h4 {
 }
 
 div.sphinxsidebar h3 a {
-    color: #444;
+    color: #6B4423;
 }
 
 div.sphinxsidebar p.logo a,
@@ -199,15 +199,15 @@ div.sphinxsidebar ul li.toctree-l2 > a {
 
 div.sphinxsidebar input {
     border: 1px solid #CCC;
-    font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
+    font-family: Palatino, 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
     font-size: 1em;
 }
 
 div.sphinxsidebar hr {
     border: none;
     height: 1px;
-    color: #AAA;
-    background: #AAA;
+    color: #D2B48C;
+    background: #D2B48C;
 
     text-align: left;
     margin-left: 0;
@@ -252,7 +252,7 @@ a.headerlink {
 }
 
 a.headerlink:hover {
-    color: #444;
+    color: #6B4423;
     background: #EAEAEA;
 }
 
@@ -263,7 +263,7 @@ div.body p, div.body dd, div.body li {
 div.admonition {
     margin: 20px 0px;
     padding: 10px 30px;
-    background-color: #EEE;
+    background-color: #F5F5DC;
     border: 1px solid #CCC;
 }
 
@@ -286,7 +286,7 @@ div.admonition p.last {
 }
 
 div.highlight {
-    background-color: #fff;
+    background-color: #FFF8E7;
 }
 
 dt:target, .highlight {
@@ -325,32 +325,32 @@ div.attention {
 }
 
 div.important {
-    background-color: #EEE;
+    background-color: #F5F5DC;
     border: 1px solid #CCC;
 }
 
 div.note {
-    background-color: #EEE;
+    background-color: #F5F5DC;
     border: 1px solid #CCC;
 }
 
 div.tip {
-    background-color: #EEE;
+    background-color: #F5F5DC;
     border: 1px solid #CCC;
 }
 
 div.hint {
-    background-color: #EEE;
+    background-color: #F5F5DC;
     border: 1px solid #CCC;
 }
 
 div.seealso {
-    background-color: #EEE;
+    background-color: #F5F5DC;
     border: 1px solid #CCC;
 }
 
 div.topic {
-    background-color: #EEE;
+    background-color: #F5F5DC;
 }
 
 p.admonition-title {
@@ -362,8 +362,8 @@ p.admonition-title:after {
 }
 
 pre, tt, code {
-    font-family: 'Consolas', 'Menlo', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
-    font-size: 0.9em;
+    font-family: 'Menlo', 'Deja Vu Sans Mono', 'Consolas', 'Bitstream Vera Sans Mono', monospace;
+    font-size: 0.8em;
 }
 
 .hll {
@@ -385,16 +385,16 @@ tt.descname, code.descname {
 }
 
 img.screenshot {
-    -moz-box-shadow: 2px 2px 4px #EEE;
-    -webkit-box-shadow: 2px 2px 4px #EEE;
-    box-shadow: 2px 2px 4px #EEE;
+    -moz-box-shadow: 2px 2px 4px #F5F5DC;
+    -webkit-box-shadow: 2px 2px 4px #F5F5DC;
+    box-shadow: 2px 2px 4px #F5F5DC;
 }
 
 table.docutils {
     border: 1px solid #888;
-    -moz-box-shadow: 2px 2px 4px #EEE;
-    -webkit-box-shadow: 2px 2px 4px #EEE;
-    box-shadow: 2px 2px 4px #EEE;
+    -moz-box-shadow: 2px 2px 4px #F5F5DC;
+    -webkit-box-shadow: 2px 2px 4px #F5F5DC;
+    box-shadow: 2px 2px 4px #F5F5DC;
 }
 
 table.docutils td, table.docutils th {
@@ -412,7 +412,7 @@ table.field-list, table.footnote {
 table.footnote {
     margin: 15px 0;
     width: 100%;
-    border: 1px solid #EEE;
+    border: 1px solid #F5F5DC;
     background: #FDFDFD;
     font-size: 0.9em;
 }
@@ -474,7 +474,7 @@ ul, ol {
 }
 
 pre {
-    background: #EEE;
+    background: #F5F5DC;
     padding: 7px 30px;
     margin: 15px 0px;
     line-height: 1.3em;
@@ -599,7 +599,7 @@ a:hover tt, a:hover code {
 
     div.documentwrapper {
         float: none;
-        background: #fff;
+        background: #FFF8E7;
     }
 
     div.sphinxsidebar {
@@ -614,11 +614,11 @@ a:hover tt, a:hover code {
 
     div.sphinxsidebar h3, div.sphinxsidebar h4, div.sphinxsidebar p,
     div.sphinxsidebar h3 a {
-        color: #fff;
+        color: #FFF8E7;
     }
 
     div.sphinxsidebar a {
-        color: #AAA;
+        color: #D2B48C;
     }
 
     div.sphinxsidebar p.logo {
