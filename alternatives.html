@@ -31,29 +31,31 @@
           <div class="body" role="main">
             
   <div class="section" id="tokenize-vs-alternatives">
-<span id="alternatives"></span><h1><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives<a class="headerlink" href="#tokenize-vs-alternatives" title="Permalink to this headline">¶</a></h1>
-<p>There are generally three methods one might use when trying to find or modify
-syntatic constructs in Python source code:</p>
+<span id="tokenize-vs-alternatives"></span><h1><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives<a class="headerlink" href="#tokenize-vs-alternatives" title="Permalink to this headline">¶</a></h1>
+<p>There are generally three methods one might use when trying to find or
+modify syntatic constructs in Python source code:</p>
 <ul class="simple">
 <li>Naive matching with regular expression</li>
 <li>Using a lexical tokenizer (i.e., the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module)</li>
 <li>Using an abstract syntax tree (AST) (i.e, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module)</li>
 </ul>
-<p>Let us look at each of these three options to see the strengths and weaknesses
-of each. Suppose you wanted to write a tool that takes a piece of Python code and
-prints the line number of every function definition, that is, every occurrence
-of the <code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. Such a tool could be used by a text editor to aid in
-jumping to function definitions, for instance.</p>
+<p>Let us look at each of these three options to see the strengths and
+weaknesses of each. Suppose you wanted to write a tool that takes a
+piece of Python code and prints the line number of every function
+definition, that is, every occurrence of the <code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. Such a tool
+could be used by a text editor to aid in jumping to function
+definitions, for instance.</p>
 <div class="section" id="regular-expressions">
-<h2>Regular expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h2>
-<p>Using naive regular expression parsing, you might start with something like</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">re</span>
+<span id="regular-expressions"></span><h2>Regular expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h2>
+<p>Using naive regular expression parsing, you might start with something
+like</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">re</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FUNCTION</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;def &#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then using regular expression matching, find all lines that match and print
-their line numbers.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_regex</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
+<p>Then using regular expression matching, find all lines that match and
+print their line numbers.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_regex</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="mi">1</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">if</span> <span class="n">FUNCTION</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
 <span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">lineno</span><span class="p">)</span>
@@ -73,12 +75,12 @@ their line numbers.</p>
 </pre></div>
 </div>
 <p>You might notice some issues with this approach. First off, the regular
-expression is not correct. It will also match lines like <code class="docutils literal notranslate"><span class="pre">indef</span> <span class="pre">+</span> <span class="pre">1</span></code>. You
-could modify the regex to make it more correct, for instance, <code class="docutils literal notranslate"><span class="pre">r'^</span> <span class="pre">*def</span> <span class="pre">'</span></code>
-(this is still not completely right; do you see why?).</p>
-<p>But there is a more serious issue. Say you had a string template to generate
-some Python code.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">code_tricky</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
+expression is not correct. It will also match lines like <code class="docutils literal notranslate"><span class="pre">indef</span> <span class="pre">+</span> <span class="pre">1</span></code>.
+You could modify the regex to make it more correct, for instance,
+<code class="docutils literal notranslate"><span class="pre">r'^</span> <span class="pre">*def</span> <span class="pre">'</span></code> (this is still not completely right; do you see why?).</p>
+<p>But there is a more serious issue. Say you had a string template to
+generate some Python code.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">code_tricky</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
 <span class="gp">... </span><span class="s1">FUNCTION_SKELETON = &quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s1">def {name}({args}):</span>
 <span class="gp">... </span><span class="s1">    {body}</span>
@@ -87,29 +89,31 @@ some Python code.</p>
 </pre></div>
 </div>
 <p>The regular expression would detect this as a function.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_regex</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_regex</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span>
 <span class="go">2</span>
 </pre></div>
 </div>
-<p>In general, it’s very difficult, if not impossible, for a regular expression
-to distinguish between a text that is inside a string and text that isn’t.</p>
+<p>In general, it’s very difficult, if not impossible, for a regular
+expression to distinguish between a text that is inside a string and
+text that isn’t.</p>
 <p>This may or may not actually bother you, depending on your application.
-Function definitions may not appear inside of strings very often, but other
-code constructs appear in strings (and comments) quite often.</p>
-<p>To quickly digress to a secondary example, the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module can be used
-to check if a piece of (incomplete) Python code has any mismatched parentheses
-or braces. In this case, you definitely don’t want to do a naive matching of
-parentheses in the source as a whole, as a single “mismatched” parenthesis in
-a string could confuse the entire engine, even if the source as Python is
-itself valid. We will see this example in more detail later.</p>
+Function definitions may not appear inside of strings very often, but
+other code constructs appear in strings (and comments) quite often.</p>
+<p>To quickly digress to a secondary example, the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module can be
+used to check if a piece of (incomplete) Python code has any mismatched
+parentheses or braces. In this case, you definitely don’t want to do a
+naive matching of parentheses in the source as a whole, as a single
+“mismatched” parenthesis in a string could confuse the entire engine,
+even if the source as Python is itself valid. We will see this example
+in more detail later.</p>
 </div>
 <div class="section" id="tokenize">
-<h2>Tokenize<a class="headerlink" href="#tokenize" title="Permalink to this headline">¶</a></h2>
-<p>Now let’s consider the tokenize module. It’s quite easy to search for the
-<code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. We just look for <code class="docutils literal notranslate"><span class="pre">NAME</span></code> tokens where the token string is
-<code class="docutils literal notranslate"><span class="pre">'def'</span></code>. Let’s write a function that does this and look at what it produces
-for the above code examples:</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
+<span id="tokenize"></span><h2>Tokenize<a class="headerlink" href="#tokenize" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s consider the tokenize module. It’s quite easy to search for
+the <code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. We just look for <code class="docutils literal notranslate"><span class="pre">NAME</span></code> tokens where the token string
+is <code class="docutils literal notranslate"><span class="pre">'def'</span></code>. Let’s write a function that does this and look at what it
+produces for the above code examples:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_tokenize</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
@@ -122,26 +126,27 @@ for the above code examples:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_tokenize</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span> <span class="c1"># No lines are printed</span>
 </pre></div>
 </div>
-<p>We see that it isn’t fooled by the code that is in a string, because strings
-are tokenized as separate entities.</p>
-<p>As noted above, tokenize can handle incomplete or invalid Python. Our regex solution is
-also capable of this. This can be a boon (code that is being input into a text
-editor is generally incomplete if the user hasn’t finished typing it yet), or
-a bane (incorrect Python code, such as <code class="docutils literal notranslate"><span class="pre">def</span></code> used as a variable, could trick
-the above function). It really depends on what your use-case is and what
-trade-offs you are willing to accept.</p>
-<p>It should also be note that the above function is not fully correct, as it
-does not properly handle <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>s or exceptions. We will see later how
-to fix it.</p>
+<p>We see that it isn’t fooled by the code that is in a string, because
+strings are tokenized as separate entities.</p>
+<p>As noted above, tokenize can handle incomplete or invalid Python. Our
+regex solution is also capable of this. This can be a boon (code that is
+being input into a text editor is generally incomplete if the user
+hasn’t finished typing it yet), or a bane (incorrect Python code, such
+as <code class="docutils literal notranslate"><span class="pre">def</span></code> used as a variable, could trick the above function). It really
+depends on what your use-case is and what trade-offs you are willing to
+accept.</p>
+<p>It should also be note that the above function is not fully correct, as
+it does not properly handle <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>s or exceptions. We will see
+later how to fix it.</p>
 </div>
 <div class="section" id="ast">
-<h2>AST<a class="headerlink" href="#ast" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">ast</span></code> module can also be used to avoid the pitfalls of detecting false
-positives. In fact, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module will have NO false positives. The price
-that is paid for this is that the input code to the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module must be
-completely valid Python code. Incomplete code will cause <code class="docutils literal notranslate"><span class="pre">ast.parse</span></code> to
-raise a <code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>.<a class="footnote-reference" href="#id2" id="id1">[1]</a></p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
+<span id="ast"></span><h2>AST<a class="headerlink" href="#ast" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ast</span></code> module can also be used to avoid the pitfalls of detecting
+false positives. In fact, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module will have NO false positives.
+The price that is paid for this is that the input code to the <code class="docutils literal notranslate"><span class="pre">ast</span></code>
+module must be completely valid Python code. Incomplete code will cause
+<code class="docutils literal notranslate"><span class="pre">ast.parse</span></code> to raise a <code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>. <sup id="a1"><a class="reference external" href="#f1">1</a></sup></p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_number_ast</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">p</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inputcode</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
@@ -160,25 +165,27 @@ raise a <code class="docutils literal notranslate"><span class="pre">SyntaxError
 <span class="gr">SyntaxError</span>: <span class="n">unexpected EOF while parsing</span>
 </pre></div>
 </div>
-<p>Another thing to note about the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module is that certain semantically
-irrelevant constructs such as redundant parentheses and extraneous whitespace
-are lost in the AST representation. This can be an advantage if you don’t care
-about them, or a disadvantage if you do. <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> does not remove
-redundant parentheses. It does remove whitespace, but it can easily be
-reconstructed from the column offsets.</p>
-<p>If you want to learn more about the AST module, look at <a class="reference external" href="https://greentreesnakes.readthedocs.io/en/latest/">Green Tree Snakes</a>, which is a companion to
-this guide for the Python <code class="docutils literal notranslate"><span class="pre">ast</span></code> module.</p>
+<p>Another thing to note about the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module is that certain
+semantically irrelevant constructs such as redundant parentheses and
+extraneous whitespace are lost in the AST representation. This can be an
+advantage if you don’t care about them, or a disadvantage if you do.
+<code class="docutils literal notranslate"><span class="pre">tokenize</span></code> does not remove redundant parentheses. It does remove
+whitespace, but it can easily be reconstructed from the column offsets.</p>
+<p>If you want to learn more about the AST module, look at <a class="reference external" href="https://greentreesnakes.readthedocs.io/en/latest/">Green Tree
+Snakes</a>, which is a
+companion to this guide for the Python <code class="docutils literal notranslate"><span class="pre">ast</span></code> module.</p>
 </div>
 <div class="section" id="summary">
-<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
-<p>The following table outlines the differences between using regular expression
-matching, <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, and <code class="docutils literal notranslate"><span class="pre">ast</span></code> to find or modify constructs in Python
-source code. No one method is the correct solution. It depends on what
-trade-offs you want to make between false positives, false negatives,
-maintainability, and the ability or inability to work with invalid or
-incomplete code. The table is not organized as “pros and cons” because some
-things may be pros (like, the ability to work with incomplete code) or cons
-(like, accepting invalid Python), depending on what you are trying to do.</p>
+<span id="summary"></span><h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>The following table outlines the differences between using regular
+expression matching, <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, and <code class="docutils literal notranslate"><span class="pre">ast</span></code> to find or modify constructs
+in Python source code. No one method is the correct solution. It depends
+on what trade-offs you want to make between false positives, false
+negatives, maintainability, and the ability or inability to work with
+invalid or incomplete code. The table is not organized as “pros and
+cons” because some things may be pros (like, the ability to work with
+incomplete code) or cons (like, accepting invalid Python), depending on
+what you are trying to do.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -225,29 +232,27 @@ exactly.</td>
 </tr>
 </tbody>
 </table>
-<p>As you can see, all three can be valid depending on what you are trying to do.
-With that being said, I hope I can convince you at least that for most
-use-cases where one might want to use naive string matching on Python code
-using regular expressions, writing an equivalent method using the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>
-module will be more correct on edge cases, more maintainable, and easier to
-extend.</p>
-<p>As a final note, David Halter’s <a class="reference external" href="https://parso.readthedocs.io/en/latest/">parso</a> library contains an alternative
-implementation of the standard library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code> modules for
-Python. Parso has many advantages over the standard library, such as
-round-trippable AST, the tokenize function has fewer “gotchas”, the ability to
-detect multiple syntax errors in a single block of code, the ability to parse
-Python code for a different version of Python than the one that is running,
-and more. If you don’t mind an external dependency and want to save yourself
-potential headaches, it is worth considering using <code class="docutils literal notranslate"><span class="pre">parso</span></code> instead of the
-standard library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> or <code class="docutils literal notranslate"><span class="pre">ast</span></code>.</p>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Actually there are a handful of syntax errors that cannot be detected
-by the AST due to their context sensitive nature, such as <code class="docutils literal notranslate"><span class="pre">break</span></code>
-outside of a loop. These are found only after compiling the AST.</td></tr>
-</tbody>
-</table>
+<p>As you can see, all three can be valid depending on what you are trying
+to do. With that being said, I hope I can convince you at least that for
+most use-cases where one might want to use naive string matching on
+Python code using regular expressions, writing an equivalent method
+using the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module will be more correct on edge cases, more
+maintainable, and easier to extend.</p>
+<p>As a final note, David Halter’s
+<a class="reference external" href="https://parso.readthedocs.io/en/latest/">parso</a> library contains an
+alternative implementation of the standard library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code>
+modules for Python. Parso has many advantages over the standard library,
+such as round-trippable AST, the tokenize function has fewer
+“gotchas”, the ability to detect multiple syntax errors in a single
+block of code, the ability to parse Python code for a different version
+of Python than the one that is running, and more. If you don’t mind an
+external dependency and want to save yourself potential headaches, it is
+worth considering using <code class="docutils literal notranslate"><span class="pre">parso</span></code> instead of the standard library
+<code class="docutils literal notranslate"><span class="pre">tokenize</span></code> or <code class="docutils literal notranslate"><span class="pre">ast</span></code>.</p>
+<p><small><a class="reference external" href="#a1">1.</a> <span id="f1"></span> Actually there are a handful of syntax errors that
+cannot be detected by the AST due to their context sensitive nature, such
+as <code class="docutils literal notranslate"><span class="pre">break</span></code> outside of a loop. These are found only after compiling the
+AST.</small></p>
 </div>
 </div>
 
@@ -294,7 +299,7 @@ outside of a loop. These are found only after compiling the AST.</td></tr>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/alternatives.rst.txt"
+      <a href="_sources/alternatives.md.txt"
           rel="nofollow">Page source</a>
     </div>
 
