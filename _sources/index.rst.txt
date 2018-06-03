@@ -1,7 +1,6 @@
-Brown Water Python
-==================
-
-Some better docs for the Python ``tokenize`` module.
+=====================================================================
+ Brown Water Python: Better Docs for the Python ``tokenize`` Module.
+=====================================================================
 
 The ``tokenize`` module in the Python standard library is very powerful, but
 its `documentation <LINK>`_ is somewhat limited. In the spirit of the `Green
