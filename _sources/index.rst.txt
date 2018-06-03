@@ -3,10 +3,11 @@
 =====================================================================
 
 The ``tokenize`` module in the Python standard library is very powerful, but
-its `documentation <LINK>`_ is somewhat limited. In the spirit of the `Green
-Tree Snakes <LINK>`_ project, which provides similar extended documentation
-for the ``ast`` module, I am providing here some extended documentation for
-effectively working with the ``tokenize`` module.
+its `documentation <https://docs.python.org/3/library/tokenize.html>`_ is
+somewhat limited. In the spirit of the `Green Tree Snakes
+<https://greentreesnakes.readthedocs.io/>`_ project, which provides similar
+extended documentation for the ``ast`` module, I am providing here some
+extended documentation for effectively working with the ``tokenize`` module.
 
 .. toctree::
    :maxdepth: 2
