@@ -49,7 +49,16 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+from recommonmark.parser import CommonMarkParser
+from recommonmark.transform import AutoStructify
+
+source_parsers = {
+    '.md': CommonMarkParser,
+}
+
+enable_eval_rst = True
+source_suffix = ['.rst', '.md']
+# source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
@@ -170,3 +179,12 @@ texinfo_documents = [
 
 
 # -- Extension configuration -------------------------------------------------
+
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+        'enable_eval_rst': True,
+        'auto_toc_tree_section': 'Contents',
+        'enable_math': False,
+        'enable_inline_math': False,
+        }, True)
+    app.add_transform(AutoStructify)
