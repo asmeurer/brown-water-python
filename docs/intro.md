@@ -92,17 +92,18 @@ I chose this example to demonstrate a few things:
     `"a" + True` is not allowed by Python. The tokenize module does not
     know or care about objects, types, or any high-level Python
     constructs.
--   Some tokens can be right next to one another in the input string.
-    Other tokens must be separated by a space (for instance,
-    `foriinrange(10)` will tokenize differently from
-    `for i in range(10)`). The complete set of rules for when spaces are
-    required or not required to separate Python tokens is quite
-    complicated, especially when multiline statements with indentation
-    are considered (as an example, consider that `1jand2` is valid
-    Python\-\--it\'s tokenized into three tokens, `NUMBER` (`1j`),
-    `NAME` (`and`), and `NUMBER` (`2`)). One use-case of the `tokenize`
-    module is to combine tokens into valid Python using the `untokenize`
-    function, which handles these details automatically.
+-   Some tokens can be right next to one another in the input string. Other
+    tokens must be separated by a space (for instance, `foriinrange(10)` will
+    tokenize differently from `for i in range(10)`). The complete set of rules
+    for when spaces are required or not required to separate Python tokens is
+    quite
+    [complicated](https://docs.python.org/3/reference/lexical_analysis.html),
+    especially when multiline statements with indentation are considered (as
+    an example, consider that `1jand2` is valid Python\-\--it\'s tokenized
+    into three tokens, `NUMBER` (`1j`), `NAME` (`and`), and `NUMBER` (`2`)).
+    One use-case of the `tokenize` module is to combine tokens into valid
+    Python using the `untokenize` function, which handles these details
+    automatically.
 -   All parentheses and operators are tokenized as `OP`. Both variable
     names and keywords are tokenized as `NAME`. To determine the exact
     type of a token often requires further inspection than simply
