@@ -24,6 +24,7 @@ extended documentation for effectively working with the ``tokenize`` module.
 
    intro
    alternatives
+   tokens
 
 
 Indices and tables

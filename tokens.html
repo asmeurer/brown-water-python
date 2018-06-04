@@ -1,0 +1,195 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>The Token Types &#8212; Brown Water Python  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="tokenize vs. alternatives" href="alternatives.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="the-token-types">
+<span id="the-token-types"></span><h1>The Token Types<a class="headerlink" href="#the-token-types" title="Permalink to this headline">¶</a></h1>
+<p>Every token produced by the tokenizer has a type. These types are represented
+by integer constants. The actual integer value of the token constants should
+never be used or relied on. Instead, refer to tokens by its variable name, and
+use the <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> dictionary to go from get the name of a token type. The
+integer value could change between Python versions, for instance, if new
+tokens are added or removed.</p>
+<p>The reason the token types are represented this way is that the true tokenizer
+for Python is written in C. C does not have an object system like Python.
+Instead, enumerated types are represented by integers (actually, <code class="docutils literal notranslate"><span class="pre">tokenizer.c</span></code>
+has a large array of the token types. The integer value of each token is its
+index in that array). The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module is written in pure Python, but the
+token type values and names mirror those from the C tokenizer, with three
+exceptions: <code class="docutils literal notranslate"><span class="pre">COMMENT</span></code>, <code class="docutils literal notranslate"><span class="pre">NL</span></code>, and <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code>.</p>
+<p>All token types are defined in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module
+does <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">token</span> <span class="pre">import</span> <span class="pre">*</span></code>. Therefore, it is easiest to just import everything
+from <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. Furthermore, the aforementioned <code class="docutils literal notranslate"><span class="pre">COMMENT</span></code>, <code class="docutils literal notranslate"><span class="pre">NL</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> tokens are not importable from <code class="docutils literal notranslate"><span class="pre">token</span></code> prior to Python 3.7, only
+from <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>.</p>
+<div class="section" id="the-tok-name-dictionary">
+<span id="the-tok-name-dictionary"></span><h2>The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary<a class="headerlink" href="#the-tok-name-dictionary" title="Permalink to this headline">¶</a></h2>
+<p>The dictionary <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> maps the tokens back to their names:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">STRING</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">tokenize</span><span class="o">.</span><span class="n">STRING</span><span class="p">]</span> <span class="c1"># Can also use token.tok_name</span>
+<span class="go">&#39;STRING&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-tokens">
+<span id="the-tokens"></span><h2>The tokens<a class="headerlink" href="#the-tokens" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="op">
+<span id="op"></span><h3><code class="docutils literal notranslate"><span class="pre">OP</span></code><a class="headerlink" href="#op" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">OP</span></code> is a generic token type for all operations, delimiters, and the ellipsis
+literal. This does not include characters that are not recognized by the
+parser (these are parsed as <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>).</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, the token type for an operation, delimiter, or ellipsis
+literal token will be <code class="docutils literal notranslate"><span class="pre">OP</span></code>. To get the exact token type, use the <code class="docutils literal notranslate"><span class="pre">exact_type</span></code>
+property of the namedtuple. <code class="docutils literal notranslate"><span class="pre">exact_type</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">type</span></code> for the
+remaining token types.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;[1+2]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">type</span><span class="p">],</span> <span class="n">i</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+<span class="go">BACKQUOTE utf-8</span>
+<span class="go">OP [</span>
+<span class="go">NUMBER 1</span>
+<span class="go">OP +</span>
+<span class="go">NUMBER 2</span>
+<span class="go">OP ]</span>
+<span class="go">ENDMARKER</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;[1+2]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">exact_type</span><span class="p">],</span> <span class="n">i</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+<span class="go">BACKQUOTE utf-8</span>
+<span class="go">LSQB [</span>
+<span class="go">NUMBER 1</span>
+<span class="go">PLUS +</span>
+<span class="go">NUMBER 2</span>
+<span class="go">RSQB ]</span>
+<span class="go">ENDMARKER</span>
+</pre></div>
+</div>
+<p>The following table lists all exact <code class="docutils literal notranslate"><span class="pre">OP</span></code> types and their corresponding
+characters.</p>
+<!-- The table below is generated with exact_type_table.py --><!-- ```eval_rst --><!-- .. include:: exact_type_table.txt -->
+<!-- ``` --></div>
+</div>
+<div class="section" id="additional-helper-functions">
+<span id="additional-helper-functions"></span><h2>Additional helper functions<a class="headerlink" href="#additional-helper-functions" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimick the modules in the C parser. Some
+additional helper functions are included, even though they are mostly useless
+outside of the C parser.</p>
+<p>For some context, the Python
+<a class="reference external" href="https://docs.python.org/3/reference/grammar.html">grammar</a>, contains
+<em>terminal</em> and <em>nonterminal</em> nodes. The terminal nodes are the ones that stop
+the parsing (they are leaf nodes, that is, no other node in the grammar can be
+contained in them). These nodes are represented in uppercase. Every terminal
+node in the grammar is a token type, for example, <code class="docutils literal notranslate"><span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">STRING</span></code>. Not all token types are terminal nodes. The C parser re-uses the
+tokenize node types when it constructs the AST. Nonterminal nodes are
+represented by numbers greater than <code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>, which is currently 256. You
+can see the list of nonterminal nodes in the
+<a class="reference external" href="https://github.com/python/cpython/blob/master/Include/graminit.h"><code class="docutils literal notranslate"><span class="pre">graminit.h</span></code></a>
+file.</p>
+<p>The following functions are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t likely
+useful outside of the Python C parser.</p>
+<div class="section" id="isterminal-x">
+<span id="isterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code><a class="headerlink" href="#isterminal-x" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> is <code class="docutils literal notranslate"><span class="pre">x</span></code> is a terminal token type. It is
+equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">NT_OFFSET</span></code>. Every token in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module (except for
+<code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>) is a terminal node.</p>
+</div>
+<div class="section" id="isnonterminal-x">
+<span id="isnonterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code><a class="headerlink" href="#isnonterminal-x" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> is a nonterminal token type. It is
+equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;=</span> <span class="pre">NT_OFFSET</span></code>. The only nonterminal “token” in the <code class="docutils literal notranslate"><span class="pre">token</span></code>
+module is <code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code> itself.</p>
+</div>
+<div class="section" id="iseof-x">
+<span id="iseof-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code><a class="headerlink" href="#iseof-x" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code> returns true if <code class="docutils literal notranslate"><span class="pre">x</span></code> is the end of input marker token type. It is
+equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">ENDMARKER</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Token Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-tok-name-dictionary">The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-tokens">The tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-helper-functions">Additional helper functions</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Aaron Meurer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/tokens.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/asmeurer/brown-water-python" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

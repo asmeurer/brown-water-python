@@ -119,17 +119,18 @@ string, even if completed, can only raise a <code class="docutils literal notran
 know or care about objects, types, or any high-level Python
 constructs.</p>
 </li>
-<li><p class="first">Some tokens can be right next to one another in the input string.
-Other tokens must be separated by a space (for instance,
-<code class="docutils literal notranslate"><span class="pre">foriinrange(10)</span></code> will tokenize differently from
-<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">range(10)</span></code>). The complete set of rules for when spaces are
-required or not required to separate Python tokens is quite
-complicated, especially when multiline statements with indentation
-are considered (as an example, consider that <code class="docutils literal notranslate"><span class="pre">1jand2</span></code> is valid
-Python---it’s tokenized into three tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1j</span></code>),
-<code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">and</span></code>), and <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code>)). One use-case of the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>
-module is to combine tokens into valid Python using the <code class="docutils literal notranslate"><span class="pre">untokenize</span></code>
-function, which handles these details automatically.</p>
+<li><p class="first">Some tokens can be right next to one another in the input string. Other
+tokens must be separated by a space (for instance, <code class="docutils literal notranslate"><span class="pre">foriinrange(10)</span></code> will
+tokenize differently from <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">range(10)</span></code>). The complete set of rules
+for when spaces are required or not required to separate Python tokens is
+quite
+<a class="reference external" href="https://docs.python.org/3/reference/lexical_analysis.html">complicated</a>,
+especially when multiline statements with indentation are considered (as
+an example, consider that <code class="docutils literal notranslate"><span class="pre">1jand2</span></code> is valid Python---it’s tokenized
+into three tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1j</span></code>), <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">and</span></code>), and <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code>)).
+One use-case of the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module is to combine tokens into valid
+Python using the <code class="docutils literal notranslate"><span class="pre">untokenize</span></code> function, which handles these details
+automatically.</p>
 </li>
 <li><p class="first">All parentheses and operators are tokenized as <code class="docutils literal notranslate"><span class="pre">OP</span></code>. Both variable
 names and keywords are tokenized as <code class="docutils literal notranslate"><span class="pre">NAME</span></code>. To determine the exact
@@ -182,6 +183,7 @@ manipulate higher level abstractions, you might want to use the
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What is tokenization?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tokens.html">The Token Types</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
