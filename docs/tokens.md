@@ -34,6 +34,51 @@ The dictionary `tok_name` maps the tokens back to their names:
 'STRING'
 ```
 
+## The tokens
+
+### `OP`
+
+`OP` is a generic token type for all operations, delimiters, and the ellipsis
+literal. This does not include characters that are not recognized by the
+parser (these are parsed as `ERRORTOKEN`).
+
+When using `tokenize`, the token type for an operation, delimiter, or ellipsis
+literal token will be `OP`. To get the exact token type, use the `exact_type`
+property of the namedtuple. `exact_type` is equivalent to `type` for the
+remaining token types.
+
+```py
+>>> import io
+>>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
+...     print(tokenize.tok_name[i.type], i.string)
+BACKQUOTE utf-8
+OP [
+NUMBER 1
+OP +
+NUMBER 2
+OP ]
+ENDMARKER
+>>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
+...     print(tokenize.tok_name[i.exact_type], i.string)
+BACKQUOTE utf-8
+LSQB [
+NUMBER 1
+PLUS +
+NUMBER 2
+RSQB ]
+ENDMARKER
+```
+
+The following table lists all exact `OP` types and their corresponding
+characters.
+
+<!-- The table below is generated with exact_type_table.py -->
+
+<!-- ```eval_rst -->
+
+<!-- .. include:: exact_type_table.txt -->
+<!-- ``` -->
+
 ## Additional helper functions
 
 The `token` and `tokenize` module mimick the modules in the C parser. Some
