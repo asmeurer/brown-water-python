@@ -81,7 +81,7 @@ characters.
 
 ## Additional helper functions
 
-The `token` and `tokenize` module mimick the modules in the C parser. Some
+The `token` and `tokenize` module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.
 
@@ -186,6 +186,7 @@ or the `ast` representation:
 >>> ast.dump(ast.parse('("a") + True'))
 "Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
 ```
+
 The following functions are included in the `token` module, but aren't
 particularly useful outside of the `parser` module.
 
