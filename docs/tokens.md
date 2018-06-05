@@ -178,6 +178,14 @@ like for the code `("a") + True`.
  ['ENDMARKER', '']]
 ```
 
+Compare this to the `tokenize` representation seen in the [intro](intro.html),
+or the `ast` representation:
+
+```py
+>>> import ast
+>>> ast.dump(ast.parse('("a") + True'))
+"Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
+```
 The following functions are included in the `token` module, but aren't
 particularly useful outside of the `parser` module.
 
