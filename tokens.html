@@ -100,39 +100,126 @@ characters.</p>
 </div>
 <div class="section" id="additional-helper-functions">
 <span id="additional-helper-functions"></span><h2>Additional helper functions<a class="headerlink" href="#additional-helper-functions" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimick the modules in the C parser. Some
+<p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.</p>
 <p>For some context, the Python
-<a class="reference external" href="https://docs.python.org/3/reference/grammar.html">grammar</a>, contains
+<a class="reference external" href="https://docs.python.org/3/reference/grammar.html">grammar</a> contains
 <em>terminal</em> and <em>nonterminal</em> nodes. The terminal nodes are the ones that stop
 the parsing (they are leaf nodes, that is, no other node in the grammar can be
 contained in them). These nodes are represented in uppercase. Every terminal
 node in the grammar is a token type, for example, <code class="docutils literal notranslate"><span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code>, or
-<code class="docutils literal notranslate"><span class="pre">STRING</span></code>. Not all token types are terminal nodes. The C parser re-uses the
-tokenize node types when it constructs the AST. Nonterminal nodes are
-represented by numbers greater than <code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>, which is currently 256. You
-can see the list of nonterminal nodes in the
+<code class="docutils literal notranslate"><span class="pre">STRING</span></code>. Most terminal nodes in the <a class="reference external" href="https://github.com/python/cpython/blob/master/Grammar/Grammar">grammar
+file</a> are
+represented by their string value (for instance, the grammar references <code class="docutils literal notranslate"><span class="pre">'('</span></code>
+instead of <code class="docutils literal notranslate"><span class="pre">LPAR</span></code>). The C parser re-uses the tokenize node types when it
+constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
+<code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>, which is currently 256. You can see the list of nonterminal nodes
+in the
 <a class="reference external" href="https://github.com/python/cpython/blob/master/Include/graminit.h"><code class="docutils literal notranslate"><span class="pre">graminit.h</span></code></a>
-file.</p>
-<p>The following functions are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t likely
-useful outside of the Python C parser.</p>
+file, or by using the
+<a class="reference external" href="https://docs.python.org/3/library/symbol.html"><code class="docutils literal notranslate"><span class="pre">symbol</span></code></a> module.</p>
+<p>The <a class="reference external" href="https://docs.python.org/3/library/parser.html"><code class="docutils literal notranslate"><span class="pre">parser</span></code></a> module can be
+used from within Python to access the parse tree. The <code class="docutils literal notranslate"><span class="pre">parser</span></code> and <code class="docutils literal notranslate"><span class="pre">symbol</span></code>
+modules aren’t discussed further in this guide because the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ast</span></code> modules are generally preferable for almost all use-cases (see the
+<a class="reference external" href="alternatives.html">alternatives</a> section). In particular, the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module
+has all the same limitations as the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module (it requires complete,
+syntactically valid Python code), but is much more difficult to work with. The
+<code class="docutils literal notranslate"><span class="pre">parser</span></code> module exists mainly as a relic from before the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module existed
+in the standard library (<code class="docutils literal notranslate"><span class="pre">ast</span></code> was introduced in Python 2.5).</p>
+<p>The following example gives an idea of what the <code class="docutils literal notranslate"><span class="pre">parser</span></code> syntax trees look
+like for the code <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">parser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">l</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">toname</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">t</span><span class="p">[:]):</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+<span class="gp">... </span>                <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">ISTERMINAL</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<span class="gp">... </span>                    <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">val</span><span class="p">]</span>
+<span class="gp">... </span>                <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>                    <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbol</span><span class="o">.</span><span class="n">sym_name</span><span class="p">[</span><span class="n">val</span><span class="p">]</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<span class="gp">... </span>                <span class="n">toname</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">toname</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">l</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
+<span class="go">[&#39;eval_input&#39;,</span>
+<span class="go"> [&#39;testlist&#39;,</span>
+<span class="go">  [&#39;test&#39;,</span>
+<span class="go">   [&#39;or_test&#39;,</span>
+<span class="go">    [&#39;and_test&#39;,</span>
+<span class="go">     [&#39;not_test&#39;,</span>
+<span class="go">      [&#39;comparison&#39;,</span>
+<span class="go">       [&#39;expr&#39;,</span>
+<span class="go">        [&#39;xor_expr&#39;,</span>
+<span class="go">         [&#39;and_expr&#39;,</span>
+<span class="go">          [&#39;shift_expr&#39;,</span>
+<span class="go">           [&#39;arith_expr&#39;,</span>
+<span class="go">            [&#39;term&#39;,</span>
+<span class="go">             [&#39;factor&#39;,</span>
+<span class="go">              [&#39;power&#39;,</span>
+<span class="go">               [&#39;atom_expr&#39;,</span>
+<span class="go">                [&#39;atom&#39;,</span>
+<span class="go">                 [&#39;LPAR&#39;, &#39;(&#39;],</span>
+<span class="go">                 [&#39;testlist_comp&#39;,</span>
+<span class="go">                  [&#39;test&#39;,</span>
+<span class="go">                   [&#39;or_test&#39;,</span>
+<span class="go">                    [&#39;and_test&#39;,</span>
+<span class="go">                     [&#39;not_test&#39;,</span>
+<span class="go">                      [&#39;comparison&#39;,</span>
+<span class="go">                       [&#39;expr&#39;,</span>
+<span class="go">                        [&#39;xor_expr&#39;,</span>
+<span class="go">                         [&#39;and_expr&#39;,</span>
+<span class="go">                          [&#39;shift_expr&#39;,</span>
+<span class="go">                           [&#39;arith_expr&#39;,</span>
+<span class="go">                            [&#39;term&#39;,</span>
+<span class="go">                             [&#39;factor&#39;,</span>
+<span class="go">                              [&#39;power&#39;,</span>
+<span class="go">                               [&#39;atom_expr&#39;,</span>
+<span class="go">                                [&#39;atom&#39;, [&#39;STRING&#39;, &#39;&quot;a&quot;&#39;]]]]]]]]]]]]]]]]],</span>
+<span class="go">                 [&#39;RPAR&#39;, &#39;)&#39;]]]]]],</span>
+<span class="go">            [&#39;PLUS&#39;, &#39;+&#39;],</span>
+<span class="go">            [&#39;term&#39;,</span>
+<span class="go">             [&#39;factor&#39;,</span>
+<span class="go">              [&#39;power&#39;, [&#39;atom_expr&#39;, [&#39;atom&#39;, [&#39;NAME&#39;, &#39;True&#39;]]]]]]]]]]]]]]]]],</span>
+<span class="go"> [&#39;NEWLINE&#39;, &#39;&#39;],</span>
+<span class="go"> [&#39;ENDMARKER&#39;, &#39;&#39;]]</span>
+</pre></div>
+</div>
+<p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <a class="reference external" href="intro.html">intro</a>,
+or the <code class="docutils literal notranslate"><span class="pre">ast</span></code> representation:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span>
+<span class="go">&quot;Module(body=[Expr(value=BinOp(left=Str(s=&#39;a&#39;), op=Add(), right=NameConstant(value=True)))])&quot;</span>
+</pre></div>
+</div>
+<p>The following functions are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t
+particularly useful outside of the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module.</p>
 <div class="section" id="isterminal-x">
 <span id="isterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code><a class="headerlink" href="#isterminal-x" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> is <code class="docutils literal notranslate"><span class="pre">x</span></code> is a terminal token type. It is
 equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">NT_OFFSET</span></code>. Every token in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module (except for
-<code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>) is a terminal node.</p>
+<code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>) is a terminal node. It returns <code class="docutils literal notranslate"><span class="pre">False</span></code> for every token in the
+<code class="docutils literal notranslate"><span class="pre">symbol</span></code> module.</p>
 </div>
 <div class="section" id="isnonterminal-x">
 <span id="isnonterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code><a class="headerlink" href="#isnonterminal-x" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> is a nonterminal token type. It is
 equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;=</span> <span class="pre">NT_OFFSET</span></code>. The only nonterminal “token” in the <code class="docutils literal notranslate"><span class="pre">token</span></code>
-module is <code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code> itself.</p>
+module is <code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code> itself. It returns <code class="docutils literal notranslate"><span class="pre">True</span></code> for every token in the
+<code class="docutils literal notranslate"><span class="pre">symbol</span></code> module.</p>
 </div>
 <div class="section" id="iseof-x">
 <span id="iseof-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code><a class="headerlink" href="#iseof-x" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code> returns true if <code class="docutils literal notranslate"><span class="pre">x</span></code> is the end of input marker token type. It is
-equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">ENDMARKER</span></code>.</p>
+equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">ENDMARKER</span></code>. This is also mostly useless, as the
+<code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> function ends iteration after it emits this token.</p>
 </div>
 </div>
 </div>

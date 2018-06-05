@@ -81,39 +81,131 @@ characters.
 
 ## Additional helper functions
 
-The `token` and `tokenize` module mimick the modules in the C parser. Some
+The `token` and `tokenize` module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.
 
 For some context, the Python
-[grammar](https://docs.python.org/3/reference/grammar.html), contains
+[grammar](https://docs.python.org/3/reference/grammar.html) contains
 *terminal* and *nonterminal* nodes. The terminal nodes are the ones that stop
 the parsing (they are leaf nodes, that is, no other node in the grammar can be
 contained in them). These nodes are represented in uppercase. Every terminal
 node in the grammar is a token type, for example, `NAME`, `NUMBER`, or
-`STRING`. Not all token types are terminal nodes. The C parser re-uses the
-tokenize node types when it constructs the AST. Nonterminal nodes are
-represented by numbers greater than `NT_OFFSET`, which is currently 256. You
-can see the list of nonterminal nodes in the
+`STRING`. Most terminal nodes in the [grammar
+file](https://github.com/python/cpython/blob/master/Grammar/Grammar) are
+represented by their string value (for instance, the grammar references `'('`
+instead of `LPAR`). The C parser re-uses the tokenize node types when it
+constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
+`NT_OFFSET`, which is currently 256. You can see the list of nonterminal nodes
+in the
 [`graminit.h`](https://github.com/python/cpython/blob/master/Include/graminit.h)
-file.
+file, or by using the
+[`symbol`](https://docs.python.org/3/library/symbol.html) module.
 
-The following functions are included in the `token` module, but aren't likely
-useful outside of the Python C parser.
+The [`parser`](https://docs.python.org/3/library/parser.html) module can be
+used from within Python to access the parse tree. The `parser` and `symbol`
+modules aren't discussed further in this guide because the `tokenize` and
+`ast` modules are generally preferable for almost all use-cases (see the
+[alternatives](alternatives.html) section). In particular, the `parser` module
+has all the same limitations as the `ast` module (it requires complete,
+syntactically valid Python code), but is much more difficult to work with. The
+`parser` module exists mainly as a relic from before the `ast` module existed
+in the standard library (`ast` was introduced in Python 2.5).
+
+The following example gives an idea of what the `parser` syntax trees look
+like for the code `("a") + True`.
+
+```py
+>>> import parser
+>>> import pprint
+>>> def pretty(st):
+...     l = st.tolist()
+...
+...     def toname(t):
+...         for i, val in enumerate(t[:]):
+...             if isinstance(val, int):
+...                 if token.ISTERMINAL(t[0]):
+...                     t[i] = token.tok_name[val]
+...                 else:
+...                     t[i] = symbol.sym_name[val]
+...             if isinstance(val, list):
+...                 toname(t[i])
+...
+...     toname(l)
+...     return l
+>>> st = parser.expr('("a") + True')
+>>> pprint.pprint(pretty(st))
+['eval_input',
+ ['testlist',
+  ['test',
+   ['or_test',
+    ['and_test',
+     ['not_test',
+      ['comparison',
+       ['expr',
+        ['xor_expr',
+         ['and_expr',
+          ['shift_expr',
+           ['arith_expr',
+            ['term',
+             ['factor',
+              ['power',
+               ['atom_expr',
+                ['atom',
+                 ['LPAR', '('],
+                 ['testlist_comp',
+                  ['test',
+                   ['or_test',
+                    ['and_test',
+                     ['not_test',
+                      ['comparison',
+                       ['expr',
+                        ['xor_expr',
+                         ['and_expr',
+                          ['shift_expr',
+                           ['arith_expr',
+                            ['term',
+                             ['factor',
+                              ['power',
+                               ['atom_expr',
+                                ['atom', ['STRING', '"a"']]]]]]]]]]]]]]]]],
+                 ['RPAR', ')']]]]]],
+            ['PLUS', '+'],
+            ['term',
+             ['factor',
+              ['power', ['atom_expr', ['atom', ['NAME', 'True']]]]]]]]]]]]]]]]],
+ ['NEWLINE', ''],
+ ['ENDMARKER', '']]
+```
+
+Compare this to the `tokenize` representation seen in the [intro](intro.html),
+or the `ast` representation:
+
+```py
+>>> import ast
+>>> ast.dump(ast.parse('("a") + True'))
+"Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
+```
+
+The following functions are included in the `token` module, but aren't
+particularly useful outside of the `parser` module.
 
 ### `ISTERMINAL(x)`
 
 `ISTERMINAL(x)` returns `True` is `x` is a terminal token type. It is
 equivalent to `x < NT_OFFSET`. Every token in the `token` module (except for
-`NT_OFFSET`) is a terminal node.
+`NT_OFFSET`) is a terminal node. It returns `False` for every token in the
+`symbol` module.
 
 ### `ISNONTERMINAL(x)`
 
 `ISNONTERMINAL(x)` returns `True` if `x` is a nonterminal token type. It is
 equivalent to `x >= NT_OFFSET`. The only nonterminal "token" in the `token`
-module is `NT_OFFSET` itself.
+module is `NT_OFFSET` itself. It returns `True` for every token in the
+`symbol` module.
 
 ### `ISEOF(x)`
 
 `ISEOF(x)` returns true if `x` is the end of input marker token type. It is
-equivalent to `x == ENDMARKER`.
+equivalent to `x == ENDMARKER`. This is also mostly useless, as the
+`tokenize()` function ends iteration after it emits this token.
