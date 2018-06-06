@@ -15,8 +15,7 @@ definition, that is, every occurrence of the `def` keyword. Such a tool
 could be used by a text editor to aid in jumping to function
 definitions, for instance.
 
-Regular expressions
--------------------
+## Regular expressions
 
 Using naive regular expression parsing, you might start with something
 like
@@ -94,8 +93,7 @@ naive matching of parentheses in the source as a whole, as a single
 even if the source as Python is itself valid. We will see this example
 in more detail later.
 
-Tokenize
---------
+## Tokenize
 
 Now let\'s consider the tokenize module. It\'s quite easy to search for
 the `def` keyword. We just look for `NAME` tokens where the token string
@@ -132,8 +130,8 @@ It should also be note that the above function is not fully correct, as
 it does not properly handle `ERRORTOKEN`s or exceptions. We will see
 later how to fix it.
 
-AST
----
+## AST
+
 
 The `ast` module can also be used to avoid the pitfalls of detecting
 false positives. In fact, the `ast` module will have NO false positives.
@@ -175,8 +173,7 @@ If you want to learn more about the AST module, look at [Green Tree
 Snakes](https://greentreesnakes.readthedocs.io/en/latest/), which is a
 companion to this guide for the Python `ast` module.
 
-Summary
--------
+## Summary
 
 The following table outlines the differences between using regular
 expression matching, `tokenize`, and `ast` to find or modify constructs
@@ -232,6 +229,8 @@ most use-cases where one might want to use naive string matching on
 Python code using regular expressions, writing an equivalent method
 using the `tokenize` module will be more correct on edge cases, more
 maintainable, and easier to extend.
+
+### parso
 
 As a final note, David Halter\'s
 [parso](https://parso.readthedocs.io/en/latest/) library contains an
