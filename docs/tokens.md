@@ -36,9 +36,78 @@ The dictionary `tok_name` maps the tokens back to their names:
 
 ## The tokens
 
+To simplify the below sections, the following utility function is used for all
+the examples:
+
+```py
+>>> import io
+>>> def print_tokens(s):
+...     for i in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
+...         print(i)
+```
+
 ### `ENDMARKER`
 
+This is always the last token emitted by `tokenize()`, unless it raises an
+exception. The `string` and `line` are always `''`. For most applications it
+is not necessary to explicitly worry about `ENDMARKER` because `tokenize()`
+stops iteration after the last token is yielded.
+
+```py
+>>> print_tokens('x + 1')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=1 (NAME), string='x', start=(1, 0), end=(1, 1), line='x + 1')
+TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='x + 1')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 4), end=(1, 5), line='x + 1')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+```
+
+```py
+>>> print_tokens('')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=0 (ENDMARKER), string='', start=(1, 0), end=(1, 0), line='')
+```
+
 ### `NAME`
+
+The `NAME` token type is used for any Python identifier, as well as every keyword. *keywords* are Python syntactic elements that consist only of alphabetic
+characters, such as `for`, `def` and `True`. To tell if a `NAME` token is a
+keyword, use
+[`keyword.iskeyword()`](https://docs.python.org/3/library/keyword.html#keyword.iskeyword).
+
+As a side note, internally, the `tokenize` module uses the
+[`str.isidentifier()`](https://docs.python.org/3/library/stdtypes.html#str.isidentifier)
+method to test if a token should be a `NAME` token. The full rules for what
+makes a [valid
+identifier](https://docs.python.org/3/reference/lexical_analysis.html?highlight=identifiers#identifiers)
+are somewhat complicated, as they involve a large table of [Unicode
+characters](https://www.dcl.hpi.uni-potsdam.de/home/loewis/table-3131.html).
+One should always use the `str.isidentifier()` method to test if a string is a
+valid Python identifier, combined with a `keyword.iskeyword()` check. Testing
+if a string is an identifier using regular expressions is generally
+discouraged.
+
+```py
+>>> print_tokens('a or α')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a or α')
+TokenInfo(type=1 (NAME), string='or', start=(1, 2), end=(1, 4), line='a or α')
+TokenInfo(type=1 (NAME), string='α', start=(1, 5), end=(1, 6), line='a or α')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+```
+
+```py
+>>> import keyword
+>>> keyword.iskeyword('or')
+True
+```
+
+```py
+>>> 'α'.isidentifier()
+True
+>>> 'or'.isidentifier()
+True
+```
 
 ### `NUMBER`
 
