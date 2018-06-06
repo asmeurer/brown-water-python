@@ -339,3 +339,79 @@ TokenError: Unclosed brace(s)
 ```
 
 ### `IndentationError`
+
+`tokenize()` raises `IndentationError` if an unindent does not match an outer
+indentation level.
+
+```py
+>>> for tok in tokenize.tokenize(io.BytesIO(b"""
+... if x:
+...     pass
+...  f
+... """).readline):
+...     print(tok) # doctest: +SKIP
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=1 (NAME), string='if', start=(2, 0), end=(2, 2), line='if x:\n')
+TokenInfo(type=1 (NAME), string='x', start=(2, 3), end=(2, 4), line='if x:\n')
+TokenInfo(type=53 (OP), string=':', start=(2, 4), end=(2, 5), line='if x:\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 5), end=(2, 6), line='if x:\n')
+TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line='    pass\n')
+TokenInfo(type=1 (NAME), string='pass', start=(3, 4), end=(3, 8), line='    pass\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 8), end=(3, 9), line='    pass\n')
+Traceback (most recent call last):
+  ...
+  File "<tokenize>", line 4
+    f
+    ^
+IndentationError: unindent does not match any outer indentation level
+
+
+```
+
+This error is difficult to recover from. If you need to handle tokenizing
+input with invalid indentation, my best recommendation is to instead use the
+[parso](https://parso.readthedocs.io/en/latest/) library, which does not raise
+`IndentationError` (it also does not raise any of the other exceptions
+discussed here). See also the [discussion](alternatives.html#parso) of parso in the
+alternatives section.
+
+This is the only indentation error `tokenize` cares about. It does not care
+about other syntactically invalid constructs such as inconsistently mixing
+tabs and spaces.
+
+```py
+>>> for tok in tokenize.tokenize(io.BytesIO(b"""
+... if x:
+...     \tpass
+... \t    pass
+... """).readline):
+...     print(tok)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=1 (NAME), string='if', start=(2, 0), end=(2, 2), line='if x:\n')
+TokenInfo(type=1 (NAME), string='x', start=(2, 3), end=(2, 4), line='if x:\n')
+TokenInfo(type=53 (OP), string=':', start=(2, 4), end=(2, 5), line='if x:\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 5), end=(2, 6), line='if x:\n')
+TokenInfo(type=5 (INDENT), string='    \t', start=(3, 0), end=(3, 5), line='    \tpass\n')
+TokenInfo(type=1 (NAME), string='pass', start=(3, 5), end=(3, 9), line='    \tpass\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 9), end=(3, 10), line='    \tpass\n')
+TokenInfo(type=5 (INDENT), string='\t    ', start=(4, 0), end=(4, 5), line='\t    pass\n')
+TokenInfo(type=1 (NAME), string='pass', start=(4, 5), end=(4, 9), line='\t    pass\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 9), end=(4, 10), line='\t    pass\n')
+TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
+TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
+TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
+>>> exec("""
+... if x:
+...     \tpass
+... \t    pass
+... """)
+Traceback (most recent call last):
+  ...
+  File "<string>", line 4
+    pass
+       ^
+TabError: inconsistent use of tabs and spaces in indentation
+
+```

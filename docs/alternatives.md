@@ -235,14 +235,14 @@ maintainable, and easier to extend.
 As a final note, David Halter\'s
 [parso](https://parso.readthedocs.io/en/latest/) library contains an
 alternative implementation of the standard library `tokenize` and `ast`
-modules for Python. Parso has many advantages over the standard library,
-such as round-trippable AST, the tokenize function has fewer
-\"gotchas\", the ability to detect multiple syntax errors in a single
-block of code, the ability to parse Python code for a different version
-of Python than the one that is running, and more. If you don\'t mind an
-external dependency and want to save yourself potential headaches, it is
-worth considering using `parso` instead of the standard library
-`tokenize` or `ast`.
+modules for Python. Parso has many advantages over the standard library, such
+as round-trippable AST, the tokenize function has fewer \"gotchas\" and
+doesn't raise [exceptions](usage.html#exceptions), the ability to detect
+multiple syntax errors in a single block of code, the ability to parse Python
+code for a different version of Python than the one that is running, and more.
+If you don\'t mind an external dependency and want to save yourself potential
+headaches, it is worth considering using `parso` instead of the standard
+library `tokenize` or `ast`.
 
 
 <small>[1.](#a1) <span id="f1"></span> Actually there are a handful of syntax errors that
