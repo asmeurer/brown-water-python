@@ -36,6 +36,24 @@ The dictionary `tok_name` maps the tokens back to their names:
 
 ## The tokens
 
+### `ENDMARKER`
+
+### `NAME`
+
+### `NUMBER`
+
+### `STRING`
+
+### `NEWLINE`
+
+### `INDENT`
+
+### `DEDENT`
+
+### `RARROW`
+
+### `ELLIPSIS`
+
 ### `OP`
 
 `OP` is a generic token type for all operations, delimiters, and the ellipsis
@@ -78,6 +96,21 @@ characters.
 
 <!-- .. include:: exact_type_table.txt -->
 <!-- ``` -->
+
+### `AWAIT`
+
+### `ASYNC`
+
+### `ERRORTOKEN`
+
+### `COMMENT`
+
+### `NL`
+
+### `ENCODING`
+
+### `NT_OFFSET`
+
 
 ## Additional helper functions
 
