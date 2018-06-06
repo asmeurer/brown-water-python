@@ -145,7 +145,7 @@ remaining token types.
 >>> import io
 >>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
 ...     print(tokenize.tok_name[i.type], i.string)
-BACKQUOTE utf-8
+ENCODING utf-8
 OP [
 NUMBER 1
 OP +
@@ -154,7 +154,7 @@ OP ]
 ENDMARKER
 >>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
 ...     print(tokenize.tok_name[i.exact_type], i.string)
-BACKQUOTE utf-8
+ENCODING utf-8
 LSQB [
 NUMBER 1
 PLUS +
