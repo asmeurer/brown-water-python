@@ -409,7 +409,6 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
 ### `DEDENT`
 
 ### `RARROW`
-
 ### `ELLIPSIS`
 
 The `RARROW` and `ELLIPSIS` tokens tokenize as [`OP`](#OP). However, due to a
@@ -421,14 +420,15 @@ correct type.
 
 ```py
 >>> # Python 3.5 and 3.6 behavior
->>> for tok in tokenize.tokenize(io.BytesIO(b'def test() ->: ...').readline):
+>>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...').readline):
 ...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string))
 ENCODING ENCODING 'utf-8'
 NAME NAME 'def'
-NAME NAME 'test'
+NAME NAME 'func'
 OP LPAR '('
 OP RPAR ')'
 OP OP '->'
+NAME NAME 'list'
 OP COLON ':'
 OP OP '...'
 ENDMARKER ENDMARKER ''
@@ -439,14 +439,15 @@ This bug has been fixed in Python 3.7.
 
 ```py
 >>> # Python 3.7+ behavior
->>> for tok in tokenize.tokenize(io.BytesIO(b'def test() ->: ...').readline):
+>>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...').readline):
 ...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP
 ENCODING ENCODING 'utf-8'
 NAME NAME 'def'
-NAME NAME 'test'
+NAME NAME 'func'
 OP LPAR '('
 OP RPAR ')'
 OP RARROW '->'
+NAME NAME 'list'
 OP COLON ':'
 OP ELLIPSIS '...'
 ENDMARKER ENDMARKER ''
