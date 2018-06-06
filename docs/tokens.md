@@ -118,6 +118,109 @@ True
 
 ### `NUMBER`
 
+The `NUMBER` token type is used for any numeric literal, including (decimal) integer literals,
+binary, octal, and hexidecimal integer literals, floating point numbers
+(including scientific notation), and imaginary number literals (like `1j`).
+
+```py
+>>> print_tokens('10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='10', start=(1, 0), end=(1, 2), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=53 (OP), string='+', start=(1, 3), end=(1, 4), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=2 (NUMBER), string='0b101', start=(1, 5), end=(1, 10), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=53 (OP), string='+', start=(1, 11), end=(1, 12), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=2 (NUMBER), string='0o10', start=(1, 13), end=(1, 17), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=53 (OP), string='+', start=(1, 18), end=(1, 19), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=2 (NUMBER), string='0xa', start=(1, 20), end=(1, 23), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=53 (OP), string='-', start=(1, 24), end=(1, 25), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=2 (NUMBER), string='1.0', start=(1, 26), end=(1, 29), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=53 (OP), string='+', start=(1, 30), end=(1, 31), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=2 (NUMBER), string='1e1', start=(1, 32), end=(1, 35), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=53 (OP), string='+', start=(1, 36), end=(1, 37), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=2 (NUMBER), string='1j', start=(1, 38), end=(1, 40), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+Note that even though literals like `1+2j` are a single `complex` type, they
+tokenize as `NUMBER` (`1`), `OP` (`+`), `NUMBER` (`2j`).
+
+```py
+>>> print_tokens('1+2j')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1+2j')
+TokenInfo(type=53 (OP), string='+', start=(1, 1), end=(1, 2), line='1+2j')
+TokenInfo(type=2 (NUMBER), string='2j', start=(1, 2), end=(1, 4), line='1+2j')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+Invalid numeric literals may tokenize as multiple numeric literals.
+
+```py
+>>> print_tokens('012')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='0', start=(1, 0), end=(1, 1), line='012')
+TokenInfo(type=2 (NUMBER), string='12', start=(1, 1), end=(1, 3), line='012')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+>>> print_tokens('0x1.0')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='0x1', start=(1, 0), end=(1, 3), line='0x1.0')
+TokenInfo(type=2 (NUMBER), string='.0', start=(1, 3), end=(1, 5), line='0x1.0')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+>>> print_tokens('0o184')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='0o1', start=(1, 0), end=(1, 3), line='0o184')
+TokenInfo(type=2 (NUMBER), string='84', start=(1, 3), end=(1, 5), line='0o184')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+One advantage of using `tokenize` over `ast` is that floating point numbers
+are not rounded at the tokenization stage, so it is possible to access the
+full input. This can be used, for instance, to wrap floating point numbers
+with a type that supports arbitrary precision, such as `decimal.Decimal`. See
+the [example](https://docs.python.org/3/library/tokenize.html#examples) in the
+official `tokenize` documentation.
+
+```py
+>>> 1.0000000000000001
+1.0
+>>> print_tokens('1.0000000000000001')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='1.0000000000000001', start=(1, 0), end=(1, 18), line='1.0000000000000001')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+>>> import ast
+>>> ast.dump(ast.parse('1.0000000000000001'))
+'Module(body=[Expr(value=Num(n=1.0))])'
+
+```
+
+In Python >=3.6, numeric literals can have [underscore
+separators](https://docs.python.org/3/whatsnew/3.6.html#whatsnew36-pep515),
+like `123_456`.
+
+```py
+>>> # Python 3.6+ only.
+>>> print_tokens('123_456') # doctest: +SKIP
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='123_456', start=(1, 0), end=(1, 7), line='123_456')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME` (`_456`).
+
+```py
+>>> # The behavior in Python 3.5
+>>> print_tokens('123_456') # doctest: +SKIP
+    TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+    TokenInfo(type=2 (NUMBER), string='123', start=(1, 0), end=(1, 3), line='123_456')
+    TokenInfo(type=1 (NAME), string='_456', start=(1, 3), end=(1, 7), line='123_456')
+    TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
 ### `STRING`
 
 ### `NEWLINE`
@@ -295,7 +398,6 @@ Compare this to the `tokenize` representation seen in the [intro](intro.html),
 or the `ast` representation:
 
 ```py
->>> import ast
 >>> ast.dump(ast.parse('("a") + True'))
 "Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
 
