@@ -144,23 +144,23 @@ remaining token types.
 ```py
 >>> import io
 >>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
-...     print(tokenize.tok_name[i.type], i.string)
-ENCODING utf-8
-OP [
-NUMBER 1
-OP +
-NUMBER 2
-OP ]
-ENDMARKER
+...     print(tokenize.tok_name[i.type], repr(i.string))
+ENCODING 'utf-8'
+OP '['
+NUMBER '1'
+OP '+'
+NUMBER '2'
+OP ']'
+ENDMARKER ''
 >>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
-...     print(tokenize.tok_name[i.exact_type], i.string)
-ENCODING utf-8
-LSQB [
-NUMBER 1
-PLUS +
-NUMBER 2
-RSQB ]
-ENDMARKER
+...     print(tokenize.tok_name[i.exact_type], repr(i.string))
+ENCODING 'utf-8'
+LSQB '['
+NUMBER '1'
+PLUS '+'
+NUMBER '2'
+RSQB ']'
+ENDMARKER ''
 
 ```
 
