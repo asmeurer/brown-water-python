@@ -77,6 +77,7 @@ pattern is recommended in Python 3 as well, see the `Usage <usage.html>`_ sectio
 
    intro
    alternatives
+   usage
    tokens
 
 
