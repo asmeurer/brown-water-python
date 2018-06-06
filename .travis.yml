@@ -28,7 +28,8 @@ install:
 script:
   - set -e
   - cd docs
-  - make doctest
+  - make doctest # tests rst files only
   - make html
+  - python -m doctest *.md
   - cd ..
   - doctr deploy --built-docs docs/_build/html .
