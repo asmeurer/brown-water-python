@@ -412,6 +412,46 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
 
 ### `ELLIPSIS`
 
+The `RARROW` and `ELLIPSIS` tokens tokenize as [`OP`](#OP). However, due to a
+[bug](https://bugs.python.org/issue24622) present in Python versions prior to
+3.7, the `exact_type` attribute of these tokens will be `OP` instead of the
+correct type.
+
+<!-- TODO: Skip when we doctest against 3.7 -->
+
+```py
+>>> # Python 3.5 and 3.6 behavior
+>>> for tok in tokenize.tokenize(io.BytesIO(b'def test() ->: ...').readline):
+...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string))
+ENCODING ENCODING 'utf-8'
+NAME NAME 'def'
+NAME NAME 'test'
+OP LPAR '('
+OP RPAR ')'
+OP OP '->'
+OP COLON ':'
+OP OP '...'
+ENDMARKER ENDMARKER ''
+
+```
+
+This bug has been fixed in Python 3.7.
+
+```py
+>>> # Python 3.7+ behavior
+>>> for tok in tokenize.tokenize(io.BytesIO(b'def test() ->: ...').readline):
+...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP
+ENCODING ENCODING 'utf-8'
+NAME NAME 'def'
+NAME NAME 'test'
+OP LPAR '('
+OP RPAR ')'
+OP RARROW '->'
+OP COLON ':'
+OP ELLIPSIS '...'
+ENDMARKER ENDMARKER ''
+
+```
 ### `OP`
 
 `OP` is a generic token type for all operations, delimiters, and the ellipsis
@@ -421,7 +461,7 @@ parser (these are parsed as `ERRORTOKEN`).
 When using `tokenize`, the token type for an operation, delimiter, or ellipsis
 literal token will be `OP`. To get the exact token type, use the `exact_type`
 property of the namedtuple. `exact_type` is equivalent to `type` for the
-remaining token types.
+remaining token types (with two exceptions, see the notes below).
 
 ```py
 >>> import io
