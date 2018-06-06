@@ -245,21 +245,24 @@ most use-cases where one might want to use naive string matching on
 Python code using regular expressions, writing an equivalent method
 using the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module will be more correct on edge cases, more
 maintainable, and easier to extend.</p>
+<div class="section" id="parso">
+<span id="parso"></span><h3>parso<a class="headerlink" href="#parso" title="Permalink to this headline">¶</a></h3>
 <p>As a final note, David Halter’s
 <a class="reference external" href="https://parso.readthedocs.io/en/latest/">parso</a> library contains an
 alternative implementation of the standard library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code>
-modules for Python. Parso has many advantages over the standard library,
-such as round-trippable AST, the tokenize function has fewer
-“gotchas”, the ability to detect multiple syntax errors in a single
-block of code, the ability to parse Python code for a different version
-of Python than the one that is running, and more. If you don’t mind an
-external dependency and want to save yourself potential headaches, it is
-worth considering using <code class="docutils literal notranslate"><span class="pre">parso</span></code> instead of the standard library
-<code class="docutils literal notranslate"><span class="pre">tokenize</span></code> or <code class="docutils literal notranslate"><span class="pre">ast</span></code>.</p>
+modules for Python. Parso has many advantages over the standard library, such
+as round-trippable AST, the tokenize function has fewer “gotchas” and
+doesn’t raise <a class="reference external" href="usage.html#exceptions">exceptions</a>, the ability to detect
+multiple syntax errors in a single block of code, the ability to parse Python
+code for a different version of Python than the one that is running, and more.
+If you don’t mind an external dependency and want to save yourself potential
+headaches, it is worth considering using <code class="docutils literal notranslate"><span class="pre">parso</span></code> instead of the standard
+library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> or <code class="docutils literal notranslate"><span class="pre">ast</span></code>.</p>
 <p><small><a class="reference external" href="#a1">1.</a> <span id="f1"></span> Actually there are a handful of syntax errors that
 cannot be detected by the AST due to their context sensitive nature, such
 as <code class="docutils literal notranslate"><span class="pre">break</span></code> outside of a loop. These are found only after compiling the
 AST.</small></p>
+</div>
 </div>
 </div>
 

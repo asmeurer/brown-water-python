@@ -89,8 +89,8 @@ mode (<code class="docutils literal notranslate"><span class="pre">'r'</span></c
 <code class="docutils literal notranslate"><span class="pre">io.BytesIO</span></code> object (<em>not <code class="docutils literal notranslate"><span class="pre">StringIO</span></code></em>), and use the <code class="docutils literal notranslate"><span class="pre">readline</span></code> method of that
 object. If you find yourself doing this often, it may be useful to define a
 helper function.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="kn">import</span> <span class="nn">io</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="s1">&#39;hello + tokenize&#39;</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
@@ -110,7 +110,7 @@ whatever you are doing before you reach the
 <a class="reference external" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a> token, you can break early from the loop
 efficiently without tokenizing the rest of the document. It is not recommended
 to convert the <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> generator into a list, except for debugging
-purposes.</p>
+purposes. Not only is this inefficient, it makes it impossible to deal with <a class="reference external" href="#exceptions">exceptions</a>.</p>
 </div>
 <div class="section" id="tokeninfo">
 <span id="tokeninfo"></span><h2><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code><a class="headerlink" href="#tokeninfo" title="Permalink to this headline">¶</a></h2>
@@ -195,6 +195,228 @@ relating to the tokenization.</p>
 </div>
 <div class="section" id="exceptions">
 <span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> has two failure modes: <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> and exceptions. When a
+non-fatal error occurs, some text will be tokenized as an <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>, and
+tokenizing will continue on the remainder of the input. This happens, for
+instance, for unrecognized characters, such as <code class="docutils literal notranslate"><span class="pre">$</span></code>, and unclosed single-quoted
+strings. See <a class="reference external" href="token.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> and
+<a class="reference external" href="token.html#error-behavior"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a>.</p>
+<p>Some tokenization failures are fatal, and cause an error to occur. Depending
+on what you are doing, you may want to catch the exception and deal with it or
+let it bubble up to the caller.</p>
+<div class="section" id="syntaxerror">
+<span id="syntaxerror"></span><h3><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code><a class="headerlink" href="#syntaxerror" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code> is raised when the input has an invalid encoding. The encoding
+is detected using the <a class="reference external" href="tokens.html#detect_encoding"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>
+function, which uses either a <a class="reference external" href="https://www.python.org/dev/peps/pep-0263/">PEP
+263</a> formatted comment at the
+beginning of the input (like <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">-*-</span> <span class="pre">coding:</span> <span class="pre">utf-8</span> <span class="pre">-*-</span></code>), or a Unicode BOM
+character. If both are present, or if the PEP 263 encoding is invalid,
+<code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code> is raised.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;# -*- coding: invalid -*-&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">SyntaxError</span>: <span class="n">unknown encoding: invalid</span>
+
+</pre></div>
+</div>
+<p>See also <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a>.</p>
+</div>
+<div class="section" id="tokenerror">
+<span id="tokenerror"></span><h3><code class="docutils literal notranslate"><span class="pre">TokenError</span></code><a class="headerlink" href="#tokenerror" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tokenize.TokenError</span></code> is raised in two situations. The only way to distinguish
+the two is to inspect the exception message. In both cases, <code class="docutils literal notranslate"><span class="pre">TokenError</span></code> is
+raised if the end of the input (<code class="docutils literal notranslate"><span class="pre">EOF</span></code>) is reached without a delimiter being
+closed. Tokens before the end of the input are still emitted, so it is
+typically desirable to process the tokens from <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> and handle
+<code class="docutils literal notranslate"><span class="pre">TokenError</span></code> if it occurs as an end of input condition.</p>
+<p>The second argument of the exception (<code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>) is a tuple of the
+<a class="reference external" href="#start">start</a> line and column number for the part of the string that was not
+tokenized due to the exception.</p>
+<ol>
+<li><p class="first"><strong>EOF in multi-line string</strong></p>
+<p>This happens if a triple-quoted string (i.e., a multi-line string, or
+docstring), is not closed at the end of the input. This exception can be
+detected by checking <code class="docutils literal notranslate"><span class="pre">'string'</span> <span class="pre">in</span> <span class="pre">e.args[0]</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">def f():</span>
+<span class="gp">... </span><span class="s2">    &#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s2">    unclosed docstring</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span> 
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(2, 0), end=(2, 3), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;f&#39;, start=(2, 4), end=(2, 5), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(2, 5), end=(2, 6), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(2, 6), end=(2, 7), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(2, 7), end=(2, 8), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 8), end=(2, 9), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=5 (INDENT), string=&#39;    &#39;, start=(3, 0), end=(3, 4), line=&quot;    &#39;&#39;&#39;\n&quot;)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">tokenize.TokenError</span>: <span class="n">(&#39;EOF in multi-line string&#39;, (3, 4))</span>
+
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>EOF in multi-line statement</strong></p>
+<p>This error occurs when an unclosed brace is found. Note that <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>
+does not necessarily stop parsing as soon as the input is syntactically
+invalid, as it only has limited knowledge of Python syntax. In fact, in the
+current implementation, this exception is only raised after all tokens have
+been emitted, except possibly <code class="docutils literal notranslate"><span class="pre">DEDENT</span></code> tokens.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">(1 +</span>
+<span class="gp">... </span><span class="s2">def f():</span>
+<span class="gp">... </span><span class="s2">    pass</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span> 
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(2, 0), end=(2, 1), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(2, 1), end=(2, 2), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(2, 3), end=(2, 4), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(2, 4), end=(2, 5), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(3, 0), end=(3, 3), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;f&#39;, start=(3, 4), end=(3, 5), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(3, 5), end=(3, 6), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(3, 6), end=(3, 7), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(3, 7), end=(3, 8), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(3, 8), end=(3, 9), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;pass&#39;, start=(4, 4), end=(4, 8), line=&#39;    pass\n&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(4, 8), end=(4, 9), line=&#39;    pass\n&#39;)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">tokenize.TokenError</span>: <span class="n">(&#39;EOF in multi-line statement&#39;, (5, 0))</span>
+
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The following example shows how <code class="docutils literal notranslate"><span class="pre">TokenError</span></code> might be caught and processed.
+See also the <a class="reference external" href="examples.html">examples</a>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">tokens_with_errors</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">except</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">TokenError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="s1">&#39;string&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;TokenError: Unclosed multi-line string starting at&quot;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">... </span>        <span class="k">elif</span> <span class="s1">&#39;statement&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;TokenError: Unclosed brace(s)&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="c1"># Unrecognized TokenError. Shouldn&#39;t happen</span>
+<span class="gp">... </span>            <span class="k">raise</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tokens_with_errors</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">def f():</span>
+<span class="gp">... </span><span class="s2">    &#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s2">    unclosed docstring</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(2, 0), end=(2, 3), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;f&#39;, start=(2, 4), end=(2, 5), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(2, 5), end=(2, 6), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(2, 6), end=(2, 7), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(2, 7), end=(2, 8), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 8), end=(2, 9), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=5 (INDENT), string=&#39;    &#39;, start=(3, 0), end=(3, 4), line=&quot;    &#39;&#39;&#39;\n&quot;)</span>
+<span class="go">TokenError: Unclosed multi-line string starting at (3, 4)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tokens_with_errors</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">(1 +</span>
+<span class="gp">... </span><span class="s2">def f():</span>
+<span class="gp">... </span><span class="s2">    pass</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(2, 0), end=(2, 1), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(2, 1), end=(2, 2), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(2, 3), end=(2, 4), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(2, 4), end=(2, 5), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(3, 0), end=(3, 3), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;f&#39;, start=(3, 4), end=(3, 5), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(3, 5), end=(3, 6), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(3, 6), end=(3, 7), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(3, 7), end=(3, 8), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(3, 8), end=(3, 9), line=&#39;def f():\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;pass&#39;, start=(4, 4), end=(4, 8), line=&#39;    pass\n&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(4, 8), end=(4, 9), line=&#39;    pass\n&#39;)</span>
+<span class="go">TokenError: Unclosed brace(s)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="indentationerror">
+<span id="indentationerror"></span><h3><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code><a class="headerlink" href="#indentationerror" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> raises <code class="docutils literal notranslate"><span class="pre">IndentationError</span></code> if an unindent does not match an outer
+indentation level.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">if x:</span>
+<span class="gp">... </span><span class="s2">    pass</span>
+<span class="gp">... </span><span class="s2"> f</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span> 
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;if&#39;, start=(2, 0), end=(2, 2), line=&#39;if x:\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(2, 3), end=(2, 4), line=&#39;if x:\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(2, 4), end=(2, 5), line=&#39;if x:\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 5), end=(2, 6), line=&#39;if x:\n&#39;)</span>
+<span class="go">TokenInfo(type=5 (INDENT), string=&#39;    &#39;, start=(3, 0), end=(3, 4), line=&#39;    pass\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;pass&#39;, start=(3, 4), end=(3, 8), line=&#39;    pass\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(3, 8), end=(3, 9), line=&#39;    pass\n&#39;)</span>
+  File <span class="nb">&quot;&lt;tokenize&gt;&quot;</span>, line <span class="m">4</span>
+    <span class="n">f</span>
+    <span class="o">^</span>
+<span class="gr">IndentationError</span>: <span class="n">unindent does not match any outer indentation level</span>
+
+
+</pre></div>
+</div>
+<p>This error is difficult to recover from. If you need to handle tokenizing
+input with invalid indentation, my best recommendation is to instead use the
+<a class="reference external" href="https://parso.readthedocs.io/en/latest/">parso</a> library, which does not raise
+<code class="docutils literal notranslate"><span class="pre">IndentationError</span></code> (it also does not raise any of the other exceptions
+discussed here). See also the <a class="reference external" href="alternatives.html#parso">discussion</a> of parso in the
+alternatives section.</p>
+<p>This is the only indentation error <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> cares about. It does not care
+about other syntactically invalid constructs such as inconsistently mixing
+tabs and spaces.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">if x:</span>
+<span class="gp">... </span><span class="s2">    </span><span class="se">\t</span><span class="s2">pass</span>
+<span class="gp">... </span><span class="se">\t</span><span class="s2">    pass</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;if&#39;, start=(2, 0), end=(2, 2), line=&#39;if x:\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(2, 3), end=(2, 4), line=&#39;if x:\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(2, 4), end=(2, 5), line=&#39;if x:\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 5), end=(2, 6), line=&#39;if x:\n&#39;)</span>
+<span class="go">TokenInfo(type=5 (INDENT), string=&#39;    \t&#39;, start=(3, 0), end=(3, 5), line=&#39;    \tpass\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;pass&#39;, start=(3, 5), end=(3, 9), line=&#39;    \tpass\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(3, 9), end=(3, 10), line=&#39;    \tpass\n&#39;)</span>
+<span class="go">TokenInfo(type=5 (INDENT), string=&#39;\t    &#39;, start=(4, 0), end=(4, 5), line=&#39;\t    pass\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;pass&#39;, start=(4, 5), end=(4, 9), line=&#39;\t    pass\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(4, 9), end=(4, 10), line=&#39;\t    pass\n&#39;)</span>
+<span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">exec</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">if x:</span>
+<span class="gp">... </span><span class="s2">    </span><span class="se">\t</span><span class="s2">pass</span>
+<span class="gp">... </span><span class="se">\t</span><span class="s2">    pass</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+  File <span class="nb">&quot;&lt;string&gt;&quot;</span>, line <span class="m">4</span>
+    <span class="k">pass</span>
+       <span class="o">^</span>
+<span class="gr">TabError</span>: <span class="n">inconsistent use of tabs and spaces in indentation</span>
+
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
