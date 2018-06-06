@@ -64,8 +64,8 @@ helper function.
 
 
 ```py
+>>> import io
 >>> def tokenize_string(s):
-...     import io
 ...     return tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline)
 >>> for tok in tokenize_string('hello + tokenize'):
 ...     print(tok)
@@ -85,7 +85,7 @@ whatever you are doing before you reach the
 [`ENDMARKER`](tokens.html#endmarker) token, you can break early from the loop
 efficiently without tokenizing the rest of the document. It is not recommended
 to convert the `tokenize()` generator into a list, except for debugging
-purposes.
+purposes. Not only is this inefficient, it makes it impossible to deal with [exceptions](#exceptions).
 
 ## `TokenInfo`
 
@@ -176,3 +176,166 @@ tabs). `line` can also be useful for providing contextual error messages
 relating to the tokenization.
 
 ## Exceptions
+
+`tokenize()` has two failure modes: `ERRORTOKEN` and exceptions. When a
+non-fatal error occurs, some text will be tokenized as an `ERRORTOKEN`, and
+tokenizing will continue on the remainder of the input. This happens, for
+instance, for unrecognized characters, such as `$`, and unclosed single-quoted
+strings. See [`ERRORTOKEN`](token.html#errortoken) and
+[`STRING`](token.html#error-behavior).
+
+Some tokenization failures are fatal, and cause an error to occur. Depending
+on what you are doing, you may want to catch the exception and deal with it or
+let it bubble up to the caller.
+
+### `SyntaxError`
+
+`SyntaxError` is raised when the input has an invalid encoding. The encoding
+is detected using the [`detect_encoding()`](tokens.html#detect_encoding)
+function, which uses either a [PEP
+263](https://www.python.org/dev/peps/pep-0263/) formatted comment at the
+beginning of the input (like `# -*- coding: utf-8 -*-`), or a Unicode BOM
+character. If both are present, or if the PEP 263 encoding is invalid,
+`SyntaxError` is raised.
+
+```py
+>>> tokenize.tokenize(io.BytesIO(b"# -*- coding: invalid -*-").readline)
+Traceback (most recent call last):
+  ...
+SyntaxError: unknown encoding: invalid
+
+```
+
+See also [`ENCODING`](tokens.html#encoding).
+
+### `TokenError`
+
+`tokenize.TokenError` is raised in two situations. The only way to distinguish
+the two is to inspect the exception message. In both cases, `TokenError` is
+raised if the end of the input (`EOF`) is reached without a delimiter being
+closed. Tokens before the end of the input are still emitted, so it is
+typically desirable to process the tokens from `tokenize()` and handle
+`TokenError` if it occurs as an end of input condition.
+
+The second argument of the exception (`e.args[1]`) is a tuple of the
+[start](#start) line and column number for the part of the string that was not
+tokenized due to the exception.
+
+1. **EOF in multi-line string**
+
+   This happens if a triple-quoted string (i.e., a multi-line string, or
+   docstring), is not closed at the end of the input. This exception can be
+   detected by checking `'string' in e.args[0]`.
+
+   ```py
+   >>> for tok in tokenize.tokenize(io.BytesIO(b"""
+   ... def f():
+   ...     '''
+   ...     unclosed docstring
+   ... """).readline):
+   ...     print(tok) # doctest: +SKIP
+   TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+   TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+   TokenInfo(type=1 (NAME), string='def', start=(2, 0), end=(2, 3), line='def f():\n')
+   TokenInfo(type=1 (NAME), string='f', start=(2, 4), end=(2, 5), line='def f():\n')
+   TokenInfo(type=53 (OP), string='(', start=(2, 5), end=(2, 6), line='def f():\n')
+   TokenInfo(type=53 (OP), string=')', start=(2, 6), end=(2, 7), line='def f():\n')
+   TokenInfo(type=53 (OP), string=':', start=(2, 7), end=(2, 8), line='def f():\n')
+   TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 8), end=(2, 9), line='def f():\n')
+   TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line="    '''\n")
+   Traceback (most recent call last):
+     ...
+   tokenize.TokenError: ('EOF in multi-line string', (3, 4))
+
+   ```
+
+2. **EOF in multi-line statement**
+
+   This error occurs when an unclosed brace is found. Note that `tokenize`
+   does not necessarily stop parsing as soon as the input is syntactically
+   invalid, as it only has limited knowledge of Python syntax. In fact, in the
+   current implementation, this exception is only raised after all tokens have
+   been emitted, except possibly `DEDENT` tokens.
+
+   ```py
+   >>> for tok in tokenize.tokenize(io.BytesIO(b"""
+   ... (1 +
+   ... def f():
+   ...     pass
+   ... """).readline):
+   ...     print(tok) # doctest: +SKIP
+   TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+   TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+   TokenInfo(type=53 (OP), string='(', start=(2, 0), end=(2, 1), line='(1 +\n')
+   TokenInfo(type=2 (NUMBER), string='1', start=(2, 1), end=(2, 2), line='(1 +\n')
+   TokenInfo(type=53 (OP), string='+', start=(2, 3), end=(2, 4), line='(1 +\n')
+   TokenInfo(type=58 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
+   TokenInfo(type=1 (NAME), string='def', start=(3, 0), end=(3, 3), line='def f():\n')
+   TokenInfo(type=1 (NAME), string='f', start=(3, 4), end=(3, 5), line='def f():\n')
+   TokenInfo(type=53 (OP), string='(', start=(3, 5), end=(3, 6), line='def f():\n')
+   TokenInfo(type=53 (OP), string=')', start=(3, 6), end=(3, 7), line='def f():\n')
+   TokenInfo(type=53 (OP), string=':', start=(3, 7), end=(3, 8), line='def f():\n')
+   TokenInfo(type=58 (NL), string='\n', start=(3, 8), end=(3, 9), line='def f():\n')
+   TokenInfo(type=1 (NAME), string='pass', start=(4, 4), end=(4, 8), line='    pass\n')
+   TokenInfo(type=58 (NL), string='\n', start=(4, 8), end=(4, 9), line='    pass\n')
+   Traceback (most recent call last):
+     ...
+   tokenize.TokenError: ('EOF in multi-line statement', (5, 0))
+
+   ```
+
+The following example shows how `TokenError` might be caught and processed.
+See also the [examples](examples.html).
+
+```py
+>>> def tokens_with_errors(s):
+...     try:
+...         for tok in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
+...             print(tok)
+...     except tokenize.TokenError as e:
+...         if 'string' in e.args[0]:
+...             print("TokenError: Unclosed multi-line string starting at", e.args[1])
+...         elif 'statement' in e.args[0]:
+...             print("TokenError: Unclosed brace(s)")
+...         else:
+...             # Unrecognized TokenError. Shouldn't happen
+...             raise
+>>> tokens_with_errors("""
+... def f():
+...     '''
+...     unclosed docstring
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=1 (NAME), string='def', start=(2, 0), end=(2, 3), line='def f():\n')
+TokenInfo(type=1 (NAME), string='f', start=(2, 4), end=(2, 5), line='def f():\n')
+TokenInfo(type=53 (OP), string='(', start=(2, 5), end=(2, 6), line='def f():\n')
+TokenInfo(type=53 (OP), string=')', start=(2, 6), end=(2, 7), line='def f():\n')
+TokenInfo(type=53 (OP), string=':', start=(2, 7), end=(2, 8), line='def f():\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 8), end=(2, 9), line='def f():\n')
+TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line="    '''\n")
+TokenError: Unclosed multi-line string starting at (3, 4)
+>>> tokens_with_errors("""
+... (1 +
+... def f():
+...     pass
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=53 (OP), string='(', start=(2, 0), end=(2, 1), line='(1 +\n')
+TokenInfo(type=2 (NUMBER), string='1', start=(2, 1), end=(2, 2), line='(1 +\n')
+TokenInfo(type=53 (OP), string='+', start=(2, 3), end=(2, 4), line='(1 +\n')
+TokenInfo(type=58 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
+TokenInfo(type=1 (NAME), string='def', start=(3, 0), end=(3, 3), line='def f():\n')
+TokenInfo(type=1 (NAME), string='f', start=(3, 4), end=(3, 5), line='def f():\n')
+TokenInfo(type=53 (OP), string='(', start=(3, 5), end=(3, 6), line='def f():\n')
+TokenInfo(type=53 (OP), string=')', start=(3, 6), end=(3, 7), line='def f():\n')
+TokenInfo(type=53 (OP), string=':', start=(3, 7), end=(3, 8), line='def f():\n')
+TokenInfo(type=58 (NL), string='\n', start=(3, 8), end=(3, 9), line='def f():\n')
+TokenInfo(type=1 (NAME), string='pass', start=(4, 4), end=(4, 8), line='    pass\n')
+TokenInfo(type=58 (NL), string='\n', start=(4, 8), end=(4, 9), line='    pass\n')
+TokenError: Unclosed brace(s)
+
+```
+
+### `IndentationError`
