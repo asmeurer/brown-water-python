@@ -25,6 +25,7 @@ like
 ```py
 >>> import re
 >>> FUNCTION = re.compile(r'def ')
+
 ```
 
 Then using regular expression matching, find all lines that match and
@@ -48,6 +49,7 @@ print their line numbers.
 >>> line_numbers_regex(code)
 1
 5
+
 ```
 
 You might notice some issues with this approach. First off, the regular
@@ -65,6 +67,7 @@ generate some Python code.
 ...     {body}
 ... """
 ... '''
+
 ```
 
 The regular expression would detect this as a function.
@@ -72,6 +75,7 @@ The regular expression would detect this as a function.
 ```py
 >>> line_numbers_regex(code_tricky)
 2
+
 ```
 
 In general, it\'s very difficult, if not impossible, for a regular
@@ -110,6 +114,7 @@ produces for the above code examples:
 1
 5
 >>> line_numbers_tokenize(code_tricky) # No lines are printed
+
 ```
 
 We see that it isn\'t fooled by the code that is in a string, because
@@ -156,6 +161,7 @@ Traceback (most recent call last):
     def test():
               ^
 SyntaxError: unexpected EOF while parsing
+
 ```
 
 Another thing to note about the `ast` module is that certain

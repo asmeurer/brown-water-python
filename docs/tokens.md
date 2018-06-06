@@ -32,6 +32,7 @@ The dictionary `tok_name` maps the tokens back to their names:
 3
 >>> tokenize.tok_name[tokenize.STRING] # Can also use token.tok_name
 'STRING'
+
 ```
 
 ## The tokens
@@ -44,6 +45,7 @@ the examples:
 >>> def print_tokens(s):
 ...     for i in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
 ...         print(i)
+
 ```
 
 ### `ENDMARKER`
@@ -60,12 +62,14 @@ TokenInfo(type=1 (NAME), string='x', start=(1, 0), end=(1, 1), line='x + 1')
 TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='x + 1')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 4), end=(1, 5), line='x + 1')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
 ```
 
 ```py
 >>> print_tokens('')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=0 (ENDMARKER), string='', start=(1, 0), end=(1, 0), line='')
+
 ```
 
 ### `NAME`
@@ -94,12 +98,14 @@ TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a or α')
 TokenInfo(type=1 (NAME), string='or', start=(1, 2), end=(1, 4), line='a or α')
 TokenInfo(type=1 (NAME), string='α', start=(1, 5), end=(1, 6), line='a or α')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
 ```
 
 ```py
 >>> import keyword
 >>> keyword.iskeyword('or')
 True
+
 ```
 
 ```py
@@ -107,6 +113,7 @@ True
 True
 >>> 'or'.isidentifier()
 True
+
 ```
 
 ### `NUMBER`
@@ -154,6 +161,7 @@ PLUS +
 NUMBER 2
 RSQB ]
 ENDMARKER
+
 ```
 
 The following table lists all exact `OP` types and their corresponding
@@ -220,6 +228,8 @@ like for the code `("a") + True`.
 ```py
 >>> import parser
 >>> import pprint
+>>> import token
+>>> import symbol
 >>> def pretty(st):
 ...     l = st.tolist()
 ...
@@ -278,6 +288,7 @@ like for the code `("a") + True`.
               ['power', ['atom_expr', ['atom', ['NAME', 'True']]]]]]]]]]]]]]]]],
  ['NEWLINE', ''],
  ['ENDMARKER', '']]
+
 ```
 
 Compare this to the `tokenize` representation seen in the [intro](intro.html),
@@ -287,6 +298,7 @@ or the `ast` representation:
 >>> import ast
 >>> ast.dump(ast.parse('("a") + True'))
 "Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
+
 ```
 
 The following functions are included in the `token` module, but aren't
