@@ -53,6 +53,7 @@ language.</p>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;True&#39;, start=(1, 8), end=(1, 12), line=&#39;(&quot;a&quot;) + True -&#39;)</span>
 <span class="go">TokenInfo(type=53 (OP), string=&#39;-&#39;, start=(1, 13), end=(1, 14), line=&#39;(&quot;a&quot;) + True -&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
+
 </pre></div>
 </div>
 <p>The string is split into the following tokens: <code class="docutils literal notranslate"><span class="pre">(</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">True</span></code>,
@@ -99,6 +100,7 @@ exception in the same snippet. --><div class="highlight-py notranslate"><div cla
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
 <span class="gr">tokenize.TokenError</span>: <span class="n">(&#39;EOF in multi-line statement&#39;, (2, 0))</span>
+
 </pre></div>
 </div>
 <p>One of the goals of this guide is to quantify exactly when these
@@ -148,6 +150,7 @@ valid Python is often tokenized. For example:</p>
 <span class="go">TokenInfo(type=56 (ERRORTOKEN), string=&#39;$&#39;, start=(1, 1), end=(1, 2), line=&#39;a$b&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;b&#39;, start=(1, 2), end=(1, 3), line=&#39;a$b&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
+
 </pre></div>
 </div>
 <p>This can be useful for dealing with code that has minor typos that

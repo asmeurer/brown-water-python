@@ -58,11 +58,104 @@ from <code class="docutils literal notranslate"><span class="pre">tokenize</span
 <span class="go">3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">tokenize</span><span class="o">.</span><span class="n">STRING</span><span class="p">]</span> <span class="c1"># Can also use token.tok_name</span>
 <span class="go">&#39;STRING&#39;</span>
+
 </pre></div>
 </div>
 </div>
 <div class="section" id="the-tokens">
 <span id="the-tokens"></span><h2>The tokens<a class="headerlink" href="#the-tokens" title="Permalink to this headline">¶</a></h2>
+<p>To simplify the below sections, the following utility function is used for all
+the examples:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">print_tokens</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<div class="section" id="endmarker">
+<span id="endmarker"></span><h3><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code><a class="headerlink" href="#endmarker" title="Permalink to this headline">¶</a></h3>
+<p>This is always the last token emitted by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, unless it raises an
+exception. The <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">line</span></code> are always <code class="docutils literal notranslate"><span class="pre">''</span></code>. For most applications it
+is not necessary to explicitly worry about <code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code> because <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>
+stops iteration after the last token is yielded.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;x + 1&#39;</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(1, 0), end=(1, 1), line=&#39;x + 1&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 2), end=(1, 3), line=&#39;x + 1&#39;)</span>
+<span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 4), end=(1, 5), line=&#39;x + 1&#39;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
+
+</pre></div>
+</div>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(1, 0), end=(1, 0), line=&#39;&#39;)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="name">
+<span id="name"></span><h3><code class="docutils literal notranslate"><span class="pre">NAME</span></code><a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token type is used for any Python identifier, as well as every keyword. <em>keywords</em> are Python syntactic elements that consist only of alphabetic
+characters, such as <code class="docutils literal notranslate"><span class="pre">for</span></code>, <code class="docutils literal notranslate"><span class="pre">def</span></code> and <code class="docutils literal notranslate"><span class="pre">True</span></code>. To tell if a <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token is a
+keyword, use
+<a class="reference external" href="https://docs.python.org/3/library/keyword.html#keyword.iskeyword"><code class="docutils literal notranslate"><span class="pre">keyword.iskeyword()</span></code></a>.</p>
+<p>As a side note, internally, the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module uses the
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str.isidentifier"><code class="docutils literal notranslate"><span class="pre">str.isidentifier()</span></code></a>
+method to test if a token should be a <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token. The full rules for what
+makes a <a class="reference external" href="https://docs.python.org/3/reference/lexical_analysis.html?highlight=identifiers#identifiers">valid
+identifier</a>
+are somewhat complicated, as they involve a large table of <a class="reference external" href="https://www.dcl.hpi.uni-potsdam.de/home/loewis/table-3131.html">Unicode
+characters</a>.
+One should always use the <code class="docutils literal notranslate"><span class="pre">str.isidentifier()</span></code> method to test if a string is a
+valid Python identifier, combined with a <code class="docutils literal notranslate"><span class="pre">keyword.iskeyword()</span></code> check. Testing
+if a string is an identifier using regular expressions is generally
+discouraged.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;a or α&#39;</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;a&#39;, start=(1, 0), end=(1, 1), line=&#39;a or α&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;or&#39;, start=(1, 2), end=(1, 4), line=&#39;a or α&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;α&#39;, start=(1, 5), end=(1, 6), line=&#39;a or α&#39;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
+
+</pre></div>
+</div>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">keyword</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">keyword</span><span class="o">.</span><span class="n">iskeyword</span><span class="p">(</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+
+</pre></div>
+</div>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;α&#39;</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;or&#39;</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">()</span>
+<span class="go">True</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="number">
+<span id="number"></span><h3><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code><a class="headerlink" href="#number" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="string">
+<span id="string"></span><h3><code class="docutils literal notranslate"><span class="pre">STRING</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="newline">
+<span id="newline"></span><h3><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code><a class="headerlink" href="#newline" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="indent">
+<span id="indent"></span><h3><code class="docutils literal notranslate"><span class="pre">INDENT</span></code><a class="headerlink" href="#indent" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="dedent">
+<span id="dedent"></span><h3><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code><a class="headerlink" href="#dedent" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="rarrow">
+<span id="rarrow"></span><h3><code class="docutils literal notranslate"><span class="pre">RARROW</span></code><a class="headerlink" href="#rarrow" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="ellipsis">
+<span id="ellipsis"></span><h3><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code><a class="headerlink" href="#ellipsis" title="Permalink to this headline">¶</a></h3>
+</div>
 <div class="section" id="op">
 <span id="op"></span><h3><code class="docutils literal notranslate"><span class="pre">OP</span></code><a class="headerlink" href="#op" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">OP</span></code> is a generic token type for all operations, delimiters, and the ellipsis
@@ -74,29 +167,51 @@ property of the namedtuple. <code class="docutils literal notranslate"><span cla
 remaining token types.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;[1+2]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">type</span><span class="p">],</span> <span class="n">i</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-<span class="go">BACKQUOTE utf-8</span>
-<span class="go">OP [</span>
-<span class="go">NUMBER 1</span>
-<span class="go">OP +</span>
-<span class="go">NUMBER 2</span>
-<span class="go">OP ]</span>
-<span class="go">ENDMARKER</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">type</span><span class="p">],</span> <span class="nb">repr</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">string</span><span class="p">))</span>
+<span class="go">ENCODING &#39;utf-8&#39;</span>
+<span class="go">OP &#39;[&#39;</span>
+<span class="go">NUMBER &#39;1&#39;</span>
+<span class="go">OP &#39;+&#39;</span>
+<span class="go">NUMBER &#39;2&#39;</span>
+<span class="go">OP &#39;]&#39;</span>
+<span class="go">ENDMARKER &#39;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;[1+2]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">exact_type</span><span class="p">],</span> <span class="n">i</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-<span class="go">BACKQUOTE utf-8</span>
-<span class="go">LSQB [</span>
-<span class="go">NUMBER 1</span>
-<span class="go">PLUS +</span>
-<span class="go">NUMBER 2</span>
-<span class="go">RSQB ]</span>
-<span class="go">ENDMARKER</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">exact_type</span><span class="p">],</span> <span class="nb">repr</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">string</span><span class="p">))</span>
+<span class="go">ENCODING &#39;utf-8&#39;</span>
+<span class="go">LSQB &#39;[&#39;</span>
+<span class="go">NUMBER &#39;1&#39;</span>
+<span class="go">PLUS &#39;+&#39;</span>
+<span class="go">NUMBER &#39;2&#39;</span>
+<span class="go">RSQB &#39;]&#39;</span>
+<span class="go">ENDMARKER &#39;&#39;</span>
+
 </pre></div>
 </div>
 <p>The following table lists all exact <code class="docutils literal notranslate"><span class="pre">OP</span></code> types and their corresponding
 characters.</p>
 <!-- The table below is generated with exact_type_table.py --><!-- ```eval_rst --><!-- .. include:: exact_type_table.txt -->
 <!-- ``` --></div>
+<div class="section" id="await">
+<span id="await"></span><h3><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code><a class="headerlink" href="#await" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="async">
+<span id="async"></span><h3><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code><a class="headerlink" href="#async" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="errortoken">
+<span id="errortoken"></span><h3><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code><a class="headerlink" href="#errortoken" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="comment">
+<span id="comment"></span><h3><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code><a class="headerlink" href="#comment" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="nl">
+<span id="nl"></span><h3><code class="docutils literal notranslate"><span class="pre">NL</span></code><a class="headerlink" href="#nl" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="encoding">
+<span id="encoding"></span><h3><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code><a class="headerlink" href="#encoding" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="nt-offset">
+<span id="nt-offset"></span><h3><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code><a class="headerlink" href="#nt-offset" title="Permalink to this headline">¶</a></h3>
+</div>
 </div>
 <div class="section" id="additional-helper-functions">
 <span id="additional-helper-functions"></span><h2>Additional helper functions<a class="headerlink" href="#additional-helper-functions" title="Permalink to this headline">¶</a></h2>
@@ -132,6 +247,8 @@ in the standard library (<code class="docutils literal notranslate"><span class=
 like for the code <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">parser</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">token</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">symbol</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">l</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="gp">...</span>
@@ -190,6 +307,7 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 <span class="go">              [&#39;power&#39;, [&#39;atom_expr&#39;, [&#39;atom&#39;, [&#39;NAME&#39;, &#39;True&#39;]]]]]]]]]]]]]]]]],</span>
 <span class="go"> [&#39;NEWLINE&#39;, &#39;&#39;],</span>
 <span class="go"> [&#39;ENDMARKER&#39;, &#39;&#39;]]</span>
+
 </pre></div>
 </div>
 <p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <a class="reference external" href="intro.html">intro</a>,
@@ -197,6 +315,7 @@ or the <code class="docutils literal notranslate"><span class="pre">ast</span></
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span>
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=Str(s=&#39;a&#39;), op=Add(), right=NameConstant(value=True)))])&quot;</span>
+
 </pre></div>
 </div>
 <p>The following functions are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t
