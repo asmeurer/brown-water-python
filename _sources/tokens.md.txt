@@ -411,7 +411,7 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
 ### `RARROW`
 ### `ELLIPSIS`
 
-The `RARROW` and `ELLIPSIS` tokens tokenize as [`OP`](#OP). However, due to a
+The `RARROW` and `ELLIPSIS` tokens tokenize as [`OP`](#op). However, due to a
 [bug](https://bugs.python.org/issue24622) present in Python versions prior to
 3.7, the `exact_type` attribute of these tokens will be `OP` instead of the
 correct type.
@@ -514,7 +514,7 @@ of `tokenize`. The C implementation used by the interpreter only has
 
 The `NL` token type represents newline characters (`\n` or `\r\n`) that do not
 end logical lines of code. Newlines that do end logical lines of Python code
-area tokenized using the [`NEWLINE`](#NEWLINE) token type.
+area tokenized using the [`NEWLINE`](#newline) token type.
 
 There are two situations where newlines are tokenized as `NL`:
 

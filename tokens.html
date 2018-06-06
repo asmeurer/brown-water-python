@@ -15,7 +15,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="tokenize vs. alternatives" href="alternatives.html" />
+    <link rel="prev" title="Usage" href="usage.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -400,7 +400,7 @@ Python code use <a class="reference external" href="#nl"><code class="docutils l
 </div>
 <div class="section" id="ellipsis">
 <span id="ellipsis"></span><h3><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code><a class="headerlink" href="#ellipsis" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">RARROW</span></code> and <code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> tokens tokenize as <a class="reference external" href="#OP"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>. However, due to a
+<p>The <code class="docutils literal notranslate"><span class="pre">RARROW</span></code> and <code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> tokens tokenize as <a class="reference external" href="#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>. However, due to a
 <a class="reference external" href="https://bugs.python.org/issue24622">bug</a> present in Python versions prior to
 3.7, the <code class="docutils literal notranslate"><span class="pre">exact_type</span></code> attribute of these tokens will be <code class="docutils literal notranslate"><span class="pre">OP</span></code> instead of the
 correct type.</p>
@@ -493,7 +493,7 @@ of <code class="docutils literal notranslate"><span class="pre">tokenize</span><
 <span id="nl"></span><h3><code class="docutils literal notranslate"><span class="pre">NL</span></code><a class="headerlink" href="#nl" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NL</span></code> token type represents newline characters (<code class="docutils literal notranslate"><span class="pre">\n</span></code> or <code class="docutils literal notranslate"><span class="pre">\r\n</span></code>) that do not
 end logical lines of code. Newlines that do end logical lines of Python code
-area tokenized using the <a class="reference external" href="#NEWLINE"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a> token type.</p>
+area tokenized using the <a class="reference external" href="#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a> token type.</p>
 <p>There are two situations where newlines are tokenized as <code class="docutils literal notranslate"><span class="pre">NL</span></code>:</p>
 <ol>
 <li><p class="first">Newlines that end lines that are continued after unclosed braces.</p>
@@ -697,6 +697,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">The Token Types</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-tok-name-dictionary">The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-tokens">The tokens</a></li>

@@ -1,0 +1,259 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Usage &#8212; Brown Water Python  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Token Types" href="tokens.html" />
+    <link rel="prev" title="tokenize vs. alternatives" href="alternatives.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="usage">
+<span id="usage"></span><h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module has several quirks which make it complicated to work
+with (in my opinion, more complicated than necessary, but it is what it is).</p>
+<p>The primary motivation of this guide is to document these quirks and
+behaviors, and such a document would have been very helpful to me when I first
+started using the module. Many of these behaviors were learned from
+experimentation and reading the <a class="reference external" href="https://github.com/python/cpython/blob/master/Lib/tokenize.py">source
+code</a>.
+Therefore, things that are not obviously API guarantees should not be
+considered API guarantees, that is, the CPython developers may decide to
+change them in future Python versions. I will try to keep this guide updated
+as new Python versions are released. <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">issue
+reports</a> and <a class="reference external" href="https://github.com/asmeurer/brown-water-python/pulls">pull
+requests</a> are most
+welcome.</p>
+<div class="section" id="calling-syntax">
+<span id="calling-syntax"></span><h2>Calling syntax<a class="headerlink" href="#calling-syntax" title="Permalink to this headline">¶</a></h2>
+<p>The first thing you’ll notice when using <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> is that its calling API
+is rather odd. It does not accept a string. It does not accept a file-like
+object either. Rather, it requires <strong>the <code class="docutils literal notranslate"><span class="pre">readline</span></code> method of a bytes-mode file-like
+object</strong>. The bytes-encoded part is important. If a file is opened in text
+mode (<code class="docutils literal notranslate"><span class="pre">'r'</span></code> instead of <code class="docutils literal notranslate"><span class="pre">'br'</span></code>), <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> will fail with an exception:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;example.py&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> <span class="c1"># Incorrect, the default mode is &#39;r&#39;, not &#39;br&#39;</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">TypeError</span>: <span class="n">startswith first arg must be str or a tuple of str, not bytes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;example.py&#39;</span><span class="p">,</span> <span class="s1">&#39;br&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=57 (COMMENT), string=&#39;# This is a an example file to be tokenized&#39;, start=(1, 0), end=(1, 43), line=&#39;# This is a an example file to be tokenized\n&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 43), end=(1, 44), line=&#39;# This is a an example file to be tokenized\n&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(2, 0), end=(2, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(3, 0), end=(3, 3), line=&#39;def two():\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;two&#39;, start=(3, 4), end=(3, 7), line=&#39;def two():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(3, 7), end=(3, 8), line=&#39;def two():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(3, 8), end=(3, 9), line=&#39;def two():\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(3, 9), end=(3, 10), line=&#39;def two():\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(3, 10), end=(3, 11), line=&#39;def two():\n&#39;)</span>
+<span class="go">TokenInfo(type=5 (INDENT), string=&#39;    &#39;, start=(4, 0), end=(4, 4), line=&#39;    return 1 + 1\n&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;return&#39;, start=(4, 4), end=(4, 10), line=&#39;    return 1 + 1\n&#39;)</span>
+<span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(4, 11), end=(4, 12), line=&#39;    return 1 + 1\n&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(4, 13), end=(4, 14), line=&#39;    return 1 + 1\n&#39;)</span>
+<span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(4, 15), end=(4, 16), line=&#39;    return 1 + 1\n&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(4, 16), end=(4, 17), line=&#39;    return 1 + 1\n&#39;)</span>
+<span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
+
+</pre></div>
+</div>
+<p>To tokenize a string, you must encode it into a <code class="docutils literal notranslate"><span class="pre">bytes</span></code>, create an
+<code class="docutils literal notranslate"><span class="pre">io.BytesIO</span></code> object (<em>not <code class="docutils literal notranslate"><span class="pre">StringIO</span></code></em>), and use the <code class="docutils literal notranslate"><span class="pre">readline</span></code> method of that
+object. If you find yourself doing this often, it may be useful to define a
+helper function.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="kn">import</span> <span class="nn">io</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="s1">&#39;hello + tokenize&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;hello&#39;, start=(1, 0), end=(1, 5), line=&#39;hello + tokenize&#39;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 6), end=(1, 7), line=&#39;hello + tokenize&#39;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;tokenize&#39;, start=(1, 8), end=(1, 16), line=&#39;hello + tokenize&#39;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
+
+</pre></div>
+</div>
+<p>The reason for this API is that <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> is a streaming API, which works
+line-by-line on a Python document. This is also why the <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> function
+returns a generator. The typical pattern when using <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> is to iterate
+over it with a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop (see the next section). If you are finished doing
+whatever you are doing before you reach the
+<a class="reference external" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a> token, you can break early from the loop
+efficiently without tokenizing the rest of the document. It is not recommended
+to convert the <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> generator into a list, except for debugging
+purposes.</p>
+</div>
+<div class="section" id="tokeninfo">
+<span id="tokeninfo"></span><h2><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code><a class="headerlink" href="#tokeninfo" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> generator yields <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> namedtuple objects. There are
+two ways to work with <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects. One is to unpack the tuple,
+typically in the <code class="docutils literal notranslate"><span class="pre">for</span></code> statement:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">toknum</span><span class="p">,</span> <span class="n">tokval</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="s1">&#39;hello + tokenize&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;toknum:&quot;</span><span class="p">,</span> <span class="n">toknum</span><span class="p">,</span> <span class="s2">&quot;tokval:&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tokval</span><span class="p">),</span> <span class="s2">&quot;start:&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="s2">&quot;end:&quot;</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="s2">&quot;line:&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+<span class="go">toknum: 59 tokval: &#39;utf-8&#39; start: (0, 0) end: (0, 0) line: &#39;&#39;</span>
+<span class="go">toknum: 1 tokval: &#39;hello&#39; start: (1, 0) end: (1, 5) line: &#39;hello + tokenize&#39;</span>
+<span class="go">toknum: 53 tokval: &#39;+&#39; start: (1, 6) end: (1, 7) line: &#39;hello + tokenize&#39;</span>
+<span class="go">toknum: 1 tokval: &#39;tokenize&#39; start: (1, 8) end: (1, 16) line: &#39;hello + tokenize&#39;</span>
+<span class="go">toknum: 0 tokval: &#39;&#39; start: (2, 0) end: (2, 0) line: &#39;&#39;</span>
+
+</pre></div>
+</div>
+<p>By tradition, unused values are often replaced by <code class="docutils literal notranslate"><span class="pre">_</span></code>. You can also unpack the
+<code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples directly.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tokval</span><span class="p">,</span> <span class="p">(</span><span class="n">start_line</span><span class="p">,</span> <span class="n">start_col</span><span class="p">),</span> <span class="p">(</span><span class="n">end_line</span><span class="p">,</span> <span class="n">end_col</span><span class="p">),</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="s1">&#39;hello + tokenize&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{tokval!r} on lines {start_line} to {end_line} on columns {start_col} to {end_col}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tokval</span><span class="o">=</span><span class="n">tokval</span><span class="p">,</span> <span class="n">start_line</span><span class="o">=</span><span class="n">start_line</span><span class="p">,</span> <span class="n">end_line</span><span class="o">=</span><span class="n">end_line</span><span class="p">,</span> <span class="n">start_col</span><span class="o">=</span><span class="n">start_col</span><span class="p">,</span> <span class="n">end_col</span><span class="o">=</span><span class="n">end_col</span><span class="p">))</span>
+<span class="go">&#39;utf-8&#39; on lines 0 to 0 on columns 0 to 0</span>
+<span class="go">&#39;hello&#39; on lines 1 to 1 on columns 0 to 5</span>
+<span class="go">&#39;+&#39; on lines 1 to 1 on columns 6 to 7</span>
+<span class="go">&#39;tokenize&#39; on lines 1 to 1 on columns 8 to 16</span>
+<span class="go">&#39;&#39; on lines 2 to 2 on columns 0 to 0</span>
+
+</pre></div>
+</div>
+<p>The other is to use it as-is, and access the members via attributes.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="s1">&#39;hello + tokenize&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;type:&quot;</span><span class="p">,</span> <span class="n">tok</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="s2">&quot;string:&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">string</span><span class="p">),</span> <span class="s2">&quot;start:&quot;</span><span class="p">,</span> <span class="n">tok</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="s2">&quot;end:&quot;</span><span class="p">,</span> <span class="n">tok</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="s2">&quot;line:&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">line</span><span class="p">))</span>
+<span class="go">type: 59 string: &#39;utf-8&#39; start: (0, 0) end: (0, 0) line: &#39;&#39;</span>
+<span class="go">type: 1 string: &#39;hello&#39; start: (1, 0) end: (1, 5) line: &#39;hello + tokenize&#39;</span>
+<span class="go">type: 53 string: &#39;+&#39; start: (1, 6) end: (1, 7) line: &#39;hello + tokenize&#39;</span>
+<span class="go">type: 1 string: &#39;tokenize&#39; start: (1, 8) end: (1, 16) line: &#39;hello + tokenize&#39;</span>
+<span class="go">type: 0 string: &#39;&#39; start: (2, 0) end: (2, 0) line: &#39;&#39;</span>
+
+</pre></div>
+</div>
+<p>The advantage of this second way is that the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> object contains an
+additional attribute, <code class="docutils literal notranslate"><span class="pre">exact_type</span></code>, which contains the exact token type of an
+<a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code> token</a>. However, this can also be determined from the
+<code class="docutils literal notranslate"><span class="pre">string</span></code>. The first form is also less verbose, but the second form avoids
+errors from getting the attributes in the wrong order. The form that you
+should use depends on your preference on these tradeoffs.</p>
+<div class="section" id="type">
+<span id="type"></span><h3><code class="docutils literal notranslate"><span class="pre">type</span></code><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
+<p>The token types are outlined in detail in the <a class="reference external" href="tokens.html">Token Types</a>
+section.</p>
+</div>
+<div class="section" id="string">
+<span id="string"></span><h3><code class="docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
+<p>The chunk of code that is tokenized. For token types where the string is
+meaningless, such as <a class="reference external" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a>, the string is
+empty. For the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token, the string is the
+encoding. It does not appear literally in the code, which is why the line
+and column numbers are 0 and the line is the empty string.</p>
+</div>
+</div>
+<div class="section" id="start-and-end">
+<span id="start-and-end"></span><h2><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code><a class="headerlink" href="#start-and-end" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> are tuples of (line number, column number) for the line and
+column numbers of the start and end of the tokenized string. <strong>Line numbers
+start at 1 and column numbers start at 0</strong>. The line and column numbers for the
+<a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token, which is always the first token
+emitted, are both <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>. The start and end tuples always nondecreasing
+(that is, <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">&lt;=</span> <span class="pre">end</span></code> will always be true for a single <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">tok0.start</span> <span class="pre">&lt;=</span> <span class="pre">tok1.start</span></code> and <code class="docutils literal notranslate"><span class="pre">tok0.end</span> <span class="pre">&lt;=</span> <span class="pre">tok1.end</span></code> will be true for
+consecutive <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>s, <code class="docutils literal notranslate"><span class="pre">tok0</span></code> and <code class="docutils literal notranslate"><span class="pre">tok1</span></code>).</p>
+<p>You should always use the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples to deduce line or column
+information. <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> ignores syntactically irrelevant whitespace, which
+can include newlines (in particular, escaped newlines, see
+<a class="reference external" href="tokens.html#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>).</p>
+</div>
+<div class="section" id="line">
+<span id="line"></span><h2><code class="docutils literal notranslate"><span class="pre">line</span></code><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">line</span></code> gives the full line that the token comes from. This is useful for
+reconstructing the whitespace between tokens (never assume that the whitespace
+between tokens is space characters—they could also be escaped newlines or
+tabs). <code class="docutils literal notranslate"><span class="pre">line</span></code> can also be useful for providing contextual error messages
+relating to the tokenization.</p>
+</div>
+<div class="section" id="exceptions">
+<span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calling-syntax">Calling syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tokens.html">The Token Types</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Aaron Meurer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/usage.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/asmeurer/brown-water-python" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

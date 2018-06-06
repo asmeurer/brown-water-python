@@ -56,37 +56,35 @@ language.</p>
 
 </pre></div>
 </div>
-<p>The string is split into the following tokens: <code class="docutils literal notranslate"><span class="pre">(</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">True</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">)</span></code> (ignore the <code class="docutils literal notranslate"><span class="pre">BytesIO</span></code> bit and the <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> and <code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code> tokens
-for now).</p>
+<p>The string is split into the following tokens: <code class="docutils literal notranslate"><span class="pre">(</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">True</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">)</span></code> (ignore the <code class="docutils literal notranslate"><span class="pre">BytesIO</span></code> bit and the <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> and <code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code> tokens for
+now).</p>
 <p>I chose this example to demonstrate a few things:</p>
 <ul>
-<li><p class="first">The <em>Tokens</em> in Python are things like parentheses, strings,
-operators, keywords, and variable names.</p>
+<li><p class="first">The <em>Tokens</em> in Python are things like parentheses, strings, operators,
+keywords, and variable names.</p>
 </li>
-<li><p class="first">Every token is a <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> which has a <code class="docutils literal notranslate"><span class="pre">type</span></code>, which is
-represented by an integer constant, and a <code class="docutils literal notranslate"><span class="pre">string</span></code>, which is the
-substring of the input representing the given token. The
-<code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> also gives line and column information that indicates
-exactly where in the input string the token was found.</p>
+<li><p class="first">Every token is a <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> which has a <code class="docutils literal notranslate"><span class="pre">type</span></code>, which is represented by
+an integer constant, and a <code class="docutils literal notranslate"><span class="pre">string</span></code>, which is the substring of the input
+representing the given token. The <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> also gives line and column
+information that indicates exactly where in the input string the token was
+found.</p>
 </li>
-<li><p class="first">The input does not need to be valid Python. Our input,
-<code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span></code> is not valid Python, but it is, however, a
-potential beginning of a valid Python string. If a valid Python
-expression were to be added to the end of the input, completing the
-subtraction operator, such as <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span> <span class="pre">x</span></code>, it would become
-valid Python. <strong>This illustrates an important aspect of tokenize,
-which is that it fundamentally works on a stream of characters.</strong>
-This means that tokens are output as they are seen, without regard
-to what comes later (the tokenize module does do lookahead on the
-input stream internally to ensure that the correct tokens are
-output, but from the point of view of a user of <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, each
-token can be processed as it is seen). This is why
-<code class="docutils literal notranslate"><span class="pre">tokenize.tokenize</span></code> produces a generator.</p>
+<li><p class="first">The input does not need to be valid Python. Our input, <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span></code> is
+not valid Python, but it is, however, a potential beginning of a valid
+Python string. If a valid Python expression were to be added to the end of
+the input, completing the subtraction operator, such as <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span> <span class="pre">x</span></code>, it would become valid Python. <strong>This illustrates an important aspect
+of tokenize, which is that it fundamentally works on a stream of
+characters.</strong> This means that tokens are output as they are seen, without
+regard to what comes later (the tokenize module does do lookahead on the
+input stream internally to ensure that the correct tokens are output, but
+from the point of view of a user of <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, each token can be
+processed as it is seen). This is why <code class="docutils literal notranslate"><span class="pre">tokenize.tokenize</span></code> produces a
+generator.</p>
 <p>However, it should be noted that tokenize does raise an exception on
-certain incomplete Python statements. For example, if we omit the
-closing parenthesis, tokenize produces all the tokens as before, but
-then raises <code class="docutils literal notranslate"><span class="pre">TokenError</span></code>:</p>
+certain incomplete Python statements. For example, if we omit the closing
+parenthesis, tokenize produces all the tokens as before, but then raises
+<code class="docutils literal notranslate"><span class="pre">TokenError</span></code>:</p>
 <!-- We have to skip this doctest, as it doesn't support output and an
 exception in the same snippet. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;(&quot;a&quot; + True -&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
@@ -103,23 +101,21 @@ exception in the same snippet. --><div class="highlight-py notranslate"><div cla
 
 </pre></div>
 </div>
-<p>One of the goals of this guide is to quantify exactly when these
-error conditions can occur, so that code that attempts to tokenize
-partial Python code can deal with them properly.</p>
+<p>One of the goals of this guide is to quantify exactly when these error
+conditions can occur, so that code that attempts to tokenize partial
+Python code can deal with them properly.</p>
 </li>
 <li><p class="first">Syntactically irrelevant aspects of the input such as redundant
-parentheses are maintained. The parentheses around the <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> in the
-input string are completely unnecessary, but they are included as
-tokens anyway. This does not apply to whitespace, however
-(indentation is an exception to this, as we will see later),
-although the whitespace between tokens can generally be deduced from
-the column information in the namedtuple.</p>
+parentheses are maintained. The parentheses around the <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> in the input
+string are completely unnecessary, but they are included as tokens anyway.
+This does not apply to whitespace, however (indentation is an exception to
+this, as we will see later), although the whitespace between tokens can
+generally be deduced from the namedtuple.</p>
 </li>
-<li><p class="first">The input need not be semantically meaningful in anyway. The input
-string, even if completed, can only raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> because
-<code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span> <span class="pre">+</span> <span class="pre">True</span></code> is not allowed by Python. The tokenize module does not
-know or care about objects, types, or any high-level Python
-constructs.</p>
+<li><p class="first">The input need not be semantically meaningful in anyway. The input string,
+even if completed, can only raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> because <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span> <span class="pre">+</span> <span class="pre">True</span></code> is
+not allowed by Python. The tokenize module does not know or care about
+objects, types, or any high-level Python constructs.</p>
 </li>
 <li><p class="first">Some tokens can be right next to one another in the input string. Other
 tokens must be separated by a space (for instance, <code class="docutils literal notranslate"><span class="pre">foriinrange(10)</span></code> will
@@ -134,14 +130,13 @@ One use-case of the <code class="docutils literal notranslate"><span class="pre"
 Python using the <code class="docutils literal notranslate"><span class="pre">untokenize</span></code> function, which handles these details
 automatically.</p>
 </li>
-<li><p class="first">All parentheses and operators are tokenized as <code class="docutils literal notranslate"><span class="pre">OP</span></code>. Both variable
-names and keywords are tokenized as <code class="docutils literal notranslate"><span class="pre">NAME</span></code>. To determine the exact
-type of a token often requires further inspection than simply
-looking at the <code class="docutils literal notranslate"><span class="pre">type</span></code> (this guide will detail exactly how to do
-this).</p>
+<li><p class="first">All parentheses and operators are tokenized as <code class="docutils literal notranslate"><span class="pre">OP</span></code>. Both variable names
+and keywords are tokenized as <code class="docutils literal notranslate"><span class="pre">NAME</span></code>. To determine the exact type of a
+token often requires further inspection than simply looking at the <code class="docutils literal notranslate"><span class="pre">type</span></code>
+(this guide will detail exactly how to do this).</p>
 </li>
-<li><p class="first">The above example does not show it, but even code that can never be
-valid Python is often tokenized. For example:</p>
+<li><p class="first">The above example does not show it, but even code that can never be valid
+Python is often tokenized. For example:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;a$b&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
@@ -153,24 +148,23 @@ valid Python is often tokenized. For example:</p>
 
 </pre></div>
 </div>
-<p>This can be useful for dealing with code that has minor typos that
-makes it invalid. It can also be used to build modules that extend
-the Python language in limited ways, but be warned that the
-<code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module makes no guarantees about how it tokenizes invalid
-Python. For example, if a future version of Python added <code class="docutils literal notranslate"><span class="pre">$</span></code> as an
-operator, the above string could tokenize completely differently.
-This exact thing happened, for instance, with f-strings. In Python
-3.5, <code class="docutils literal notranslate"><span class="pre">f&quot;{a}&quot;</span></code> tokenizes as two tokens, <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">f</span></code>) and <code class="docutils literal notranslate"><span class="pre">STRING</span></code>
-(<code class="docutils literal notranslate"><span class="pre">&quot;{a}&quot;</span></code>). In Python 3.6, it tokenizes as one token, <code class="docutils literal notranslate"><span class="pre">STRING</span></code>
-(<code class="docutils literal notranslate"><span class="pre">f&quot;{a}&quot;</span></code>).</p>
+<p>This can be useful for dealing with code that has minor typos that makes
+it invalid. It can also be used to build modules that extend the Python
+language in limited ways, but be warned that the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module makes
+no guarantees about how it tokenizes invalid Python. For example, if a
+future version of Python added <code class="docutils literal notranslate"><span class="pre">$</span></code> as an operator, the above string could
+tokenize completely differently. This exact thing happened, for instance,
+with f-strings. In Python 3.5, <code class="docutils literal notranslate"><span class="pre">f&quot;{a}&quot;</span></code> tokenizes as two tokens, <code class="docutils literal notranslate"><span class="pre">NAME</span></code>
+(<code class="docutils literal notranslate"><span class="pre">f</span></code>) and <code class="docutils literal notranslate"><span class="pre">STRING</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;{a}&quot;</span></code>). In Python 3.6, it tokenizes as one token,
+<code class="docutils literal notranslate"><span class="pre">STRING</span></code> (<code class="docutils literal notranslate"><span class="pre">f&quot;{a}&quot;</span></code>).</p>
 </li>
-<li><p class="first">Finally, the key thing to understand about tokenization is that
-tokens are a very low level abstraction of the Python syntax. The
-same token may have different meanings in different contexts. For
-example, in <code class="docutils literal notranslate"><span class="pre">[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code> token is part of a list literal, whereas
-in <code class="docutils literal notranslate"><span class="pre">a[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code> token is part of a slice. If you want to
-manipulate higher level abstractions, you might want to use the
-<code class="docutils literal notranslate"><span class="pre">ast</span></code> module instead (see the <a class="reference external" href="alternatives.html">next section</a>).</p>
+<li><p class="first">Finally, the key thing to understand about tokenization is that tokens are
+a very low level abstraction of the Python syntax. The same token may have
+different meanings in different contexts. For example, in <code class="docutils literal notranslate"><span class="pre">[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code>
+token is part of a list literal, whereas in <code class="docutils literal notranslate"><span class="pre">a[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code> token is part
+of a slice. If you want to manipulate higher level abstractions, you might
+want to use the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module instead (see the <a class="reference external" href="alternatives.html">next
+section</a>).</p>
 </li>
 </ul>
 </div>
@@ -186,6 +180,7 @@ manipulate higher level abstractions, you might want to use the
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What is tokenization?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tokens.html">The Token Types</a></li>
 </ul>
 

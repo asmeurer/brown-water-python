@@ -2,6 +2,7 @@
 ./_sources/index.rst.txt
 ./_sources/intro.md.txt
 ./_sources/tokens.md.txt
+./_sources/usage.md.txt
 ./_static/ajax-loader.gif
 ./_static/alabaster.css
 ./_static/basic.css
@@ -33,3 +34,4 @@
 ./search.html
 ./searchindex.js
 ./tokens.html
+./usage.html
