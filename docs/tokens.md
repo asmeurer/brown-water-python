@@ -223,6 +223,147 @@ In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME` (`_
 
 ### `STRING`
 
+The `STRING` token type matches any string literal, including single quoted,
+double quoted strings, triple- single and double quoted strings (i.e.,
+docstrings), raw, "unicode", bytes, and f-strings (Python 3.6+).
+
+```py
+>>> print_tokens("""
+... "I" + \'love\' + '''tokenize'''
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=3 (STRING), string='"I"', start=(2, 0), end=(2, 3), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
+TokenInfo(type=53 (OP), string='+', start=(2, 4), end=(2, 5), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
+TokenInfo(type=3 (STRING), string="'love'", start=(2, 6), end=(2, 12), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
+TokenInfo(type=53 (OP), string='+', start=(2, 13), end=(2, 14), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
+TokenInfo(type=3 (STRING), string="'''tokenize'''", start=(2, 15), end=(2, 29), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 29), end=(2, 30), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
+TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
+
+
+```
+
+
+Note that even though Python implicitly concatenates string literals,
+`tokenize` tokenizes them separately.
+
+```py
+>>> print_tokens('"this is" " fun"')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=3 (STRING), string='"this is"', start=(1, 0), end=(1, 9), line='"this is" " fun"')
+TokenInfo(type=3 (STRING), string='" fun"', start=(1, 10), end=(1, 16), line='"this is" " fun"')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+
+In the case of raw, "unicode", bytes, and f-strings, the string prefix is
+included in the tokenized string.
+
+```py
+>>> print_tokens("rb'\hello'")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=3 (STRING), string="rb'\\hello'", start=(1, 0), end=(1, 10), line="rb'\\hello'")
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+f-strings (Python 3.6+) are parsed as a single `STRING` token.
+
+```py
+>>> # Python 3.6+ only.
+>>> print_tokens('f"{a + b}"') # doctest: +SKIP
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=3 (STRING), string='f"{a + b}"', start=(1, 0), end=(1, 10), line='f"{a + b}"')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+The `string.Format.parse()` function can be used to parse format strings
+(including f-strings).
+
+```py
+>>> a = 1
+>>> b = 2
+>>> # f-strings are Python 3.6+ only
+>>> f'a + b is {a + b!r}' # doctest: +SKIP
+'a + b is 3'
+>>> import string
+>>> list(string.Formatter().parse('a + b is {a + b!r}'))
+[('a + b is ', 'a + b', '', 'r')]
+
+```
+
+#### **Error behavior**
+
+If a single quoted strings is unclosed, the opening string delimiter is
+tokenized as `ERRORTOKEN`, and the remainder is tokenized as if it were not in
+a string.
+
+```py
+>>> print_tokens("'unclosed + string")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string")
+TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unclosed + string")
+TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string")
+TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string")
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+This behavior can be useful for handling error situations. For example, if you
+were to build a syntax highlighter using `tokenize`, you might not necessarily
+want an unclosed string to highlight the rest of the document as a string
+(such things are common in "live" editing environments).
+
+However, if a triple quoted string (i.e., multiline string, or docstring) is
+not closed, `tokenize` will raise `TokenError` when it reaches it.
+
+```py
+>>> print_tokens("'an ' + '''unclosed multiline string") # doctest: +SKIP
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=3 (STRING), string="'an '", start=(1, 0), end=(1, 5), line="'an ' + '''unclosed multiline string")
+TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line="'an ' + '''unclosed multiline string")
+Traceback (most recent call last):
+    ...
+    raise TokenError("EOF in multi-line string", strstart)
+tokenize.TokenError: ('EOF in multi-line string', (1, 8))
+
+```
+
+This behavior can be annoying to deal with in practice. For many applications,
+the correct way to handle this scenario is to consider that since the unclosed
+string is multiline, the remainder of the input from where the `TokenError` is
+raised is inside the unclosed string.
+
+As a final note, beware that it is possible to construct string literals that
+tokenize without any errors, but raise SyntaxError when parsed by the
+interpreter.
+
+```py
+>>> print_tokens(r"'\N{NOT REAL}'")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=3 (STRING), string="'\\N{NOT REAL}'", start=(1, 0), end=(1, 14), line="'\\N{NOT REAL}'")
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+>>> eval(r"'\N{NOT REAL}'")
+Traceback (most recent call last):
+  ...
+SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 0-11: unknown Unicode character name
+
+```
+
+To test if a string literal is valid, you can use the `ast.literal_eval()`
+function, which is safe to use on untrusted input.
+
+```py
+>>> ast.literal_eval(r"'\N{NOT REAL}'")
+Traceback (most recent call last):
+  ...
+SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 0-11: unknown Unicode character name
+
+```
+
 ### `NEWLINE`
 
 ### `INDENT`
