@@ -366,6 +366,44 @@ SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in positio
 
 ### `NEWLINE`
 
+The `NEWLINE` token type represents a newline character (`\n` or `\r\n`) that
+ends a logical line of Python code. Newlines that do not end a logical line of
+Python code use [`NL`](#nl).
+
+```py
+>>> print_tokens("""\
+... def hello():
+...     return 'hello world'
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=1 (NAME), string='def', start=(1, 0), end=(1, 3), line='def hello():\n')
+TokenInfo(type=1 (NAME), string='hello', start=(1, 4), end=(1, 9), line='def hello():\n')
+TokenInfo(type=53 (OP), string='(', start=(1, 9), end=(1, 10), line='def hello():\n')
+TokenInfo(type=53 (OP), string=')', start=(1, 10), end=(1, 11), line='def hello():\n')
+TokenInfo(type=53 (OP), string=':', start=(1, 11), end=(1, 12), line='def hello():\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 12), end=(1, 13), line='def hello():\n')
+TokenInfo(type=5 (INDENT), string='    ', start=(2, 0), end=(2, 4), line="    return 'hello world'\n")
+TokenInfo(type=1 (NAME), string='return', start=(2, 4), end=(2, 10), line="    return 'hello world'\n")
+TokenInfo(type=3 (STRING), string="'hello world'", start=(2, 11), end=(2, 24), line="    return 'hello world'\n")
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 24), end=(2, 25), line="    return 'hello world'\n")
+TokenInfo(type=6 (DEDENT), string='', start=(3, 0), end=(3, 0), line='')
+TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
+
+```
+
+Windows-style newlines (`\r\n`) are tokenized as a single token.
+
+```py
+>>> print_tokens("1\n2\r\n")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 1), end=(1, 2), line='1\n')
+TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2\r\n')
+TokenInfo(type=4 (NEWLINE), string='\r\n', start=(2, 1), end=(2, 3), line='2\r\n')
+TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
+
+```
+
 ### `INDENT`
 
 ### `DEDENT`
@@ -426,9 +464,78 @@ characters.
 
 ### `COMMENT`
 
+The `COMMENT` token type exists only in the standard library Python implementation
+of `tokenize`. The C implementation used by the interpreter only has
+`NEWLINE`. In Python versions prior to 3.7, `COMMENT` is only importable from
+`tokenize` module. In 3.7, it is added to the `token` module as well.
+
 ### `NL`
 
+The `NL` token type represents newline characters (`\n` or `\r\n`) that do not
+end logical lines of code. Newlines that do end logical lines of Python code
+area tokenized using the [`NEWLINE`](#NEWLINE) token type.
+
+There are two situations where newlines are tokenized as `NL`:
+
+1. Newlines that end lines that are continued after unclosed braces.
+
+   ```py
+   >>> print_tokens("""(1 +
+   ... 2)""")
+   TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+   TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='(1 +\n')
+   TokenInfo(type=2 (NUMBER), string='1', start=(1, 1), end=(1, 2), line='(1 +\n')
+   TokenInfo(type=53 (OP), string='+', start=(1, 3), end=(1, 4), line='(1 +\n')
+   TokenInfo(type=58 (NL), string='\n', start=(1, 4), end=(1, 5), line='(1 +\n')
+   TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2)')
+   TokenInfo(type=53 (OP), string=')', start=(2, 1), end=(2, 2), line='2)')
+   TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
+
+   ```
+
+2. Newlines that end empty lines or lines that only have comments.
+
+   ```py
+   >>> print_tokens("""
+   ... # Comment line
+   ...
+   ... """)
+   TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+   TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+   TokenInfo(type=57 (COMMENT), string='# Comment line', start=(2, 0), end=(2, 14), line='# Comment line\n')
+   TokenInfo(type=58 (NL), string='\n', start=(2, 14), end=(2, 15), line='# Comment line\n')
+   TokenInfo(type=58 (NL), string='\n', start=(3, 0), end=(3, 1), line='\n')
+   TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
+
+   ```
+
+Note that newlines that are escaped (preceded with `\`) are treated like
+whitespace, that is, they do not tokenize at all. Consequently, you should
+always use the line numbers in the `start` and `end` attributes of the
+`TokenInfo` namedtuple. Never try to determine line numbers by counting
+`NEWLINE` and `NL` tokens.
+
+```py
+>>> print_tokens('1 + \\\n2')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1 + \\\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='1 + \\\n')
+TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2')
+TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
+
+```
+
+The `NL` token type exists only in the standard library Python implementation
+of `tokenize`. The C implementation used by the interpreter only has
+`NEWLINE`. In Python versions prior to 3.7, `NL` is only importable from
+`tokenize` module. In 3.7, it is added to the `token` module as well.
+
 ### `ENCODING`
+
+The `ENCODING` token type exists only in the standard library Python implementation
+of `tokenize`. The C implementation used by the interpreter only has
+`NEWLINE`. In Python versions prior to 3.7, `ENCODING` is only importable from
+`tokenize` module. In 3.7, it is added to the `token` module as well.
 
 ### `NT_OFFSET`
 
