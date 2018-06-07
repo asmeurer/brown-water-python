@@ -553,12 +553,80 @@ of <code class="docutils literal notranslate"><span class="pre">tokenize</span><
 <code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code>. In Python versions prior to 3.7, <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> is only importable from
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module. In 3.7, it is added to the <code class="docutils literal notranslate"><span class="pre">token</span></code> module as well.</p>
 </div>
-<div class="section" id="nt-offset">
-<span id="nt-offset"></span><h3><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code><a class="headerlink" href="#nt-offset" title="Permalink to this headline">¶</a></h3>
-</div>
 </div>
 <div class="section" id="additional-helper-functions">
 <span id="additional-helper-functions"></span><h2>Additional helper functions<a class="headerlink" href="#additional-helper-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="untokenize-iterable">
+<span id="untokenize-iterable"></span><h3><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code><a class="headerlink" href="#untokenize-iterable" title="Permalink to this headline">¶</a></h3>
+<p>Converts an iterable of tokens into a bytes string. The string is encoded
+using the encoding of the <a class="reference external" href="#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. The iterable can be
+<code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects, or tuples of <code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code>.</p>
+<p>This function is round-trippable in one direction, namely,
+<code class="docutils literal notranslate"><span class="pre">tokenize(io.BytesIO(untokenize(tokens)).readline)</span></code> will always return the
+same tokens.</p>
+<p>If full <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> tuples are given with correct <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>
+information (iterable of 5-tuples), this function also round-trips in the
+other direction. However, be aware that the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples must be
+nondecreasing. If the <code class="docutils literal notranslate"><span class="pre">start</span></code> of one token is before the <code class="docutils literal notranslate"><span class="pre">end</span></code> of the previous
+token, it raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Therefore, if you want to modify tokens and use
+<code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> to convert back to a string, you must keep track of and
+maintain the line and column information in <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;sum([[1, 2]][0])&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">))</span>
+<span class="go">b&#39;sum([[1, 2]][0])&#39;</span>
+
+</pre></div>
+</div>
+<p>If only the token type and token names are given (iterable of
+2-tuples), it will not, and in fact, for any nontrivial input, the resulting
+bytes string will not be the same. This is because it adds spaces after
+certain tokens to ensure the resulting string is syntactically valid (or
+rather, to ensure that it tokenizes back in the same way).</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;sum([[1, 2]][0])&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)])</span>
+<span class="go">b&#39;sum ([[1 ,2 ]][0 ])&#39;</span>
+
+</pre></div>
+</div>
+<p>If you want to use the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module to extend the Python language
+injecting or modifying tokens in a token stream, then using <code class="docutils literal notranslate"><span class="pre">exec</span></code> or <code class="docutils literal notranslate"><span class="pre">eval</span></code>
+to convert the resulting source into executable code, and you do not care what
+the code itself looks like, you can simply pass this function tuples of
+<code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code> and it will work fine. However, if your end goal
+is to translate code in a human-readable way, you must keep track of line and
+column information near the tokens you modify. The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module does not
+provide any tools to help with this.</p>
+</div>
+<div class="section" id="detect-encoding-readline">
+<span id="detect-encoding-readline"></span><h3><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code><a class="headerlink" href="#detect-encoding-readline" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding">official
+docs</a>
+for this function are helpful. This is the function used by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> to
+generate the <a class="reference external" href="#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. It can be used separately to
+determine the encoding of some Python code. The calling syntax is the <a class="reference external" href="usage.html#calling-syntax">same as for <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code></a>.</p>
+<p>Returns a tuple of the encoding, and a list of any lines (in bytes) that it
+has read from the function (it will read at most two lines from the file).
+Invalid encoding raise a <a class="reference external" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">detect_encoding</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;# -*- coding: ascii -*-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
+<span class="go">(&#39;ascii&#39;, [b&#39;# -*- coding: ascii -*-&#39;])</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="tokenize-open-filename">
+<span id="tokenize-open-filename"></span><h3><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code><a class="headerlink" href="#tokenize-open-filename" title="Permalink to this headline">¶</a></h3>
+<p>This is an alternative to the built-in <code class="docutils literal notranslate"><span class="pre">open()</span></code> function that automatically
+opens a Python file in text mode with the correct encoding, as detected by
+<a class="reference external" href="#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>.</p>
+<p>This function is not particularly useful in conjunction with the <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>
+function (remember that <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> requires opening a file in binary mode,
+whereas this function opens it in text mode). Rather, this is a function that
+uses the functionality of the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module, in particular,
+<code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code>, to provide a higher level task that would be difficult to
+do otherwise (opening a Python source file in text mode using the syntactically
+correct encoding).</p>
+</div>
+</div>
+<div class="section" id="helper-functions-related-to-the-parser-module">
+<span id="helper-functions-related-to-the-parser-module"></span><h2>Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module<a class="headerlink" href="#helper-functions-related-to-the-parser-module" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.</p>
@@ -573,7 +641,7 @@ file</a> are
 represented by their string value (for instance, the grammar references <code class="docutils literal notranslate"><span class="pre">'('</span></code>
 instead of <code class="docutils literal notranslate"><span class="pre">LPAR</span></code>). The C parser re-uses the tokenize node types when it
 constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
-<code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>, which is currently 256. You can see the list of nonterminal nodes
+<a class="reference external" href="#nt_offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a>. You can see the list of nonterminal nodes
 in the
 <a class="reference external" href="https://github.com/python/cpython/blob/master/Include/graminit.h"><code class="docutils literal notranslate"><span class="pre">graminit.h</span></code></a>
 file, or by using the
@@ -661,8 +729,16 @@ or the <code class="docutils literal notranslate"><span class="pre">ast</span></
 
 </pre></div>
 </div>
-<p>The following functions are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t
-particularly useful outside of the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module.</p>
+<p>The following are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t particularly
+useful outside of the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module.</p>
+<div class="section" id="nt-offset">
+<span id="nt-offset"></span><h3><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code><a class="headerlink" href="#nt-offset" title="Permalink to this headline">¶</a></h3>
+<p>The greatest possible terminal token number. This is not useful unless you
+intend to use the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module. <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> never emits this token. Even
+if you are using the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module, you would generally use one of the
+functions below instead of this token type. The current value of this constant
+is 256.</p>
+</div>
 <div class="section" id="isterminal-x">
 <span id="isterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code><a class="headerlink" href="#isterminal-x" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> is <code class="docutils literal notranslate"><span class="pre">x</span></code> is a terminal token type. It is
@@ -702,6 +778,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 <li class="toctree-l2"><a class="reference internal" href="#the-tok-name-dictionary">The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-tokens">The tokens</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#additional-helper-functions">Additional helper functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helper-functions-related-to-the-parser-module">Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module</a></li>
 </ul>
 </li>
 </ul>
