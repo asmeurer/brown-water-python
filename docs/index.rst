@@ -81,11 +81,3 @@ Table of Contents
    alternatives
    usage
    tokens
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
