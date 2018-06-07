@@ -426,20 +426,75 @@ tabs and spaces.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h3><a href="index.html">Table Of Contents</a></h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<h1><a href="index.html">Brown Water Python</a></h1>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#calling-syntax">Calling syntax</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#regular-expressions">Regular expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#tokenize">Tokenize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#ast">AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#summary">Summary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">parso</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tokens.html">The Token Types</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calling-syntax">Calling syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#indentationerror"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tokens.html">The Token Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tok-name-dictionary">The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tokens">The tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#string"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tokens.html#error-behavior"><strong>Error behavior</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#indent"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#dedent"><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#rarrow"><code class="docutils literal notranslate"><span class="pre">RARROW</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#ellipsis"><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#additional-helper-functions">Additional helper functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#helper-functions-related-to-the-parser-module">Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#isterminal-x"><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#isnonterminal-x"><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#iseof-x"><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
