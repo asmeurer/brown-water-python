@@ -71,9 +71,11 @@ able to use attributes to access the members. Instead use something like ``for
 toknum, tokval, start, end, line in tokenize.generate_tokens(...):`` (this
 pattern is recommended in Python 3 as well, see the `Usage <usage.html>`_ section).
 
+Table of Contents
+=================
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
 
    intro
    alternatives

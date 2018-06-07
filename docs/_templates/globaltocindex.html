@@ -9,4 +9,7 @@
 
     Modified to work properly with the index page
 #}
-{{ toctree() }}
+{%- if display_toc %}
+<h3><a href="{{ pathto(master_doc) }}">{{ _('Brown Water Python') }}</a></h3>
+{{ toctree(maxdepth=-1, collapse=False) }}
+{%- endif %}
