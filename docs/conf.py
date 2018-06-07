@@ -97,6 +97,8 @@ html_theme_options = {
     'github_banner': True,
     'logo_name': True,
     'show_related': True,
+    # Needs a release with https://github.com/bitprophet/alabaster/pull/101 first
+    # 'show_relbars': True,
 
     # Colors
     #
