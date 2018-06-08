@@ -34,6 +34,7 @@ script:
   - cd docs
   - make doctest # tests rst files only
   - make html
+  - make linkcheck
   - python -m doctest *.md
   - cd ..
   - doctr deploy --built-docs docs/_build/html .
