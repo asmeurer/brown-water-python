@@ -230,6 +230,12 @@ Python code using regular expressions, writing an equivalent method
 using the `tokenize` module will be more correct on edge cases, more
 maintainable, and easier to extend.
 
+### Other standard library modules
+
+In addition to `tokenize` and `ast`, the Python standard library has several
+[other modules](https://docs.python.org/3/library/language.html) which can aid
+in inspecting and manipulating Python source code.
+
 ### parso
 
 As a final note, David Halter\'s
