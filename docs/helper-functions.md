@@ -55,7 +55,7 @@ it ignores the column information and uses its own spacing.
 >>> import ast
 >>> def split_string(s):
 ...     """
-...     Split string tokens into constituant characters
+...     Split string tokens into constituent characters
 ...     """
 ...     new_tokens = []
 ...     for toknum, tokstr, start, end, line in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
@@ -65,8 +65,8 @@ it ignores the column information and uses its own spacing.
 ...         else:
 ...             new_tokens.append((toknum, tokstr, start, end, line))
 ...     return tokenize.untokenize(new_tokens).decode('utf-8')
->>> split_string("print('hello') and print('world')")
-"print('h' 'e' 'l' 'l' 'o')and print ('w' 'o' 'r' 'l' 'd')"
+>>> split_string("print('hello ') and print('world')")
+"print('h' 'e' 'l' 'l' 'o' ' ')and print ('w' 'o' 'r' 'l' 'd')"
 
 ```
 
