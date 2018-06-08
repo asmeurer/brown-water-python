@@ -461,7 +461,7 @@ parser (these are parsed as `ERRORTOKEN`).
 
 When using `tokenize`, the token type for an operation, delimiter, or ellipsis
 literal token will be `OP`. To get the exact token type, use the `exact_type`
-property of the namedtuple. `exact_type` is equivalent to `type` for the
+property of the namedtuple. `tok.exact_type` is equivalent to `tok.type` for the
 remaining token types (with two exceptions, see the notes below).
 
 ```py
