@@ -133,7 +133,7 @@ are somewhat complicated, as they involve a large table of <a class="reference e
 characters</a>.
 One should always use the <code class="docutils literal notranslate"><span class="pre">str.isidentifier()</span></code> method to test if a string is a
 valid Python identifier, combined with a <code class="docutils literal notranslate"><span class="pre">keyword.iskeyword()</span></code> check. Testing
-if a string is an identifier using regular expressions is generally
+if a string is an identifier using regular expressions is highly
 discouraged.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;a or α&#39;</span><span class="p">)</span>
 <span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
