@@ -1,4 +1,5 @@
 ./_sources/alternatives.md.txt
+./_sources/examples.md.txt
 ./_sources/helper-functions.md.txt
 ./_sources/index.rst.txt
 ./_sources/intro.md.txt
@@ -28,6 +29,7 @@
 ./_static/up.png
 ./_static/websupport.js
 ./alternatives.html
+./examples.html
 ./genindex.html
 ./helper-functions.html
 ./index.html

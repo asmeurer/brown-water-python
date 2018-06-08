@@ -51,7 +51,7 @@
   <div class="section" id="tokenize-vs-alternatives">
 <span id="tokenize-vs-alternatives"></span><h1><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives<a class="headerlink" href="#tokenize-vs-alternatives" title="Permalink to this headline">¶</a></h1>
 <p>There are generally three methods one might use when trying to find or
-modify syntatic constructs in Python source code:</p>
+modify syntactic constructs in Python source code:</p>
 <ul class="simple">
 <li>Naive matching with regular expression</li>
 <li>Using a lexical tokenizer (i.e., the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module)</li>
@@ -262,6 +262,12 @@ most use-cases where one might want to use naive string matching on
 Python code using regular expressions, writing an equivalent method
 using the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module will be more correct on edge cases, more
 maintainable, and easier to extend.</p>
+<div class="section" id="other-standard-library-modules">
+<span id="other-standard-library-modules"></span><h3>Other standard library modules<a class="headerlink" href="#other-standard-library-modules" title="Permalink to this headline">¶</a></h3>
+<p>In addition to <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code>, the Python standard library has several
+<a class="reference external" href="https://docs.python.org/3/library/language.html">other modules</a> which can aid
+in inspecting and manipulating Python source code.</p>
+</div>
 <div class="section" id="parso">
 <span id="parso"></span><h3>parso<a class="headerlink" href="#parso" title="Permalink to this headline">¶</a></h3>
 <p>As a final note, David Halter’s
@@ -313,6 +319,7 @@ AST.</small></p>
 <li class="toctree-l2"><a class="reference internal" href="#tokenize">Tokenize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ast">AST</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#other-standard-library-modules">Other standard library modules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#parso">parso</a></li>
 </ul>
 </li>
@@ -375,6 +382,7 @@ AST.</small></p>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
