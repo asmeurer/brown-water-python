@@ -102,7 +102,7 @@ Invalid encoding raise a [`SyntaxError`](usage.html#syntaxerror).
 
 This is an alternative to the built-in `open()` function that automatically
 opens a Python file in text mode with the correct encoding, as detected by
-[`detect_encoding()`](tokens.html#detect-encoding-readline).
+[`detect_encoding()`](#detect-encoding-readline).
 
 This function is not particularly useful in conjunction with the `tokenize()`
 function (remember that `tokenize()` requires opening a file in binary mode,
@@ -129,7 +129,7 @@ file](https://github.com/python/cpython/blob/master/Grammar/Grammar) are
 represented by their string value (for instance, the grammar references `'('`
 instead of `LPAR`). The C parser re-uses the tokenize node types when it
 constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
-[`NT_OFFSET`](#nt_offset). You can see the list of nonterminal nodes
+[`NT_OFFSET`](#nt-offset). You can see the list of nonterminal nodes
 in the
 [`graminit.h`](https://github.com/python/cpython/blob/master/Include/graminit.h)
 file, or by using the
