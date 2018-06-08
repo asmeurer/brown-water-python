@@ -11,8 +11,8 @@ HEADER = """
 """
 
 TABLE_ENTRY = """
-   * - {token_name}{note}
-     - {token_string}
+   * - ``{token_name}``{note}
+     - ``{token_string}``
 """
 
 FOOTER = """
@@ -45,7 +45,7 @@ def main():
 
             f.write(TABLE_ENTRY.format(
                 token_name=tokenize.tok_name[token_type],
-                token_string=escape(token_string),
+                token_string=token_string,
                 note=note,
                 ))
         f.write(FOOTER)
