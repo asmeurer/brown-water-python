@@ -81,3 +81,4 @@ Table of Contents
    alternatives
    usage
    tokens
+   helper-functions
