@@ -14,8 +14,8 @@ An example should clarify things. Consider the string of partial Python code,
 >>> import tokenize
 >>> import io
 >>> string = '("a") + True -'
->>> for token in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
-...     print(token)
+>>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
+...     print(tok)
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='("a") + True -')
 TokenInfo(type=3 (STRING), string='"a"', start=(1, 1), end=(1, 4), line='("a") + True -')
@@ -63,8 +63,8 @@ I chose this example to demonstrate a few things:
 
     ```py
     >>> string = '("a" + True -'
-    >>> for token in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
-    ...     print(token) # doctest: +SKIP
+    >>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
+    ...     print(tok) # doctest: +SKIP
     TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
     TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='("a" + True -')
     TokenInfo(type=3 (STRING), string='"a"', start=(1, 1), end=(1, 4), line='("a" + True -')
@@ -112,8 +112,8 @@ I chose this example to demonstrate a few things:
 
     ```py
     >>> string = 'a$b'
-    >>> for token in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
-    ...     print(token)
+    >>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
+    ...     print(tok)
     TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
     TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a$b')
     TokenInfo(type=56 (ERRORTOKEN), string='$', start=(1, 1), end=(1, 2), line='a$b')

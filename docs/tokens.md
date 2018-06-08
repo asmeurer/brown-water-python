@@ -43,8 +43,8 @@ the examples:
 ```py
 >>> import io
 >>> def print_tokens(s):
-...     for i in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
-...         print(i)
+...     for tok in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
+...         print(tok)
 
 ```
 
@@ -466,8 +466,8 @@ remaining token types (with two exceptions, see the notes below).
 
 ```py
 >>> import io
->>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
-...     print(tokenize.tok_name[i.type], repr(i.string))
+>>> for tok in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
+...     print(tokenize.tok_name[tok.type], repr(tok.string))
 ENCODING 'utf-8'
 OP '['
 NUMBER '1'
@@ -475,8 +475,8 @@ OP '+'
 NUMBER '2'
 OP ']'
 ENDMARKER ''
->>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
-...     print(tokenize.tok_name[i.exact_type], repr(i.string))
+>>> for tok in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
+...     print(tokenize.tok_name[tok.exact_type], repr(tok.string))
 ENCODING 'utf-8'
 LSQB '['
 NUMBER '1'
