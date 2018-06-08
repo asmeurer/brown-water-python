@@ -505,6 +505,30 @@ characters.
 
 ### `COMMENT`
 
+The `COMMENT` token type represents a comment. If a comment spans multiple
+lines, each line is tokenized separately.
+
+```py
+>>> print_tokens("""
+... # This is a comment
+... # This is another comment
+... f() # This is a third comment
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=57 (COMMENT), string='# This is a comment', start=(2, 0), end=(2, 19), line='# This is a comment\n')
+TokenInfo(type=58 (NL), string='\n', start=(2, 19), end=(2, 20), line='# This is a comment\n')
+TokenInfo(type=57 (COMMENT), string='# This is another comment', start=(3, 0), end=(3, 25), line='# This is another comment\n')
+TokenInfo(type=58 (NL), string='\n', start=(3, 25), end=(3, 26), line='# This is another comment\n')
+TokenInfo(type=1 (NAME), string='f', start=(4, 0), end=(4, 1), line='f() # This is a third comment\n')
+TokenInfo(type=53 (OP), string='(', start=(4, 1), end=(4, 2), line='f() # This is a third comment\n')
+TokenInfo(type=53 (OP), string=')', start=(4, 2), end=(4, 3), line='f() # This is a third comment\n')
+TokenInfo(type=57 (COMMENT), string='# This is a third comment', start=(4, 4), end=(4, 29), line='f() # This is a third comment\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 29), end=(4, 30), line='f() # This is a third comment\n')
+TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
+
+```
+
 The `COMMENT` token type exists only in the standard library Python implementation
 of `tokenize`. The C implementation used by the interpreter only has
 `NEWLINE`. In Python versions prior to 3.7, `COMMENT` is only importable from
