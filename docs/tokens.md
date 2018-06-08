@@ -597,6 +597,47 @@ of `tokenize`. The C implementation used by the interpreter only has
 
 ### `ENCODING`
 
+`ENCODING` is a special token type that represents the encoding of the input.
+It is always the first token emitted by `tokenize()`, unless the detected
+encoding is invalid, in which case it raises [`SyntaxError`](usage.html#syntaxerror). The encoding is detected via either a [PEP
+263](https://www.python.org/dev/peps/pep-0263/) formatted comment in one of
+the first two lines of the input (like `# -*- coding: utf-8 -*-`; such
+comments are still tokenized as a [`COMMENT`](#comment) as well), or a
+Unicode BOM character.
+
+The detected encoding is in the `string` attribute of the `TokenInfo`.
+`ENCODING` is the only token type where `tok.string` does not appear literally
+in the input. The default encoding is `utf-8`.
+
+If you only want to detect the encoding and nothing else, use
+[`detect_encoding()`](helper-functions.html#detect-encodin-readline). If you only need
+the encoding to pass to `open()`, use [`tokenize.open()`](helper-functions.html#tokenize-open-filename).
+
+The `start` and `end` line and column numbers for `ENCODING` will always be
+`(0, 0)`.
+
+```
+>>> print_tokens("# The default encoding is utf-8")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (COMMENT), string='# The default encoding is utf-8', start=(1, 0), end=(1, 31), line='# The default encoding is utf-8')
+TokenInfo(type=58 (NL), string='', start=(1, 31), end=(1, 31), line='# The default encoding is utf-8')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+>>> print_tokens("# -*- coding: ascii -*-")
+TokenInfo(type=59 (ENCODING), string='ascii', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (COMMENT), string='# -*- coding: ascii -*-', start=(1, 0), end=(1, 23), line='# -*- coding: ascii -*-')
+TokenInfo(type=58 (NL), string='', start=(1, 23), end=(1, 23), line='# -*- coding: ascii -*-')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+The `ENCODING` token is not typically used when processing tokens, although
+its guaranteed presence as the first token can be useful when handling tokens
+in a rolling window (see the [examples](#examples.html)).
+
+Strictly speaking, the `string` of every token in a token stream should be
+decodable by the encoding of the `ENCODING` token (e.g., if the encoding is
+`ascii`, the tokens cannot include any non-ASCII characters).
+
 The `ENCODING` token type exists only in the standard library Python implementation
 of `tokenize`. The C implementation used by the interpreter only has
 `NEWLINE`. In Python versions prior to 3.7, `ENCODING` is only importable from

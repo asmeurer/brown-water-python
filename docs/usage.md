@@ -191,7 +191,7 @@ let it bubble up to the caller.
 ### `SyntaxError`
 
 `SyntaxError` is raised when the input has an invalid encoding. The encoding
-is detected using the [`detect_encoding()`](tokens.html#detect_encoding)
+is detected using the [`detect_encoding()`](helper-functions.html#detect-encoding-readline)
 function, which uses either a [PEP
 263](https://www.python.org/dev/peps/pep-0263/) formatted comment at the
 beginning of the input (like `# -*- coding: utf-8 -*-`), or a Unicode BOM
