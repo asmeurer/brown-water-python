@@ -492,10 +492,10 @@ characters.
 
 <!-- The table below is generated with exact_type_table.py -->
 
-<!-- ```eval_rst -->
+```eval_rst
 
-<!-- .. include:: exact_type_table.txt -->
-<!-- ``` -->
+.. include:: exact_type_table.txt
+```
 
 ### `AWAIT`
 
@@ -631,7 +631,8 @@ The [official
 docs](https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding)
 for this function are helpful. This is the function used by `tokenize()` to
 generate the [`ENCODING`](#encoding) token. It can be used separately to
-determine the encoding of some Python code. The calling syntax is the [same as for `tokenize()`](usage.html#calling-syntax).
+determine the encoding of some Python code. The calling syntax is the [same as
+for `tokenize()`](usage.html#calling-syntax).
 
 Returns a tuple of the encoding, and a list of any lines (in bytes) that it
 has read from the function (it will read at most two lines from the file).

@@ -15,27 +15,31 @@ TABLE_ENTRY = """
      - {token_string}
 """
 
-RARROW_NOTE = " The ``exact_type`` for ``RARROW`` is ``OP`` in Python versions prior to 3.7. See :ref:`RARROW` below."
+FOOTER = """
 
-ELLIPSIS_NOTE = " The ``exact_type`` for ``ELLIPSIS`` is ``OP`` in Python versions prior to 3.7. See :ref:`ELLIPSIS` below."
+.. rubric:: Footnotes
+
+.. [#f1] Due to a `bug <https://bugs.python.org/issue24622>`_, the ``exact_type`` for ``RARROW`` and ``ELLIPSIS`` is ``OP`` in Python versions prior to 3.7. See `below <#rarrow>`_.
+
+"""
 
 def escape(s):
     return '\\' + '\\'.join(s)
 
-token_types = {num: string for string, num in tokenize.EXACT_TOKEN_TYPES}
+token_types = {num: string for string, num in tokenize.EXACT_TOKEN_TYPES.items()}
 
 # Not included below Python 3.7 for some reason
 token_types[tokenize.ELLIPSIS] = '...'
 token_types[tokenize.RARROW] = '->'
 
 def main():
+    print("Generating exact_type_table.txt")
     with open('exact_type_table.txt', 'w') as f:
         f.write(HEADER)
-        for token_type, token_string in sorted(token_types):
-            if token_type == tokenize.RARROW:
-                note = RARROW_NOTE
-            elif token_type == tokenize.ELLIPSIS:
-                note = ELLIPSIS_NOTE
+        for token_type in sorted(token_types):
+            token_string = token_types[token_type]
+            if token_type in [tokenize.RARROW, tokenize.ELLIPSIS]:
+                note = " [#f1]_"
             else:
                 note = ''
 
@@ -44,6 +48,7 @@ def main():
                 token_string=escape(token_string),
                 note=note,
                 ))
+        f.write(FOOTER)
 
 if __name__ == '__main__':
     main()
