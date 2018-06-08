@@ -241,7 +241,8 @@ like <code class="docutils literal notranslate"><span class="pre">123_456</span>
 
 </pre></div>
 </div>
-<p>In Python 3.5, this will tokenize as two tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>).</p>
+<p>In Python 3.5, this will tokenize as two tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and <code class="docutils literal notranslate"><span class="pre">NAME</span></code>
+(<code class="docutils literal notranslate"><span class="pre">_456</span></code>) (and will not be syntactically valid in any context).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The behavior in Python 3.5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;123_456&#39;</span><span class="p">)</span> 
 <span class="go">    TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
