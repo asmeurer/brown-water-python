@@ -2,7 +2,7 @@
 ===========================
 
 There are generally three methods one might use when trying to find or
-modify syntatic constructs in Python source code:
+modify syntactic constructs in Python source code:
 
 -   Naive matching with regular expression
 -   Using a lexical tokenizer (i.e., the `tokenize` module)
