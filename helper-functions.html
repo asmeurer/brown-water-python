@@ -1,0 +1,409 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Helper Functions &#8212; Brown Water Python  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="The Token Types" href="tokens.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tokens.html" title="Previous document">The Token Types</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="helper-functions">
+<span id="helper-functions"></span><h1>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h1>
+<p>In addition to the primary <a class="reference external" href="usage.html"><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code></a> entry-point, the
+<code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module has several additional helper functions.</p>
+<div class="section" id="untokenize-iterable">
+<span id="untokenize-iterable"></span><h2><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code><a class="headerlink" href="#untokenize-iterable" title="Permalink to this headline">¶</a></h2>
+<p>Converts an iterable of tokens into a bytes string. The string is encoded
+using the encoding of the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. The iterable can be
+<code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects, or tuples of <code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code>.</p>
+<p>This function is round-trippable in one direction, namely,
+<code class="docutils literal notranslate"><span class="pre">tokenize(io.BytesIO(untokenize(tokens)).readline)</span></code> will always return the
+same tokens.</p>
+<p>If full <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> tuples are given with correct <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>
+information (iterable of 5-tuples), this function also round-trips in the
+other direction. However, be aware that the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples must be
+nondecreasing. If the <code class="docutils literal notranslate"><span class="pre">start</span></code> of one token is before the <code class="docutils literal notranslate"><span class="pre">end</span></code> of the previous
+token, it raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Therefore, if you want to modify tokens and use
+<code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> to convert back to a string, you must keep track of and
+maintain the line and column information in <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;sum([[1, 2]][0])&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">))</span>
+<span class="go">b&#39;sum([[1, 2]][0])&#39;</span>
+
+</pre></div>
+</div>
+<p>If only the token type and token names are given (iterable of
+2-tuples), it will not, and in fact, for any nontrivial input, the resulting
+bytes string will not be the same. This is because it adds spaces after
+certain tokens to ensure the resulting string is syntactically valid (or
+rather, to ensure that it tokenizes back in the same way).</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;sum([[1, 2]][0])&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)])</span>
+<span class="go">b&#39;sum ([[1 ,2 ]][0 ])&#39;</span>
+
+</pre></div>
+</div>
+<p>2-tuples and 5-tuples can be mixed (for instance, you can add new tokens to a
+list of <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects using only 2-tuples), but in this case, it will
+ignore the column information for the 5-tuples.</p>
+<p>Consider this simple example which replaces all <code class="docutils literal notranslate"><span class="pre">STRING</span></code> tokens with a list of
+<code class="docutils literal notranslate"><span class="pre">STRING</span></code> tokens of individual characters (making use of implicit string
+concatenation). Once <code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> encounters the newly added 2-tuple tokens,
+it ignores the column information and uses its own spacing.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">split_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="sd">    Split string tokens into constituent characters</span>
+<span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="gp">... </span>    <span class="n">new_tokens</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">toknum</span><span class="p">,</span> <span class="n">tokstr</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">toknum</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">tokstr</span><span class="p">):</span>
+<span class="gp">... </span>                <span class="n">new_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">toknum</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">char</span><span class="p">)))</span>
+<span class="gp">... </span>        <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="n">new_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">toknum</span><span class="p">,</span> <span class="n">tokstr</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">line</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">new_tokens</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">split_string</span><span class="p">(</span><span class="s2">&quot;print(&#39;hello &#39;) and print(&#39;world&#39;)&quot;</span><span class="p">)</span>
+<span class="go">&quot;print(&#39;h&#39; &#39;e&#39; &#39;l&#39; &#39;l&#39; &#39;o&#39; &#39; &#39;)and print (&#39;w&#39; &#39;o&#39; &#39;r&#39; &#39;l&#39; &#39;d&#39;)&quot;</span>
+
+</pre></div>
+</div>
+<p>If you want to use the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module to extend the Python language
+injecting or modifying tokens in a token stream, then using <code class="docutils literal notranslate"><span class="pre">exec</span></code> or <code class="docutils literal notranslate"><span class="pre">eval</span></code>
+to convert the resulting source into executable code, and you do not care what
+the code itself looks like, you can simply pass this function tuples of
+<code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code> and it will work fine. However, if your end goal
+is to translate code in a human-readable way, you must keep track of line and
+column information near the tokens you modify. The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module does not
+provide any tools to help with this.</p>
+</div>
+<div class="section" id="detect-encoding-readline">
+<span id="detect-encoding-readline"></span><h2><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code><a class="headerlink" href="#detect-encoding-readline" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding">official
+docs</a>
+for this function are helpful. This is the function used by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> to
+generate the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. It can be used separately to
+determine the encoding of some Python code. The calling syntax is the <a class="reference external" href="usage.html#calling-syntax">same as
+for <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code></a>.</p>
+<p>Returns a tuple of the encoding, and a list of any lines (in bytes) that it
+has read from the function (it will read at most two lines from the file).
+Invalid encoding raise a <a class="reference external" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">detect_encoding</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;# -*- coding: ascii -*-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
+<span class="go">(&#39;ascii&#39;, [b&#39;# -*- coding: ascii -*-&#39;])</span>
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="tokenize-open-filename">
+<span id="tokenize-open-filename"></span><h2><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code><a class="headerlink" href="#tokenize-open-filename" title="Permalink to this headline">¶</a></h2>
+<p>This is an alternative to the built-in <code class="docutils literal notranslate"><span class="pre">open()</span></code> function that automatically
+opens a Python file in text mode with the correct encoding, as detected by
+<a class="reference external" href="tokens.html#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>.</p>
+<p>This function is not particularly useful in conjunction with the <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>
+function (remember that <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> requires opening a file in binary mode,
+whereas this function opens it in text mode). Rather, this is a function that
+uses the functionality of the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module, in particular,
+<code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code>, to provide a higher level task that would be difficult to
+do otherwise (opening a Python source file in text mode using the syntactically
+correct encoding).</p>
+</div>
+<div class="section" id="helper-functions-related-to-the-parser-module">
+<span id="helper-functions-related-to-the-parser-module"></span><h2>Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module<a class="headerlink" href="#helper-functions-related-to-the-parser-module" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimic the modules in the C parser. Some
+additional helper functions are included, even though they are mostly useless
+outside of the C parser.</p>
+<p>For some context, the Python
+<a class="reference external" href="https://docs.python.org/3/reference/grammar.html">grammar</a> contains
+<em>terminal</em> and <em>nonterminal</em> nodes. The terminal nodes are the ones that stop
+the parsing (they are leaf nodes, that is, no other node in the grammar can be
+contained in them). These nodes are represented in uppercase. Every terminal
+node in the grammar is a token type, for example, <code class="docutils literal notranslate"><span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">STRING</span></code>. Most terminal nodes in the <a class="reference external" href="https://github.com/python/cpython/blob/master/Grammar/Grammar">grammar
+file</a> are
+represented by their string value (for instance, the grammar references <code class="docutils literal notranslate"><span class="pre">'('</span></code>
+instead of <code class="docutils literal notranslate"><span class="pre">LPAR</span></code>). The C parser re-uses the tokenize node types when it
+constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
+<a class="reference external" href="#nt_offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a>. You can see the list of nonterminal nodes
+in the
+<a class="reference external" href="https://github.com/python/cpython/blob/master/Include/graminit.h"><code class="docutils literal notranslate"><span class="pre">graminit.h</span></code></a>
+file, or by using the
+<a class="reference external" href="https://docs.python.org/3/library/symbol.html"><code class="docutils literal notranslate"><span class="pre">symbol</span></code></a> module.</p>
+<p>The <a class="reference external" href="https://docs.python.org/3/library/parser.html"><code class="docutils literal notranslate"><span class="pre">parser</span></code></a> module can be
+used from within Python to access the parse tree. The <code class="docutils literal notranslate"><span class="pre">parser</span></code> and <code class="docutils literal notranslate"><span class="pre">symbol</span></code>
+modules aren’t discussed further in this guide because the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ast</span></code> modules are generally preferable for almost all use-cases (see the
+<a class="reference external" href="alternatives.html">alternatives</a> section). In particular, the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module
+has all the same limitations as the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module (it requires complete,
+syntactically valid Python code), but is much more difficult to work with. The
+<code class="docutils literal notranslate"><span class="pre">parser</span></code> module exists mainly as a relic from before the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module existed
+in the standard library (<code class="docutils literal notranslate"><span class="pre">ast</span></code> was introduced in Python 2.5).</p>
+<p>The following example gives an idea of what the <code class="docutils literal notranslate"><span class="pre">parser</span></code> syntax trees look
+like for the code <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">parser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">token</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">symbol</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">l</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">toname</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">t</span><span class="p">[:]):</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+<span class="gp">... </span>                <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">ISTERMINAL</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<span class="gp">... </span>                    <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">val</span><span class="p">]</span>
+<span class="gp">... </span>                <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>                    <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbol</span><span class="o">.</span><span class="n">sym_name</span><span class="p">[</span><span class="n">val</span><span class="p">]</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<span class="gp">... </span>                <span class="n">toname</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">toname</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">l</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
+<span class="go">[&#39;eval_input&#39;,</span>
+<span class="go"> [&#39;testlist&#39;,</span>
+<span class="go">  [&#39;test&#39;,</span>
+<span class="go">   [&#39;or_test&#39;,</span>
+<span class="go">    [&#39;and_test&#39;,</span>
+<span class="go">     [&#39;not_test&#39;,</span>
+<span class="go">      [&#39;comparison&#39;,</span>
+<span class="go">       [&#39;expr&#39;,</span>
+<span class="go">        [&#39;xor_expr&#39;,</span>
+<span class="go">         [&#39;and_expr&#39;,</span>
+<span class="go">          [&#39;shift_expr&#39;,</span>
+<span class="go">           [&#39;arith_expr&#39;,</span>
+<span class="go">            [&#39;term&#39;,</span>
+<span class="go">             [&#39;factor&#39;,</span>
+<span class="go">              [&#39;power&#39;,</span>
+<span class="go">               [&#39;atom_expr&#39;,</span>
+<span class="go">                [&#39;atom&#39;,</span>
+<span class="go">                 [&#39;LPAR&#39;, &#39;(&#39;],</span>
+<span class="go">                 [&#39;testlist_comp&#39;,</span>
+<span class="go">                  [&#39;test&#39;,</span>
+<span class="go">                   [&#39;or_test&#39;,</span>
+<span class="go">                    [&#39;and_test&#39;,</span>
+<span class="go">                     [&#39;not_test&#39;,</span>
+<span class="go">                      [&#39;comparison&#39;,</span>
+<span class="go">                       [&#39;expr&#39;,</span>
+<span class="go">                        [&#39;xor_expr&#39;,</span>
+<span class="go">                         [&#39;and_expr&#39;,</span>
+<span class="go">                          [&#39;shift_expr&#39;,</span>
+<span class="go">                           [&#39;arith_expr&#39;,</span>
+<span class="go">                            [&#39;term&#39;,</span>
+<span class="go">                             [&#39;factor&#39;,</span>
+<span class="go">                              [&#39;power&#39;,</span>
+<span class="go">                               [&#39;atom_expr&#39;,</span>
+<span class="go">                                [&#39;atom&#39;, [&#39;STRING&#39;, &#39;&quot;a&quot;&#39;]]]]]]]]]]]]]]]]],</span>
+<span class="go">                 [&#39;RPAR&#39;, &#39;)&#39;]]]]]],</span>
+<span class="go">            [&#39;PLUS&#39;, &#39;+&#39;],</span>
+<span class="go">            [&#39;term&#39;,</span>
+<span class="go">             [&#39;factor&#39;,</span>
+<span class="go">              [&#39;power&#39;, [&#39;atom_expr&#39;, [&#39;atom&#39;, [&#39;NAME&#39;, &#39;True&#39;]]]]]]]]]]]]]]]]],</span>
+<span class="go"> [&#39;NEWLINE&#39;, &#39;&#39;],</span>
+<span class="go"> [&#39;ENDMARKER&#39;, &#39;&#39;]]</span>
+
+</pre></div>
+</div>
+<p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <a class="reference external" href="intro.html">intro</a>,
+or the <code class="docutils literal notranslate"><span class="pre">ast</span></code> representation:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span>
+<span class="go">&quot;Module(body=[Expr(value=BinOp(left=Str(s=&#39;a&#39;), op=Add(), right=NameConstant(value=True)))])&quot;</span>
+
+</pre></div>
+</div>
+<p>The following are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t particularly
+useful outside of the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module.</p>
+<div class="section" id="nt-offset">
+<span id="nt-offset"></span><h3><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code><a class="headerlink" href="#nt-offset" title="Permalink to this headline">¶</a></h3>
+<p>The greatest possible terminal token number. This is not useful unless you
+intend to use the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module. <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> never emits this token. Even
+if you are using the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module, you would generally use one of the
+functions below instead of this token type. The current value of this constant
+is 256.</p>
+</div>
+<div class="section" id="isterminal-x">
+<span id="isterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code><a class="headerlink" href="#isterminal-x" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> is <code class="docutils literal notranslate"><span class="pre">x</span></code> is a terminal token type. It is
+equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">NT_OFFSET</span></code>. Every token in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module (except for
+<code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>) is a terminal node. It returns <code class="docutils literal notranslate"><span class="pre">False</span></code> for every token in the
+<code class="docutils literal notranslate"><span class="pre">symbol</span></code> module.</p>
+</div>
+<div class="section" id="isnonterminal-x">
+<span id="isnonterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code><a class="headerlink" href="#isnonterminal-x" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> is a nonterminal token type. It is
+equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;=</span> <span class="pre">NT_OFFSET</span></code>. The only nonterminal “token” in the <code class="docutils literal notranslate"><span class="pre">token</span></code>
+module is <code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code> itself. It returns <code class="docutils literal notranslate"><span class="pre">True</span></code> for every token in the
+<code class="docutils literal notranslate"><span class="pre">symbol</span></code> module.</p>
+</div>
+<div class="section" id="iseof-x">
+<span id="iseof-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code><a class="headerlink" href="#iseof-x" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code> returns true if <code class="docutils literal notranslate"><span class="pre">x</span></code> is the end of input marker token type. It is
+equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">ENDMARKER</span></code>. This is also mostly useless, as the
+<code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> function ends iteration after it emits this token.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tokens.html" title="Previous document">The Token Types</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1><a href="index.html">Brown Water Python</a></h1>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#regular-expressions">Regular expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#tokenize">Tokenize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#ast">AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#summary">Summary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">parso</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#calling-syntax">Calling syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#indentationerror"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tokens.html">The Token Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tok-name-dictionary">The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tokens">The tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#string"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tokens.html#error-behavior"><strong>Error behavior</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#indent"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#dedent"><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#rarrow"><code class="docutils literal notranslate"><span class="pre">RARROW</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#ellipsis"><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#n-tokens"><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Helper Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helper-functions-related-to-the-parser-module">Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#isterminal-x"><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#isnonterminal-x"><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iseof-x"><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Aaron Meurer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6+</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/helper-functions.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/asmeurer/brown-water-python" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

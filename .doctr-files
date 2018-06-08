@@ -1,4 +1,5 @@
 ./_sources/alternatives.md.txt
+./_sources/helper-functions.md.txt
 ./_sources/index.rst.txt
 ./_sources/intro.md.txt
 ./_sources/tokens.md.txt
@@ -28,6 +29,7 @@
 ./_static/websupport.js
 ./alternatives.html
 ./genindex.html
+./helper-functions.html
 ./index.html
 ./intro.html
 ./objects.inv

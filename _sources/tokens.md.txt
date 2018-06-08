@@ -43,8 +43,8 @@ the examples:
 ```py
 >>> import io
 >>> def print_tokens(s):
-...     for i in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
-...         print(i)
+...     for tok in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
+...         print(tok)
 
 ```
 
@@ -461,13 +461,13 @@ parser (these are parsed as `ERRORTOKEN`).
 
 When using `tokenize`, the token type for an operation, delimiter, or ellipsis
 literal token will be `OP`. To get the exact token type, use the `exact_type`
-property of the namedtuple. `exact_type` is equivalent to `type` for the
+property of the namedtuple. `tok.exact_type` is equivalent to `tok.type` for the
 remaining token types (with two exceptions, see the notes below).
 
 ```py
 >>> import io
->>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
-...     print(tokenize.tok_name[i.type], repr(i.string))
+>>> for tok in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
+...     print(tokenize.tok_name[tok.type], repr(tok.string))
 ENCODING 'utf-8'
 OP '['
 NUMBER '1'
@@ -475,8 +475,8 @@ OP '+'
 NUMBER '2'
 OP ']'
 ENDMARKER ''
->>> for i in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
-...     print(tokenize.tok_name[i.exact_type], repr(i.string))
+>>> for tok in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
+...     print(tokenize.tok_name[tok.exact_type], repr(tok.string))
 ENCODING 'utf-8'
 LSQB '['
 NUMBER '1'
@@ -492,10 +492,10 @@ characters.
 
 <!-- The table below is generated with exact_type_table.py -->
 
-<!-- ```eval_rst -->
+```eval_rst
 
-<!-- .. include:: exact_type_table.txt -->
-<!-- ``` -->
+.. include:: exact_type_table.txt
+```
 
 ### `AWAIT`
 
@@ -504,6 +504,30 @@ characters.
 ### `ERRORTOKEN`
 
 ### `COMMENT`
+
+The `COMMENT` token type represents a comment. If a comment spans multiple
+lines, each line is tokenized separately.
+
+```py
+>>> print_tokens("""
+... # This is a comment
+... # This is another comment
+... f() # This is a third comment
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=57 (COMMENT), string='# This is a comment', start=(2, 0), end=(2, 19), line='# This is a comment\n')
+TokenInfo(type=58 (NL), string='\n', start=(2, 19), end=(2, 20), line='# This is a comment\n')
+TokenInfo(type=57 (COMMENT), string='# This is another comment', start=(3, 0), end=(3, 25), line='# This is another comment\n')
+TokenInfo(type=58 (NL), string='\n', start=(3, 25), end=(3, 26), line='# This is another comment\n')
+TokenInfo(type=1 (NAME), string='f', start=(4, 0), end=(4, 1), line='f() # This is a third comment\n')
+TokenInfo(type=53 (OP), string='(', start=(4, 1), end=(4, 2), line='f() # This is a third comment\n')
+TokenInfo(type=53 (OP), string=')', start=(4, 2), end=(4, 3), line='f() # This is a third comment\n')
+TokenInfo(type=57 (COMMENT), string='# This is a third comment', start=(4, 4), end=(4, 29), line='f() # This is a third comment\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 29), end=(4, 30), line='f() # This is a third comment\n')
+TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
+
+```
 
 The `COMMENT` token type exists only in the standard library Python implementation
 of `tokenize`. The C implementation used by the interpreter only has
@@ -573,228 +597,60 @@ of `tokenize`. The C implementation used by the interpreter only has
 
 ### `ENCODING`
 
+`ENCODING` is a special token type that represents the encoding of the input.
+It is always the first token emitted by `tokenize()`, unless the detected
+encoding is invalid, in which case it raises [`SyntaxError`](usage.html#syntaxerror). The encoding is detected via either a [PEP
+263](https://www.python.org/dev/peps/pep-0263/) formatted comment in one of
+the first two lines of the input (like `# -*- coding: utf-8 -*-`; such
+comments are still tokenized as a [`COMMENT`](#comment) as well), or a
+Unicode BOM character.
+
+The detected encoding is in the `string` attribute of the `TokenInfo`.
+`ENCODING` is the only token type where `tok.string` does not appear literally
+in the input. The default encoding is `utf-8`.
+
+If you only want to detect the encoding and nothing else, use
+[`detect_encoding()`](helper-functions.html#detect-encodin-readline). If you only need
+the encoding to pass to `open()`, use [`tokenize.open()`](helper-functions.html#tokenize-open-filename).
+
+The `start` and `end` line and column numbers for `ENCODING` will always be
+`(0, 0)`.
+
+```
+>>> print_tokens("# The default encoding is utf-8")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (COMMENT), string='# The default encoding is utf-8', start=(1, 0), end=(1, 31), line='# The default encoding is utf-8')
+TokenInfo(type=58 (NL), string='', start=(1, 31), end=(1, 31), line='# The default encoding is utf-8')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+>>> print_tokens("# -*- coding: ascii -*-")
+TokenInfo(type=59 (ENCODING), string='ascii', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (COMMENT), string='# -*- coding: ascii -*-', start=(1, 0), end=(1, 23), line='# -*- coding: ascii -*-')
+TokenInfo(type=58 (NL), string='', start=(1, 23), end=(1, 23), line='# -*- coding: ascii -*-')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+The `ENCODING` token is not typically used when processing tokens, although
+its guaranteed presence as the first token can be useful when handling tokens
+in a rolling window (see the [examples](#examples.html)).
+
+Strictly speaking, the `string` of every token in a token stream should be
+decodable by the encoding of the `ENCODING` token (e.g., if the encoding is
+`ascii`, the tokens cannot include any non-ASCII characters).
+
 The `ENCODING` token type exists only in the standard library Python implementation
 of `tokenize`. The C implementation used by the interpreter only has
 `NEWLINE`. In Python versions prior to 3.7, `ENCODING` is only importable from
 `tokenize` module. In 3.7, it is added to the `token` module as well.
 
-## Additional helper functions
+### `N_TOKENS`
 
-### `untokenize(iterable)`
+The number of token types (not including
+[`NT_OFFSET`](helper-functions.html#nt_offset) or itself).
 
-Converts an iterable of tokens into a bytes string. The string is encoded
-using the encoding of the [`ENCODING`](#encoding) token. The iterable can be
-`TokenInfo` objects, or tuples of `(TOKEN_TYPE, TOKEN_STRING)`.
-
-This function is round-trippable in one direction, namely,
-`tokenize(io.BytesIO(untokenize(tokens)).readline)` will always return the
-same tokens.
-
-If full `TokenInfo` tuples are given with correct `start` and `end`
-information (iterable of 5-tuples), this function also round-trips in the
-other direction. However, be aware that the `start` and `end` tuples must be
-nondecreasing. If the `start` of one token is before the `end` of the previous
-token, it raises `ValueError`. Therefore, if you want to modify tokens and use
-`untokenize()` to convert back to a string, you must keep track of and
-maintain the line and column information in `start` and `end`.
-
-```py
->>> tokenize.untokenize(tokenize.tokenize(io.BytesIO(b'sum([[1, 2]][0])').readline))
-b'sum([[1, 2]][0])'
-
-```
-
-If only the token type and token names are given (iterable of
-2-tuples), it will not, and in fact, for any nontrivial input, the resulting
-bytes string will not be the same. This is because it adds spaces after
-certain tokens to ensure the resulting string is syntactically valid (or
-rather, to ensure that it tokenizes back in the same way).
-
-```py
->>> tokenize.untokenize([(i, j) for (i, j, _, _, _) in tokenize.tokenize(io.BytesIO(b'sum([[1, 2]][0])').readline)])
-b'sum ([[1 ,2 ]][0 ])'
-
-```
-
-If you want to use the `tokenize` module to extend the Python language
-injecting or modifying tokens in a token stream, then using `exec` or `eval`
-to convert the resulting source into executable code, and you do not care what
-the code itself looks like, you can simply pass this function tuples of
-`(TOKEN_TYPE, TOKEN_STRING)` and it will work fine. However, if your end goal
-is to translate code in a human-readable way, you must keep track of line and
-column information near the tokens you modify. The `tokenize` module does not
-provide any tools to help with this.
-
-### `detect_encoding(readline)`
-
-The [official
-docs](https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding)
-for this function are helpful. This is the function used by `tokenize()` to
-generate the [`ENCODING`](#encoding) token. It can be used separately to
-determine the encoding of some Python code. The calling syntax is the [same as for `tokenize()`](usage.html#calling-syntax).
-
-Returns a tuple of the encoding, and a list of any lines (in bytes) that it
-has read from the function (it will read at most two lines from the file).
-Invalid encoding raise a [`SyntaxError`](usage.html#syntaxerror).
-
-```py
->>> tokenize.detect_encoding(io.BytesIO(b'# -*- coding: ascii -*-').readline)
-('ascii', [b'# -*- coding: ascii -*-'])
-
-```
-
-### `tokenize.open(filename)`
-
-This is an alternative to the built-in `open()` function that automatically
-opens a Python file in text mode with the correct encoding, as detected by
-[`detect_encoding()`](#detect-encoding-readline).
-
-This function is not particularly useful in conjunction with the `tokenize()`
-function (remember that `tokenize()` requires opening a file in binary mode,
-whereas this function opens it in text mode). Rather, this is a function that
-uses the functionality of the `tokenize` module, in particular,
-`detect_encoding()`, to provide a higher level task that would be difficult to
-do otherwise (opening a Python source file in text mode using the syntactically
-correct encoding).
-
-## Helper Functions related to the `parser` Module
-
-The `token` and `tokenize` module mimic the modules in the C parser. Some
-additional helper functions are included, even though they are mostly useless
-outside of the C parser.
-
-For some context, the Python
-[grammar](https://docs.python.org/3/reference/grammar.html) contains
-*terminal* and *nonterminal* nodes. The terminal nodes are the ones that stop
-the parsing (they are leaf nodes, that is, no other node in the grammar can be
-contained in them). These nodes are represented in uppercase. Every terminal
-node in the grammar is a token type, for example, `NAME`, `NUMBER`, or
-`STRING`. Most terminal nodes in the [grammar
-file](https://github.com/python/cpython/blob/master/Grammar/Grammar) are
-represented by their string value (for instance, the grammar references `'('`
-instead of `LPAR`). The C parser re-uses the tokenize node types when it
-constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
-[`NT_OFFSET`](#nt_offset). You can see the list of nonterminal nodes
-in the
-[`graminit.h`](https://github.com/python/cpython/blob/master/Include/graminit.h)
-file, or by using the
-[`symbol`](https://docs.python.org/3/library/symbol.html) module.
-
-The [`parser`](https://docs.python.org/3/library/parser.html) module can be
-used from within Python to access the parse tree. The `parser` and `symbol`
-modules aren't discussed further in this guide because the `tokenize` and
-`ast` modules are generally preferable for almost all use-cases (see the
-[alternatives](alternatives.html) section). In particular, the `parser` module
-has all the same limitations as the `ast` module (it requires complete,
-syntactically valid Python code), but is much more difficult to work with. The
-`parser` module exists mainly as a relic from before the `ast` module existed
-in the standard library (`ast` was introduced in Python 2.5).
-
-The following example gives an idea of what the `parser` syntax trees look
-like for the code `("a") + True`.
-
-```py
->>> import parser
->>> import pprint
->>> import token
->>> import symbol
->>> def pretty(st):
-...     l = st.tolist()
-...
-...     def toname(t):
-...         for i, val in enumerate(t[:]):
-...             if isinstance(val, int):
-...                 if token.ISTERMINAL(t[0]):
-...                     t[i] = token.tok_name[val]
-...                 else:
-...                     t[i] = symbol.sym_name[val]
-...             if isinstance(val, list):
-...                 toname(t[i])
-...
-...     toname(l)
-...     return l
->>> st = parser.expr('("a") + True')
->>> pprint.pprint(pretty(st))
-['eval_input',
- ['testlist',
-  ['test',
-   ['or_test',
-    ['and_test',
-     ['not_test',
-      ['comparison',
-       ['expr',
-        ['xor_expr',
-         ['and_expr',
-          ['shift_expr',
-           ['arith_expr',
-            ['term',
-             ['factor',
-              ['power',
-               ['atom_expr',
-                ['atom',
-                 ['LPAR', '('],
-                 ['testlist_comp',
-                  ['test',
-                   ['or_test',
-                    ['and_test',
-                     ['not_test',
-                      ['comparison',
-                       ['expr',
-                        ['xor_expr',
-                         ['and_expr',
-                          ['shift_expr',
-                           ['arith_expr',
-                            ['term',
-                             ['factor',
-                              ['power',
-                               ['atom_expr',
-                                ['atom', ['STRING', '"a"']]]]]]]]]]]]]]]]],
-                 ['RPAR', ')']]]]]],
-            ['PLUS', '+'],
-            ['term',
-             ['factor',
-              ['power', ['atom_expr', ['atom', ['NAME', 'True']]]]]]]]]]]]]]]]],
- ['NEWLINE', ''],
- ['ENDMARKER', '']]
-
-```
-
-Compare this to the `tokenize` representation seen in the [intro](intro.html),
-or the `ast` representation:
-
-```py
->>> ast.dump(ast.parse('("a") + True'))
-"Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
-
-```
-
-The following are included in the `token` module, but aren't particularly
-useful outside of the `parser` module.
-
-### `NT_OFFSET`
-
-The greatest possible terminal token number. This is not useful unless you
-intend to use the `parser` module. `tokenize()` never emits this token. Even
-if you are using the `parser` module, you would generally use one of the
-functions below instead of this token type. The current value of this constant
-is 256.
-
-### `ISTERMINAL(x)`
-
-`ISTERMINAL(x)` returns `True` is `x` is a terminal token type. It is
-equivalent to `x < NT_OFFSET`. Every token in the `token` module (except for
-`NT_OFFSET`) is a terminal node. It returns `False` for every token in the
-`symbol` module.
-
-### `ISNONTERMINAL(x)`
-
-`ISNONTERMINAL(x)` returns `True` if `x` is a nonterminal token type. It is
-equivalent to `x >= NT_OFFSET`. The only nonterminal "token" in the `token`
-module is `NT_OFFSET` itself. It returns `True` for every token in the
-`symbol` module.
-
-### `ISEOF(x)`
-
-`ISEOF(x)` returns true if `x` is the end of input marker token type. It is
-equivalent to `x == ENDMARKER`. This is also mostly useless, as the
-`tokenize()` function ends iteration after it emits this token.
+In Python versions prior to 3.7, `token.N_TOKENS` and `tokenize.N_TOKENS` are
+different, because [`COMMENT`](#comment), [`NL`](#nl), and
+[`ENCODING`](#encoding) are in `tokenize` but not in `token`. In these
+versions, `N_TOKENS` is also not in the `tok_name` dictionary. Python 3.7 also
+removed the [`AWAIT`](#await) and [`ASYNC`](#async) tokens, so the value of
+`N_TOKENS` is different than in 3.5 and 3.6.
