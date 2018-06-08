@@ -633,7 +633,7 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 
 The `ENCODING` token is not typically used when processing tokens, although
 its guaranteed presence as the first token can be useful when handling tokens
-in a rolling window (see the [examples](#examples.html)).
+in a rolling window (see the [examples](examples.html)).
 
 Strictly speaking, the `string` of every token in a token stream should be
 decodable by the encoding of the `ENCODING` token (e.g., if the encoding is
