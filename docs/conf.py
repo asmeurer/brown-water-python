@@ -114,6 +114,9 @@ html_theme_options = {
     # medium. tan
     'gray_3': '#D2B48C',
 
+    # Remove gray background from inline code
+    'code_bg': '',
+
     # Fonts
     'font_family': "Palatino, 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif",
     'font_size': '18px',
