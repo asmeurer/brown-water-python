@@ -577,3 +577,15 @@ The `ENCODING` token type exists only in the standard library Python implementat
 of `tokenize`. The C implementation used by the interpreter only has
 `NEWLINE`. In Python versions prior to 3.7, `ENCODING` is only importable from
 `tokenize` module. In 3.7, it is added to the `token` module as well.
+
+### `N_TOKENS`
+
+The number of token types (not including
+[`NT_OFFSET`](helper-functions.html#nt_offset) or itself).
+
+In Python versions prior to 3.7, `token.N_TOKENS` and `tokenize.N_TOKENS` are
+different, because [`COMMENT`](#comment), [`NL`](#nl), and
+[`ENCODING`](#encoding) are in `tokenize` but not in `token`. In these
+versions, `N_TOKENS` is also not in the `tok_name` dictionary. Python 3.7 also
+removed the [`AWAIT`](#await) and [`ASYNC`](#async) tokens, so the value of
+`N_TOKENS` is different than in 3.5 and 3.6.
