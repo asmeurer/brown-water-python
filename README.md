@@ -21,6 +21,12 @@ To build the HTML pages, first install `sphinx` and `recommonmark`.
 
     pip install sphinx recommonmark
 
+At the moment, you also need the git versions of Sphinx and alabaster (this
+will not be required once they do releases).
+
+    pip install git+https://github.com/bitprophet/alabaster/
+    pip install git+https://github.com/sphinx-doc/sphinx
+
 Then run
 
     cd doc

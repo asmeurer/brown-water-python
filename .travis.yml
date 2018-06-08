@@ -24,6 +24,10 @@ install:
   - conda info -a
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION sphinx doctr recommonmark
   - source activate test-environment
+  # Needed for show_relabars, https://github.com/bitprophet/alabaster/pull/101
+  - pip install git+https://github.com/bitprophet/alabaster/
+  # Needed for the build to not error. https://github.com/sphinx-doc/sphinx/pull/5052
+  - pip install git+https://github.com/sphinx-doc/sphinx
 
 script:
   - set -e
