@@ -25,7 +25,7 @@ At the moment, you also need the git versions of Sphinx and alabaster (this
 will not be required once they do releases).
 
     pip install git+https://github.com/bitprophet/alabaster/
-    pip install git+https://github.com/sphinx-doc/sphinx
+    pip install git+https://github.com/sphinx-doc/sphinx@1.7
 
 Then run
 

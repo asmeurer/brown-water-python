@@ -27,7 +27,7 @@ install:
   # Needed for show_relabars, https://github.com/bitprophet/alabaster/pull/101
   - pip install git+https://github.com/bitprophet/alabaster/
   # Needed for the build to not error. https://github.com/sphinx-doc/sphinx/pull/5052
-  - pip install git+https://github.com/sphinx-doc/sphinx
+  - pip install git+https://github.com/sphinx-doc/sphinx@1.7
 
 script:
   - set -e
