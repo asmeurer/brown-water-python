@@ -211,7 +211,8 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 
 ```
 
-In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME` (`_456`).
+In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME`
+(`_456`) (and will not be syntactically valid in any context).
 
 ```py
 >>> # The behavior in Python 3.5
