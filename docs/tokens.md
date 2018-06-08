@@ -90,7 +90,7 @@ are somewhat complicated, as they involve a large table of [Unicode
 characters](https://www.dcl.hpi.uni-potsdam.de/home/loewis/table-3131.html).
 One should always use the `str.isidentifier()` method to test if a string is a
 valid Python identifier, combined with a `keyword.iskeyword()` check. Testing
-if a string is an identifier using regular expressions is generally
+if a string is an identifier using regular expressions is highly
 discouraged.
 
 ```py
