@@ -158,8 +158,8 @@ column numbers of the start and end of the tokenized string. **Line numbers
 start at 1 and column numbers start at 0**. The line and column numbers for the
 [`ENCODING`](tokens.html#encoding) token, which is always the first token
 emitted, are both `(0, 0)`. The start and end tuples always nondecreasing
-(that is, `start <= end` will always be true for a single `TokenInfo`, and
-`tok0.start <= tok1.start` and `tok0.end <= tok1.end` will be true for
+(that is, `start <= end` will always be True for a single `TokenInfo`, and
+`tok0.start <= tok1.start` and `tok0.end <= tok1.end` will be True for
 consecutive `TokenInfo`s, `tok0` and `tok1`).
 
 You should always use the `start` and `end` tuples to deduce line or column
