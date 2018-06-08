@@ -82,3 +82,4 @@ Table of Contents
    usage
    tokens
    helper-functions
+   examples
