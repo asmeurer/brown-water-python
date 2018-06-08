@@ -74,9 +74,11 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(1, 0), end=(1, 0), line='')
 
 ### `NAME`
 
-The `NAME` token type is used for any Python identifier, as well as every keyword. *keywords* are Python syntactic elements that consist only of alphabetic
-characters, such as `for`, `def` and `True`. To tell if a `NAME` token is a
-keyword, use
+The `NAME` token type is used for any Python identifier, as well as every
+keyword.
+[*Keywords*](https://docs.python.org/3/reference/lexical_analysis.html#keywords)
+are Python names that are reserved, that is, they cannot be assigned to, such
+as `for`, `def`, and `True`. To tell if a `NAME` token is a keyword, use
 [`keyword.iskeyword()`](https://docs.python.org/3/library/keyword.html#keyword.iskeyword).
 
 As a side note, internally, the `tokenize` module uses the

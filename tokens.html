@@ -118,9 +118,11 @@ stops iteration after the last token is yielded.</p>
 </div>
 <div class="section" id="name">
 <span id="name"></span><h3><code class="docutils literal notranslate"><span class="pre">NAME</span></code><a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token type is used for any Python identifier, as well as every keyword. <em>keywords</em> are Python syntactic elements that consist only of alphabetic
-characters, such as <code class="docutils literal notranslate"><span class="pre">for</span></code>, <code class="docutils literal notranslate"><span class="pre">def</span></code> and <code class="docutils literal notranslate"><span class="pre">True</span></code>. To tell if a <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token is a
-keyword, use
+<p>The <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token type is used for any Python identifier, as well as every
+keyword.
+<a class="reference external" href="https://docs.python.org/3/reference/lexical_analysis.html#keywords"><em>Keywords</em></a>
+are Python names that are reserved, that is, they cannot be assigned to, such
+as <code class="docutils literal notranslate"><span class="pre">for</span></code>, <code class="docutils literal notranslate"><span class="pre">def</span></code>, and <code class="docutils literal notranslate"><span class="pre">True</span></code>. To tell if a <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token is a keyword, use
 <a class="reference external" href="https://docs.python.org/3/library/keyword.html#keyword.iskeyword"><code class="docutils literal notranslate"><span class="pre">keyword.iskeyword()</span></code></a>.</p>
 <p>As a side note, internally, the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module uses the
 <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str.isidentifier"><code class="docutils literal notranslate"><span class="pre">str.isidentifier()</span></code></a>
