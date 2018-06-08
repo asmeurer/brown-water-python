@@ -610,8 +610,9 @@ The detected encoding is in the `string` attribute of the `TokenInfo`.
 in the input. The default encoding is `utf-8`.
 
 If you only want to detect the encoding and nothing else, use
-[`detect_encoding()`](helper-functions.html#detect-encodin-readline). If you only need
-the encoding to pass to `open()`, use [`tokenize.open()`](helper-functions.html#tokenize-open-filename).
+[`detect_encoding()`](helper-functions.html#detect-encoding-readline). If you
+only need the encoding to pass to `open()`, use
+[`tokenize.open()`](helper-functions.html#tokenize-open-filename).
 
 The `start` and `end` line and column numbers for `ENCODING` will always be
 `(0, 0)`.
@@ -646,7 +647,7 @@ of `tokenize`. The C implementation used by the interpreter only has
 ### `N_TOKENS`
 
 The number of token types (not including
-[`NT_OFFSET`](helper-functions.html#nt_offset) or itself).
+[`NT_OFFSET`](helper-functions.html#nt-offset) or itself).
 
 In Python versions prior to 3.7, `token.N_TOKENS` and `tokenize.N_TOKENS` are
 different, because [`COMMENT`](#comment), [`NL`](#nl), and

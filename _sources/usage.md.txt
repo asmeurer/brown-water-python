@@ -181,8 +181,8 @@ relating to the tokenization.
 non-fatal error occurs, some text will be tokenized as an `ERRORTOKEN`, and
 tokenizing will continue on the remainder of the input. This happens, for
 instance, for unrecognized characters, such as `$`, and unclosed single-quoted
-strings. See [`ERRORTOKEN`](token.html#errortoken) and
-[`STRING`](token.html#error-behavior).
+strings. See [`ERRORTOKEN`](tokens.html#errortoken) and
+[`STRING`](tokens.html#error-behavior).
 
 Some tokenization failures are fatal, and cause an error to occur. Depending
 on what you are doing, you may want to catch the exception and deal with it or
@@ -218,7 +218,7 @@ typically desirable to process the tokens from `tokenize()` and handle
 `TokenError` if it occurs as an end of input condition.
 
 The second argument of the exception (`e.args[1]`) is a tuple of the
-[start](#start) line and column number for the part of the string that was not
+[start](#start-and-end) line and column number for the part of the string that was not
 tokenized due to the exception.
 
 1. **EOF in multi-line string**

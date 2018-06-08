@@ -216,8 +216,8 @@ relating to the tokenization.</p>
 non-fatal error occurs, some text will be tokenized as an <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>, and
 tokenizing will continue on the remainder of the input. This happens, for
 instance, for unrecognized characters, such as <code class="docutils literal notranslate"><span class="pre">$</span></code>, and unclosed single-quoted
-strings. See <a class="reference external" href="token.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> and
-<a class="reference external" href="token.html#error-behavior"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a>.</p>
+strings. See <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> and
+<a class="reference external" href="tokens.html#error-behavior"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a>.</p>
 <p>Some tokenization failures are fatal, and cause an error to occur. Depending
 on what you are doing, you may want to catch the exception and deal with it or
 let it bubble up to the caller.</p>
@@ -248,7 +248,7 @@ closed. Tokens before the end of the input are still emitted, so it is
 typically desirable to process the tokens from <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> and handle
 <code class="docutils literal notranslate"><span class="pre">TokenError</span></code> if it occurs as an end of input condition.</p>
 <p>The second argument of the exception (<code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>) is a tuple of the
-<a class="reference external" href="#start">start</a> line and column number for the part of the string that was not
+<a class="reference external" href="#start-and-end">start</a> line and column number for the part of the string that was not
 tokenized due to the exception.</p>
 <ol>
 <li><p class="first"><strong>EOF in multi-line string</strong></p>

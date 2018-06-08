@@ -134,7 +134,7 @@ Invalid encoding raise a <a class="reference external" href="usage.html#syntaxer
 <span id="tokenize-open-filename"></span><h2><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code><a class="headerlink" href="#tokenize-open-filename" title="Permalink to this headline">¶</a></h2>
 <p>This is an alternative to the built-in <code class="docutils literal notranslate"><span class="pre">open()</span></code> function that automatically
 opens a Python file in text mode with the correct encoding, as detected by
-<a class="reference external" href="tokens.html#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>.</p>
+<a class="reference external" href="#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>.</p>
 <p>This function is not particularly useful in conjunction with the <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>
 function (remember that <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> requires opening a file in binary mode,
 whereas this function opens it in text mode). Rather, this is a function that
@@ -159,7 +159,7 @@ file</a> are
 represented by their string value (for instance, the grammar references <code class="docutils literal notranslate"><span class="pre">'('</span></code>
 instead of <code class="docutils literal notranslate"><span class="pre">LPAR</span></code>). The C parser re-uses the tokenize node types when it
 constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
-<a class="reference external" href="#nt_offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a>. You can see the list of nonterminal nodes
+<a class="reference external" href="#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a>. You can see the list of nonterminal nodes
 in the
 <a class="reference external" href="https://github.com/python/cpython/blob/master/Include/graminit.h"><code class="docutils literal notranslate"><span class="pre">graminit.h</span></code></a>
 file, or by using the

@@ -756,8 +756,9 @@ Unicode BOM character.</p>
 <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> is the only token type where <code class="docutils literal notranslate"><span class="pre">tok.string</span></code> does not appear literally
 in the input. The default encoding is <code class="docutils literal notranslate"><span class="pre">utf-8</span></code>.</p>
 <p>If you only want to detect the encoding and nothing else, use
-<a class="reference external" href="helper-functions.html#detect-encodin-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>. If you only need
-the encoding to pass to <code class="docutils literal notranslate"><span class="pre">open()</span></code>, use <a class="reference external" href="helper-functions.html#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open()</span></code></a>.</p>
+<a class="reference external" href="helper-functions.html#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>. If you
+only need the encoding to pass to <code class="docutils literal notranslate"><span class="pre">open()</span></code>, use
+<a class="reference external" href="helper-functions.html#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open()</span></code></a>.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> line and column numbers for <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> will always be
 <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;# The default encoding is utf-8&quot;</span><span class="p">)</span>
@@ -786,7 +787,7 @@ of <code class="docutils literal notranslate"><span class="pre">tokenize</span><
 <div class="section" id="n-tokens">
 <span id="n-tokens"></span><h3><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code><a class="headerlink" href="#n-tokens" title="Permalink to this headline">¶</a></h3>
 <p>The number of token types (not including
-<a class="reference external" href="helper-functions.html#nt_offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a> or itself).</p>
+<a class="reference external" href="helper-functions.html#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a> or itself).</p>
 <p>In Python versions prior to 3.7, <code class="docutils literal notranslate"><span class="pre">token.N_TOKENS</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize.N_TOKENS</span></code> are
 different, because <a class="reference external" href="#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a>, <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>, and
 <a class="reference external" href="#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> are in <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> but not in <code class="docutils literal notranslate"><span class="pre">token</span></code>. In these
