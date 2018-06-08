@@ -27,8 +27,8 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 
 ```
 
-The string is split into the following tokens: `(`, `"a"`, `+`, `True`, and
-`)` (ignore the `BytesIO` bit and the `ENCODING` and `ENDMARKER` tokens for
+The string is split into the following tokens: `(`, `"a"`, `)`, `+`, `True`, and
+`-` (ignore the `BytesIO` bit and the `ENCODING` and `ENDMARKER` tokens for
 now).
 
 I chose this example to demonstrate a few things:
