@@ -126,7 +126,6 @@ html_theme_options = {
 
 html_sidebars = {
     '**': ['globaltocindex.html', 'searchbox.html'],
-    'index': ['globaltocindex.html', 'searchbox.html'],
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
