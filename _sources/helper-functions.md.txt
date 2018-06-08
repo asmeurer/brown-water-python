@@ -112,6 +112,55 @@ uses the functionality of the `tokenize` module, in particular,
 do otherwise (opening a Python source file in text mode using the syntactically
 correct encoding).
 
+## Command line usage
+
+The `tokenize` module can be called from the command line using `python -m
+tokenize filename.py`. This prints three columns, representing the start-end
+line and column positions, the token type, and the token string. If the `-e`
+flag is used, the token type is the exact type. Otherwise it is
+[`OP`](tokens.html#op).
+
+```
+$ python -m tokenize example.py
+0,0-0,0:            ENCODING       'utf-8'
+1,0-1,43:           COMMENT        '# This is a an example file to be tokenized'
+1,43-1,44:          NL             '\n'
+2,0-2,1:            NL             '\n'
+3,0-3,3:            NAME           'def'
+3,4-3,7:            NAME           'two'
+3,7-3,8:            OP             '('
+3,8-3,9:            OP             ')'
+3,9-3,10:           OP             ':'
+3,10-3,11:          NEWLINE        '\n'
+4,0-4,4:            INDENT         '    '
+4,4-4,10:           NAME           'return'
+4,11-4,12:          NUMBER         '1'
+4,13-4,14:          OP             '+'
+4,15-4,16:          NUMBER         '1'
+4,16-4,17:          NEWLINE        '\n'
+5,0-5,0:            DEDENT         ''
+5,0-5,0:            ENDMARKER      ''
+$ python -m tokenize -e example.py
+0,0-0,0:            ENCODING       'utf-8'
+1,0-1,43:           COMMENT        '# This is a an example file to be tokenized'
+1,43-1,44:          NL             '\n'
+2,0-2,1:            NL             '\n'
+3,0-3,3:            NAME           'def'
+3,4-3,7:            NAME           'two'
+3,7-3,8:            LPAR           '('
+3,8-3,9:            RPAR           ')'
+3,9-3,10:           COLON          ':'
+3,10-3,11:          NEWLINE        '\n'
+4,0-4,4:            INDENT         '    '
+4,4-4,10:           NAME           'return'
+4,11-4,12:          NUMBER         '1'
+4,13-4,14:          PLUS           '+'
+4,15-4,16:          NUMBER         '1'
+4,16-4,17:          NEWLINE        '\n'
+5,0-5,0:            DEDENT         ''
+5,0-5,0:            ENDMARKER      ''
+
+```
 ## Helper Functions related to the `parser` Module
 
 The `token` and `tokenize` module mimic the modules in the C parser. Some

@@ -151,6 +151,53 @@ uses the functionality of the <code class="docutils literal notranslate"><span c
 do otherwise (opening a Python source file in text mode using the syntactically
 correct encoding).</p>
 </div>
+<div class="section" id="command-line-usage">
+<span id="command-line-usage"></span><h2>Command line usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module can be called from the command line using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">tokenize</span> <span class="pre">filename.py</span></code>. This prints three columns, representing the start-end
+line and column positions, the token type, and the token string. If the <code class="docutils literal notranslate"><span class="pre">-e</span></code>
+flag is used, the token type is the exact type. Otherwise it is
+<a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -m tokenize example.py
+0,0-0,0:            ENCODING       &#39;utf-8&#39;
+1,0-1,43:           COMMENT        &#39;# This is a an example file to be tokenized&#39;
+1,43-1,44:          NL             &#39;\n&#39;
+2,0-2,1:            NL             &#39;\n&#39;
+3,0-3,3:            NAME           &#39;def&#39;
+3,4-3,7:            NAME           &#39;two&#39;
+3,7-3,8:            OP             &#39;(&#39;
+3,8-3,9:            OP             &#39;)&#39;
+3,9-3,10:           OP             &#39;:&#39;
+3,10-3,11:          NEWLINE        &#39;\n&#39;
+4,0-4,4:            INDENT         &#39;    &#39;
+4,4-4,10:           NAME           &#39;return&#39;
+4,11-4,12:          NUMBER         &#39;1&#39;
+4,13-4,14:          OP             &#39;+&#39;
+4,15-4,16:          NUMBER         &#39;1&#39;
+4,16-4,17:          NEWLINE        &#39;\n&#39;
+5,0-5,0:            DEDENT         &#39;&#39;
+5,0-5,0:            ENDMARKER      &#39;&#39;
+$ python -m tokenize -e example.py
+0,0-0,0:            ENCODING       &#39;utf-8&#39;
+1,0-1,43:           COMMENT        &#39;# This is a an example file to be tokenized&#39;
+1,43-1,44:          NL             &#39;\n&#39;
+2,0-2,1:            NL             &#39;\n&#39;
+3,0-3,3:            NAME           &#39;def&#39;
+3,4-3,7:            NAME           &#39;two&#39;
+3,7-3,8:            LPAR           &#39;(&#39;
+3,8-3,9:            RPAR           &#39;)&#39;
+3,9-3,10:           COLON          &#39;:&#39;
+3,10-3,11:          NEWLINE        &#39;\n&#39;
+4,0-4,4:            INDENT         &#39;    &#39;
+4,4-4,10:           NAME           &#39;return&#39;
+4,11-4,12:          NUMBER         &#39;1&#39;
+4,13-4,14:          PLUS           &#39;+&#39;
+4,15-4,16:          NUMBER         &#39;1&#39;
+4,16-4,17:          NEWLINE        &#39;\n&#39;
+5,0-5,0:            DEDENT         &#39;&#39;
+5,0-5,0:            ENDMARKER      &#39;&#39;
+</pre></div>
+</div>
+</div>
 <div class="section" id="helper-functions-related-to-the-parser-module">
 <span id="helper-functions-related-to-the-parser-module"></span><h2>Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module<a class="headerlink" href="#helper-functions-related-to-the-parser-module" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimic the modules in the C parser. Some
@@ -329,10 +376,10 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 <li class="toctree-l2"><a class="reference internal" href="usage.html#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="usage.html#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="usage.html#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage.html#exceptions">Exceptions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a></li>
@@ -372,6 +419,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 <li class="toctree-l2"><a class="reference internal" href="#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-usage">Command line usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#helper-functions-related-to-the-parser-module">Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#isterminal-x"><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code></a></li>

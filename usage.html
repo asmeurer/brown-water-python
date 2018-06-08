@@ -189,16 +189,15 @@ empty. For the <a class="reference external" href="tokens.html#encoding"><code c
 encoding. It does not appear literally in the code, which is why the line
 and column numbers are 0 and the line is the empty string.</p>
 </div>
-</div>
 <div class="section" id="start-and-end">
-<span id="start-and-end"></span><h2><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code><a class="headerlink" href="#start-and-end" title="Permalink to this headline">¶</a></h2>
+<span id="start-and-end"></span><h3><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code><a class="headerlink" href="#start-and-end" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> are tuples of (line number, column number) for the line and
 column numbers of the start and end of the tokenized string. <strong>Line numbers
 start at 1 and column numbers start at 0</strong>. The line and column numbers for the
 <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token, which is always the first token
 emitted, are both <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>. The start and end tuples always nondecreasing
-(that is, <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">&lt;=</span> <span class="pre">end</span></code> will always be true for a single <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>, and
-<code class="docutils literal notranslate"><span class="pre">tok0.start</span> <span class="pre">&lt;=</span> <span class="pre">tok1.start</span></code> and <code class="docutils literal notranslate"><span class="pre">tok0.end</span> <span class="pre">&lt;=</span> <span class="pre">tok1.end</span></code> will be true for
+(that is, <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">&lt;=</span> <span class="pre">end</span></code> will always be True for a single <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">tok0.start</span> <span class="pre">&lt;=</span> <span class="pre">tok1.start</span></code> and <code class="docutils literal notranslate"><span class="pre">tok0.end</span> <span class="pre">&lt;=</span> <span class="pre">tok1.end</span></code> will be True for
 consecutive <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>s, <code class="docutils literal notranslate"><span class="pre">tok0</span></code> and <code class="docutils literal notranslate"><span class="pre">tok1</span></code>).</p>
 <p>You should always use the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples to deduce line or column
 information. <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> ignores syntactically irrelevant whitespace, which
@@ -206,12 +205,13 @@ can include newlines (in particular, escaped newlines, see
 <a class="reference external" href="tokens.html#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>).</p>
 </div>
 <div class="section" id="line">
-<span id="line"></span><h2><code class="docutils literal notranslate"><span class="pre">line</span></code><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h2>
+<span id="line"></span><h3><code class="docutils literal notranslate"><span class="pre">line</span></code><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">line</span></code> gives the full line that the token comes from. This is useful for
 reconstructing the whitespace between tokens (never assume that the whitespace
 between tokens is space characters—they could also be escaped newlines or
 tabs). <code class="docutils literal notranslate"><span class="pre">line</span></code> can also be useful for providing contextual error messages
 relating to the tokenization.</p>
+</div>
 </div>
 <div class="section" id="exceptions">
 <span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
@@ -481,10 +481,10 @@ tabs and spaces.</p>
 <li class="toctree-l2"><a class="reference internal" href="#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a></li>
@@ -524,6 +524,7 @@ tabs and spaces.</p>
 <li class="toctree-l2"><a class="reference internal" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="helper-functions.html#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="helper-functions.html#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helper-functions.html#command-line-usage">Command line usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="helper-functions.html#helper-functions-related-to-the-parser-module">Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="helper-functions.html#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="helper-functions.html#isterminal-x"><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code></a></li>
