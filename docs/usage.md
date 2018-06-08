@@ -151,7 +151,7 @@ The chunk of code that is tokenized. For token types where the string is
     encoding. It does not appear literally in the code, which is why the line
     and column numbers are 0 and the line is the empty string.
 
-## `start` and `end`
+### `start` and `end`
 
 `start` and `end` are tuples of (line number, column number) for the line and
 column numbers of the start and end of the tokenized string. **Line numbers
@@ -167,7 +167,7 @@ information. `tokenize()` ignores syntactically irrelevant whitespace, which
 can include newlines (in particular, escaped newlines, see
 [`NL`](tokens.html#nl)).
 
-## `line`
+### `line`
 
 `line` gives the full line that the token comes from. This is useful for
 reconstructing the whitespace between tokens (never assume that the whitespace
