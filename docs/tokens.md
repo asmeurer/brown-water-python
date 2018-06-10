@@ -504,7 +504,43 @@ characters.
 
 ### `ASYNC`
 
+The `AWAIT` and `ASYNC` token types are used to tokenize
+
 ### `ERRORTOKEN`
+
+The `ERRORTOKEN` type is used for any character that isn't recognized. Inputs
+that tokenize `ERRORTOKEN`s cannot be valid Python, but this token type is
+used so that applications that process tokens can do error recovery, as the
+remainder of the input stream is tokenized normally. It can also be used to
+process extensions to Python syntax (see the [examples](examples.html)).
+
+```py
+>>> print_tokens('1!')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1!')
+TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 1), end=(1, 2), line='1!')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+>>> print_tokens('💯')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (ERRORTOKEN), string='💯', start=(1, 0), end=(1, 1), line='💯')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+`ERRORTOKEN` is also used for single-quoted strings that are not closed before
+a newline. See the [`STRING`](#error-behavior) section for more information.
+
+
+```py
+>>> print_tokens("'unclosed + string")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string")
+TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unclosed + string")
+TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string")
+TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string")
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
 
 ### `COMMENT`
 
