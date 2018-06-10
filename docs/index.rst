@@ -4,7 +4,7 @@
 
 The ``tokenize`` module in the Python standard library is very powerful, but
 its `documentation <https://docs.python.org/3/library/tokenize.html>`_ is
-somewhat limited. In the spirit of the `Green Tree Snakes
+somewhat limited. In the spirit of Thomas Kluyver's `Green Tree Snakes
 <https://greentreesnakes.readthedocs.io/>`_ project, which provides similar
 extended documentation for the ``ast`` module, I am providing here some
 extended documentation for effectively working with the ``tokenize`` module.
@@ -21,25 +21,28 @@ extended documentation for effectively working with the ``tokenize`` module.
 Python Versions Supported
 =========================
 
-
 The contents of this guide apply to Python 3.5 and up. Several minor changes
 were made to the ``tokenize`` module in Python 3.7, and they have been noted
 where appropriate.
 
 The ``tokenize`` module tokenizes code according to the version of Python that
 it is being run under. For example, some new syntax features in 3.6 affect
-tokenization (particularly, `f-strings
+tokenization (in particular, `f-strings
 <https://docs.python.org/3.6/whatsnew/3.6.html#pep-498-formatted-string-literals>`_
 and `underscores in numeric literals
 <https://docs.python.org/3.6/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals>`_).
-For example, ``123_456`` will tokenize as a single token in Python 3.6+,
+Take ``123_456``. This will tokenize as a single token in Python 3.6+,
 ``NUMBER`` (``123_456``), but in Python 3.5, it tokenizes as two tokens,
-``NUMBER`` (``123``) and ``NAME`` (``_456``) (this will also be invalid syntax
-in any context). See `the example <tokens.html#number>`_ in the ``NUMBER``
-reference.
+``NUMBER`` (``123``) and ``NAME`` (``_456``) (see the reference for the
+|NUMBER|_ token type for more info).
 
-Most of what is written here will also apply to earlier Python 3 versions, with
-obvious exceptions (like tokens that were added for new syntax).
+.. _NUMBER: tokens.html#number
+
+.. |NUMBER| replace:: ``NUMBER``
+
+Most of what is written here will also apply to earlier Python 3 versions,
+with obvious exceptions (like tokens that were added for new syntax), though
+none of it has been tested.
 
 I don't have any interest in supporting Python 2 in this guide. `Its lifetime
 <https://devguide.python.org/#status-of-python-branches>`_ is quickly coming
@@ -65,11 +68,11 @@ which works like ``tokenize()`` in Python 3 (see the `docs
    (2, '2', (1, 4), (1, 5), '1 + 2')
    (0, '', (2, 0), (2, 0), '')
 
-Also, the result of
-this function is a regular tuple, not a ``namedtuple``, so you will not be
-able to use attributes to access the members. Instead use something like ``for
-toknum, tokval, start, end, line in tokenize.generate_tokens(...):`` (this
-pattern is recommended in Python 3 as well, see the `Usage <usage.html>`_ section).
+Another difference is that the result of this function is a regular tuple, not
+a ``namedtuple``, so you will not be able to use attributes to access the
+members. Instead use something like "``for toknum, tokval, start, end, line in
+tokenize.generate_tokens(...):``" (this pattern can be used in Python 3 as
+well, see the `Usage <usage.html#calling-syntax>`_ section).
 
 Table of Contents
 =================

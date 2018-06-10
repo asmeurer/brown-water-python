@@ -2,25 +2,32 @@ The Token Types
 ===============
 
 Every token produced by the tokenizer has a type. These types are represented
-by integer constants. The actual integer value of the token constants should
-never be used or relied on. Instead, refer to tokens by its variable name, and
-use the `tok_name` dictionary to go from get the name of a token type. The
-integer value could change between Python versions, for instance, if new
-tokens are added or removed.
+by integer constants. The actual integer value of the token constants is not
+important (except for [`N_TOKENS`](#n-tokens)), and should never be used or
+relied on. Instead, refer to tokens by their variable names, and use the
+`tok_name` dictionary to get the name of a token type. The exact integer value
+could change between Python versions, for instance, if new tokens are added or
+removed (and indeed, certain token integer values are different between Python
+3.6 and 3.7 due to the [`ASYNC`](#async) and [`AWAIT`](#await) tokens being
+removed).
 
-The reason the token types are represented this way is that the true tokenizer
-for Python is written in C. C does not have an object system like Python.
-Instead, enumerated types are represented by integers (actually, `tokenizer.c`
-has a large array of the token types. The integer value of each token is its
-index in that array). The `tokenize` module is written in pure Python, but the
-token type values and names mirror those from the C tokenizer, with three
-exceptions: `COMMENT`, `NL`, and `ENCODING`.
+The reason the token types are represented this way is that the actual
+tokenizer used by the Python interpreter is not the `tokenize` module; it is a
+much more [efficient, but equivalent
+implementation](https://github.com/python/cpython/blob/master/Parser/tokenizer.c)
+written in C. C does not have an object system like Python. Instead,
+enumerated types are represented by integers (actually, `tokenizer.c` has a
+large array of the token types. The integer value of each token is its index
+in that array). The `tokenize` module is written in pure Python, but the token
+type values and names mirror those from the C tokenizer, with three
+exceptions: [`COMMENT`](#comment), [`NL`](#nl), and [`ENCODING`](#nl).
 
 All token types are defined in the `token` module, but the `tokenize` module
-does `from token import *`. Therefore, it is easiest to just import everything
-from `tokenize`. Furthermore, the aforementioned `COMMENT`, `NL`, and
-`ENCODING` tokens are not importable from `token` prior to Python 3.7, only
-from `tokenize`.
+does `from token import *`, so they can be imported from `tokenize` as well.
+Therefore, it is easiest to just import everything from `tokenize`.
+Furthermore, the aforementioned [`COMMENT`](#nl), [`NL`](#nl), and
+[`ENCODING`](#nl) tokens are not importable from `token` prior to Python 3.7,
+only from `tokenize`.
 
 ## The `tok_name` Dictionary
 
@@ -51,9 +58,13 @@ the examples:
 ### `ENDMARKER`
 
 This is always the last token emitted by `tokenize()`, unless it raises an
-exception. The `string` and `line` attributes are always `''`. For most
-applications it is not necessary to explicitly worry about `ENDMARKER` because
-`tokenize()` stops iteration after the last token is yielded.
+exception. The `string` and `line` attributes are always `''`. The `start` and
+`end` lines are always one more than the total number of lines in the input,
+and the `start` and `end` columns are always 0.
+
+For most applications it is not necessary to explicitly worry about
+`ENDMARKER`, because `tokenize()` stops iteration after the last token is
+yielded.
 
 ```py
 >>> print_tokens('x + 1')
@@ -78,8 +89,29 @@ The `NAME` token type is used for any Python identifier, as well as every
 keyword.
 [*Keywords*](https://docs.python.org/3/reference/lexical_analysis.html#keywords)
 are Python names that are reserved, that is, they cannot be assigned to, such
-as `for`, `def`, and `True`. To tell if a `NAME` token is a keyword, use
-[`keyword.iskeyword()`](https://docs.python.org/3/library/keyword.html#keyword.iskeyword).
+as `for`, `def`, and `True`.
+
+
+```py
+>>> print_tokens('a or α')
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a or α')
+TokenInfo(type=1 (NAME), string='or', start=(1, 2), end=(1, 4), line='a or α')
+TokenInfo(type=1 (NAME), string='α', start=(1, 5), end=(1, 6), line='a or α')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+To tell if a `NAME` token is a keyword, use
+[`keyword.iskeyword()`](https://docs.python.org/3/library/keyword.html#keyword.iskeyword)
+on the `string`.
+
+```py
+>>> import keyword
+>>> keyword.iskeyword('or')
+True
+
+```
 
 As a side note, internally, the `tokenize` module uses the
 [`str.isidentifier()`](https://docs.python.org/3/library/stdtypes.html#str.isidentifier)
@@ -92,23 +124,6 @@ One should always use the `str.isidentifier()` method to test if a string is a
 valid Python identifier, combined with a `keyword.iskeyword()` check. Testing
 if a string is an identifier using regular expressions is highly
 discouraged.
-
-```py
->>> print_tokens('a or α')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a or α')
-TokenInfo(type=1 (NAME), string='or', start=(1, 2), end=(1, 4), line='a or α')
-TokenInfo(type=1 (NAME), string='α', start=(1, 5), end=(1, 6), line='a or α')
-TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
-```
-
-```py
->>> import keyword
->>> keyword.iskeyword('or')
-True
-
-```
 
 ```py
 >>> 'α'.isidentifier()
@@ -180,10 +195,7 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 
 One advantage of using `tokenize` over `ast` is that floating point numbers
 are not rounded at the tokenization stage, so it is possible to access the
-full input. This can be used, for instance, to wrap floating point numbers
-with a type that supports arbitrary precision, such as `decimal.Decimal`. See
-the [example](https://docs.python.org/3/library/tokenize.html#examples) in the
-official `tokenize` documentation.
+full input.
 
 ```py
 >>> 1.0000000000000001
@@ -197,6 +209,12 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 'Module(body=[Expr(value=Num(n=1.0))])'
 
 ```
+
+This can be used, for instance, to wrap floating point numbers with a type
+that supports arbitrary precision, such as
+[`decimal.Decimal`]((https://docs.python.org/3/library/decimal.html)). See the
+[example](https://docs.python.org/3/library/tokenize.html#examples) in the
+official `tokenize` documentation.
 
 In Python >=3.6, numeric literals can have [underscore
 separators](https://docs.python.org/3/whatsnew/3.6.html#whatsnew36-pep515),
@@ -228,11 +246,12 @@ In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME`
 
 The `STRING` token type matches any string literal, including single quoted,
 double quoted strings, triple- single and double quoted strings (i.e.,
-docstrings), raw, "unicode", bytes, and f-strings (Python 3.6+).
+multi-line strings, or "docstrings"), raw, "unicode", bytes, and f-strings
+(Python 3.6+).
 
 ```py
 >>> print_tokens("""
-... "I" + \'love\' + '''tokenize'''
+... "I" + 'love' + '''tokenize'''
 ... """)
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
@@ -298,11 +317,21 @@ The `string.Format.parse()` function can be used to parse format strings
 
 ```
 
+To get the string value from a tokenized string literal (i.e., to strip away
+the quote characters), use `ast.literal_eval()`. This is recommended over
+trying to strip the quotes manually, which is error prone, or using raw
+`eval`, which can execute arbitrary code in the case of an f-string.
+
+```py
+>>> ast.literal_eval("rb'a\\''")
+b"a\\'"
+```
+
 #### **Error behavior**
 
-If a single quoted strings is unclosed, the opening string delimiter is
-tokenized as `ERRORTOKEN`, and the remainder is tokenized as if it were not in
-a string.
+If a single quoted string is unclosed, the opening string delimiter is
+tokenized as [`ERRORTOKEN`](#errortoken), and the remainder is tokenized as if
+it were not in a string.
 
 ```py
 >>> print_tokens("'unclosed + string")
@@ -320,8 +349,9 @@ were to build a syntax highlighter using `tokenize`, you might not necessarily
 want an unclosed string to highlight the rest of the document as a string
 (such things are common in "live" editing environments).
 
-However, if a triple quoted string (i.e., multiline string, or docstring) is
-not closed, `tokenize` will raise `TokenError` when it reaches it.
+However, if a triple quoted string (i.e., multi-line string, or "docstring")
+is not closed, `tokenize` will raise [`TokenError`](usage.html#tokenerror)
+when it reaches it.
 
 ```py
 >>> print_tokens("'an ' + '''unclosed multiline string") # doctest: +SKIP
@@ -337,11 +367,11 @@ tokenize.TokenError: ('EOF in multi-line string', (1, 8))
 
 This behavior can be annoying to deal with in practice. For many applications,
 the correct way to handle this scenario is to consider that since the unclosed
-string is multiline, the remainder of the input from where the `TokenError` is
-raised is inside the unclosed string.
+string is multiline, the remainder of the input from where the
+[`TokenError`](usage.html#tokenerror) is raised is inside the unclosed string.
 
 As a final note, beware that it is possible to construct string literals that
-tokenize without any errors, but raise SyntaxError when parsed by the
+tokenize without any errors, but raise `SyntaxError` when parsed by the
 interpreter.
 
 ```py
@@ -363,8 +393,8 @@ function, which is safe to use on untrusted input.
 >>> ast.literal_eval(r"'\N{NOT REAL}'")
 Traceback (most recent call last):
   ...
-SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 0-11: unknown Unicode character name
-
+SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in
+position 0-11: unknown Unicode character name
 ```
 
 ### `NEWLINE`
@@ -570,9 +600,10 @@ Traceback (most recent call last):
 IndentationError: unindent does not match any outer indentation level
 
 ```
-The level of
-indentation can be determined by incrementing and decrementing a counter for
-each `INDENT` and `DEDENT` token. See the [examples](examples.html).
+
+The level of indentation at a particular point in the token stream can be
+determined by incrementing and decrementing a counter for each `INDENT` and
+`DEDENT` token. See the [examples](examples.html).
 
 
 
@@ -623,14 +654,15 @@ ENDMARKER ENDMARKER ''
 ```
 ### `OP`
 
-`OP` is a generic token type for all operations, delimiters, and the ellipsis
-literal. This does not include characters that are not recognized by the
-parser (these are parsed as `ERRORTOKEN`).
+`OP` is a generic token type for all operators, delimiters, and the ellipsis
+literal. This does not include characters and operators that are not
+recognized by the parser (these are parsed as [`ERRORTOKEN`](#errortoken)).
 
-When using `tokenize`, the token type for an operation, delimiter, or ellipsis
-literal token will be `OP`. To get the exact token type, use the `exact_type`
-property of the namedtuple. `tok.exact_type` is equivalent to `tok.type` for the
-remaining token types (with two exceptions, see the notes below).
+When using `tokenize()`, the token type for an operator, delimiter, or
+ellipsis literal token will be `OP`. To get the exact token type, use the
+`exact_type` property of the namedtuple. `tok.exact_type` is equivalent to
+`tok.type` for the remaining token types (with two exceptions, see the notes
+below).
 
 ```py
 >>> import io
@@ -669,11 +701,11 @@ characters.
 
 ### `ASYNC`
 
-The `AWAIT` and `ASYNC` token types are used to tokenize the `async` and
-`await` keywords in Python 3.5 and 3.6. They do not exist in Python 3.7+.
+The `AWAIT` and `ASYNC` token types are used to tokenize the `await` and
+`async` keywords in Python 3.5 and 3.6. They do not exist in Python 3.7+.
 
-In Python 3.5 and 3.6, `async` and `await` are pseudo-keywords. To aid the
-transition in the addition of new keywords, `async` and `await` were kept as
+In Python 3.5 and 3.6, `await` and `async` are pseudo-keywords. To aid the
+transition in the addition of new keywords, `await` and `async` were kept as
 valid variable names outside of an `async def` blocks.
 
 ```py
@@ -689,10 +721,10 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
 To support this, in Python 3.5 and 3.6 when `async def` is encountered,
-`tokenize` keeps track of its indentation level, and all `async` and `await`
-tokens that are nested under it are tokenized as `ASYNC` and `AWAIT`,
-respectively (including the `async` from the `async def`). Otherwise, `async`
-and `await` are tokenized as `NAME`, as in the example above.
+`tokenize` keeps track of its indentation level, and all `await` and `async`
+tokens that are nested under it are tokenized as `AWAIT` and `ASYNC`,
+respectively (including the `async` from the `async def`). Otherwise, `await`
+and `async` are tokenized as `NAME`, as in the example above.
 
 ```py
 >>> # This is the behavior in Python 3.5 and 3.6
@@ -734,8 +766,8 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(6, 0), end=(6, 0), line='')
 ```
 
 In Python 3.7, `async` and `await` are proper keywords, and are tokenized as
-[`NAME`](#name) like all other keywords. In Python 3.7, the `ASYNC` and
-`AWAIT` token types have been removed from the `token` module.
+[`NAME`](#name) like all other keywords. In Python 3.7, the `AWAIT` and
+`ASYNC` token types have been removed from the `token` module.
 
 
 ```
@@ -834,10 +866,11 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
 
 ```
 
-The `COMMENT` token type exists only in the standard library Python implementation
-of `tokenize`. The C implementation used by the interpreter only has
-`NEWLINE`. In Python versions prior to 3.7, `COMMENT` is only importable from
-`tokenize` module. In 3.7, it is added to the `token` module as well.
+The `COMMENT` token type exists only in the standard library Python
+implementation of `tokenize`. The C implementation used by the interpreter
+ignores comments. In Python versions prior to 3.7, `COMMENT` is only
+importable from the `tokenize` module. In 3.7, it is added to the `token`
+module as well.
 
 ### `NL`
 
@@ -883,7 +916,7 @@ Note that newlines that are escaped (preceded with `\`) are treated like
 whitespace, that is, they do not tokenize at all. Consequently, you should
 always use the line numbers in the `start` and `end` attributes of the
 `TokenInfo` namedtuple. Never try to determine line numbers by counting
-`NEWLINE` and `NL` tokens.
+[`NEWLINE`](#newline) and `NL` tokens.
 
 ```py
 >>> print_tokens('1 + \\\n2')
@@ -897,8 +930,9 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
 
 The `NL` token type exists only in the standard library Python implementation
 of `tokenize`. The C implementation used by the interpreter only has
-`NEWLINE`. In Python versions prior to 3.7, `NL` is only importable from
-`tokenize` module. In 3.7, it is added to the `token` module as well.
+[`NEWLINE`](#newline). In Python versions prior to 3.7, `NL` is only
+importable from `tokenize` module. In 3.7, it is added to the `token` module
+as well.
 
 ### `ENCODING`
 
@@ -944,22 +978,23 @@ Strictly speaking, the `string` of every token in a token stream should be
 decodable by the encoding of the `ENCODING` token (e.g., if the encoding is
 `ascii`, the tokens cannot include any non-ASCII characters).
 
-The `ENCODING` token type exists only in the standard library Python implementation
-of `tokenize`. The C implementation used by the interpreter only has
-`NEWLINE`. In Python versions prior to 3.7, `ENCODING` is only importable from
-`tokenize` module. In 3.7, it is added to the `token` module as well.
+The `ENCODING` token type exists only in the standard library Python
+implementation of `tokenize`. The C implementation used by the interpreter
+detects the encoding separately. In Python versions prior to 3.7, `ENCODING`
+is only importable from `tokenize` module. In 3.7, it is added to the `token`
+module as well.
 
 ### `N_TOKENS`
 
 The number of token types (not including
 [`NT_OFFSET`](helper-functions.html#nt-offset) or itself).
 
-In Python versions prior to 3.7, `token.N_TOKENS` and `tokenize.N_TOKENS` are
-different, because [`COMMENT`](#comment), [`NL`](#nl), and
-[`ENCODING`](#encoding) are in `tokenize` but not in `token`. In these
-versions, `N_TOKENS` is also not in the `tok_name` dictionary. Python 3.7 also
-removed the [`AWAIT`](#await) and [`ASYNC`](#async) tokens, so the value of
-`N_TOKENS` is different than in 3.5 and 3.6.
+In Python 3.5 and 3.6, `token.N_TOKENS` and `tokenize.N_TOKENS` are different,
+because [`COMMENT`](#comment), [`NL`](#nl), and [`ENCODING`](#encoding) are in
+`tokenize` but not in `token`. In these versions, `N_TOKENS` is also not in
+the `tok_name` dictionary. Additionally, Python 3.7 removed the
+[`AWAIT`](#await) and [`ASYNC`](#async) tokens, so the value of `N_TOKENS` is
+different than in 3.5 and 3.6.
 
 ```py
 >>> # In Python 3.7

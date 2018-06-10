@@ -7,10 +7,11 @@ In addition to the primary [`tokenize()`](usage.html) entry-point, the
 ## `untokenize(iterable)`
 
 Converts an iterable of tokens into a bytes string. The string is encoded
-using the encoding of the [`ENCODING`](tokens.html#encoding) token. The iterable can be
-`TokenInfo` objects, or tuples of `(TOKEN_TYPE, TOKEN_STRING)`.
+using the encoding of the [`ENCODING`](tokens.html#encoding) token. The
+iterable can be `TokenInfo` objects, or tuples of `(TOKEN_TYPE,
+TOKEN_STRING)`.
 
-This function is round-trippable in one direction, namely,
+This function always round-trips in one direction, namely,
 `tokenize(io.BytesIO(untokenize(tokens)).readline)` will always return the
 same tokens.
 
@@ -19,25 +20,27 @@ information (iterable of 5-tuples), this function also round-trips in the
 other direction. However, be aware that the `start` and `end` tuples must be
 nondecreasing. If the `start` of one token is before the `end` of the previous
 token, it raises `ValueError`. Therefore, if you want to modify tokens and use
-`untokenize()` to convert back to a string, you must keep track of and
-maintain the line and column information in `start` and `end`.
+`untokenize()` to convert back to a string, using full 5-tuples, you must keep
+track of and maintain the line and column information in `start` and `end`.
 
 ```py
 >>> import tokenize
 >>> import io
->>> tokenize.untokenize(tokenize.tokenize(io.BytesIO(b'sum([[1, 2]][0])').readline))
+>>> string = b'sum([[1, 2]][0])'
+>>> tokenize.untokenize(tokenize.tokenize(io.BytesIO(string).readline))
 b'sum([[1, 2]][0])'
 
 ```
 
-If only the token type and token names are given (iterable of
-2-tuples), it will not, and in fact, for any nontrivial input, the resulting
-bytes string will not be the same. This is because it adds spaces after
-certain tokens to ensure the resulting string is syntactically valid (or
-rather, to ensure that it tokenizes back in the same way).
+If only the token type and token names are given (iterable of 2-tuples),
+`untokenize()` does not round-trip, and in fact, for any nontrivial input, the
+resulting bytes string will be very different than the original input. This is
+because `untokenize()` adds spaces after certain tokens to ensure the
+resulting string is syntactically valid (or rather, to ensure that it
+tokenizes back in the same way).
 
 ```py
->>> tokenize.untokenize([(i, j) for (i, j, _, _, _) in tokenize.tokenize(io.BytesIO(b'sum([[1, 2]][0])').readline)])
+>>> tokenize.untokenize([(i, j) for (i, j, _, _, _) in tokenize.tokenize(io.BytesIO(string).readline)])
 b'sum ([[1 ,2 ]][0 ])'
 
 ```
@@ -46,10 +49,11 @@ b'sum ([[1 ,2 ]][0 ])'
 list of `TokenInfo` objects using only 2-tuples), but in this case, it will
 ignore the column information for the 5-tuples.
 
-Consider this simple example which replaces all `STRING` tokens with a list of
-`STRING` tokens of individual characters (making use of implicit string
-concatenation). Once `untokenize()` encounters the newly added 2-tuple tokens,
-it ignores the column information and uses its own spacing.
+Consider this simple example which replaces all [`STRING`](tokens.html#string)
+tokens with a list of [`STRING`](tokens.html#string) tokens of individual
+characters (making use of implicit string concatenation). Once `untokenize()`
+encounters the newly added 2-tuple tokens, it ignores the column information
+and uses its own spacing.
 
 ```py
 >>> import ast
@@ -90,7 +94,8 @@ for `tokenize()`](usage.html#calling-syntax).
 
 Returns a tuple of the encoding, and a list of any lines (in bytes) that it
 has read from the function (it will read at most two lines from the file).
-Invalid encoding raise a [`SyntaxError`](usage.html#syntaxerror).
+Invalid encodings will cause it to raise a
+[`SyntaxError`](usage.html#syntaxerror).
 
 ```py
 >>> tokenize.detect_encoding(io.BytesIO(b'# -*- coding: ascii -*-').readline)
@@ -117,8 +122,8 @@ correct encoding).
 The `tokenize` module can be called from the command line using `python -m
 tokenize filename.py`. This prints three columns, representing the start-end
 line and column positions, the token type, and the token string. If the `-e`
-flag is used, the token type is the exact type. Otherwise it is
-[`OP`](tokens.html#op).
+flag is used, the token type for operators is the exact type. Otherwise the
+[`OP`](tokens.html#op) type is used.
 
 ```
 $ python -m tokenize example.py

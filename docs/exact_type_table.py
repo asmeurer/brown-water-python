@@ -19,7 +19,9 @@ FOOTER = """
 
 .. rubric:: Footnotes
 
-.. [#f1] Due to a `bug <https://bugs.python.org/issue24622>`_, the ``exact_type`` for ``RARROW`` and ``ELLIPSIS`` is ``OP`` in Python versions prior to 3.7. See `below <#rarrow>`_.
+.. [#f1] Due to a `bug <https://bugs.python.org/issue24622>`_, the
+   ``exact_type`` for ``RARROW`` and ``ELLIPSIS`` tokens is ``OP`` in Python
+   versions prior to 3.7. See `above <#rarrow>`_.
 
 """
 
