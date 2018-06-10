@@ -504,7 +504,108 @@ characters.
 
 ### `ASYNC`
 
-The `AWAIT` and `ASYNC` token types are used to tokenize
+The `AWAIT` and `ASYNC` token types are used to tokenize the `async` and
+`await` keywords in Python 3.5 and 3.6. They do not exist in Python 3.7+.
+
+In Python 3.5 and 3.6, `async` and `await` are pseudo-keywords. To aid the
+transition in the addition of new keywords, `async` and `await` were kept as
+valid variable names outside of an `async def` blocks.
+
+```py
+>>> # This is valid Python in Python 3.5 and 3.6. It isn't in Python 3.7.
+>>> async = 1
+>>> print_tokens("async = 1")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=1 (NAME), string='async', start=(1, 0), end=(1, 5), line='async = 1')
+TokenInfo(type=53 (OP), string='=', start=(1, 6), end=(1, 7), line='async = 1')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 8), end=(1, 9), line='async = 1')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+
+```
+
+To support this, in Python 3.5 and 3.6 when `async def` is encountered,
+`tokenize` keeps track of its indentation level, and all `async` and `await`
+tokens that are nested under it are tokenized as `ASYNC` and `AWAIT`,
+respectively (including the `async` from the `async def`). Otherwise, `async`
+and `await` are tokenized as `NAME`, as in the example above.
+
+```py
+>>> # This is the behavior in Python 3.5 and 3.6
+>>> print_tokens("""
+... async def coro():
+...     async with lock:
+...         await f()
+... await = 1
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=55 (ASYNC), string='async', start=(2, 0), end=(2, 5), line='async def coro():\n')
+TokenInfo(type=1 (NAME), string='def', start=(2, 6), end=(2, 9), line='async def coro():\n')
+TokenInfo(type=1 (NAME), string='coro', start=(2, 10), end=(2, 14), line='async def coro():\n')
+TokenInfo(type=53 (OP), string='(', start=(2, 14), end=(2, 15), line='async def coro():\n')
+TokenInfo(type=53 (OP), string=')', start=(2, 15), end=(2, 16), line='async def coro():\n')
+TokenInfo(type=53 (OP), string=':', start=(2, 16), end=(2, 17), line='async def coro():\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 17), end=(2, 18), line='async def coro():\n')
+TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line='    async with lock:\n')
+TokenInfo(type=55 (ASYNC), string='async', start=(3, 4), end=(3, 9), line='    async with lock:\n')
+TokenInfo(type=1 (NAME), string='with', start=(3, 10), end=(3, 14), line='    async with lock:\n')
+TokenInfo(type=1 (NAME), string='lock', start=(3, 15), end=(3, 19), line='    async with lock:\n')
+TokenInfo(type=53 (OP), string=':', start=(3, 19), end=(3, 20), line='    async with lock:\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 20), end=(3, 21), line='    async with lock:\n')
+TokenInfo(type=5 (INDENT), string='        ', start=(4, 0), end=(4, 8), line='        await f()\n')
+TokenInfo(type=54 (AWAIT), string='await', start=(4, 8), end=(4, 13), line='        await f()\n')
+TokenInfo(type=1 (NAME), string='f', start=(4, 14), end=(4, 15), line='        await f()\n')
+TokenInfo(type=53 (OP), string='(', start=(4, 15), end=(4, 16), line='        await f()\n')
+TokenInfo(type=53 (OP), string=')', start=(4, 16), end=(4, 17), line='        await f()\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 17), end=(4, 18), line='        await f()\n')
+TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='await = 1\n')
+TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='await = 1\n')
+TokenInfo(type=1 (NAME), string='await', start=(5, 0), end=(5, 5), line='await = 1\n')
+TokenInfo(type=53 (OP), string='=', start=(5, 6), end=(5, 7), line='await = 1\n')
+TokenInfo(type=2 (NUMBER), string='1', start=(5, 8), end=(5, 9), line='await = 1\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(5, 9), end=(5, 10), line='await = 1\n')
+TokenInfo(type=0 (ENDMARKER), string='', start=(6, 0), end=(6, 0), line='')
+
+```
+
+In Python 3.7, `async` and `await` are proper keywords, and are tokenized as
+[`NAME`](#name) like all other keywords. In Python 3.7, the `ASYNC` and
+`AWAIT` token types have been removed from the `token` module.
+
+
+```
+>>> # This is the behavior in Python 3.7+
+>>> print_tokens("""
+... async def coro():
+...     async with lock:
+...         await f()
+... """) # doctest: +SKIP
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=1 (NAME), string='async', start=(2, 0), end=(2, 5), line='async def coro():\n')
+TokenInfo(type=1 (NAME), string='def', start=(2, 6), end=(2, 9), line='async def coro():\n')
+TokenInfo(type=1 (NAME), string='coro', start=(2, 10), end=(2, 14), line='async def coro():\n')
+TokenInfo(type=53 (OP), string='(', start=(2, 14), end=(2, 15), line='async def coro():\n')
+TokenInfo(type=53 (OP), string=')', start=(2, 15), end=(2, 16), line='async def coro():\n')
+TokenInfo(type=53 (OP), string=':', start=(2, 16), end=(2, 17), line='async def coro():\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 17), end=(2, 18), line='async def coro():\n')
+TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line='    async with lock:\n')
+TokenInfo(type=1 (NAME), string='async', start=(3, 4), end=(3, 9), line='    async with lock:\n')
+TokenInfo(type=1 (NAME), string='with', start=(3, 10), end=(3, 14), line='    async with lock:\n')
+TokenInfo(type=1 (NAME), string='lock', start=(3, 15), end=(3, 19), line='    async with lock:\n')
+TokenInfo(type=53 (OP), string=':', start=(3, 19), end=(3, 20), line='    async with lock:\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 20), end=(3, 21), line='    async with lock:\n')
+TokenInfo(type=5 (INDENT), string='        ', start=(4, 0), end=(4, 8), line='        await f()\n')
+TokenInfo(type=1 (NAME), string='await', start=(4, 8), end=(4, 13), line='        await f()\n')
+TokenInfo(type=1 (NAME), string='f', start=(4, 14), end=(4, 15), line='        await f()\n')
+TokenInfo(type=53 (OP), string='(', start=(4, 15), end=(4, 16), line='        await f()\n')
+TokenInfo(type=53 (OP), string=')', start=(4, 16), end=(4, 17), line='        await f()\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 17), end=(4, 18), line='        await f()\n')
+TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
+TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
+TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
+
+```
 
 ### `ERRORTOKEN`
 
