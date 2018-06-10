@@ -795,3 +795,10 @@ different, because [`COMMENT`](#comment), [`NL`](#nl), and
 versions, `N_TOKENS` is also not in the `tok_name` dictionary. Python 3.7 also
 removed the [`AWAIT`](#await) and [`ASYNC`](#async) tokens, so the value of
 `N_TOKENS` is different than in 3.5 and 3.6.
+
+```py
+>>> # In Python 3.7
+>>> tokenize.N_TOKENS # doctest: +SKIP
+58
+
+```
