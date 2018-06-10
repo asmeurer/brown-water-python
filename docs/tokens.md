@@ -51,9 +51,9 @@ the examples:
 ### `ENDMARKER`
 
 This is always the last token emitted by `tokenize()`, unless it raises an
-exception. The `string` and `line` are always `''`. For most applications it
-is not necessary to explicitly worry about `ENDMARKER` because `tokenize()`
-stops iteration after the last token is yielded.
+exception. The `string` and `line` attributes are always `''`. For most
+applications it is not necessary to explicitly worry about `ENDMARKER` because
+`tokenize()` stops iteration after the last token is yielded.
 
 ```py
 >>> print_tokens('x + 1')
@@ -408,8 +408,173 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
 ```
 
 ### `INDENT`
-
 ### `DEDENT`
+
+The `INDENT` token type represents the indentation for indented blocks. The
+indentation itself (the text from the beginning of the line to the first
+nonwhitespace character) is in the `string` attribute. `INDENT` is emitted
+once per block of indented text, not once per line.
+
+The `DEDENT` token type represents a dedentation. Every `INDENT` token is
+matched by a corresponding `DEDENT` token. The `string` attribute of `DEDENT`
+is always `''`.
+
+Consider the following
+pseudo-example:
+
+```py
+>>> print_tokens("""
+... 1
+...     2
+...     3
+...         4
+... 5
+...
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=2 (NUMBER), string='1', start=(2, 0), end=(2, 1), line='1\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 1), end=(2, 2), line='1\n')
+TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line='    2\n')
+TokenInfo(type=2 (NUMBER), string='2', start=(3, 4), end=(3, 5), line='    2\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 5), end=(3, 6), line='    2\n')
+TokenInfo(type=2 (NUMBER), string='3', start=(4, 4), end=(4, 5), line='    3\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 5), end=(4, 6), line='    3\n')
+TokenInfo(type=5 (INDENT), string='        ', start=(5, 0), end=(5, 8), line='        4\n')
+TokenInfo(type=2 (NUMBER), string='4', start=(5, 8), end=(5, 9), line='        4\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(5, 9), end=(5, 10), line='        4\n')
+TokenInfo(type=6 (DEDENT), string='', start=(6, 0), end=(6, 0), line='5\n')
+TokenInfo(type=6 (DEDENT), string='', start=(6, 0), end=(6, 0), line='5\n')
+TokenInfo(type=2 (NUMBER), string='5', start=(6, 0), end=(6, 1), line='5\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(6, 1), end=(6, 2), line='5\n')
+TokenInfo(type=58 (NL), string='\n', start=(7, 0), end=(7, 1), line='\n')
+TokenInfo(type=0 (ENDMARKER), string='', start=(8, 0), end=(8, 0), line='')
+
+```
+
+There is one `INDENT` before the `2-3` block, one `INDENT` before `4`, and two
+`DEDENTS` before `5`
+
+`INDENT` is not used for indentations on line continuations.
+
+```py
+>>> print_tokens("""
+... (1 +
+...     2)
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=53 (OP), string='(', start=(2, 0), end=(2, 1), line='(1 +\n')
+TokenInfo(type=2 (NUMBER), string='1', start=(2, 1), end=(2, 2), line='(1 +\n')
+TokenInfo(type=53 (OP), string='+', start=(2, 3), end=(2, 4), line='(1 +\n')
+TokenInfo(type=58 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
+TokenInfo(type=2 (NUMBER), string='2', start=(3, 4), end=(3, 5), line='    2)\n')
+TokenInfo(type=53 (OP), string=')', start=(3, 5), end=(3, 6), line='    2)\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 6), end=(3, 7), line='    2)\n')
+TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
+
+```
+
+Indentation can be any number of spaces or tabs. The only restriction is that
+every unindented indentation level must match a previous outer indentation
+level. If an unindent does not match an outer indentation level, `tokenize()`
+raises [`IndentationError`](usage.html#indentationerror).
+
+```
+>>> print_tokens("""
+... def countdown(x):
+... \tassert x>=0
+... \twhile x:
+... \t\tprint(x)
+... \t\tx -= 1
+... \tprint('Go!')
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=1 (NAME), string='def', start=(2, 0), end=(2, 3), line='def countdown(x):\n')
+TokenInfo(type=1 (NAME), string='countdown', start=(2, 4), end=(2, 13), line='def countdown(x):\n')
+TokenInfo(type=53 (OP), string='(', start=(2, 13), end=(2, 14), line='def countdown(x):\n')
+TokenInfo(type=1 (NAME), string='x', start=(2, 14), end=(2, 15), line='def countdown(x):\n')
+TokenInfo(type=53 (OP), string=')', start=(2, 15), end=(2, 16), line='def countdown(x):\n')
+TokenInfo(type=53 (OP), string=':', start=(2, 16), end=(2, 17), line='def countdown(x):\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 17), end=(2, 18), line='def countdown(x):\n')
+TokenInfo(type=5 (INDENT), string='\t', start=(3, 0), end=(3, 1), line='\tassert x>=0\n')
+TokenInfo(type=1 (NAME), string='assert', start=(3, 1), end=(3, 7), line='\tassert x>=0\n')
+TokenInfo(type=1 (NAME), string='x', start=(3, 8), end=(3, 9), line='\tassert x>=0\n')
+TokenInfo(type=53 (OP), string='>=', start=(3, 9), end=(3, 11), line='\tassert x>=0\n')
+TokenInfo(type=2 (NUMBER), string='0', start=(3, 11), end=(3, 12), line='\tassert x>=0\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 12), end=(3, 13), line='\tassert x>=0\n')
+TokenInfo(type=1 (NAME), string='while', start=(4, 1), end=(4, 6), line='\twhile x:\n')
+TokenInfo(type=1 (NAME), string='x', start=(4, 7), end=(4, 8), line='\twhile x:\n')
+TokenInfo(type=53 (OP), string=':', start=(4, 8), end=(4, 9), line='\twhile x:\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 9), end=(4, 10), line='\twhile x:\n')
+TokenInfo(type=5 (INDENT), string='\t\t', start=(5, 0), end=(5, 2), line='\t\tprint(x)\n')
+TokenInfo(type=1 (NAME), string='print', start=(5, 2), end=(5, 7), line='\t\tprint(x)\n')
+TokenInfo(type=53 (OP), string='(', start=(5, 7), end=(5, 8), line='\t\tprint(x)\n')
+TokenInfo(type=1 (NAME), string='x', start=(5, 8), end=(5, 9), line='\t\tprint(x)\n')
+TokenInfo(type=53 (OP), string=')', start=(5, 9), end=(5, 10), line='\t\tprint(x)\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(5, 10), end=(5, 11), line='\t\tprint(x)\n')
+TokenInfo(type=1 (NAME), string='x', start=(6, 2), end=(6, 3), line='\t\tx -= 1\n')
+TokenInfo(type=53 (OP), string='-=', start=(6, 4), end=(6, 6), line='\t\tx -= 1\n')
+TokenInfo(type=2 (NUMBER), string='1', start=(6, 7), end=(6, 8), line='\t\tx -= 1\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(6, 8), end=(6, 9), line='\t\tx -= 1\n')
+TokenInfo(type=6 (DEDENT), string='', start=(7, 1), end=(7, 1), line="\tprint('Go!')\n")
+TokenInfo(type=1 (NAME), string='print', start=(7, 1), end=(7, 6), line="\tprint('Go!')\n")
+TokenInfo(type=53 (OP), string='(', start=(7, 6), end=(7, 7), line="\tprint('Go!')\n")
+TokenInfo(type=3 (STRING), string="'Go!'", start=(7, 7), end=(7, 12), line="\tprint('Go!')\n")
+TokenInfo(type=53 (OP), string=')', start=(7, 12), end=(7, 13), line="\tprint('Go!')\n")
+TokenInfo(type=4 (NEWLINE), string='\n', start=(7, 13), end=(7, 14), line="\tprint('Go!')\n")
+TokenInfo(type=6 (DEDENT), string='', start=(8, 0), end=(8, 0), line='')
+TokenInfo(type=0 (ENDMARKER), string='', start=(8, 0), end=(8, 0), line='')
+>>> print_tokens("""
+... def countdown(x):
+... \tassert x>=0
+... \twhile x:
+... \t\tprint(x)
+... \t\tx -= 1
+...     print('Go!')
+... """) # doctest: +SKIP
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=1 (NAME), string='def', start=(2, 0), end=(2, 3), line='def countdown(x):\n')
+TokenInfo(type=1 (NAME), string='countdown', start=(2, 4), end=(2, 13), line='def countdown(x):\n')
+TokenInfo(type=53 (OP), string='(', start=(2, 13), end=(2, 14), line='def countdown(x):\n')
+TokenInfo(type=1 (NAME), string='x', start=(2, 14), end=(2, 15), line='def countdown(x):\n')
+TokenInfo(type=53 (OP), string=')', start=(2, 15), end=(2, 16), line='def countdown(x):\n')
+TokenInfo(type=53 (OP), string=':', start=(2, 16), end=(2, 17), line='def countdown(x):\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 17), end=(2, 18), line='def countdown(x):\n')
+TokenInfo(type=5 (INDENT), string='\t', start=(3, 0), end=(3, 1), line='\tassert x>=0\n')
+TokenInfo(type=1 (NAME), string='assert', start=(3, 1), end=(3, 7), line='\tassert x>=0\n')
+TokenInfo(type=1 (NAME), string='x', start=(3, 8), end=(3, 9), line='\tassert x>=0\n')
+TokenInfo(type=53 (OP), string='>=', start=(3, 9), end=(3, 11), line='\tassert x>=0\n')
+TokenInfo(type=2 (NUMBER), string='0', start=(3, 11), end=(3, 12), line='\tassert x>=0\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 12), end=(3, 13), line='\tassert x>=0\n')
+TokenInfo(type=1 (NAME), string='while', start=(4, 1), end=(4, 6), line='\twhile x:\n')
+TokenInfo(type=1 (NAME), string='x', start=(4, 7), end=(4, 8), line='\twhile x:\n')
+TokenInfo(type=53 (OP), string=':', start=(4, 8), end=(4, 9), line='\twhile x:\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 9), end=(4, 10), line='\twhile x:\n')
+TokenInfo(type=5 (INDENT), string='\t\t', start=(5, 0), end=(5, 2), line='\t\tprint(x)\n')
+TokenInfo(type=1 (NAME), string='print', start=(5, 2), end=(5, 7), line='\t\tprint(x)\n')
+TokenInfo(type=53 (OP), string='(', start=(5, 7), end=(5, 8), line='\t\tprint(x)\n')
+TokenInfo(type=1 (NAME), string='x', start=(5, 8), end=(5, 9), line='\t\tprint(x)\n')
+TokenInfo(type=53 (OP), string=')', start=(5, 9), end=(5, 10), line='\t\tprint(x)\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(5, 10), end=(5, 11), line='\t\tprint(x)\n')
+TokenInfo(type=1 (NAME), string='x', start=(6, 2), end=(6, 3), line='\t\tx -= 1\n')
+TokenInfo(type=53 (OP), string='-=', start=(6, 4), end=(6, 6), line='\t\tx -= 1\n')
+TokenInfo(type=2 (NUMBER), string='1', start=(6, 7), end=(6, 8), line='\t\tx -= 1\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(6, 8), end=(6, 9), line='\t\tx -= 1\n')
+Traceback (most recent call last):
+  ...
+    print('Go!')
+    ^
+IndentationError: unindent does not match any outer indentation level
+
+```
+The level of
+indentation can be determined by incrementing and decrementing a counter for
+each `INDENT` and `DEDENT` token. See the [examples](examples.html).
+
+
 
 ### `RARROW`
 ### `ELLIPSIS`
