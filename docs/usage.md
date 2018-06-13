@@ -233,8 +233,8 @@ typically desirable to process the tokens from `tokenize()` and handle
 `TokenError` as an end of input condition.
 
 The second argument of the exception (`e.args[1]`) is a tuple of the
-[start](#start-and-end) line and column number for the part of the string that was not
-tokenized due to the exception.
+[start](#start-and-end) line and column number for the part of the input that
+was not tokenized due to the exception.
 
 1. **EOF in multi-line string**
 
