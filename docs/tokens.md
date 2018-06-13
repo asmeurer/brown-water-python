@@ -325,6 +325,7 @@ trying to strip the quotes manually, which is error prone, or using raw
 ```py
 >>> ast.literal_eval("rb'a\\''")
 b"a\\'"
+
 ```
 
 #### **Error behavior**
@@ -393,8 +394,8 @@ function, which is safe to use on untrusted input.
 >>> ast.literal_eval(r"'\N{NOT REAL}'")
 Traceback (most recent call last):
   ...
-SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in
-position 0-11: unknown Unicode character name
+SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 0-11: unknown Unicode character name
+
 ```
 
 ### `NEWLINE`
