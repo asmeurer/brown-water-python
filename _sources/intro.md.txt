@@ -35,17 +35,19 @@ I chose this example to demonstrate a few things:
 
 -   The *Tokens* in Python are things like parentheses, strings, operators,
     keywords, and variable names.
--   Every token is a `namedtuple` which has a `type`, which is represented by
-    an integer constant, and a `string`, which is the substring of the input
-    representing the given token. The `namedtuple` also gives line and column
-    information that indicates exactly where in the input string the token was
-    found.
+
+-   Every token is a represented by `namedtuple` called `TokenInfo`, which has
+    a `type`, represented by an integer constant, and a `string`, which is the
+    substring of the input representing the given token. The `namedtuple` also
+    gives line and column information that indicates exactly where in the
+    input string the token was found.
+
 -   The input does not need to be valid Python. Our input, `("a") + True -` is
-    not valid Python, but it is, however, a potential beginning of a valid
-    Python string. If a valid Python expression were to be added to the end of
-    the input, completing the subtraction operator, such as `("a") + True -
-    x`, it would become valid Python. **This illustrates an important aspect
-    of tokenize, which is that it fundamentally works on a stream of
+    not valid Python. It is, however, a potential beginning of a valid Python
+    string. If a valid Python expression were to be added to the end of the
+    input, completing the subtraction operator, such as `("a") + True - x`, it
+    would become valid Python. **This illustrates an important aspect of
+    tokenize, which is that it fundamentally works on a stream of
     characters.** This means that tokens are output as they are seen, without
     regard to what comes later (the tokenize module does do lookahead on the
     input stream internally to ensure that the correct tokens are output, but
@@ -53,10 +55,10 @@ I chose this example to demonstrate a few things:
     processed as it is seen). This is why `tokenize.tokenize` produces a
     generator.
 
-    However, it should be noted that tokenize does raise an exception on
-    certain incomplete Python statements. For example, if we omit the closing
-    parenthesis, tokenize produces all the tokens as before, but then raises
-    `TokenError`:
+    However, it should be noted that tokenize does raise
+    [exceptions](usage.html#exceptions) on certain incomplete or invalid
+    Python statements. For example, if we omit the closing parenthesis,
+    tokenize produces all the tokens as before, but then raises `TokenError`:
 
     <!-- We have to skip this doctest, as it doesn't support output and an
     exception in the same snippet. -->
@@ -84,13 +86,16 @@ I chose this example to demonstrate a few things:
 -   Syntactically irrelevant aspects of the input such as redundant
     parentheses are maintained. The parentheses around the `"a"` in the input
     string are completely unnecessary, but they are included as tokens anyway.
-    This does not apply to whitespace, however (indentation is an exception to
-    this, as we will see later), although the whitespace between tokens can
-    generally be deduced from the namedtuple.
+    This does not apply to whitespace, however
+    ([indentation](tokens.html#indent) is an exception to this, as we will see
+    later), although the whitespace between tokens can generally be deduced
+    from the additional information procided in the `TokenInfo`.
+
 -   The input need not be semantically meaningful in anyway. The input string,
     even if completed, can only raise a `TypeError` because `"a" + True` is
     not allowed by Python. The tokenize module does not know or care about
     objects, types, or any high-level Python constructs.
+
 -   Some tokens can be right next to one another in the input string. Other
     tokens must be separated by a space (for instance, `foriinrange(10)` will
     tokenize differently from `for i in range(10)`). The complete set of rules
@@ -101,12 +106,15 @@ I chose this example to demonstrate a few things:
     an example, consider that `1jand2` is valid Python\-\--it\'s tokenized
     into three tokens, `NUMBER` (`1j`), `NAME` (`and`), and `NUMBER` (`2`)).
     One use-case of the `tokenize` module is to combine tokens into valid
-    Python using the `untokenize` function, which handles these details
-    automatically.
--   All parentheses and operators are tokenized as `OP`. Both variable names
-    and keywords are tokenized as `NAME`. To determine the exact type of a
-    token often requires further inspection than simply looking at the `type`
-    (this guide will detail exactly how to do this).
+    Python using the [`untokenize`](helper-functions.html#untokenize-iterable)
+    function, which handles these details automatically.
+
+-   All parentheses and operators are tokenized as [`OP`](tokens.html#op).
+    Both variable names and keywords are tokenized as
+    [`NAME`](tokens.html#name). To determine the exact type of a token often
+    requires further inspection than simply looking at the `type` (this guide
+    will detail exactly how to do this).
+
 -   The above example does not show it, but even code that can never be valid
     Python is often tokenized. For example:
 

@@ -5,14 +5,16 @@ The `tokenize` module has several quirks which make it complicated to work
 with (in my opinion, more complicated than necessary, but it is what it is).
 
 The primary motivation of this guide is to document these quirks and
-behaviors, and such a document would have been very helpful to me when I first
-started using the module. Many of these behaviors were learned from
+behaviors, as such a document would have been very helpful to me when I first
+started using the module. Most of these behaviors were learned from
 experimentation and reading the [source
-code](https://github.com/python/cpython/blob/master/Lib/tokenize.py).
-Therefore, things that are not obviously API guarantees should not be
-considered API guarantees, that is, the CPython developers may decide to
-change them in future Python versions. I will try to keep this guide updated
-as new Python versions are released. [issue
+code](https://github.com/python/cpython/blob/master/Lib/tokenize.py). I have
+no idea what behaviors can be considered API guarantees, that is, the CPython
+developers may decide to change them in future Python versions. With that
+being said, the CPython developers are generally very conservative about
+changes to the standard library that might break downstream code, even for
+major releases. I will try to keep this guide updated as new Python versions
+are released. [issue
 reports](https://github.com/asmeurer/brown-water-python/issues) and [pull
 requests](https://github.com/asmeurer/brown-water-python/pulls) are most
 welcome.
@@ -22,7 +24,7 @@ welcome.
 The first thing you'll notice when using `tokenize()` is that its calling API
 is rather odd. It does not accept a string. It does not accept a file-like
 object either. Rather, it requires **the `readline` method of a bytes-mode file-like
-object**. The bytes-encoded part is important. If a file is opened in text
+object**. The bytes-mode part is important. If a file is opened in text
 mode (`'r'` instead of `'br'`), `tokenize()` will fail with an exception:
 
 ```py
@@ -134,9 +136,11 @@ type: 0 string: '' start: (2, 0) end: (2, 0) line: ''
 The advantage of this second way is that the `TokenInfo` object contains an
 additional attribute, `exact_type`, which contains the exact token type of an
 [`OP` token](tokens.html#op). However, this can also be determined from the
-`string`. The first form is also less verbose, but the second form avoids
-errors from getting the attributes in the wrong order. The form that you
-should use depends on your preference on these tradeoffs.
+`string`. Additionally, the first form is less verbose, but the second form
+avoids errors from getting the attributes in the wrong order. The form that
+you should use depends on your preference on these tradeoffs. I personally
+recommend the second form (`for tok in tokenize(...): ... tok.type, etc.`),
+unless you have the `(toknum, tokstr, start, end, line)` order memorized.
 
 ### `type`
 
@@ -146,21 +150,28 @@ section.
 ### `string`
 
 The chunk of code that is tokenized. For token types where the string is
-    meaningless, such as [`ENDMARKER`](tokens.html#endmarker), the string is
-    empty. For the [`ENCODING`](tokens.html#encoding) token, the string is the
-    encoding. It does not appear literally in the code, which is why the line
-    and column numbers are 0 and the line is the empty string.
+meaningless, such as [`ENDMARKER`](tokens.html#endmarker), the string is
+empty.
+
+For the [`ENCODING`](tokens.html#encoding) token, the string is the encoding,
+which does not appear literally in the code, which is why for `ENCODING` the
+line and column numbers are 0 and the `line` is the empty string.
 
 ### `start` and `end`
 
 `start` and `end` are tuples of (line number, column number) for the line and
 column numbers of the start and end of the tokenized string. **Line numbers
-start at 1 and column numbers start at 0**. The line and column numbers for the
-[`ENCODING`](tokens.html#encoding) token, which is always the first token
-emitted, are both `(0, 0)`. The start and end tuples always nondecreasing
-(that is, `start <= end` will always be True for a single `TokenInfo`, and
-`tok0.start <= tok1.start` and `tok0.end <= tok1.end` will be True for
-consecutive `TokenInfo`s, `tok0` and `tok1`).
+start at 1 and column numbers start at 0**. The line and column numbers for
+the [`ENCODING`](tokens.html#encoding) token, which is always the first token
+emitted, are both `(0, 0)`.
+
+Because Python tuples compare lexicographically (`(a, b) < (c, d)` is
+equivalent to `a < c or (a == c and b <= d)`, these tuples can be compared
+directly to determine which comes earlier in the input. The `start` and `end`
+tuples as emitted from `tokenize()` are always nondecreasing (that is, `start
+<= end` will always be True for a single `TokenInfo`, and `tok0.start <=
+tok1.start` and `tok0.end <= tok1.end` will be True for consecutive
+`TokenInfo`s, `tok0` and `tok1`).
 
 You should always use the `start` and `end` tuples to deduce line or column
 information. `tokenize()` ignores syntactically irrelevant whitespace, which
@@ -171,22 +182,26 @@ can include newlines (in particular, escaped newlines, see
 
 `line` gives the full line that the token comes from. This is useful for
 reconstructing the whitespace between tokens (never assume that the whitespace
-between tokens is space characters---they could also be escaped newlines or
-tabs). `line` can also be useful for providing contextual error messages
+between tokens is space characters---it could also consist of escaped newlines
+or tabs). `line` can also be useful for providing contextual error messages
 relating to the tokenization.
 
 ## Exceptions
 
-`tokenize()` has two failure modes: `ERRORTOKEN` and exceptions. When a
-non-fatal error occurs, some text will be tokenized as an `ERRORTOKEN`, and
-tokenizing will continue on the remainder of the input. This happens, for
-instance, for unrecognized characters, such as `$`, and unclosed single-quoted
-strings. See [`ERRORTOKEN`](tokens.html#errortoken) and
-[`STRING`](tokens.html#error-behavior).
+`tokenize()` has two failure modes: [`ERRORTOKEN`](tokens.html#errortoken) and
+exceptions. When a non-fatal error occurs, some text will be tokenized as an
+[`ERRORTOKEN`](tokens.html#errortoken), and tokenizing will continue on the
+remainder of the input. This happens, for instance, for unrecognized
+characters, such as `$`, and unclosed single-quoted strings. See the
+[`ERRORTOKEN`](tokens.html#errortoken) and
+[`STRING`](tokens.html#error-behavior) references for more information.
 
-Some tokenization failures are fatal, and cause an error to occur. Depending
-on what you are doing, you may want to catch the exception and deal with it or
-let it bubble up to the caller.
+Other failures are so fatal that tokenization cannot continue, causing an
+exception to be raised. Depending on what you are doing, you may want to catch
+the exception and deal with it or let it bubble up to the caller.
+
+These are the exceptions that can be raised from `tokenize()`. An exception
+other than these likely indicates incorrect [input](#calling-syntax).
 
 ### `SyntaxError`
 
@@ -215,16 +230,16 @@ the two is to inspect the exception message. In both cases, `TokenError` is
 raised if the end of the input (`EOF`) is reached without a delimiter being
 closed. Tokens before the end of the input are still emitted, so it is
 typically desirable to process the tokens from `tokenize()` and handle
-`TokenError` if it occurs as an end of input condition.
+`TokenError` as an end of input condition.
 
 The second argument of the exception (`e.args[1]`) is a tuple of the
-[start](#start-and-end) line and column number for the part of the string that was not
-tokenized due to the exception.
+[start](#start-and-end) line and column number for the part of the input that
+was not tokenized due to the exception.
 
 1. **EOF in multi-line string**
 
    This happens if a triple-quoted string (i.e., a multi-line string, or
-   docstring), is not closed at the end of the input. This exception can be
+   "docstring"), is not closed at the end of the input. This exception can be
    detected by checking `'string' in e.args[0]`.
 
    ```py
@@ -255,7 +270,8 @@ tokenized due to the exception.
    does not necessarily stop parsing as soon as the input is syntactically
    invalid, as it only has limited knowledge of Python syntax. In fact, in the
    current implementation, this exception is only raised after all tokens have
-   been emitted, except possibly `DEDENT` tokens.
+   been emitted, except possibly [`DEDENT`](tokens.html#dedent) tokens. This
+   exception can be detected by checking `'statement' in e.args[0]`.
 
    ```py
    >>> for tok in tokenize.tokenize(io.BytesIO(b"""

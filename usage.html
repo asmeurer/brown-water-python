@@ -56,14 +56,16 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module has several quirks which make it complicated to work
 with (in my opinion, more complicated than necessary, but it is what it is).</p>
 <p>The primary motivation of this guide is to document these quirks and
-behaviors, and such a document would have been very helpful to me when I first
-started using the module. Many of these behaviors were learned from
+behaviors, as such a document would have been very helpful to me when I first
+started using the module. Most of these behaviors were learned from
 experimentation and reading the <a class="reference external" href="https://github.com/python/cpython/blob/master/Lib/tokenize.py">source
-code</a>.
-Therefore, things that are not obviously API guarantees should not be
-considered API guarantees, that is, the CPython developers may decide to
-change them in future Python versions. I will try to keep this guide updated
-as new Python versions are released. <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">issue
+code</a>. I have
+no idea what behaviors can be considered API guarantees, that is, the CPython
+developers may decide to change them in future Python versions. With that
+being said, the CPython developers are generally very conservative about
+changes to the standard library that might break downstream code, even for
+major releases. I will try to keep this guide updated as new Python versions
+are released. <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">issue
 reports</a> and <a class="reference external" href="https://github.com/asmeurer/brown-water-python/pulls">pull
 requests</a> are most
 welcome.</p>
@@ -72,7 +74,7 @@ welcome.</p>
 <p>The first thing you’ll notice when using <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> is that its calling API
 is rather odd. It does not accept a string. It does not accept a file-like
 object either. Rather, it requires <strong>the <code class="docutils literal notranslate"><span class="pre">readline</span></code> method of a bytes-mode file-like
-object</strong>. The bytes-encoded part is important. If a file is opened in text
+object</strong>. The bytes-mode part is important. If a file is opened in text
 mode (<code class="docutils literal notranslate"><span class="pre">'r'</span></code> instead of <code class="docutils literal notranslate"><span class="pre">'br'</span></code>), <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> will fail with an exception:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;example.py&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> <span class="c1"># Incorrect, the default mode is &#39;r&#39;, not &#39;br&#39;</span>
@@ -173,9 +175,11 @@ typically in the <code class="docutils literal notranslate"><span class="pre">fo
 <p>The advantage of this second way is that the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> object contains an
 additional attribute, <code class="docutils literal notranslate"><span class="pre">exact_type</span></code>, which contains the exact token type of an
 <a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code> token</a>. However, this can also be determined from the
-<code class="docutils literal notranslate"><span class="pre">string</span></code>. The first form is also less verbose, but the second form avoids
-errors from getting the attributes in the wrong order. The form that you
-should use depends on your preference on these tradeoffs.</p>
+<code class="docutils literal notranslate"><span class="pre">string</span></code>. Additionally, the first form is less verbose, but the second form
+avoids errors from getting the attributes in the wrong order. The form that
+you should use depends on your preference on these tradeoffs. I personally
+recommend the second form (<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">tok</span> <span class="pre">in</span> <span class="pre">tokenize(...):</span> <span class="pre">...</span> <span class="pre">tok.type,</span> <span class="pre">etc.</span></code>),
+unless you have the <code class="docutils literal notranslate"><span class="pre">(toknum,</span> <span class="pre">tokstr,</span> <span class="pre">start,</span> <span class="pre">end,</span> <span class="pre">line)</span></code> order memorized.</p>
 <div class="section" id="type">
 <span id="type"></span><h3><code class="docutils literal notranslate"><span class="pre">type</span></code><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
 <p>The token types are outlined in detail in the <a class="reference external" href="tokens.html">Token Types</a>
@@ -185,20 +189,23 @@ section.</p>
 <span id="string"></span><h3><code class="docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
 <p>The chunk of code that is tokenized. For token types where the string is
 meaningless, such as <a class="reference external" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a>, the string is
-empty. For the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token, the string is the
-encoding. It does not appear literally in the code, which is why the line
-and column numbers are 0 and the line is the empty string.</p>
+empty.</p>
+<p>For the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token, the string is the encoding,
+which does not appear literally in the code, which is why for <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> the
+line and column numbers are 0 and the <code class="docutils literal notranslate"><span class="pre">line</span></code> is the empty string.</p>
 </div>
 <div class="section" id="start-and-end">
 <span id="start-and-end"></span><h3><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code><a class="headerlink" href="#start-and-end" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> are tuples of (line number, column number) for the line and
 column numbers of the start and end of the tokenized string. <strong>Line numbers
-start at 1 and column numbers start at 0</strong>. The line and column numbers for the
-<a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token, which is always the first token
-emitted, are both <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>. The start and end tuples always nondecreasing
-(that is, <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">&lt;=</span> <span class="pre">end</span></code> will always be True for a single <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>, and
-<code class="docutils literal notranslate"><span class="pre">tok0.start</span> <span class="pre">&lt;=</span> <span class="pre">tok1.start</span></code> and <code class="docutils literal notranslate"><span class="pre">tok0.end</span> <span class="pre">&lt;=</span> <span class="pre">tok1.end</span></code> will be True for
-consecutive <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>s, <code class="docutils literal notranslate"><span class="pre">tok0</span></code> and <code class="docutils literal notranslate"><span class="pre">tok1</span></code>).</p>
+start at 1 and column numbers start at 0</strong>. The line and column numbers for
+the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token, which is always the first token
+emitted, are both <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>.</p>
+<p>Because Python tuples compare lexicographically (<code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b)</span> <span class="pre">&lt;</span> <span class="pre">(c,</span> <span class="pre">d)</span></code> is
+equivalent to <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">c</span> <span class="pre">or</span> <span class="pre">(a</span> <span class="pre">==</span> <span class="pre">c</span> <span class="pre">and</span> <span class="pre">b</span> <span class="pre">&lt;=</span> <span class="pre">d)</span></code>, these tuples can be compared
+directly to determine which comes earlier in the input. The <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>
+tuples as emitted from <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> are always nondecreasing (that is, <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">&lt;=</span> <span class="pre">end</span></code> will always be True for a single <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>, and <code class="docutils literal notranslate"><span class="pre">tok0.start</span> <span class="pre">&lt;=</span> <span class="pre">tok1.start</span></code> and <code class="docutils literal notranslate"><span class="pre">tok0.end</span> <span class="pre">&lt;=</span> <span class="pre">tok1.end</span></code> will be True for consecutive
+<code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>s, <code class="docutils literal notranslate"><span class="pre">tok0</span></code> and <code class="docutils literal notranslate"><span class="pre">tok1</span></code>).</p>
 <p>You should always use the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples to deduce line or column
 information. <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> ignores syntactically irrelevant whitespace, which
 can include newlines (in particular, escaped newlines, see
@@ -208,22 +215,25 @@ can include newlines (in particular, escaped newlines, see
 <span id="line"></span><h3><code class="docutils literal notranslate"><span class="pre">line</span></code><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">line</span></code> gives the full line that the token comes from. This is useful for
 reconstructing the whitespace between tokens (never assume that the whitespace
-between tokens is space characters—they could also be escaped newlines or
-tabs). <code class="docutils literal notranslate"><span class="pre">line</span></code> can also be useful for providing contextual error messages
+between tokens is space characters—it could also consist of escaped newlines
+or tabs). <code class="docutils literal notranslate"><span class="pre">line</span></code> can also be useful for providing contextual error messages
 relating to the tokenization.</p>
 </div>
 </div>
 <div class="section" id="exceptions">
 <span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> has two failure modes: <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> and exceptions. When a
-non-fatal error occurs, some text will be tokenized as an <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>, and
-tokenizing will continue on the remainder of the input. This happens, for
-instance, for unrecognized characters, such as <code class="docutils literal notranslate"><span class="pre">$</span></code>, and unclosed single-quoted
-strings. See <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> and
-<a class="reference external" href="tokens.html#error-behavior"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a>.</p>
-<p>Some tokenization failures are fatal, and cause an error to occur. Depending
-on what you are doing, you may want to catch the exception and deal with it or
-let it bubble up to the caller.</p>
+<p><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> has two failure modes: <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> and
+exceptions. When a non-fatal error occurs, some text will be tokenized as an
+<a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>, and tokenizing will continue on the
+remainder of the input. This happens, for instance, for unrecognized
+characters, such as <code class="docutils literal notranslate"><span class="pre">$</span></code>, and unclosed single-quoted strings. See the
+<a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> and
+<a class="reference external" href="tokens.html#error-behavior"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a> references for more information.</p>
+<p>Other failures are so fatal that tokenization cannot continue, causing an
+exception to be raised. Depending on what you are doing, you may want to catch
+the exception and deal with it or let it bubble up to the caller.</p>
+<p>These are the exceptions that can be raised from <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>. An exception
+other than these likely indicates incorrect <a class="reference external" href="#calling-syntax">input</a>.</p>
 <div class="section" id="syntaxerror">
 <span id="syntaxerror"></span><h3><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code><a class="headerlink" href="#syntaxerror" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code> is raised when the input has an invalid encoding. The encoding
@@ -249,14 +259,14 @@ the two is to inspect the exception message. In both cases, <code class="docutil
 raised if the end of the input (<code class="docutils literal notranslate"><span class="pre">EOF</span></code>) is reached without a delimiter being
 closed. Tokens before the end of the input are still emitted, so it is
 typically desirable to process the tokens from <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> and handle
-<code class="docutils literal notranslate"><span class="pre">TokenError</span></code> if it occurs as an end of input condition.</p>
+<code class="docutils literal notranslate"><span class="pre">TokenError</span></code> as an end of input condition.</p>
 <p>The second argument of the exception (<code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>) is a tuple of the
-<a class="reference external" href="#start-and-end">start</a> line and column number for the part of the string that was not
-tokenized due to the exception.</p>
+<a class="reference external" href="#start-and-end">start</a> line and column number for the part of the input that
+was not tokenized due to the exception.</p>
 <ol>
 <li><p class="first"><strong>EOF in multi-line string</strong></p>
 <p>This happens if a triple-quoted string (i.e., a multi-line string, or
-docstring), is not closed at the end of the input. This exception can be
+“docstring”), is not closed at the end of the input. This exception can be
 detected by checking <code class="docutils literal notranslate"><span class="pre">'string'</span> <span class="pre">in</span> <span class="pre">e.args[0]</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s2">def f():</span>
@@ -285,7 +295,8 @@ detected by checking <code class="docutils literal notranslate"><span class="pre
 does not necessarily stop parsing as soon as the input is syntactically
 invalid, as it only has limited knowledge of Python syntax. In fact, in the
 current implementation, this exception is only raised after all tokens have
-been emitted, except possibly <code class="docutils literal notranslate"><span class="pre">DEDENT</span></code> tokens.</p>
+been emitted, except possibly <a class="reference external" href="tokens.html#dedent"><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code></a> tokens. This
+exception can be detected by checking <code class="docutils literal notranslate"><span class="pre">'statement'</span> <span class="pre">in</span> <span class="pre">e.args[0]</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s2">(1 +</span>
 <span class="gp">... </span><span class="s2">def f():</span>
@@ -471,7 +482,7 @@ tabs and spaces.</p>
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#ast">AST</a></li>
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#summary">Summary</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="alternatives.html#other-standard-library-modules">Other standard library modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">parso</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">Parso</a></li>
 </ul>
 </li>
 </ul>

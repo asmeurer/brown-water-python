@@ -58,9 +58,9 @@
 <div class="section" id="untokenize-iterable">
 <span id="untokenize-iterable"></span><h2><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code><a class="headerlink" href="#untokenize-iterable" title="Permalink to this headline">¶</a></h2>
 <p>Converts an iterable of tokens into a bytes string. The string is encoded
-using the encoding of the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. The iterable can be
-<code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects, or tuples of <code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code>.</p>
-<p>This function is round-trippable in one direction, namely,
+using the encoding of the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. The
+iterable can be <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects, or tuples of <code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code>.</p>
+<p>This function always round-trips in one direction, namely,
 <code class="docutils literal notranslate"><span class="pre">tokenize(io.BytesIO(untokenize(tokens)).readline)</span></code> will always return the
 same tokens.</p>
 <p>If full <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> tuples are given with correct <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>
@@ -68,21 +68,23 @@ information (iterable of 5-tuples), this function also round-trips in the
 other direction. However, be aware that the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples must be
 nondecreasing. If the <code class="docutils literal notranslate"><span class="pre">start</span></code> of one token is before the <code class="docutils literal notranslate"><span class="pre">end</span></code> of the previous
 token, it raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Therefore, if you want to modify tokens and use
-<code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> to convert back to a string, you must keep track of and
-maintain the line and column information in <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> to convert back to a string, using full 5-tuples, you must keep
+track of and maintain the line and column information in <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;sum([[1, 2]][0])&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;sum([[1, 2]][0])&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">))</span>
 <span class="go">b&#39;sum([[1, 2]][0])&#39;</span>
 
 </pre></div>
 </div>
-<p>If only the token type and token names are given (iterable of
-2-tuples), it will not, and in fact, for any nontrivial input, the resulting
-bytes string will not be the same. This is because it adds spaces after
-certain tokens to ensure the resulting string is syntactically valid (or
-rather, to ensure that it tokenizes back in the same way).</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;sum([[1, 2]][0])&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)])</span>
+<p>If only the token type and token names are given (iterable of 2-tuples),
+<code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> does not round-trip, and in fact, for any nontrivial input, the
+resulting bytes string will be very different than the original input. This is
+because <code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> adds spaces after certain tokens to ensure the
+resulting string is syntactically valid (or rather, to ensure that it
+tokenizes back in the same way).</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)])</span>
 <span class="go">b&#39;sum ([[1 ,2 ]][0 ])&#39;</span>
 
 </pre></div>
@@ -90,10 +92,11 @@ rather, to ensure that it tokenizes back in the same way).</p>
 <p>2-tuples and 5-tuples can be mixed (for instance, you can add new tokens to a
 list of <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects using only 2-tuples), but in this case, it will
 ignore the column information for the 5-tuples.</p>
-<p>Consider this simple example which replaces all <code class="docutils literal notranslate"><span class="pre">STRING</span></code> tokens with a list of
-<code class="docutils literal notranslate"><span class="pre">STRING</span></code> tokens of individual characters (making use of implicit string
-concatenation). Once <code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> encounters the newly added 2-tuple tokens,
-it ignores the column information and uses its own spacing.</p>
+<p>Consider this simple example which replaces all <a class="reference external" href="tokens.html#string"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a>
+tokens with a list of <a class="reference external" href="tokens.html#string"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a> tokens of individual
+characters (making use of implicit string concatenation). Once <code class="docutils literal notranslate"><span class="pre">untokenize()</span></code>
+encounters the newly added 2-tuple tokens, it ignores the column information
+and uses its own spacing.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">split_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;</span>
@@ -131,7 +134,8 @@ determine the encoding of some Python code. The calling syntax is the <a class="
 for <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code></a>.</p>
 <p>Returns a tuple of the encoding, and a list of any lines (in bytes) that it
 has read from the function (it will read at most two lines from the file).
-Invalid encoding raise a <a class="reference external" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>.</p>
+Invalid encodings will cause it to raise a
+<a class="reference external" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">detect_encoding</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;# -*- coding: ascii -*-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
 <span class="go">(&#39;ascii&#39;, [b&#39;# -*- coding: ascii -*-&#39;])</span>
 
@@ -155,8 +159,8 @@ correct encoding).</p>
 <span id="command-line-usage"></span><h2>Command line usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module can be called from the command line using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">tokenize</span> <span class="pre">filename.py</span></code>. This prints three columns, representing the start-end
 line and column positions, the token type, and the token string. If the <code class="docutils literal notranslate"><span class="pre">-e</span></code>
-flag is used, the token type is the exact type. Otherwise it is
-<a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>.</p>
+flag is used, the token type for operators is the exact type. Otherwise the
+<a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a> type is used.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -m tokenize example.py
 0,0-0,0:            ENCODING       &#39;utf-8&#39;
 1,0-1,43:           COMMENT        &#39;# This is a an example file to be tokenized&#39;
@@ -366,7 +370,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#ast">AST</a></li>
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#summary">Summary</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="alternatives.html#other-standard-library-modules">Other standard library modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">parso</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">Parso</a></li>
 </ul>
 </li>
 </ul>

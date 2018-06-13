@@ -50,7 +50,7 @@
 <h1>Brown Water Python: Better Docs for the Python <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> Module.<a class="headerlink" href="#brown-water-python-better-docs-for-the-python-tokenize-module" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module in the Python standard library is very powerful, but
 its <a class="reference external" href="https://docs.python.org/3/library/tokenize.html">documentation</a> is
-somewhat limited. In the spirit of the <a class="reference external" href="https://greentreesnakes.readthedocs.io/">Green Tree Snakes</a> project, which provides similar
+somewhat limited. In the spirit of Thomas Kluyver’s <a class="reference external" href="https://greentreesnakes.readthedocs.io/">Green Tree Snakes</a> project, which provides similar
 extended documentation for the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module, I am providing here some
 extended documentation for effectively working with the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module.</p>
 <div class="admonition note">
@@ -67,15 +67,15 @@ were made to the <code class="docutils literal notranslate"><span class="pre">to
 where appropriate.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module tokenizes code according to the version of Python that
 it is being run under. For example, some new syntax features in 3.6 affect
-tokenization (particularly, <a class="reference external" href="https://docs.python.org/3.6/whatsnew/3.6.html#pep-498-formatted-string-literals">f-strings</a>
+tokenization (in particular, <a class="reference external" href="https://docs.python.org/3.6/whatsnew/3.6.html#pep-498-formatted-string-literals">f-strings</a>
 and <a class="reference external" href="https://docs.python.org/3.6/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals">underscores in numeric literals</a>).
-For example, <code class="docutils literal notranslate"><span class="pre">123_456</span></code> will tokenize as a single token in Python 3.6+,
+Take <code class="docutils literal notranslate"><span class="pre">123_456</span></code>. This will tokenize as a single token in Python 3.6+,
 <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123_456</span></code>), but in Python 3.5, it tokenizes as two tokens,
-<code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>) (this will also be invalid syntax
-in any context). See <a class="reference external" href="tokens.html#number">the example</a> in the <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code>
-reference.</p>
-<p>Most of what is written here will also apply to earlier Python 3 versions, with
-obvious exceptions (like tokens that were added for new syntax).</p>
+<code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>) (see the reference for the
+<a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> token type for more info).</p>
+<p>Most of what is written here will also apply to earlier Python 3 versions,
+with obvious exceptions (like tokens that were added for new syntax), though
+none of it has been tested.</p>
 <p>I don’t have any interest in supporting Python 2 in this guide. <a class="reference external" href="https://devguide.python.org/#status-of-python-branches">Its lifetime</a> is quickly coming
 to an end, so you should strongly consider being Python 3-only for most new
 code that is written.</p>
@@ -95,11 +95,11 @@ which works like <code class="docutils literal notranslate"><span class="pre">to
 <span class="go">(0, &#39;&#39;, (2, 0), (2, 0), &#39;&#39;)</span>
 </pre></div>
 </div>
-<p>Also, the result of
-this function is a regular tuple, not a <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code>, so you will not be
-able to use attributes to access the members. Instead use something like <code class="docutils literal notranslate"><span class="pre">for</span>
-<span class="pre">toknum,</span> <span class="pre">tokval,</span> <span class="pre">start,</span> <span class="pre">end,</span> <span class="pre">line</span> <span class="pre">in</span> <span class="pre">tokenize.generate_tokens(...):</span></code> (this
-pattern is recommended in Python 3 as well, see the <a class="reference external" href="usage.html">Usage</a> section).</p>
+<p>Another difference is that the result of this function is a regular tuple, not
+a <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code>, so you will not be able to use attributes to access the
+members. Instead use something like “<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">toknum,</span> <span class="pre">tokval,</span> <span class="pre">start,</span> <span class="pre">end,</span> <span class="pre">line</span> <span class="pre">in</span>
+<span class="pre">tokenize.generate_tokens(...):</span></code>” (this pattern can be used in Python 3 as
+well, see the <a class="reference external" href="usage.html#calling-syntax">Usage</a> section).</p>
 </div>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
@@ -112,7 +112,7 @@ pattern is recommended in Python 3 as well, see the <a class="reference external
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#ast">AST</a></li>
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#summary">Summary</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="alternatives.html#other-standard-library-modules">Other standard library modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">parso</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">Parso</a></li>
 </ul>
 </li>
 </ul>
@@ -205,7 +205,7 @@ pattern is recommended in Python 3 as well, see the <a class="reference external
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#ast">AST</a></li>
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#summary">Summary</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="alternatives.html#other-standard-library-modules">Other standard library modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">parso</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">Parso</a></li>
 </ul>
 </li>
 </ul>
