@@ -145,8 +145,8 @@ tokenize differently from <code class="docutils literal notranslate"><span class
 for when spaces are required or not required to separate Python tokens is
 quite
 <a class="reference external" href="https://docs.python.org/3/reference/lexical_analysis.html">complicated</a>,
-especially when multiline statements with indentation are considered (as
-an example, consider that <code class="docutils literal notranslate"><span class="pre">1jand2</span></code> is valid Python---it’s tokenized
+especially when multi-line statements with indentation are considered (as
+an example, consider that <code class="docutils literal notranslate"><span class="pre">1jand2</span></code> is valid Python—it’s tokenized
 into three tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1j</span></code>), <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">and</span></code>), and <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code>)).
 One use-case of the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module is to combine tokens into valid
 Python using the <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize</span></code></a>
@@ -296,7 +296,17 @@ section</a>).</p>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#processing-tokens">Processing tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#inside-string"><code class="docutils literal notranslate"><span class="pre">inside_string()</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#exercises">Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#line-numbers"><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">

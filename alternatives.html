@@ -130,7 +130,7 @@ a piece of (incomplete) Python code has any mismatched parentheses or braces.
 In this case, you definitely don’t want to do a naive matching of parentheses
 in the source as a whole, as a single “mismatched” parenthesis in a string
 could confuse the entire engine, even if the source as Python is itself valid.
-We will see this example in more detail <a class="reference external" href="examples.html">later</a>.</p>
+We will see this example in more detail <a class="reference external" href="examples.html#line-numbers">later</a>.</p>
 </div>
 <div class="section" id="tokenize">
 <span id="tokenize"></span><h2>Tokenize<a class="headerlink" href="#tokenize" title="Permalink to this headline">¶</a></h2>
@@ -141,9 +141,9 @@ produces for the above code examples:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_tokenize</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">and</span> <span class="n">token</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="s1">&#39;def&#39;</span><span class="p">:</span>
-<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">and</span> <span class="n">tok</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="s1">&#39;def&#39;</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_tokenize</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
 <span class="go">1</span>
@@ -399,7 +399,17 @@ AST.</small></p>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#processing-tokens">Processing tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#inside-string"><code class="docutils literal notranslate"><span class="pre">inside_string()</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#exercises">Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#line-numbers"><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
