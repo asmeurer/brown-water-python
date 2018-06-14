@@ -43,7 +43,7 @@ or a prefix character (like `r` or `f`).
 ...     """
 ...     try:
 ...         for toknum, tokval, start, end, _ in tokenize_string(s):
-...             if toknum == tokenize.ERRORTOKEN:
+...             if toknum == tokenize.ERRORTOKEN and tokval in '"\'':
 ...                 # There is an unclosed string. We haven't gotten to the
 ...                 # position yet, so it must be inside this string
 ...                 return True
@@ -81,9 +81,9 @@ is contained in (it is between the `start` and `end` tokens). This may not
 actually happen, for instance, if the `(row, col)` is inside whitespace that
 isn't tokenized.
 
-The first thing to check for is [`ERRORTOKEN`](tokens.html#errortoken). If an
-unclosed single quote (not multiline) string is encountered, that is, it is
-closed by a newline, like
+The first thing to check for is [`ERRORTOKEN`](tokens.html#errortoken) caused
+by an unclosed single-quoted string. If an unclosed single-quote (not
+multiline) string is encountered, that is, it is closed by a newline, like
 
 ```
 "an unclosed string
@@ -96,7 +96,7 @@ the rest of the line is inside the unclosed string.
 
 
 ```py
-         if toknum == tokenize.ERRORTOKEN:
+         if toknum == tokenize.ERRORTOKEN and tokval in '"\'':
              # There is an unclosed string. We haven't gotten to the
              # position yet, so it must be inside this string
              return True
