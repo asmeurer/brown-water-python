@@ -103,9 +103,9 @@ produces for the above code examples:
 >>> import tokenize
 >>> import io
 >>> def line_numbers_tokenize(inputcode):
-...     for token in tokenize.tokenize(io.BytesIO(inputcode.encode('utf-8')).readline):
-...         if token.type == tokenize.NAME and token.string == 'def':
-...             print(token.start[0])
+...     for tok in tokenize.tokenize(io.BytesIO(inputcode.encode('utf-8')).readline):
+...         if tok.type == tokenize.NAME and tok.string == 'def':
+...             print(tok.start[0])
 ...
 >>> line_numbers_tokenize(code)
 1
