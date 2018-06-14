@@ -102,8 +102,8 @@ I chose this example to demonstrate a few things:
     for when spaces are required or not required to separate Python tokens is
     quite
     [complicated](https://docs.python.org/3/reference/lexical_analysis.html),
-    especially when multiline statements with indentation are considered (as
-    an example, consider that `1jand2` is valid Python\-\--it\'s tokenized
+    especially when multi-line statements with indentation are considered (as
+    an example, consider that `1jand2` is valid Python---it's tokenized
     into three tokens, `NUMBER` (`1j`), `NAME` (`and`), and `NUMBER` (`2`)).
     One use-case of the `tokenize` module is to combine tokens into valid
     Python using the [`untokenize`](helper-functions.html#untokenize-iterable)

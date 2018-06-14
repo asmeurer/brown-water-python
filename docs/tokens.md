@@ -355,10 +355,10 @@ is not closed, `tokenize` will raise [`TokenError`](usage.html#tokenerror)
 when it reaches it.
 
 ```py
->>> print_tokens("'an ' + '''unclosed multiline string") # doctest: +SKIP
+>>> print_tokens("'an ' + '''unclosed multi-line string") # doctest: +SKIP
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=3 (STRING), string="'an '", start=(1, 0), end=(1, 5), line="'an ' + '''unclosed multiline string")
-TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line="'an ' + '''unclosed multiline string")
+TokenInfo(type=3 (STRING), string="'an '", start=(1, 0), end=(1, 5), line="'an ' + '''unclosed multi-line string")
+TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line="'an ' + '''unclosed multi-line string")
 Traceback (most recent call last):
     ...
     raise TokenError("EOF in multi-line string", strstart)
@@ -368,7 +368,7 @@ tokenize.TokenError: ('EOF in multi-line string', (1, 8))
 
 This behavior can be annoying to deal with in practice. For many applications,
 the correct way to handle this scenario is to consider that since the unclosed
-string is multiline, the remainder of the input from where the
+string is multi-line, the remainder of the input from where the
 [`TokenError`](usage.html#tokenerror) is raised is inside the unclosed string.
 
 As a final note, beware that it is possible to construct string literals that
