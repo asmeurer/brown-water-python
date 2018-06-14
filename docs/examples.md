@@ -43,7 +43,7 @@ or a prefix character (like `r` or `f`).
 ...     """
 ...     try:
 ...         for toknum, tokval, start, end, _ in tokenize_string(s):
-...             if toknum == tokenize.ERRORTOKEN and tokval in '"\'':
+...             if toknum == tokenize.ERRORTOKEN and tokval[0] in '"\'':
 ...                 # There is an unclosed string. We haven't gotten to the
 ...                 # position yet, so it must be inside this string
 ...                 return True
@@ -96,7 +96,7 @@ the rest of the line is inside the unclosed string.
 
 
 ```py
-         if toknum == tokenize.ERRORTOKEN and tokval in '"\'':
+         if toknum == tokenize.ERRORTOKEN and tokval[0] in '"\'':
              # There is an unclosed string. We haven't gotten to the
              # position yet, so it must be inside this string
              return True

@@ -811,13 +811,15 @@ The `ERRORTOKEN` type is used for any character that isn't recognized. Inputs
 that tokenize `ERRORTOKEN`s cannot be valid Python, but this token type is
 used so that applications that process tokens can do error recovery, as the
 remainder of the input stream is tokenized normally. It can also be used to
-process extensions to Python syntax (see the [examples](examples.html)).
+process extensions to Python syntax (see the [examples](examples.html)). Every
+unrecognized character is tokenized separately.
 
 ```py
->>> print_tokens('1!')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1!')
-TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 1), end=(1, 2), line='1!')
+>>> print_tokens("1!!")
+TokenInfo(type=59 (BACKQUOTE), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1!!')
+TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 1), end=(1, 2), line='1!!')
+TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 2), end=(1, 3), line='1!!')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> print_tokens('💯')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
@@ -840,6 +842,24 @@ TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unc
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 
 ```
+
+If the string is continued and unclosed, the entire string is tokenized as an
+error token. Otherwise only the start quote delimiter is.
+
+```py
+>>> print_tokens(r"""
+... 'unclosed \
+... continued string
+... """)
+TokenInfo(type=59 (BACKQUOTE), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=56 (ERRORTOKEN), string="'unclosed \\\ncontinued string\n", start=(2, 0), end=(3, 17), line="'unclosed \\\n")
+TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
+
+```
+
+Therefore, code that handles `ERRORTOKEN` specifically for unclosed strings
+should check `tok.string[0] in '"\''`.
 
 ### `COMMENT`
 
