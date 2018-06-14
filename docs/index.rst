@@ -86,3 +86,8 @@ Table of Contents
    tokens
    helper-functions
    examples
+
+.. raw:: html
+
+   <div class="footer" style="text-align: left;">Water Python image by Matt from Melbourne, Australia <a
+   href="https://creativecommons.org/licenses/by/2.0">CC BY 2.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Water_Python_(Liasis_mackloti)_(8692394648).jpg">Wikimedia Commons</a></div><p>
