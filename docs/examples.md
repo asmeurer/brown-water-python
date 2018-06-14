@@ -216,4 +216,119 @@ True
   [parso](https://parso.readthedocs.io/en/latest/)'s tokenizer
   (`parso.python.tokenize.tokenize()`).
 
-###
+### `line_numbers()`
+
+Let's go back to our motivating example from the [`tokenize` vs.
+alternatives](alternatives.html) section, a function that prints the line
+numbers of every function definition. [Our
+function](alternatives.html#tokenize) looked like this (rewritten to use our
+`tokenize_string()` helper):
+
+```py
+>>> def line_numbers(s):
+...     for tok in tokenize_string(s):
+...         if tok.type == tokenize.NAME and tok.string == 'def':
+...             print(tok.start[0])
+...
+
+```
+
+As we noted, this function works, but it doesn't handle any of our
+[error](tokens.html#errortoken) [conditions](usage.html#exceptions).
+
+Looking at our exceptions list, [`SynatxError`](usage.html#syntaxerror) and
+[`IndentationError`](usage.html#indentationerror) are unrecoverable, so we
+will just let them bubble up. However, [`TokenError`](usage.html#tokenerror)
+simply means that the input had an unclosed brace or multi-line string. In the
+former case, the tokenization reaches the end of the input before the
+exception is raised, and in the latter case, the remainder of the input is
+inside the unclosed multi-line string, so we can safely ignore `TokenError` in
+either case.
+
+
+```py
+>>> def line_numbers(s):
+...     try:
+...         for tok in tokenize_string(s):
+...             if tok.type == tokenize.NAME and tok.string == 'def':
+...                 print(tok.start[0])
+...     except tokenize.TokenError:
+...         pass
+
+```
+
+Finally, let's consider [`ERRORTOKEN`](tokens.html#errortoken) due to unclosed
+single-quoted strings. Our motivation for using `tokenize` to solve this
+problem is to handle incomplete or invalid Python (otherwise, we should use
+the [`ast`](alternatives.html#ast) implementation, which is much simpler).
+Thus, it makes sense to treat unclosed single-quoted strings as if they were
+closed at the end of the line.
+
+
+```py
+>>> def line_numbers(s):
+...     try:
+...         skip_line = -1
+...         for tok in tokenize_string(s):
+...             if tok.start[0] == skip_line:
+...                 continue
+...             elif tok.start[0] >= skip_line:
+...                 # reset skip_line
+...                 skip_line = -1
+...             if tok.type == tokenize.ERRORTOKEN and tok.string in '"\'':
+...                 # Unclosed single-quoted string. Ignore the rest of this line
+...                 skip_line = tok.start[0]
+...                 continue
+...             if tok.type == tokenize.NAME and tok.string == 'def':
+...                 print(tok.start[0])
+...     except tokenize.TokenError:
+...         pass
+
+```
+
+Here are our original test cases, plus some additional ones for our added
+behavior.
+
+```py
+>>> code = """\
+... def f(x):
+...     pass
+...
+... class MyClass:
+...     def g(self):
+...         pass
+... """
+>>> line_numbers(code)
+1
+5
+>>> code = '''\
+... FUNCTION_SKELETON = """
+... def {name}({args}):
+...     {body}
+... """
+... '''
+>>> line_numbers(code) # no output
+>>> code = """\
+... def f():
+...     '''
+...     an unclosed docstring.
+... """
+>>> line_numbers(code)
+1
+>>> code = """\
+... def f(: # Unclosed parenthesis
+...     pass
+... """
+>>> line_numbers(code)
+1
+>>> code = """\
+... def f():
+...     "an unclosed single-quoted string. It should not match this def
+... def g():
+...     pass
+... """
+>>> line_numbers(code)
+1
+3
+
+```
