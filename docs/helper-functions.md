@@ -7,9 +7,10 @@ In addition to the primary [`tokenize()`](usage.html) entry-point, the
 ## `untokenize(iterable)`
 
 Converts an iterable of tokens into a bytes string. The string is encoded
-using the encoding of the [`ENCODING`](tokens.html#encoding) token. The
-iterable can be `TokenInfo` objects, or tuples of `(TOKEN_TYPE,
-TOKEN_STRING)`.
+using the encoding of the [`ENCODING`](tokens.html#encoding) token. If there
+is no `ENCODING` token present, the string is returned decoded (a `str`
+instead of `bytes`). The iterable can be `TokenInfo` objects, or tuples of
+`(TOKEN_TYPE, TOKEN_STRING)`.
 
 This function always round-trips in one direction, namely,
 `tokenize(io.BytesIO(untokenize(tokens)).readline)` will always return the
