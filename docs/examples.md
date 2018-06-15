@@ -350,6 +350,58 @@ tokens in a human-readable way. Doing this is possible, by keeping track of
 column offsets, but we will not bother with it here. See the discussion in the
 [`untokenize()`](helper-functions.html#untokenize-iterable) section.
 
+### Converting `^` to `**`
+
+Python's syntax uses `**` for exponentiation, although many might expect it to
+use `^` instead. `^` is instead the [XOR
+operator](https://docs.python.org/3/reference/expressions.html#binary-bitwise-operations).
+Suppose you wanted to allow `^` to be written in place of `**` to represent
+exponentiation. You might think to use the `ast` module and replace
+[`BitXor`](https://greentreesnakes.readthedocs.io/en/latest/nodes.html#BitXor)
+nodes with
+[`Pow`](https://greentreesnakes.readthedocs.io/en/latest/nodes.html#Pow), but
+this will not work, because `^` has a different precedence than `**`.
+
+```py
+>>> import ast
+>>> ast.dump(ast.parse('x**2 + 1'))
+"Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id='x', ctx=Load()), op=Pow(), right=Num(n=2)), op=Add(), right=Num(n=1)))])"
+>>> ast.dump(ast.parse('x^2 + 1'))
+"Module(body=[Expr(value=BinOp(left=Name(id='x', ctx=Load()), op=BitXor(), right=BinOp(left=Num(n=2), op=Add(), right=Num(n=1))))])"
+
+```
+
+This is difficult to read, but it basically says that `x**2 + 1` is parsed
+like `(x**2) + 1` and `x^2 + 1` is parsed like `x^(2 + 1)`.
+
+We could do a simple `s.replace('^', '**')`, but this would [also
+replace](alternatives.html#regular-expressions) any occurrences of `^` in
+strings and comments.
+
+Instead, we can use `tokenize`. The replacement is quite easy to do
+
+```py
+>>> def xor_to_pow(s):
+...     result = []
+...     for tok in tokenize_string(s):
+...         if tok.exact_type == tokenize.CIRCUMFLEX:
+...             result.append((tokenize.OP, '**'))
+...         else:
+...             result.append(tok)
+...     return tokenize.untokenize(result)
+...
+>>> xor_to_pow('x^2 + 1')
+b'x**2 +1 '
+
+```
+
+Because we are replacing a 1-character token with a 2-character token,
+[`untokenize()`](helper-functions.html#untokenize-iterable) removes the
+original whitespace and replaces it with its own. An exercise for the reader
+is to redefine the column offsets for the new token and all subsequent tokens
+on that line to avoid this issue.
+
+
 ### Wrapping floats with `decimal.Decimal`
 
 This example is modified from the [example in the standard library
