@@ -132,7 +132,6 @@ does not properly handle [`ERRORTOKEN`](tokens.html#errortoken)s or
 
 ## AST
 
-
 The `ast` module can also be used to avoid the pitfalls of detecting false
 positives. In fact, the `ast` module will have NO false positives. The price
 that is paid for this is that the input code to the `ast` module must be

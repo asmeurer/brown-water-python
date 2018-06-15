@@ -34,6 +34,52 @@ Then run
 
 The resulting pages are in `_build/html`.
 
+## Doctests
+
+The examples in are all doctested. You can run the doctests with
+
+    cd doc
+    ./run_doctests
+
+I have extended to doctests to add flags to skip doctests in Python 3.5, 3.6,
+and 3.7, to help test differences in the three language versions. The flags
+are `SKIP35`, `SKIP36`, and `SKIP37`, respectively. For example, to make a
+doctest that doesn't run in Python 3.5, use
+
+```py
+>>> # This is only valid syntax in Python 3.6+
+>>> 123_456  # doctest: +SKIP35
+123456
+
+```
+
+To make a doctest that only runs in Python 3.5, use something like
+
+
+```py
+>>> # This is the behavior in Python 3.5
+>>> 123_456 # doctest: +SKIP36, +SKIP37
+Traceback (most recent call last):
+  ...
+    123_456
+          ^
+SyntaxError: invalid syntax
+
+```
+
+The `# doctest` comments are automatically hidden in the rendered output, so
+it's generally a good idea to include an explanatory comment that the given
+code only runs on certain Python versions, as in the above examples.
+
+For code that tests exceptions, you'll need to include `...` in the traceback
+to make it match.
+
+For code that prints something and then has an exception, you'll have to skip
+it entirely (`# doctest: +SKIP`), as the doctest module does not support this.
+
+As a final note, the doctester won't work correctly unless you include a blank
+line before the end \`\`\` (it will think it is part of the output).
+
 ## Contributing
 
 Contributions are welcome. So are questions. My goal here is to help people to
@@ -52,5 +98,5 @@ construct to embed reST in the Markdown.
 
 ## License
 
-Everything in this repo is licensed under the MIT licence. See the LICENSE
+Everything in this repo is licensed under the MIT license. See the LICENSE
 file.

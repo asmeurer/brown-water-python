@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+"""
+This module has a custom doctest runner that supports flags for skipping
+doctests in certain Python versions. The flags
+
+SKIP35
+SKIP36
+SKIP37
+
+will skip the doctests in those Python versions. Use them like
+
+>>> import sys
+>>> print(sys.version_info[:2]) # doctest: +SKIP36, +SKIP37
+(3, 5)
+
+WARNING: This file registers these flags globally in the standard library
+doctest module and monkeypatches the DoctestRunner object. It should only be
+run as a standalone script. Do not attempt to import it.
+
+"""
+
+import sys
+import warnings
+import glob
+from doctest import DocTestRunner, register_optionflag, _test
+
+SKIP35 = register_optionflag("SKIP35")
+SKIP36 = register_optionflag("SKIP36")
+SKIP37 = register_optionflag("SKIP37")
+
+if sys.version_info[1] == 5:
+    SKIP_THIS_VERSION = SKIP35
+elif sys.version_info[1] == 6:
+    SKIP_THIS_VERSION = SKIP36
+elif sys.version_info[1] == 7:
+    SKIP_THIS_VERSION = SKIP37
+else:
+    warnings.warn("Unrecognized Python version: %s.%s" % sys.version_info[:2])
+    SKIP_THIS_VERSION = SKIP37
+
+orig_run = DocTestRunner.run
+
+def run(self, test, **kwargs):
+    filtered_examples = []
+    for example in test.examples:
+        if SKIP_THIS_VERSION not in example.options:
+            filtered_examples.append(example)
+    test.examples = filtered_examples
+
+    orig_run(self, test, **kwargs)
+
+DocTestRunner.run = run
+
+if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        sys.argv.extend(glob.glob('*.md'))
+    sys.exit(_test())
+else:
+    warnings.warn("Importing run_doctests is not recommended.")
