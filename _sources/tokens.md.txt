@@ -42,7 +42,7 @@ The dictionary `tok_name` maps the tokens back to their names:
 
 ```
 
-## The tokens
+## The Tokens
 
 To simplify the below sections, the following utility function is used for all
 the examples:
@@ -213,8 +213,7 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 This can be used, for instance, to wrap floating point numbers with a type
 that supports arbitrary precision, such as
 [`decimal.Decimal`]((https://docs.python.org/3/library/decimal.html)). See the
-[example](https://docs.python.org/3/library/tokenize.html#examples) in the
-official `tokenize` documentation.
+[examples](examples.html#wrapping-floats-with-decimal-decimal).
 
 In Python >=3.6, numeric literals can have [underscore
 separators](https://docs.python.org/3/whatsnew/3.6.html#whatsnew36-pep515),
@@ -328,7 +327,7 @@ b"a\\'"
 
 ```
 
-#### **Error behavior**
+#### Error Behavior
 
 If a single quoted string is unclosed, the opening string delimiter is
 tokenized as [`ERRORTOKEN`](#errortoken), and the remainder is tokenized as if
@@ -448,10 +447,11 @@ once per block of indented text, not once per line.
 
 The `DEDENT` token type represents a dedentation. Every `INDENT` token is
 matched by a corresponding `DEDENT` token. The `string` attribute of `DEDENT`
-is always `''`.
+is always `''`. The `start` and `end` positions of a `DEDENT` token are the
+first position in the line after the indentation (even if there are multiple
+consecutive `DEDENT`s).
 
-Consider the following
-pseudo-example:
+Consider the following pseudo-example:
 
 ```py
 >>> print_tokens("""
@@ -604,7 +604,7 @@ IndentationError: unindent does not match any outer indentation level
 
 The level of indentation at a particular point in the token stream can be
 determined by incrementing and decrementing a counter for each `INDENT` and
-`DEDENT` token. See the [examples](examples.html).
+`DEDENT` token. See the [examples](examples.html#indentation-level).
 
 
 

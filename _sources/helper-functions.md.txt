@@ -7,9 +7,10 @@ In addition to the primary [`tokenize()`](usage.html) entry-point, the
 ## `untokenize(iterable)`
 
 Converts an iterable of tokens into a bytes string. The string is encoded
-using the encoding of the [`ENCODING`](tokens.html#encoding) token. The
-iterable can be `TokenInfo` objects, or tuples of `(TOKEN_TYPE,
-TOKEN_STRING)`.
+using the encoding of the [`ENCODING`](tokens.html#encoding) token. If there
+is no `ENCODING` token present, the string is returned decoded (a `str`
+instead of `bytes`). The iterable can be `TokenInfo` objects, or tuples of
+`(TOKEN_TYPE, TOKEN_STRING)`.
 
 This function always round-trips in one direction, namely,
 `tokenize(io.BytesIO(untokenize(tokens)).readline)` will always return the
@@ -117,7 +118,7 @@ uses the functionality of the `tokenize` module, in particular,
 do otherwise (opening a Python source file in text mode using the syntactically
 correct encoding).
 
-## Command line usage
+## Command Line Usage
 
 The `tokenize` module can be called from the command line using `python -m
 tokenize filename.py`. This prints three columns, representing the start-end
@@ -166,7 +167,7 @@ $ python -m tokenize -e example.py
 5,0-5,0:            ENDMARKER      ''
 
 ```
-## Helper Functions related to the `parser` Module
+## Helper Functions Related to the `parser` Module
 
 The `token` and `tokenize` module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless

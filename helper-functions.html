@@ -58,8 +58,10 @@
 <div class="section" id="untokenize-iterable">
 <span id="untokenize-iterable"></span><h2><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code><a class="headerlink" href="#untokenize-iterable" title="Permalink to this headline">¶</a></h2>
 <p>Converts an iterable of tokens into a bytes string. The string is encoded
-using the encoding of the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. The
-iterable can be <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects, or tuples of <code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code>.</p>
+using the encoding of the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. If there
+is no <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> token present, the string is returned decoded (a <code class="docutils literal notranslate"><span class="pre">str</span></code>
+instead of <code class="docutils literal notranslate"><span class="pre">bytes</span></code>). The iterable can be <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects, or tuples of
+<code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code>.</p>
 <p>This function always round-trips in one direction, namely,
 <code class="docutils literal notranslate"><span class="pre">tokenize(io.BytesIO(untokenize(tokens)).readline)</span></code> will always return the
 same tokens.</p>
@@ -156,7 +158,7 @@ do otherwise (opening a Python source file in text mode using the syntactically
 correct encoding).</p>
 </div>
 <div class="section" id="command-line-usage">
-<span id="command-line-usage"></span><h2>Command line usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">¶</a></h2>
+<span id="command-line-usage"></span><h2>Command Line Usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module can be called from the command line using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">tokenize</span> <span class="pre">filename.py</span></code>. This prints three columns, representing the start-end
 line and column positions, the token type, and the token string. If the <code class="docutils literal notranslate"><span class="pre">-e</span></code>
 flag is used, the token type for operators is the exact type. Otherwise the
@@ -203,7 +205,7 @@ $ python -m tokenize -e example.py
 </div>
 </div>
 <div class="section" id="helper-functions-related-to-the-parser-module">
-<span id="helper-functions-related-to-the-parser-module"></span><h2>Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module<a class="headerlink" href="#helper-functions-related-to-the-parser-module" title="Permalink to this headline">¶</a></h2>
+<span id="helper-functions-related-to-the-parser-module"></span><h2>Helper Functions Related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module<a class="headerlink" href="#helper-functions-related-to-the-parser-module" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.</p>
@@ -373,20 +375,20 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 
 
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">What is tokenization?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. alternatives</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="alternatives.html#regular-expressions">Regular expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Tokenization?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. Alternatives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="alternatives.html#regular-expressions">Regular Expressions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#tokenize">Tokenize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#ast">AST</a></li>
 <li class="toctree-l2"><a class="reference internal" href="alternatives.html#summary">Summary</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="alternatives.html#other-standard-library-modules">Other standard library modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="alternatives.html#other-standard-library-modules">Other Standard Library Modules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="alternatives.html#parso">Parso</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#calling-syntax">Calling syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#calling-syntax">Calling Syntax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage.html#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="usage.html#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="usage.html#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
@@ -404,12 +406,12 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tokens.html">The Token Types</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tok-name-dictionary">The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tokens">The tokens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tokens">The Tokens</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#string"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tokens.html#error-behavior"><strong>Error behavior</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tokens.html#error-behavior">Error Behavior</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a></li>
@@ -433,8 +435,8 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 <li class="toctree-l2"><a class="reference internal" href="#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#command-line-usage">Command line usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#helper-functions-related-to-the-parser-module">Helper Functions related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-usage">Command Line Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helper-functions-related-to-the-parser-module">Helper Functions Related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#isterminal-x"><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#isnonterminal-x"><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code></a></li>
@@ -444,12 +446,26 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#processing-tokens">Processing tokens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#processing-tokens">Processing Tokens</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples.html#inside-string"><code class="docutils literal notranslate"><span class="pre">inside_string()</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples.html#exercises">Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="examples.html#line-numbers"><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#indentation-level">Indentation Level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#mismatched-parentheses">Mismatched Parentheses</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#exercise">Exercise</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#modifying-tokens">Modifying Tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#converting-to">Converting <code class="docutils literal notranslate"><span class="pre">^</span></code> to <code class="docutils literal notranslate"><span class="pre">**</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#wrapping-floats-with-decimal-decimal">Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#extending-python-s-syntax">Extending Python’s Syntax</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#emoji-math">Emoji Math</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
