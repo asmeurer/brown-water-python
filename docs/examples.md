@@ -384,14 +384,16 @@ Instead, we can use `tokenize`. The replacement is quite easy to do
 >>> def xor_to_pow(s):
 ...     result = []
 ...     for tok in tokenize_string(s):
+...         if tok.type == tokenize.ENCODING:
+...             encoding = tok.string
 ...         if tok.exact_type == tokenize.CIRCUMFLEX:
 ...             result.append((tokenize.OP, '**'))
 ...         else:
 ...             result.append(tok)
-...     return tokenize.untokenize(result)
+...     return tokenize.untokenize(result).decode(encoding)
 ...
 >>> xor_to_pow('x^2 + 1')
-b'x**2 +1 '
+'x**2 +1 '
 
 ```
 
@@ -400,7 +402,6 @@ Because we are replacing a 1-character token with a 2-character token,
 original whitespace and replaces it with its own. An exercise for the reader
 is to redefine the column offsets for the new token and all subsequent tokens
 on that line to avoid this issue.
-
 
 ### Wrapping floats with `decimal.Decimal`
 
