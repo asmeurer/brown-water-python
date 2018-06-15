@@ -20,7 +20,7 @@ To simplify the examples, the following helper function is used.
 
 ```
 
-## Processing tokens
+## Processing Tokens
 
 These examples show different ways that you can process tokens.
 
@@ -333,7 +333,7 @@ behavior.
 
 ```
 
-### Indentation level
+### Indentation Level
 
 [`INDENT`](tokens.html#indent) and [`DEDENT`](tokens.html#dedent) tokens are
 always balanced in the token stream (unless there is an
@@ -408,7 +408,7 @@ To demonstrate the function, let's apply it to itself.
 ```
 
 
-### Mismatched parentheses
+### Mismatched Parentheses
 
 
 This example shows how to use a very important tool when processing tokens, a
@@ -649,7 +649,7 @@ modified). In the `allow_intermediary_mismatches=True` case, the stack is
 </details>
 
 
-## Modifying tokens
+## Modifying Tokens
 
 These examples show some ways that you can modify the token stream.
 
@@ -771,7 +771,7 @@ Decimal('1.000000000000000000000000000000001000000000000000000000000000000000000
 
 ```
 
-### Extending Python's syntax
+### Extending Python's Syntax
 
 Because `tokenize()` emits [`ERRORTOKEN`](tokens.html#errortoken) on any
 unrecognized operators, it can be used to add extensions to the Python syntax.

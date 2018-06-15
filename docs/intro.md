@@ -1,4 +1,4 @@
-What is tokenization?
+What is Tokenization?
 =====================
 
 In the field of parsing, a

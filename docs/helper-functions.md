@@ -118,7 +118,7 @@ uses the functionality of the `tokenize` module, in particular,
 do otherwise (opening a Python source file in text mode using the syntactically
 correct encoding).
 
-## Command line usage
+## Command Line Usage
 
 The `tokenize` module can be called from the command line using `python -m
 tokenize filename.py`. This prints three columns, representing the start-end
@@ -167,7 +167,7 @@ $ python -m tokenize -e example.py
 5,0-5,0:            ENDMARKER      ''
 
 ```
-## Helper Functions related to the `parser` Module
+## Helper Functions Related to the `parser` Module
 
 The `token` and `tokenize` module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless

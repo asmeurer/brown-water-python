@@ -19,7 +19,7 @@ reports](https://github.com/asmeurer/brown-water-python/issues) and [pull
 requests](https://github.com/asmeurer/brown-water-python/pulls) are most
 welcome.
 
-## Calling syntax
+## Calling Syntax
 
 The first thing you'll notice when using `tokenize()` is that its calling API
 is rather odd. It does not accept a string. It does not accept a file-like

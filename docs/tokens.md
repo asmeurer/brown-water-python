@@ -42,7 +42,7 @@ The dictionary `tok_name` maps the tokens back to their names:
 
 ```
 
-## The tokens
+## The Tokens
 
 To simplify the below sections, the following utility function is used for all
 the examples:
@@ -327,7 +327,7 @@ b"a\\'"
 
 ```
 
-#### **Error behavior**
+#### Error Behavior
 
 If a single quoted string is unclosed, the opening string delimiter is
 tokenized as [`ERRORTOKEN`](#errortoken), and the remainder is tokenized as if

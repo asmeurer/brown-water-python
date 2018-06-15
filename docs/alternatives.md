@@ -1,4 +1,4 @@
-`tokenize` vs. alternatives
+`tokenize` vs. Alternatives
 ===========================
 
 There are generally three methods one might use when trying to find or
@@ -15,7 +15,7 @@ definition, that is, every occurrence of the `def` keyword. Such a tool
 could be used by a text editor to aid in jumping to function
 definitions, for instance.
 
-## Regular expressions
+## Regular Expressions
 
 Using naive regular expression parsing, you might start with something
 like
@@ -229,7 +229,7 @@ almost always preferable to using regular expressions to match Python code.
 Code written using the `tokenize` module will be more correct on edge cases,
 more maintainable, and easier to extend.
 
-### Other standard library modules
+### Other Standard Library Modules
 
 In addition to `tokenize` and `ast`, the Python standard library has several
 [other modules](https://docs.python.org/3/library/language.html) which can aid
