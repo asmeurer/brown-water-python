@@ -460,3 +460,57 @@ Decimal('1.000000000000000000000000000000001000000000000000000000000000000000000
 ```
 
 ### Extending Python's syntax
+
+Because `tokenize()` emits [`ERRORTOKEN`](tokens.html#errortoken) on any
+unrecognized operators, it can be used to add extensions to the Python syntax.
+This can be challenging to do in general, as you may need to do significant
+parsing of the tokens to ensure that your new "operator" has the correct
+precedence.
+
+#### Emoji Math
+
+The below example is relatively simple. It allows the "emoji" mathematical
+symbols ➕, ➖, ➗, and ✖ to be used instead of their ASCII counterparts.
+
+```py
+>>> emoji_map = {
+...     '➕': '+',
+...     '➖': '-',
+...     '➗': '/',
+...     '✖': '*',
+... }
+>>> def emoji_math(s):
+...     result = []
+...     for tok in tokenize_string(s):
+...         if tok.type == tokenize.ENCODING:
+...             encoding = tok.string
+...         if tok.type == tokenize.ERRORTOKEN and tok.string in emoji_map:
+...             new_tok = (tokenize.OP, emoji_map[tok.string], *tok[2:])
+...             result.append(new_tok)
+...         else:
+...             result.append(tok)
+...     return tokenize.untokenize(result).decode(encoding)
+...
+>>> emoji_math('1 ➕ 2 ➖ 3➗4✖5')
+'1 + 2 - 3/4*5'
+
+```
+
+Because we are replacing a single character with a single character,
+we can use 5-tuples and keep the column offsets intact, making
+[`untokenize()`](helper-functions.html#untokenize-iterable) maintain
+the whitespace of the input.
+
+
+```eval_rst
+
+.. note::
+
+   These emoji may often appear as two characters, for instance, ✖ may often
+   appear instead as ✖️, which is ✖ (``HEAVY MULTIPLICATION X``) + (``VARIATION
+   SELECTOR-16``). The ``VARIATION SELECTOR-16`` is an invisible character which
+   forces it to render as an emoji. The above example does not include the
+   ``VARIATION SELECTOR-16``. An exercise for the reader is to modify the above
+   function to work with this.
+
+```
