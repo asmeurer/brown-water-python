@@ -337,6 +337,204 @@ behavior.
 
 ### Mismatched parentheses
 
+Here is a more advanced example showing how to use a stack to find any
+mismatched parentheses or braces. The function handles `()`, `[]`, and `{}`
+type braces.
+
+```py
+>>> braces = {
+...     tokenize.LPAR: tokenize.RPAR,
+...     tokenize.LSQB: tokenize.RSQB,
+...     tokenize.LBRACE: tokenize.RBRACE,
+... }
+...
+>>> def matching_parens(s):
+...     """
+...     Find matching and mismatching parentheses and braces
+...
+...     s should be a string of (partial) Python code.
+...
+...     Returns a tuple (matching, mismatching).
+...
+...     matching is a list of tuples of matching TokenInfo objects for matching
+...     parentheses/braces.
+...
+...     mismatching is a list of TokenInfo objects for mismatching
+...     parentheses/braces.
+...     """
+...     stack = []
+...     matching = []
+...     mismatching = []
+...     try:
+...         for tok in tokenize_string(s):
+...             exact_type = tok.exact_type
+...             if exact_type == tokenize.ERRORTOKEN and tok.string[0] in '"\'':
+...                 # There is an unclosed string. If we do not break here,
+...                 # tokenize will tokenize the stuff after the string delimiter.
+...                 break
+...             elif exact_type in braces:
+...                 stack.append(tok)
+...             elif exact_type in braces.values():
+...                 if not stack:
+...                     mismatching.append(tok)
+...                     continue
+...                 prevtok = stack.pop()
+...                 if braces[prevtok.exact_type] == exact_type:
+...                     matching.append((prevtok, tok))
+...                 else:
+...                     mismatching.insert(0, prevtok)
+...                     mismatching.append(tok)
+...             else:
+...                 continue
+...     except tokenize.TokenError:
+...         # Either unclosed brace (what we are trying to handle here), or
+...         # unclosed multi-line string (which we don't care about).
+...         pass
+...
+...     matching.reverse()
+...
+...     # Anything remaining on the stack is mismatching. Keep the mismatching
+...     # list in order.
+...     stack.reverse()
+...     mismatching = stack + mismatching
+...     return matching, mismatching
+
+```
+
+
+```py
+>>> matching, mismatching = matching_parens("('a', {(1, 2)}, ]")
+>>> matching # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+[(TokenInfo(..., string='{', ...), TokenInfo(..., string='}', ...)),
+ (TokenInfo(..., string='(', ...), TokenInfo(..., string=')', ...))]
+>>> mismatching # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+[TokenInfo(..., string='(', ...), TokenInfo(..., string=']', ...)]
+
+```
+
+#### Exercise
+
+Add a flag, `allow_intermediary_mismatches`, which when `True`, allows an
+opening brace to still be considered matching if it is closed with the wrong
+brace but later closed with the correct brace (`False` would give the current
+behavior, that is, once an opening brace is closed with the wrong brace
+it---and any unclosed braces before it---cannot be matched).
+
+For example, consider `'[ { ] }'`. Currently, all the braces are considered
+mismatched.
+
+```py
+>>> matching, mismatching = matching_parens('[ { ] }')
+>>> matching
+[]
+>>> mismatching # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+[TokenInfo(..., string='[', ...),
+ TokenInfo(..., string='{', ...),
+ TokenInfo(..., string=']', ...),
+ TokenInfo(..., string='}', ...)]
+
+```
+
+With `allow_intermediary_mismatches` set to `True`, the `{` and `}` should be
+considered matching.
+
+```py
+>>> matching, mismatching = matching_parens('[ { ] }',
+... allow_intermediary_mismatches=True) # doctest: +SKIP
+>>> matching # doctest: +SKIP
+[(TokenInfo(..., string='{', ...),
+ TokenInfo(..., string='}', ...))]
+>>> mismatching # doctest: +SKIP
+[TokenInfo(..., string='[', ...),
+ TokenInfo(..., string=']', ...)]
+
+```
+
+Furthermore, with `'[ { ] } ]'` only the middle `]` would be considered
+mismatched (with the current version, all would be mismatched).
+
+```py
+>>> matching, mismatching = matching_parens('[ { ] } ]',
+... allow_intermediary_mismatches=True) # doctest: +SKIP
+>>> matching # doctest: +SKIP
+[(TokenInfo(..., string='[', ...), TokenInfo(..., string=']', start=(1, 8), ...)),
+ (TokenInfo(..., string='{', ...), TokenInfo(..., string='}', ...))]
+>>> mismatching # doctest: +SKIP
+[TokenInfo(..., string=']', start=(1, 4), ...)]
+>>> # The current version, which would be allow_intermediary_mismatches=False
+>>> matching, mismatching = matching_parens('[ { ] } ]')
+>>> matching
+[]
+>>> mismatching # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+[TokenInfo(..., string='[', ...),
+ TokenInfo(..., string='{', ...),
+ TokenInfo(..., string=']', ...),
+ TokenInfo(..., string='}', ...),
+ TokenInfo(..., string=']', ...)]
+
+```
+
+The current behavior (`allow_intermediary_mismatches=False`) is a more
+technically correct version, but `allow_intermediary_mismatches=True` would
+provide more useful feedback for applications that might use this function to
+highlight mismatching braces, as it would be more likely to highlight only the
+"mistake" braces.
+
+Since this exercise is relatively difficult, I'm providing the solution. I
+recommend trying to solve it yourself first, as it will really force you to
+understand how the function works.
+
+<details>
+<summary>Click here to show the solution</summary>
+
+No really, do try it yourself first. At least think about it.
+
+<details>
+<summary>I've thought about it. Show the solution</summary>
+
+Replace
+
+```py
+mismatching.insert(0, prevtok)
+mismatching.append(tok)
+```
+
+with
+
+```py
+if allow_intermediary_mismatches:
+    stack.append(prevtok)
+else:
+    mismatching.insert(0, prevtok)
+mismatching.append(tok)
+```
+
+In this code block, `tok` is a closing brace and `prevtok` is the most
+recently found opening brace (`stack.pop()`). Under the current code, we append
+both braces to the `mismatching` list (keeping their order), and we continue
+to do that with `allow_intermediary_mismatches=False`. However, if
+`allow_intermediary_mismatches=True`, we instead put the `prevtok` back on the
+stack, and still put the `tok` in the `mismatching` list. This allows
+`prevtok` to still be matched by a closing brace later.
+
+For example, suppose we have `( } )`. We first append `(` to the stack, so the
+stack is `['(']`. Then when we get to `}`. We pop `(` from the stack, and see
+that it doesn't match. If `allow_intermediary_mismatches=False`, we consider
+these both to be mismatched, and add them to the `mismatched` list in the
+correct order (`['(', '}']`). If `allow_intermediary_mismatches=True`, though,
+we only add `'}'` to the mismatched list (`['}']`), and put `(` back on the
+stack.
+
+Then we get to `)`. In the `allow_intermediary_mismatches=False` case, the
+stack will be empty, so it will not be considered matching, and thus be placed
+in the `mismatching` list (the `if not stack:` block prior to the code we
+modified). In the `allow_intermediary_mismatches=True` case, the stack is
+`['(']`, so `prevtok` will be `(`, which matches the `)`, so they are both put in the `matching` list.
+
+</details>
+</details>
+
+
 ## Modifying tokens
 
 These examples show some ways that you can modify the token stream.
