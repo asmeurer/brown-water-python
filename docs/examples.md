@@ -332,3 +332,78 @@ behavior.
 3
 
 ```
+
+### Indentation counter
+
+### Mismatched parentheses
+
+## Modifying tokens
+
+These examples show some ways that you can modify the token stream.
+
+The general pattern we will apply here is to get the token stream from
+`tokenize()`, modify it in some way, and convert it back to a bytes string
+with [`untokenize()`](helper-functions.html#untokenize-iterable).
+
+When new tokens are added, `untokenize()` does not maintain whitespace between
+tokens in a human-readable way. Doing this is possible, by keeping track of
+column offsets, but we will not bother with it here. See the discussion in the
+[`untokenize()`](helper-functions.html#untokenize-iterable) section.
+
+### Wrapping floats with `decimal.Decimal`
+
+This example is modified from the [example in the standard library
+docs](https://docs.python.org/3/library/tokenize.html#examples) for
+`tokenize`. It is a good example for modifying tokens because the logic is not
+too complex, and it is something that is not possible to do with other tools
+such as the `ast` module, because `ast` does not keep the full precision of
+floats as they are in the input.
+
+```py
+>>> def float_to_decimal(s):
+...     result = []
+...     for tok in tokenize_string(s):
+...         if tok.type == tokenize.ENCODING:
+...             encoding = tok.string
+...         # A float is a NUMBER token with a . or e (scientific notation)
+...         if tok.type == tokenize.NUMBER and '.' in tok.string or 'e' in tok.string.lower():
+...             result.extend([
+...                 (tokenize.NAME, 'Decimal'),
+...                 (tokenize.OP, '('),
+...                 (tokenize.STRING, repr(tok.string)),
+...                 (tokenize.OP, ')')
+...             ])
+...         else:
+...             result.append(tok)
+...     return tokenize.untokenize(result).decode(encoding)
+
+```
+
+This works like this
+
+```py
+>>> 1e-1000 + 1.000000000000000000000000000000001
+1.0
+>>> float_to_decimal('1e-1000 + 1.000000000000000000000000000000001')
+"Decimal ('1e-1000')+Decimal ('1.000000000000000000000000000000001')"
+
+```
+
+Notice that because new tokens were added as length 2 tuples, the whitespace
+of the result is not the same as the input, and does not really follow [PEP
+8](https://www.python.org/dev/peps/pep-0008/).
+
+The transformed code can produce arbitrary precision decimals. Note that the
+`decimal` module still requires setting the context precision high enough to
+avoid rounding the input. An exercise for the reader is to extend
+`float_to_decimal` to determine the required precision automatically.
+
+```py
+>>> from decimal import Decimal, getcontext
+>>> getcontext().prec = 1001
+>>> eval(float_to_decimal('1e-1000 + 1.000000000000000000000000000000001'))
+Decimal('1.0000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001')
+
+```
+
+### Extending Python's syntax

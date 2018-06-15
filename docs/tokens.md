@@ -213,8 +213,7 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 This can be used, for instance, to wrap floating point numbers with a type
 that supports arbitrary precision, such as
 [`decimal.Decimal`]((https://docs.python.org/3/library/decimal.html)). See the
-[example](https://docs.python.org/3/library/tokenize.html#examples) in the
-official `tokenize` documentation.
+[examples](examples.html#wrapping-floats-with-decimal-decimal).
 
 In Python >=3.6, numeric literals can have [underscore
 separators](https://docs.python.org/3/whatsnew/3.6.html#whatsnew36-pep515),
