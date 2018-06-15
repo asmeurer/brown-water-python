@@ -333,7 +333,7 @@ behavior.
 
 ```
 
-### Indentation counter
+### Indentation level
 
 [`INDENT`](tokens.html#indent) and [`DEDENT`](tokens.html#dedent) tokens are
 always balanced in the token stream (unless there is an

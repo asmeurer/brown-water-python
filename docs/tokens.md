@@ -604,7 +604,7 @@ IndentationError: unindent does not match any outer indentation level
 
 The level of indentation at a particular point in the token stream can be
 determined by incrementing and decrementing a counter for each `INDENT` and
-`DEDENT` token. See the [examples](examples.html#indentation-counter).
+`DEDENT` token. See the [examples](examples.html#indentation-level).
 
 
 
