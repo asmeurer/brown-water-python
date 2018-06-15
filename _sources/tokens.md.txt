@@ -814,8 +814,9 @@ The `ERRORTOKEN` type is used for any character that isn't recognized. Inputs
 that tokenize `ERRORTOKEN`s cannot be valid Python, but this token type is
 used so that applications that process tokens can do error recovery, as the
 remainder of the input stream is tokenized normally. It can also be used to
-process extensions to Python syntax (see the [examples](examples.html)). Every
-unrecognized character is tokenized separately.
+process extensions to Python syntax (see the
+[examples](examples.html#extending-python-s-syntax)). Every unrecognized
+character is tokenized separately.
 
 ```py
 >>> print_tokens("1!!")
@@ -995,8 +996,9 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
 The `ENCODING` token is not typically used when processing tokens, although
-its guaranteed presence as the first token can be useful when handling tokens
-in a rolling window (see the [examples](examples.html)).
+its guaranteed presence as the first token can be useful when processing tokens
+as it will guarantee that every other token type will have some previous token
+from the stream (see the [examples](examples.html#backporting-underscores-in-numeric-literals)).
 
 Strictly speaking, the `string` of every token in a token stream should be
 decodable by the encoding of the `ENCODING` token (e.g., if the encoding is

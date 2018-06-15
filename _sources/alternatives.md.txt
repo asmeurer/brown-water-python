@@ -127,8 +127,8 @@ accept.
 
 It should also be noted that the above function is not fully correct, as it
 does not properly handle [`ERRORTOKEN`](tokens.html#errortoken)s or
-[exceptions](usage.html#exceptions). We will see [later](examples.html#line)
-how to fix it.
+[exceptions](usage.html#exceptions). We will see
+[later](examples.html#line-numbers) how to fix it.
 
 ## AST
 

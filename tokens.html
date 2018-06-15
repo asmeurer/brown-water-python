@@ -944,8 +944,9 @@ and <code class="docutils literal notranslate"><span class="pre">async</span></c
 that tokenize <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>s cannot be valid Python, but this token type is
 used so that applications that process tokens can do error recovery, as the
 remainder of the input stream is tokenized normally. It can also be used to
-process extensions to Python syntax (see the <a class="reference external" href="examples.html">examples</a>). Every
-unrecognized character is tokenized separately.</p>
+process extensions to Python syntax (see the
+<a class="reference external" href="examples.html#extending-python-s-syntax">examples</a>). Every unrecognized
+character is tokenized separately.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;1!!&quot;</span><span class="p">)</span>
 <span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 0), end=(1, 1), line=&#39;1!!&#39;)</span>
@@ -1106,8 +1107,9 @@ only need the encoding to pass to <code class="docutils literal notranslate"><sp
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> token is not typically used when processing tokens, although
-its guaranteed presence as the first token can be useful when handling tokens
-in a rolling window (see the <a class="reference external" href="examples.html">examples</a>).</p>
+its guaranteed presence as the first token can be useful when processing tokens
+as it will guarantee that every other token type will have some previous token
+from the stream (see the <a class="reference external" href="examples.html#backporting-underscores-in-numeric-literals">examples</a>).</p>
 <p>Strictly speaking, the <code class="docutils literal notranslate"><span class="pre">string</span></code> of every token in a token stream should be
 decodable by the encoding of the <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> token (e.g., if the encoding is
 <code class="docutils literal notranslate"><span class="pre">ascii</span></code>, the tokens cannot include any non-ASCII characters).</p>
