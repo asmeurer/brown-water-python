@@ -90,7 +90,7 @@ a piece of (incomplete) Python code has any mismatched parentheses or braces.
 In this case, you definitely don't want to do a naive matching of parentheses
 in the source as a whole, as a single "mismatched" parenthesis in a string
 could confuse the entire engine, even if the source as Python is itself valid.
-We will see this example in more detail [later](examples.html).
+We will see this example in more detail [later](examples.html#mismatched-parentheses).
 
 ## Tokenize
 
