@@ -447,10 +447,11 @@ once per block of indented text, not once per line.
 
 The `DEDENT` token type represents a dedentation. Every `INDENT` token is
 matched by a corresponding `DEDENT` token. The `string` attribute of `DEDENT`
-is always `''`.
+is always `''`. The `start` and `end` positions of a `DEDENT` token are the
+first position in the line after the indentation (even if there are multiple
+consecutive `DEDENT`s).
 
-Consider the following
-pseudo-example:
+Consider the following pseudo-example:
 
 ```py
 >>> print_tokens("""
@@ -603,7 +604,7 @@ IndentationError: unindent does not match any outer indentation level
 
 The level of indentation at a particular point in the token stream can be
 determined by incrementing and decrementing a counter for each `INDENT` and
-`DEDENT` token. See the [examples](examples.html).
+`DEDENT` token. See the [examples](examples.html#indentation-counter).
 
 
 

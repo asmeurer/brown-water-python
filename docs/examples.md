@@ -335,6 +335,79 @@ behavior.
 
 ### Indentation counter
 
+[`INDENT`](tokens.html#indent) and [`DEDENT`](tokens.html#dedent) tokens are
+always balanced in the token stream (unless there is an
+[`IndentationError`](usage.html#indentationerror)), so it is easy to detect the
+indentation level of a block of code by incrementing and decrementing a
+counter.
+
+```py
+>>> def indentation_level(s, row, col):
+...     """
+...     Returns the indentation level of the code at (row, col)
+...     """
+...     level = 0
+...     try:
+...         for tok in tokenize_string(s):
+...             if tok.start >= (row, col):
+...                 return level
+...             if tok.type == tokenize.INDENT:
+...                 level += 1
+...             if tok.type == tokenize.DEDENT:
+...                 level -= 1
+...     except tokenize.TokenError:
+...         # Ignore TokenError (we don't care about incomplete code)
+...         pass
+...     return level
+
+```
+
+To demonstrate the function, let's apply it to itself.
+
+```py
+>>> indentation_level_source = '''\
+... def indentation_level(s, row, col):
+...     """
+...     Returns the indentation level of the code at (row, col)
+...     """
+...     level = 0
+...     try:
+...         for tok in tokenize_string(s):
+...             if tok.start >= (row, col):
+...                 return level
+...             if tok.type == tokenize.INDENT:
+...                 level += 1
+...             if tok.type == tokenize.DEDENT:
+...                 level -= 1
+...     except tokenize.TokenError:
+...         # Ignore TokenError (we don't care about incomplete code)
+...         pass
+...     return level
+... '''
+>>> for i in range(1, indentation_level_source.count('\n') + 2):
+...     print(indentation_level(indentation_level_source, i, 30))
+0
+1
+1
+1
+1
+1
+2
+3
+4
+3
+4
+3
+4
+1
+1
+2
+1
+0
+
+```
+
+
 ### Mismatched parentheses
 
 
