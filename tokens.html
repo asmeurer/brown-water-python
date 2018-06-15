@@ -609,9 +609,9 @@ determined by incrementing and decrementing a counter for each <code class="docu
 <a class="reference external" href="https://bugs.python.org/issue24622">bug</a> present in Python versions prior to
 3.7, the <code class="docutils literal notranslate"><span class="pre">exact_type</span></code> attribute of these tokens will be <code class="docutils literal notranslate"><span class="pre">OP</span></code> instead of the
 correct type.</p>
-<!-- TODO: Skip when we doctest against 3.7 --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Python 3.5 and 3.6 behavior</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Python 3.5 and 3.6 behavior</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;def func() -&gt; list: ...&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">type</span><span class="p">],</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">exact_type</span><span class="p">],</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">string</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">type</span><span class="p">],</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tok_name</span><span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">exact_type</span><span class="p">],</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">string</span><span class="p">))</span> 
 <span class="go">ENCODING ENCODING &#39;utf-8&#39;</span>
 <span class="go">NAME NAME &#39;def&#39;</span>
 <span class="go">NAME NAME &#39;func&#39;</span>
@@ -870,7 +870,7 @@ and <code class="docutils literal notranslate"><span class="pre">async</span></c
 <span class="gp">... </span><span class="s2">    async with lock:</span>
 <span class="gp">... </span><span class="s2">        await f()</span>
 <span class="gp">... </span><span class="s2">await = 1</span>
-<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span> 
 <span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=55 (ASYNC), string=&#39;async&#39;, start=(2, 0), end=(2, 5), line=&#39;async def coro():\n&#39;)</span>

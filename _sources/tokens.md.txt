@@ -297,7 +297,7 @@ f-strings (Python 3.6+) are parsed as a single `STRING` token.
 
 ```py
 >>> # Python 3.6+ only.
->>> print_tokens('f"{a + b}"') # doctest: +SKIP
+>>> print_tokens('f"{a + b}"') # doctest: +SKIP35
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string='f"{a + b}"', start=(1, 0), end=(1, 10), line='f"{a + b}"')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
@@ -311,7 +311,7 @@ The `string.Format.parse()` function can be used to parse format strings
 >>> a = 1
 >>> b = 2
 >>> # f-strings are Python 3.6+ only
->>> f'a + b is {a + b!r}' # doctest: +SKIP
+>>> f'a + b is {a + b!r}' # doctest: +SKIP35
 'a + b is 3'
 >>> import string
 >>> list(string.Formatter().parse('a + b is {a + b!r}'))
@@ -619,12 +619,11 @@ The `RARROW` and `ELLIPSIS` tokens tokenize as [`OP`](#op). However, due to a
 3.7, the `exact_type` attribute of these tokens will be `OP` instead of the
 correct type.
 
-<!-- TODO: Skip when we doctest against 3.7 -->
 
 ```py
 >>> # Python 3.5 and 3.6 behavior
 >>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...').readline):
-...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string))
+...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP37
 ENCODING ENCODING 'utf-8'
 NAME NAME 'def'
 NAME NAME 'func'
@@ -643,7 +642,7 @@ This bug has been fixed in Python 3.7.
 ```py
 >>> # Python 3.7+ behavior
 >>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...').readline):
-...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP
+...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP35, +SKIP36
 ENCODING ENCODING 'utf-8'
 NAME NAME 'def'
 NAME NAME 'func'
@@ -737,7 +736,7 @@ and `async` are tokenized as `NAME`, as in the example above.
 ...     async with lock:
 ...         await f()
 ... await = 1
-... """)
+... """) # doctest: +SKIP37
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=55 (ASYNC), string='async', start=(2, 0), end=(2, 5), line='async def coro():\n')
@@ -780,7 +779,7 @@ In Python 3.7, `async` and `await` are proper keywords, and are tokenized as
 ... async def coro():
 ...     async with lock:
 ...         await f()
-... """) # doctest: +SKIP
+... """) # doctest: +SKIP35, +SKIP36
 TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=1 (NAME), string='async', start=(2, 0), end=(2, 5), line='async def coro():\n')
@@ -1024,7 +1023,7 @@ different than in 3.5 and 3.6.
 
 ```py
 >>> # In Python 3.7
->>> tokenize.N_TOKENS # doctest: +SKIP
+>>> tokenize.N_TOKENS # doctest: +SKIP35, +SKIP36
 58
 
 ```

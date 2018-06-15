@@ -846,7 +846,7 @@ For example,
 
 ```py
 >>> # Python 3.6+ only
->>> 123_456 # doctest: +SKIP
+>>> 123_456 # doctest: +SKIP35
 123456
 
 ```
@@ -936,7 +936,11 @@ column values are correct).
 
 ```py
 >>> s = '1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.'
->>> underscore_literals(s) # doctest: +SKIP
+>>> # In Python 3.5
+>>> underscore_literals(s) # doctest: +SKIP36, +SKIP37
 '10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.'
+>>> # In Python 3.6+
+>>> underscore_literals(s) # doctest: +SKIP35
+'1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.'
 
 ```

@@ -873,8 +873,12 @@ absolute values (remember that
 <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples to be nondecreasing; it doesn’t care if the actual
 column values are correct).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">underscore_literals</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> 
 <span class="go">&#39;10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.6+</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">underscore_literals</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> 
+<span class="go">&#39;1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.&#39;</span>
 
 </pre></div>
 </div>
