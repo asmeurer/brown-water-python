@@ -337,9 +337,50 @@ behavior.
 
 ### Mismatched parentheses
 
-Here is a more advanced example showing how to use a stack to find any
-mismatched parentheses or braces. The function handles `()`, `[]`, and `{}`
-type braces.
+
+This example shows how to use a very important tool when processing tokens, a
+stack. A [*stack*](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
+is a data structure that operates as First In, Last Out. A stack has two basic
+operations, *push*, which adds something to the stack, and *pop*, which
+removes the most recently added item.
+
+In Python, a stack is usually implemented using a list. The push method is
+`list.append` and the pop method is `list.pop`.
+
+```py
+>>> stack = []
+>>> stack.append(1)
+>>> stack.append(2)
+>>> stack.pop()
+2
+>>> stack.append(3)
+>>> stack.pop()
+3
+>>> stack.pop()
+1
+
+```
+
+Stacks are important because they allow keeping track of nested structures.
+Going down one level of nesting can be represented by pushing something on the
+stack, and going up can be represented by popping. The stack allows keeping
+track of the opening of the nested structure to ensure it properly matches the
+closing.
+
+In particular, for a set of parentheses, such as `(((())())())`, a stack can
+be used to check if they are properly balanced. Every time we encounter an
+opening parenthesis, we push it on the stack, and every time we encounter a
+closing parenthesis, we pop the stack. If the stack is empty when we try to
+pop it, or if it still has items when we finish processing all the
+parentheses, it means they are not balanced. Otherwise, they are. In this
+case, we could simply use a counter like we did for the previous example, and
+make sure it doesn't go negative and ends at 0, but a stack is required to
+handle more than one type of brace, like `(())([])[]`, which of course is the
+case in Python.
+
+Here is an example showing how to use a stack to find all the mismatched
+parentheses or braces in a piece of Python code. The function handles `()`,
+`[]`, and `{}` type braces.
 
 ```py
 >>> braces = {
