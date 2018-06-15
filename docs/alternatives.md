@@ -90,7 +90,7 @@ a piece of (incomplete) Python code has any mismatched parentheses or braces.
 In this case, you definitely don't want to do a naive matching of parentheses
 in the source as a whole, as a single "mismatched" parenthesis in a string
 could confuse the entire engine, even if the source as Python is itself valid.
-We will see this example in more detail [later](examples.html#line-numbers).
+We will see this example in more detail [later](examples.html).
 
 ## Tokenize
 
@@ -127,8 +127,8 @@ accept.
 
 It should also be noted that the above function is not fully correct, as it
 does not properly handle [`ERRORTOKEN`](tokens.html#errortoken)s or
-[exceptions](usage.html#exceptions). We will see [later](examples.html) how to
-fix it.
+[exceptions](usage.html#exceptions). We will see [later](examples.html#line)
+how to fix it.
 
 ## AST
 
