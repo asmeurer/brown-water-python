@@ -173,7 +173,7 @@ discouraged.</p>
 <div class="section" id="number">
 <span id="number"></span><h3><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code><a class="headerlink" href="#number" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> token type is used for any numeric literal, including (decimal) integer literals,
-binary, octal, and hexidecimal integer literals, floating point numbers
+binary, octal, and hexadecimal integer literals, floating point numbers
 (including scientific notation), and imaginary number literals (like <code class="docutils literal notranslate"><span class="pre">1j</span></code>).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j&#39;</span><span class="p">)</span>
 <span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
@@ -265,6 +265,8 @@ like <code class="docutils literal notranslate"><span class="pre">123_456</span>
 
 </pre></div>
 </div>
+<p>In the <a class="reference external" href="examples.html#backporting-underscores-in-numeric-literals">examples</a>
+we will see how to use <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to backport this feature to Python 3.5.</p>
 </div>
 <div class="section" id="string">
 <span id="string"></span><h3><code class="docutils literal notranslate"><span class="pre">STRING</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
@@ -1258,6 +1260,7 @@ different than in 3.5 and 3.6.</p>
 <li class="toctree-l3"><a class="reference internal" href="examples.html#wrapping-floats-with-decimal-decimal">Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples.html#extending-python-s-syntax">Extending Python’s Syntax</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples.html#emoji-math">Emoji Math</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#backporting-underscores-in-numeric-literals">Backporting Underscores in Numeric Literals</a></li>
 </ul>
 </li>
 </ul>

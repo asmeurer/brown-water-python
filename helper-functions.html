@@ -67,7 +67,8 @@ instead of <code class="docutils literal notranslate"><span class="pre">bytes</s
 same tokens.</p>
 <p>If full <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> tuples are given with correct <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>
 information (iterable of 5-tuples), this function also round-trips in the
-other direction. However, be aware that the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples must be
+other direction, for the most part (it assumes space characters between
+tokens). However, be aware that the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples must be
 nondecreasing. If the <code class="docutils literal notranslate"><span class="pre">start</span></code> of one token is before the <code class="docutils literal notranslate"><span class="pre">end</span></code> of the previous
 token, it raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Therefore, if you want to modify tokens and use
 <code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> to convert back to a string, using full 5-tuples, you must keep
@@ -464,6 +465,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 <li class="toctree-l3"><a class="reference internal" href="examples.html#wrapping-floats-with-decimal-decimal">Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples.html#extending-python-s-syntax">Extending Python’s Syntax</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples.html#emoji-math">Emoji Math</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#backporting-underscores-in-numeric-literals">Backporting Underscores in Numeric Literals</a></li>
 </ul>
 </li>
 </ul>
