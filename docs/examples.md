@@ -779,6 +779,13 @@ This can be challenging to do in general, as you may need to do significant
 parsing of the tokens to ensure that your new "operator" has the correct
 precedence.
 
+You can find some more advanced examples of extending Python's syntax in
+SymPy's [parser
+module](https://github.com/sympy/sympy/blob/master/sympy/parsing/sympy_parser.py),
+for example, functions to allow implicit multiplication (`x y` -> `x*y`),
+implicit function application (`sin x` -> `sin(x)`), factorial notation (`x!`
+-> `factorial(x)`), and more.
+
 #### Emoji Math
 
 The below example is relatively simple. It allows the "emoji" mathematical
