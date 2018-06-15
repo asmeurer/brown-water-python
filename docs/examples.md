@@ -833,3 +833,110 @@ the whitespace of the input.
    function to work with this.
 
 ```
+
+#### Backporting Underscores in Numeric Literals
+
+Python 3.6 added a new syntactic feature that allows [underscores in numeric
+literals](https://docs.python.org/3/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals).
+To quote the docs, "single underscores are allowed between digits and after
+any base specifier. Leading, trailing, or multiple underscores in a row are
+not allowed."
+
+For example,
+
+```py
+>>> # Python 3.6+ only
+>>> 123_456 # doctest: +SKIP
+123456
+
+```
+
+We can write a function using `tokenize` to backport this feature to Python
+3.5. As noted in the [`NUMBER`](tokens.html#number) section, in Python 3.5,
+`123_456` tokenizes as `NUMBER` (`123`) and `NAME` (`_456`). In general,
+multiple underscores between tokens will tokenize like this. Additionally,
+underscores are allowed after base specifiers, like `0x_1`. This also
+tokenizes as `NUMBER` (`0`) and `NAME` (`x_1`). Since `NUMBER` and `NAME`
+tokens cannot appear next to one another in valid Python, we can simply
+combine them when they do. Finally, if an underscore appears before the `.` in
+a floating point literal, like `1_2.3_4` it will tokenize `NUMBER` (`1`),
+`NAME` (`_2`), `NUMBER` (`.3`), `NAME` (`_4`).
+
+Note that in this example, the `ENCODING` token allows us to access
+`result[-1]` unconditionally, as we know there must always be at least this
+token already processed before any `NAME` token.
+
+We do some basic checks here to not allow spaces before underscores, which is also
+not allowed in Python 3.6. But for simplicity this function takes a garbage
+in, garbage out approach. Invalid syntax in Python 3.6, like `123a_bc` will transform to
+something that is still invalid syntax in Python 3.5 (`123abc`).
+
+```py
+>>> import sys
+>>> def underscore_literals(s):
+...     if sys.version_info >= (3, 6):
+...         return s
+...
+...     result = []
+...     for tok in tokenize_string(s):
+...         if tok.type == tokenize.ENCODING:
+...             encoding = tok.string
+...         if tok.type == tokenize.NAME and result[-1].type == tokenize.NUMBER:
+...             # Check that there are no spaces between the tokens
+...             # e.g., 123 _456 is not allowed
+...             if result[-1].end == tok.start:
+...                 new_tok = tokenize.TokenInfo(
+...                     tokenize.NUMBER,
+...                     result[-1].string + tok.string.replace('_', ''),
+...                     result[-1].start,
+...                     tok.end,
+...                     tok.line,
+...                     )
+...                 result[-1] = new_tok
+...                 continue
+...         if tok.type == tokenize.NUMBER and tok.string[0] == '.' and result[-1].type == tokenize.NUMBER:
+...             # Float with underscore before the ., like 1_2.0, which is 1, _2, .0
+...             if result[-1].end == tok.start:
+...                 new_tok = tokenize.TokenInfo(
+...                     tokenize.NUMBER,
+...                     result[-1].string + tok.string,
+...                     result[-1].start,
+...                     tok.end,
+...                     tok.line,
+...                 )
+...                 result[-1] = new_tok
+...                 continue
+...         if tok.exact_type == tokenize.DOT and result[-1].type == tokenize.NUMBER:
+...             # Like 1_2. which becomes 1, _2, .
+...             if result[-1].end == tok.start:
+...                 new_tok = tokenize.TokenInfo(
+...                     tokenize.NUMBER,
+...                     result[-1].string + tok.string,
+...                     result[-1].start,
+...                     tok.end,
+...                     tok.line,
+...                 )
+...                 result[-1] = new_tok
+...                 continue
+...
+...         result.append(tok)
+...     return tokenize.untokenize(result).decode(encoding)
+...
+
+```
+
+Note that by reusing the `start` and `end` tokens, we are able to make
+untokenize keep the whitespace, even though characters were removed,
+[`untokenize()`](helper-functions.html#untokenize-iterable) only uses the
+differences between `end` and `start` to determine how many spaces, not their
+absolute values (remember that
+[`untokenize()`](helper-functions.html#untokenize-iterable) only requires the
+`start` and `end` tuples to be nondecreasing; it doesn't care if the actual
+column values are correct).
+
+```py
+>>> s = '1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.'
+>>> underscore_literals(s) # doctest: +SKIP
+'10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.'
+
+```

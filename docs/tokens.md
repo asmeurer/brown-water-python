@@ -136,7 +136,7 @@ True
 ### `NUMBER`
 
 The `NUMBER` token type is used for any numeric literal, including (decimal) integer literals,
-binary, octal, and hexidecimal integer literals, floating point numbers
+binary, octal, and hexadecimal integer literals, floating point numbers
 (including scientific notation), and imaginary number literals (like `1j`).
 
 ```py
@@ -240,6 +240,9 @@ In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME`
     TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 
 ```
+
+In the [examples](examples.html#backporting-underscores-in-numeric-literals)
+we will see how to use `tokenize` to backport this feature to Python 3.5.
 
 ### `STRING`
 

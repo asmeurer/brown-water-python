@@ -18,7 +18,8 @@ same tokens.
 
 If full `TokenInfo` tuples are given with correct `start` and `end`
 information (iterable of 5-tuples), this function also round-trips in the
-other direction. However, be aware that the `start` and `end` tuples must be
+other direction, for the most part (it assumes space characters between
+tokens). However, be aware that the `start` and `end` tuples must be
 nondecreasing. If the `start` of one token is before the `end` of the previous
 token, it raises `ValueError`. Therefore, if you want to modify tokens and use
 `untokenize()` to convert back to a string, using full 5-tuples, you must keep
