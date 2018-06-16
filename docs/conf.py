@@ -107,8 +107,10 @@ html_theme_options = {
 
     # cosmic latte
     'base_bg': '#FFF8E7',
+    'narrow_sidebar_bg': '#FFF8E7',
     # dark. kobicha
     'gray_1': '#6B4423',
+    'narrow_sidebar_link': '#6B4423',
     # light. beige
     'gray_2': '#F5F5DC',
     # medium. tan
@@ -124,9 +126,6 @@ html_theme_options = {
     'code_font_size': '0.8em',
     }
 
-html_sidebars = {
-    '**': ['globaltocindex.html', 'searchbox.html'],
-}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -140,8 +139,10 @@ html_static_path = ['_static']
 # defined by theme itself.  Builtin themes are using these templates by
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
-#
-# html_sidebars = {}
+
+html_sidebars = {
+    '**': ['globaltocindex.html', 'searchbox.html'],
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
