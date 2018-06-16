@@ -119,6 +119,9 @@ html_theme_options = {
     # Remove gray background from inline code
     'code_bg': '#F5F5DC',
 
+    # Originally 940px
+    'page_width': '1000px',
+
     # Fonts
     'font_family': "Palatino, 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif",
     'font_size': '18px',
