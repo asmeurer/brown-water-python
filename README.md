@@ -1,4 +1,4 @@
-<img src="docs/_static/water-python.jpg" alt="logo" width="1898">
+<a href="https://www.asmeurer.com/brown-water-python/"><img src="docs/_static/water-python.jpg" alt="logo" width="50%"></a>
 
 Brown Water Python: Better Docs for the Python `tokenize` Module.
 =================================================================
