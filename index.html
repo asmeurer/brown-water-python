@@ -53,13 +53,6 @@ its <a class="reference external" href="https://docs.python.org/3/library/tokeni
 somewhat limited. In the spirit of Thomas Kluyver’s <a class="reference external" href="https://greentreesnakes.readthedocs.io/">Green Tree Snakes</a> project, which provides similar
 extended documentation for the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module, I am providing here some
 extended documentation for effectively working with the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This document is currently a work in progress. I plan to add more, but any
-feedback on what I already have or what you’d like to see is welcome. Feel
-free to <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">open an issue</a> or <a class="reference external" href="https://github.com/asmeurer/brown-water-python/pulls">pull request</a> about anything
-(questions, comments on what you’d like to see, corrections, etc.).</p>
-</div>
 <div class="section" id="python-versions-supported">
 <h2>Python Versions Supported<a class="headerlink" href="#python-versions-supported" title="Permalink to this headline">¶</a></h2>
 <p>The contents of this guide apply to Python 3.5 and up. Several minor changes
@@ -100,6 +93,16 @@ a <code class="docutils literal notranslate"><span class="pre">namedtuple</span>
 members. Instead use something like “<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">toknum,</span> <span class="pre">tokval,</span> <span class="pre">start,</span> <span class="pre">end,</span> <span class="pre">line</span> <span class="pre">in</span>
 <span class="pre">tokenize.generate_tokens(...):</span></code>” (this pattern can be used in Python 3 as
 well, see the <a class="reference external" href="usage.html#calling-syntax">Usage</a> section).</p>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/asmeurer/brown-water-python">Contributions</a> are welcome.
+So are <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">questions</a>.
+My goal here is to help people to understand the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module, so if
+something is not clear, <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">please let me know</a>. If you see
+something written here that is wrong, please make a <a class="reference external" href="https://github.com/asmeurer/brown-water-python/pulls">pull request</a> correcting it. I’m
+not an expert at <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. I mainly know what is written here from trial
+and error and from reading the <a class="reference external" href="https://github.com/python/cpython/blob/master/Lib/tokenize.py">source code</a>.</p>
 </div>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
