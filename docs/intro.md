@@ -24,7 +24,6 @@ TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line='("a") + True
 TokenInfo(type=1 (NAME), string='True', start=(1, 8), end=(1, 12), line='("a") + True -')
 TokenInfo(type=53 (OP), string='-', start=(1, 13), end=(1, 14), line='("a") + True -')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 The string is split into the following tokens: `(`, `"a"`, `)`, `+`, `True`, and
@@ -76,7 +75,6 @@ I chose this example to demonstrate a few things:
     Traceback (most recent call last):
     ...
     tokenize.TokenError: ('EOF in multi-line statement', (2, 0))
-
     ```
 
     One of the goals of this guide is to quantify exactly when these error
@@ -127,7 +125,6 @@ I chose this example to demonstrate a few things:
     TokenInfo(type=56 (ERRORTOKEN), string='$', start=(1, 1), end=(1, 2), line='a$b')
     TokenInfo(type=1 (NAME), string='b', start=(1, 2), end=(1, 3), line='a$b')
     TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
     ```
 
     This can be useful for dealing with code that has minor typos that makes

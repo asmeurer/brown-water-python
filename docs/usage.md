@@ -56,7 +56,6 @@ TokenInfo(type=2 (NUMBER), string='1', start=(4, 15), end=(4, 16), line='    ret
 TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 16), end=(4, 17), line='    return 1 + 1\n')
 TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
 TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
-
 ```
 
 To tokenize a string, you must encode it into a `bytes`, create an
@@ -76,7 +75,6 @@ TokenInfo(type=1 (NAME), string='hello', start=(1, 0), end=(1, 5), line='hello +
 TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line='hello + tokenize')
 TokenInfo(type=1 (NAME), string='tokenize', start=(1, 8), end=(1, 16), line='hello + tokenize')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 The reason for this API is that `tokenize()` is a streaming API, which works
@@ -103,7 +101,6 @@ toknum: 1 tokval: 'hello' start: (1, 0) end: (1, 5) line: 'hello + tokenize'
 toknum: 53 tokval: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize'
 toknum: 1 tokval: 'tokenize' start: (1, 8) end: (1, 16) line: 'hello + tokenize'
 toknum: 0 tokval: '' start: (2, 0) end: (2, 0) line: ''
-
 ```
 
 By tradition, unused values are often replaced by `_`. You can also unpack the
@@ -117,7 +114,6 @@ By tradition, unused values are often replaced by `_`. You can also unpack the
 '+' on lines 1 to 1 on columns 6 to 7
 'tokenize' on lines 1 to 1 on columns 8 to 16
 '' on lines 2 to 2 on columns 0 to 0
-
 ```
 
 The other is to use it as-is, and access the members via attributes. I like
@@ -134,7 +130,6 @@ type: 1 string: 'hello' start: (1, 0) end: (1, 5) line: 'hello + tokenize'
 type: 53 string: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize'
 type: 1 string: 'tokenize' start: (1, 8) end: (1, 16) line: 'hello + tokenize'
 type: 0 string: '' start: (2, 0) end: (2, 0) line: ''
-
 ```
 
 The advantage of this second way is that the `TokenInfo` object contains an
@@ -222,7 +217,6 @@ character. If both are present, or if the PEP 263 encoding is invalid,
 Traceback (most recent call last):
   ...
 SyntaxError: unknown encoding: invalid
-
 ```
 
 See also [`ENCODING`](tokens.html#encoding).
@@ -355,7 +349,6 @@ TokenInfo(type=58 (NL), string='\n', start=(3, 8), end=(3, 9), line='def f():\n'
 TokenInfo(type=1 (NAME), string='pass', start=(4, 4), end=(4, 8), line='    pass\n')
 TokenInfo(type=58 (NL), string='\n', start=(4, 8), end=(4, 9), line='    pass\n')
 TokenError: Unclosed brace(s)
-
 ```
 
 ### `IndentationError`
@@ -385,7 +378,6 @@ Traceback (most recent call last):
     f
     ^
 IndentationError: unindent does not match any outer indentation level
-
 
 ```
 
@@ -433,5 +425,4 @@ Traceback (most recent call last):
     pass
        ^
 TabError: inconsistent use of tabs and spaces in indentation
-
 ```

@@ -17,7 +17,6 @@ To simplify the examples, the following helper function is used.
 ...     Generator of tokens from the string s
 ...     """
 ...     return tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline)
-
 ```
 
 ## Processing Tokens
@@ -55,7 +54,6 @@ character (like `r` or `f`) of the string.
 ...         return 'string' in e.args[0]
 ...
 ...     return False
-
 ```
 
 Let's walk through the code.
@@ -192,7 +190,6 @@ False
 ...     return 'hello %s' % name
 ... """, 3, 12) # 'h' in 'hello'
 True
-
 ```
 
 #### Exercises
@@ -226,7 +223,6 @@ function](alternatives.html#tokenize) looked like this (rewritten to use our
 ...     for tok in tokenize_string(s):
 ...         if tok.type == tokenize.NAME and tok.string == 'def':
 ...             print(tok.start[0])
-
 ```
 
 As we noted, this function works, but it doesn't handle any of our
@@ -250,7 +246,6 @@ inside the unclosed multi-line string, so we can safely ignore
 ...                 print(tok.start[0])
 ...     except tokenize.TokenError:
 ...         pass
-
 ```
 
 Finally, let's consider [`ERRORTOKEN`](tokens.html#errortoken) due to unclosed
@@ -279,7 +274,6 @@ closed at the end of the line.
 ...                 print(tok.start[0])
 ...     except tokenize.TokenError:
 ...         pass
-
 ```
 
 Here are our original test cases, plus some additional ones for our added
@@ -326,7 +320,6 @@ behavior.
 >>> line_numbers(code)
 1
 3
-
 ```
 
 ### Indentation Level
@@ -355,7 +348,6 @@ counter.
 ...         # Ignore TokenError (we don't care about incomplete code)
 ...         pass
 ...     return level
-
 ```
 
 To demonstrate the function, let's apply it to itself.
@@ -401,7 +393,6 @@ To demonstrate the function, let's apply it to itself.
 2
 1
 0
-
 ```
 
 An oddity worth mentioning: the comment near the end of the function is not
@@ -433,7 +424,6 @@ In Python, a stack is usually implemented using a list. The push method is
 3
 >>> stack.pop()
 1
-
 ```
 
 Stacks are important because they allow keeping track of nested structures.
@@ -514,7 +504,6 @@ parentheses or braces in a piece of Python code. The function handles `()`,
 ...     stack.reverse()
 ...     mismatching = stack + mismatching
 ...     return matching, mismatching
-
 ```
 
 
@@ -525,7 +514,6 @@ parentheses or braces in a piece of Python code. The function handles `()`,
  (TokenInfo(..., string='(', ...), TokenInfo(..., string=')', ...))]
 >>> mismatching # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
 [TokenInfo(..., string='(', ...), TokenInfo(..., string=']', ...)]
-
 ```
 
 #### Exercise
@@ -548,7 +536,6 @@ mismatched.
  TokenInfo(..., string='{', ...),
  TokenInfo(..., string=']', ...),
  TokenInfo(..., string='}', ...)]
-
 ```
 
 With `allow_intermediary_mismatches` set to `True`, the `{` and `}` should be
@@ -563,7 +550,6 @@ considered matching.
 >>> mismatching # doctest: +SKIP
 [TokenInfo(..., string='[', ...),
  TokenInfo(..., string=']', ...)]
-
 ```
 
 Furthermore, with `'[ { ] } ]'` only the middle `]` would be considered
@@ -587,7 +573,6 @@ mismatched (with the current version, all would be mismatched).
  TokenInfo(..., string=']', ...),
  TokenInfo(..., string='}', ...),
  TokenInfo(..., string=']', ...)]
-
 ```
 
 The current behavior (`allow_intermediary_mismatches=False`) is a more
@@ -675,7 +660,6 @@ operator](https://docs.python.org/3/reference/expressions.html#binary-bitwise-op
 ```py
 >>> bin(0b101 ^ 0b001)
 '0b100'
-
 ```
 
 Suppose you don't care about XOR, and want to allow `^` to represent
@@ -691,7 +675,6 @@ this will not work, because `^` has a different precedence than `**`:
 "Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id='x', ctx=Load()), op=Pow(), right=Num(n=2)), op=Add(), right=Num(n=1)))])"
 >>> ast.dump(ast.parse('x^2 + 1'))
 "Module(body=[Expr(value=BinOp(left=Name(id='x', ctx=Load()), op=BitXor(), right=BinOp(left=Num(n=2), op=Add(), right=Num(n=1))))])"
-
 ```
 
 This is difficult to read, but it basically says that `x**2 + 1` is parsed
@@ -719,7 +702,6 @@ Instead, we can use `tokenize`. The replacement is quite easy to do:
 ...
 >>> xor_to_pow('x^2 + 1')
 'x**2 +1 '
-
 ```
 
 Because we are replacing a 1-character token with a 2-character token,
@@ -754,7 +736,6 @@ floats as they are in the input.
 ...         else:
 ...             result.append(tok)
 ...     return tokenize.untokenize(result).decode(encoding)
-
 ```
 
 This works like this
@@ -764,7 +745,6 @@ This works like this
 1.0
 >>> float_to_decimal('1e-1000 + 1.000000000000000000000000000000001')
 "Decimal ('1e-1000')+Decimal ('1.000000000000000000000000000000001')"
-
 ```
 
 Notice that because new tokens were added as length 2 tuples, the whitespace
@@ -781,7 +761,6 @@ avoid rounding the input. An exercise for the reader is to extend
 >>> getcontext().prec = 1001
 >>> eval(float_to_decimal('1e-1000 + 1.000000000000000000000000000000001'))
 Decimal('1.0000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001')
-
 ```
 
 ### Extending Python's Syntax
@@ -825,7 +804,6 @@ symbols ➕, ➖, ➗, and ✖ to be used instead of their ASCII counterparts.
 ...
 >>> emoji_math('1 ➕ 2 ➖ 3➗4✖5')
 '1 + 2 - 3/4*5'
-
 ```
 
 Because we are replacing a single character with a single character,
@@ -861,7 +839,6 @@ For example,
 >>> # Python 3.6+ only
 >>> 123_456 # doctest: +SKIP35
 123456
-
 ```
 
 We can write a function using `tokenize` to backport this feature to Python
@@ -947,7 +924,6 @@ still invalid syntax in Python 3.5 (`123abc`).
 ...         result.append(tok)
 ...     return tokenize.untokenize(result).decode(encoding)
 ...
-
 ```
 
 Note that by reusing the [`start`](usage.html#start-and-end) and
@@ -968,5 +944,4 @@ correct).
 >>> # In Python 3.5
 >>> underscore_literals(s) # doctest: +SKIP36, +SKIP37
 '10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.'
-
 ```
