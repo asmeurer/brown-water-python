@@ -31,7 +31,6 @@ track of and maintain the line and column information in `start` and `end`.
 >>> string = b'sum([[1, 2]][0])'
 >>> tokenize.untokenize(tokenize.tokenize(io.BytesIO(string).readline))
 b'sum([[1, 2]][0])'
-
 ```
 
 If only the token type and token names are given (iterable of 2-tuples),
@@ -44,7 +43,6 @@ tokenizes back in the same way).
 ```py
 >>> tokenize.untokenize([(i, j) for (i, j, _, _, _) in tokenize.tokenize(io.BytesIO(string).readline)])
 b'sum ([[1 ,2 ]][0 ])'
-
 ```
 
 2-tuples and 5-tuples can be mixed (for instance, you can add new tokens to a
@@ -73,7 +71,6 @@ and uses its own spacing.
 ...     return tokenize.untokenize(new_tokens).decode('utf-8')
 >>> split_string("print('hello ') and print('world')")
 "print('h' 'e' 'l' 'l' 'o' ' ')and print ('w' 'o' 'r' 'l' 'd')"
-
 ```
 
 If you want to use the `tokenize` module to extend the Python language
@@ -102,7 +99,6 @@ Invalid encodings will cause it to raise a
 ```py
 >>> tokenize.detect_encoding(io.BytesIO(b'# -*- coding: ascii -*-').readline)
 ('ascii', [b'# -*- coding: ascii -*-'])
-
 ```
 
 ## `tokenize.open(filename)`
@@ -127,7 +123,7 @@ line and column positions, the token type, and the token string. If the `-e`
 flag is used, the token type for operators is the exact type. Otherwise the
 [`OP`](tokens.html#op) type is used.
 
-```
+```bash
 $ python -m tokenize example.py
 0,0-0,0:            ENCODING       'utf-8'
 1,0-1,43:           COMMENT        '# This is a an example file to be tokenized'
@@ -166,7 +162,6 @@ $ python -m tokenize -e example.py
 4,16-4,17:          NEWLINE        '\n'
 5,0-5,0:            DEDENT         ''
 5,0-5,0:            ENDMARKER      ''
-
 ```
 ## Helper Functions Related to the `parser` Module
 
@@ -267,7 +262,6 @@ like for the code `("a") + True`.
               ['power', ['atom_expr', ['atom', ['NAME', 'True']]]]]]]]]]]]]]]]],
  ['NEWLINE', ''],
  ['ENDMARKER', '']]
-
 ```
 
 Compare this to the `tokenize` representation seen in the [intro](intro.html),
@@ -276,7 +270,6 @@ or the `ast` representation:
 ```py
 >>> ast.dump(ast.parse('("a") + True'))
 "Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
-
 ```
 
 The following are included in the `token` module, but aren't particularly

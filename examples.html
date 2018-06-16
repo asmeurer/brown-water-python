@@ -60,7 +60,6 @@ hide the Python prompts and outputs.</p>
 <span class="gp">... </span><span class="sd">    Generator of tokens from the string s</span>
 <span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
-
 </pre></div>
 </div>
 <div class="section" id="processing-tokens">
@@ -93,7 +92,6 @@ character (like <code class="docutils literal notranslate"><span class="pre">r</
 <span class="gp">... </span>        <span class="k">return</span> <span class="s1">&#39;string&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="bp">False</span>
-
 </pre></div>
 </div>
 <p>Let’s walk through the code.</p>
@@ -207,7 +205,6 @@ it means we never found a <code class="docutils literal notranslate"><span class
 <span class="gp">... </span><span class="s2">    return &#39;hello </span><span class="si">%s</span><span class="s2">&#39; % name</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="c1"># &#39;h&#39; in &#39;hello&#39;</span>
 <span class="go">True</span>
-
 </pre></div>
 </div>
 <div class="section" id="exercises">
@@ -239,7 +236,6 @@ function</a> looked like this (rewritten to use our
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">and</span> <span class="n">tok</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="s1">&#39;def&#39;</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
 </pre></div>
 </div>
 <p>As we noted, this function works, but it doesn’t handle any of our
@@ -259,7 +255,6 @@ inside the unclosed multi-line string, so we can safely ignore
 <span class="gp">... </span>                <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">... </span>    <span class="k">except</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">TokenError</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">pass</span>
-
 </pre></div>
 </div>
 <p>Finally, let’s consider <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> due to unclosed
@@ -285,7 +280,6 @@ closed at the end of the line.</p>
 <span class="gp">... </span>                <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">... </span>    <span class="k">except</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">TokenError</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">pass</span>
-
 </pre></div>
 </div>
 <p>Here are our original test cases, plus some additional ones for our added
@@ -330,7 +324,6 @@ behavior.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
 <span class="go">1</span>
 <span class="go">3</span>
-
 </pre></div>
 </div>
 </div>
@@ -358,7 +351,6 @@ counter.</p>
 <span class="gp">... </span>        <span class="c1"># Ignore TokenError (we don&#39;t care about incomplete code)</span>
 <span class="gp">... </span>        <span class="k">pass</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">level</span>
-
 </pre></div>
 </div>
 <p>To demonstrate the function, let’s apply it to itself.</p>
@@ -402,7 +394,6 @@ counter.</p>
 <span class="go">2</span>
 <span class="go">1</span>
 <span class="go">0</span>
-
 </pre></div>
 </div>
 <p>An oddity worth mentioning: the comment near the end of the function is not
@@ -430,7 +421,6 @@ removes the most recently added item.</p>
 <span class="go">3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 <span class="go">1</span>
-
 </pre></div>
 </div>
 <p>Stacks are important because they allow keeping track of nested structures.
@@ -507,7 +497,6 @@ parentheses or braces in a piece of Python code. The function handles <code clas
 <span class="gp">... </span>    <span class="n">stack</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">mismatching</span> <span class="o">=</span> <span class="n">stack</span> <span class="o">+</span> <span class="n">mismatching</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">matching</span><span class="p">,</span> <span class="n">mismatching</span>
-
 </pre></div>
 </div>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">matching</span><span class="p">,</span> <span class="n">mismatching</span> <span class="o">=</span> <span class="n">matching_parens</span><span class="p">(</span><span class="s2">&quot;(&#39;a&#39;, {(1, 2)}, ]&quot;</span><span class="p">)</span>
@@ -516,7 +505,6 @@ parentheses or braces in a piece of Python code. The function handles <code clas
 <span class="go"> (TokenInfo(..., string=&#39;(&#39;, ...), TokenInfo(..., string=&#39;)&#39;, ...))]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mismatching</span> 
 <span class="go">[TokenInfo(..., string=&#39;(&#39;, ...), TokenInfo(..., string=&#39;]&#39;, ...)]</span>
-
 </pre></div>
 </div>
 <div class="section" id="exercise">
@@ -536,7 +524,6 @@ mismatched.</p>
 <span class="go"> TokenInfo(..., string=&#39;{&#39;, ...),</span>
 <span class="go"> TokenInfo(..., string=&#39;]&#39;, ...),</span>
 <span class="go"> TokenInfo(..., string=&#39;}&#39;, ...)]</span>
-
 </pre></div>
 </div>
 <p>With <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches</span></code> set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the <code class="docutils literal notranslate"><span class="pre">{</span></code> and <code class="docutils literal notranslate"><span class="pre">}</span></code> should be
@@ -549,7 +536,6 @@ considered matching.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mismatching</span> 
 <span class="go">[TokenInfo(..., string=&#39;[&#39;, ...),</span>
 <span class="go"> TokenInfo(..., string=&#39;]&#39;, ...)]</span>
-
 </pre></div>
 </div>
 <p>Furthermore, with <code class="docutils literal notranslate"><span class="pre">'[</span> <span class="pre">{</span> <span class="pre">]</span> <span class="pre">}</span> <span class="pre">]'</span></code> only the middle <code class="docutils literal notranslate"><span class="pre">]</span></code> would be considered
@@ -571,7 +557,6 @@ mismatched (with the current version, all would be mismatched).</p>
 <span class="go"> TokenInfo(..., string=&#39;]&#39;, ...),</span>
 <span class="go"> TokenInfo(..., string=&#39;}&#39;, ...),</span>
 <span class="go"> TokenInfo(..., string=&#39;]&#39;, ...)]</span>
-
 </pre></div>
 </div>
 <p>The current behavior (<code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=False</span></code>) is a more
@@ -643,7 +628,6 @@ use <code class="docutils literal notranslate"><span class="pre">^</span></code>
 operator</a>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">bin</span><span class="p">(</span><span class="mb">0b101</span> <span class="o">^</span> <span class="mb">0b001</span><span class="p">)</span>
 <span class="go">&#39;0b100&#39;</span>
-
 </pre></div>
 </div>
 <p>Suppose you don’t care about XOR, and want to allow <code class="docutils literal notranslate"><span class="pre">^</span></code> to represent
@@ -657,7 +641,6 @@ this will not work, because <code class="docutils literal notranslate"><span cla
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id=&#39;x&#39;, ctx=Load()), op=Pow(), right=Num(n=2)), op=Add(), right=Num(n=1)))])&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;x^2 + 1&#39;</span><span class="p">))</span>
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=Name(id=&#39;x&#39;, ctx=Load()), op=BitXor(), right=BinOp(left=Num(n=2), op=Add(), right=Num(n=1))))])&quot;</span>
-
 </pre></div>
 </div>
 <p>This is difficult to read, but it basically says that <code class="docutils literal notranslate"><span class="pre">x**2</span> <span class="pre">+</span> <span class="pre">1</span></code> is parsed
@@ -681,7 +664,6 @@ strings and comments.</p>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xor_to_pow</span><span class="p">(</span><span class="s1">&#39;x^2 + 1&#39;</span><span class="p">)</span>
 <span class="go">&#39;x**2 +1 &#39;</span>
-
 </pre></div>
 </div>
 <p>Because we are replacing a 1-character token with a 2-character token,
@@ -714,7 +696,6 @@ floats as they are in the input.</p>
 <span class="gp">... </span>        <span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
-
 </pre></div>
 </div>
 <p>This works like this</p>
@@ -722,7 +703,6 @@ floats as they are in the input.</p>
 <span class="go">1.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">float_to_decimal</span><span class="p">(</span><span class="s1">&#39;1e-1000 + 1.000000000000000000000000000000001&#39;</span><span class="p">)</span>
 <span class="go">&quot;Decimal (&#39;1e-1000&#39;)+Decimal (&#39;1.000000000000000000000000000000001&#39;)&quot;</span>
-
 </pre></div>
 </div>
 <p>Notice that because new tokens were added as length 2 tuples, the whitespace
@@ -736,7 +716,6 @@ avoid rounding the input. An exercise for the reader is to extend
 <span class="gp">&gt;&gt;&gt; </span><span class="n">getcontext</span><span class="p">()</span><span class="o">.</span><span class="n">prec</span> <span class="o">=</span> <span class="mi">1001</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">eval</span><span class="p">(</span><span class="n">float_to_decimal</span><span class="p">(</span><span class="s1">&#39;1e-1000 + 1.000000000000000000000000000000001&#39;</span><span class="p">))</span>
 <span class="go">Decimal(&#39;1.0000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001&#39;)</span>
-
 </pre></div>
 </div>
 </div>
@@ -777,7 +756,6 @@ symbols ➕, ➖, ➗, and ✖ to be used instead of their ASCII counterparts.</
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">emoji_math</span><span class="p">(</span><span class="s1">&#39;1 ➕ 2 ➖ 3➗4✖5&#39;</span><span class="p">)</span>
 <span class="go">&#39;1 + 2 - 3/4*5&#39;</span>
-
 </pre></div>
 </div>
 <p>Because we are replacing a single character with a single character,
@@ -805,7 +783,6 @@ not allowed.”</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Python 3.6+ only</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="mi">123</span><span class="n">_456</span> 
 <span class="go">123456</span>
-
 </pre></div>
 </div>
 <p>We can write a function using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to backport this feature to Python
@@ -886,7 +863,6 @@ still invalid syntax in Python 3.5 (<code class="docutils literal notranslate"><
 <span class="gp">... </span>        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
 <span class="gp">...</span>
-
 </pre></div>
 </div>
 <p>Note that by reusing the <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and
@@ -905,7 +881,6 @@ correct).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">underscore_literals</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> 
 <span class="go">&#39;10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.&#39;</span>
-
 </pre></div>
 </div>
 </div>

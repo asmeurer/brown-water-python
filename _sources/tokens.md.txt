@@ -39,7 +39,6 @@ The dictionary `tok_name` maps the tokens back to their names:
 3
 >>> tokenize.tok_name[tokenize.STRING] # Can also use token.tok_name
 'STRING'
-
 ```
 
 ## The Tokens
@@ -52,7 +51,6 @@ the examples:
 >>> def print_tokens(s):
 ...     for tok in tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline):
 ...         print(tok)
-
 ```
 
 ### `ENDMARKER`
@@ -73,14 +71,12 @@ TokenInfo(type=1 (NAME), string='x', start=(1, 0), end=(1, 1), line='x + 1')
 TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='x + 1')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 4), end=(1, 5), line='x + 1')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 ```py
 >>> print_tokens('')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=0 (ENDMARKER), string='', start=(1, 0), end=(1, 0), line='')
-
 ```
 
 ### `NAME`
@@ -99,7 +95,6 @@ TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a or α')
 TokenInfo(type=1 (NAME), string='or', start=(1, 2), end=(1, 4), line='a or α')
 TokenInfo(type=1 (NAME), string='α', start=(1, 5), end=(1, 6), line='a or α')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 To tell if a `NAME` token is a keyword, use
@@ -110,7 +105,6 @@ on the `string`.
 >>> import keyword
 >>> keyword.iskeyword('or')
 True
-
 ```
 
 As a side note, internally, the `tokenize` module uses the
@@ -130,7 +124,6 @@ discouraged.
 True
 >>> 'or'.isidentifier()
 True
-
 ```
 
 ### `NUMBER`
@@ -156,7 +149,6 @@ TokenInfo(type=2 (NUMBER), string='1e1', start=(1, 32), end=(1, 35), line='10 + 
 TokenInfo(type=53 (OP), string='+', start=(1, 36), end=(1, 37), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
 TokenInfo(type=2 (NUMBER), string='1j', start=(1, 38), end=(1, 40), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 Note that even though literals like `1+2j` are a single `complex` type, they
@@ -169,7 +161,6 @@ TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1+2j')
 TokenInfo(type=53 (OP), string='+', start=(1, 1), end=(1, 2), line='1+2j')
 TokenInfo(type=2 (NUMBER), string='2j', start=(1, 2), end=(1, 4), line='1+2j')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 Invalid numeric literals may tokenize as multiple numeric literals.
@@ -190,7 +181,6 @@ TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='0o1', start=(1, 0), end=(1, 3), line='0o184')
 TokenInfo(type=2 (NUMBER), string='84', start=(1, 3), end=(1, 5), line='0o184')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 One advantage of using `tokenize` over `ast` is that floating point numbers
@@ -207,7 +197,6 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> import ast
 >>> ast.dump(ast.parse('1.0000000000000001'))
 'Module(body=[Expr(value=Num(n=1.0))])'
-
 ```
 
 This can be used, for instance, to wrap floating point numbers with a type
@@ -225,7 +214,6 @@ like `123_456`.
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='123_456', start=(1, 0), end=(1, 7), line='123_456')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME`
@@ -238,7 +226,6 @@ In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME`
     TokenInfo(type=2 (NUMBER), string='123', start=(1, 0), end=(1, 3), line='123_456')
     TokenInfo(type=1 (NAME), string='_456', start=(1, 3), end=(1, 7), line='123_456')
     TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 In the [examples](examples.html#backporting-underscores-in-numeric-literals)
@@ -264,8 +251,6 @@ TokenInfo(type=53 (OP), string='+', start=(2, 13), end=(2, 14), line='"I" + \'lo
 TokenInfo(type=3 (STRING), string="'''tokenize'''", start=(2, 15), end=(2, 29), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 29), end=(2, 30), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
-
-
 ```
 
 
@@ -278,7 +263,6 @@ TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string='"this is"', start=(1, 0), end=(1, 9), line='"this is" " fun"')
 TokenInfo(type=3 (STRING), string='" fun"', start=(1, 10), end=(1, 16), line='"this is" " fun"')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 
@@ -290,7 +274,6 @@ included in the tokenized string.
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string="rb'\\hello'", start=(1, 0), end=(1, 10), line="rb'\\hello'")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 f-strings (Python 3.6+) are parsed as a single `STRING` token.
@@ -301,7 +284,6 @@ f-strings (Python 3.6+) are parsed as a single `STRING` token.
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string='f"{a + b}"', start=(1, 0), end=(1, 10), line='f"{a + b}"')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 The `string.Format.parse()` function can be used to parse format strings
@@ -316,7 +298,6 @@ The `string.Format.parse()` function can be used to parse format strings
 >>> import string
 >>> list(string.Formatter().parse('a + b is {a + b!r}'))
 [('a + b is ', 'a + b', '', 'r')]
-
 ```
 
 To get the string value from a tokenized string literal (i.e., to strip away
@@ -327,7 +308,6 @@ trying to strip the quotes manually, which is error prone, or using raw
 ```py
 >>> ast.literal_eval("rb'a\\''")
 b"a\\'"
-
 ```
 
 #### Error Behavior
@@ -344,7 +324,6 @@ TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unc
 TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string")
 TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 This behavior can be useful for handling error situations. For example, if you
@@ -365,7 +344,6 @@ Traceback (most recent call last):
     ...
     raise TokenError("EOF in multi-line string", strstart)
 tokenize.TokenError: ('EOF in multi-line string', (1, 8))
-
 ```
 
 This behavior can be annoying to deal with in practice. For many applications,
@@ -386,7 +364,6 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 Traceback (most recent call last):
   ...
 SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 0-11: unknown Unicode character name
-
 ```
 
 To test if a string literal is valid, you can use the `ast.literal_eval()`
@@ -397,7 +374,6 @@ function, which is safe to use on untrusted input.
 Traceback (most recent call last):
   ...
 SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 0-11: unknown Unicode character name
-
 ```
 
 ### `NEWLINE`
@@ -424,7 +400,6 @@ TokenInfo(type=3 (STRING), string="'hello world'", start=(2, 11), end=(2, 24), l
 TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 24), end=(2, 25), line="    return 'hello world'\n")
 TokenInfo(type=6 (DEDENT), string='', start=(3, 0), end=(3, 0), line='')
 TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
-
 ```
 
 Windows-style newlines (`\r\n`) are tokenized as a single token.
@@ -437,7 +412,6 @@ TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 1), end=(1, 2), line='1\n')
 TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2\r\n')
 TokenInfo(type=4 (NEWLINE), string='\r\n', start=(2, 1), end=(2, 3), line='2\r\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
-
 ```
 
 ### `INDENT`
@@ -483,7 +457,6 @@ TokenInfo(type=2 (NUMBER), string='5', start=(6, 0), end=(6, 1), line='5\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(6, 1), end=(6, 2), line='5\n')
 TokenInfo(type=58 (NL), string='\n', start=(7, 0), end=(7, 1), line='\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(8, 0), end=(8, 0), line='')
-
 ```
 
 There is one `INDENT` before the `2-3` block, one `INDENT` before `4`, and two
@@ -506,7 +479,6 @@ TokenInfo(type=2 (NUMBER), string='2', start=(3, 4), end=(3, 5), line='    2)\n'
 TokenInfo(type=53 (OP), string=')', start=(3, 5), end=(3, 6), line='    2)\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 6), end=(3, 7), line='    2)\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
-
 ```
 
 Indentation can be any number of spaces or tabs. The only restriction is that
@@ -514,7 +486,7 @@ every unindented indentation level must match a previous outer indentation
 level. If an unindent does not match an outer indentation level, `tokenize()`
 raises [`IndentationError`](usage.html#indentationerror).
 
-```
+```py
 >>> print_tokens("""
 ... def countdown(x):
 ... \tassert x>=0
@@ -602,7 +574,6 @@ Traceback (most recent call last):
     print('Go!')
     ^
 IndentationError: unindent does not match any outer indentation level
-
 ```
 
 The level of indentation at a particular point in the token stream can be
@@ -634,7 +605,6 @@ NAME NAME 'list'
 OP COLON ':'
 OP OP '...'
 ENDMARKER ENDMARKER ''
-
 ```
 
 This bug has been fixed in Python 3.7.
@@ -653,8 +623,8 @@ NAME NAME 'list'
 OP COLON ':'
 OP ELLIPSIS '...'
 ENDMARKER ENDMARKER ''
-
 ```
+
 ### `OP`
 
 `OP` is a generic token type for all operators, delimiters, and the ellipsis
@@ -687,7 +657,6 @@ PLUS '+'
 NUMBER '2'
 RSQB ']'
 ENDMARKER ''
-
 ```
 
 The following table lists all exact `OP` types and their corresponding
@@ -720,7 +689,6 @@ TokenInfo(type=1 (NAME), string='async', start=(1, 0), end=(1, 5), line='async =
 TokenInfo(type=53 (OP), string='=', start=(1, 6), end=(1, 7), line='async = 1')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 8), end=(1, 9), line='async = 1')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 To support this, in Python 3.5 and 3.6 when `async def` is encountered,
@@ -765,15 +733,13 @@ TokenInfo(type=53 (OP), string='=', start=(5, 6), end=(5, 7), line='await = 1\n'
 TokenInfo(type=2 (NUMBER), string='1', start=(5, 8), end=(5, 9), line='await = 1\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(5, 9), end=(5, 10), line='await = 1\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(6, 0), end=(6, 0), line='')
-
 ```
 
 In Python 3.7, `async` and `await` are proper keywords, and are tokenized as
 [`NAME`](#name) like all other keywords. In Python 3.7, the `AWAIT` and
 `ASYNC` token types have been removed from the `token` module.
 
-
-```
+```py
 >>> # This is the behavior in Python 3.7+
 >>> print_tokens("""
 ... async def coro():
@@ -804,7 +770,6 @@ TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 17), end=(4, 18), line='     
 TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
 TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
 TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
-
 ```
 
 ### `ERRORTOKEN`
@@ -828,7 +793,6 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=56 (ERRORTOKEN), string='💯', start=(1, 0), end=(1, 1), line='💯')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 `ERRORTOKEN` is also used for single-quoted strings that are not closed before
@@ -843,7 +807,6 @@ TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unc
 TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string")
 TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 If the string is continued and unclosed, the entire string is tokenized as an
@@ -858,7 +821,6 @@ TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=56 (ERRORTOKEN), string="'unclosed \\\ncontinued string\n", start=(2, 0), end=(3, 17), line="'unclosed \\\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
-
 ```
 
 Therefore, code that handles `ERRORTOKEN` specifically for unclosed strings
@@ -887,7 +849,6 @@ TokenInfo(type=53 (OP), string=')', start=(4, 2), end=(4, 3), line='f() # This i
 TokenInfo(type=57 (COMMENT), string='# This is a third comment', start=(4, 4), end=(4, 29), line='f() # This is a third comment\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 29), end=(4, 30), line='f() # This is a third comment\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
-
 ```
 
 The `COMMENT` token type exists only in the standard library Python
@@ -917,7 +878,6 @@ There are two situations where newlines are tokenized as `NL`:
    TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2)')
    TokenInfo(type=53 (OP), string=')', start=(2, 1), end=(2, 2), line='2)')
    TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
-
    ```
 
 2. Newlines that end empty lines or lines that only have comments.
@@ -933,7 +893,6 @@ There are two situations where newlines are tokenized as `NL`:
    TokenInfo(type=58 (NL), string='\n', start=(2, 14), end=(2, 15), line='# Comment line\n')
    TokenInfo(type=58 (NL), string='\n', start=(3, 0), end=(3, 1), line='\n')
    TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
-
    ```
 
 Note that newlines that are escaped (preceded with `\`) are treated like
@@ -949,7 +908,6 @@ TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1 + \\\n'
 TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='1 + \\\n')
 TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2')
 TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
-
 ```
 
 The `NL` token type exists only in the standard library Python implementation
@@ -980,7 +938,7 @@ only need the encoding to pass to `open()`, use
 The `start` and `end` line and column numbers for `ENCODING` will always be
 `(0, 0)`.
 
-```
+```py
 >>> print_tokens("# The default encoding is utf-8")
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=57 (COMMENT), string='# The default encoding is utf-8', start=(1, 0), end=(1, 31), line='# The default encoding is utf-8')
@@ -991,7 +949,6 @@ TokenInfo(type=59 (ENCODING), string='ascii', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=57 (COMMENT), string='# -*- coding: ascii -*-', start=(1, 0), end=(1, 23), line='# -*- coding: ascii -*-')
 TokenInfo(type=58 (NL), string='', start=(1, 23), end=(1, 23), line='# -*- coding: ascii -*-')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
-
 ```
 
 The `ENCODING` token is not typically used when processing tokens, although
@@ -1025,5 +982,4 @@ different than in 3.5 and 3.6.
 >>> # In Python 3.7
 >>> tokenize.N_TOKENS # doctest: +SKIP35, +SKIP36
 58
-
 ```

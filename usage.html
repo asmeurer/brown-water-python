@@ -104,7 +104,6 @@ mode (<code class="docutils literal notranslate"><span class="pre">'r'</span></c
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(4, 16), end=(4, 17), line=&#39;    return 1 + 1\n&#39;)</span>
 <span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
-
 </pre></div>
 </div>
 <p>To tokenize a string, you must encode it into a <code class="docutils literal notranslate"><span class="pre">bytes</span></code>, create an
@@ -121,7 +120,6 @@ helper function.</p>
 <span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 6), end=(1, 7), line=&#39;hello + tokenize&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;tokenize&#39;, start=(1, 8), end=(1, 16), line=&#39;hello + tokenize&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
-
 </pre></div>
 </div>
 <p>The reason for this API is that <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> is a streaming API, which works
@@ -146,7 +144,6 @@ typically in the <code class="docutils literal notranslate"><span class="pre">fo
 <span class="go">toknum: 53 tokval: &#39;+&#39; start: (1, 6) end: (1, 7) line: &#39;hello + tokenize&#39;</span>
 <span class="go">toknum: 1 tokval: &#39;tokenize&#39; start: (1, 8) end: (1, 16) line: &#39;hello + tokenize&#39;</span>
 <span class="go">toknum: 0 tokval: &#39;&#39; start: (2, 0) end: (2, 0) line: &#39;&#39;</span>
-
 </pre></div>
 </div>
 <p>By tradition, unused values are often replaced by <code class="docutils literal notranslate"><span class="pre">_</span></code>. You can also unpack the
@@ -158,7 +155,6 @@ typically in the <code class="docutils literal notranslate"><span class="pre">fo
 <span class="go">&#39;+&#39; on lines 1 to 1 on columns 6 to 7</span>
 <span class="go">&#39;tokenize&#39; on lines 1 to 1 on columns 8 to 16</span>
 <span class="go">&#39;&#39; on lines 2 to 2 on columns 0 to 0</span>
-
 </pre></div>
 </div>
 <p>The other is to use it as-is, and access the members via attributes. I like
@@ -173,7 +169,6 @@ includes all the names from <code class="docutils literal notranslate"><span cla
 <span class="go">type: 53 string: &#39;+&#39; start: (1, 6) end: (1, 7) line: &#39;hello + tokenize&#39;</span>
 <span class="go">type: 1 string: &#39;tokenize&#39; start: (1, 8) end: (1, 16) line: &#39;hello + tokenize&#39;</span>
 <span class="go">type: 0 string: &#39;&#39; start: (2, 0) end: (2, 0) line: &#39;&#39;</span>
-
 </pre></div>
 </div>
 <p>The advantage of this second way is that the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> object contains an
@@ -251,7 +246,6 @@ character. If both are present, or if the PEP 263 encoding is invalid,
 <span class="gt">Traceback (most recent call last):</span>
   <span class="c">...</span>
 <span class="gr">SyntaxError</span>: <span class="n">unknown encoding: invalid</span>
-
 </pre></div>
 </div>
 <p>See also <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a>.</p>
@@ -378,7 +372,6 @@ See also the <a class="reference external" href="examples.html">examples</a>.</p
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;pass&#39;, start=(4, 4), end=(4, 8), line=&#39;    pass\n&#39;)</span>
 <span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(4, 8), end=(4, 9), line=&#39;    pass\n&#39;)</span>
 <span class="go">TokenError: Unclosed brace(s)</span>
-
 </pre></div>
 </div>
 </div>
@@ -405,7 +398,6 @@ indentation level.</p>
     <span class="n">f</span>
     <span class="o">^</span>
 <span class="gr">IndentationError</span>: <span class="n">unindent does not match any outer indentation level</span>
-
 
 </pre></div>
 </div>
@@ -448,7 +440,6 @@ tabs and spaces.</p>
     <span class="k">pass</span>
        <span class="o">^</span>
 <span class="gr">TabError</span>: <span class="n">inconsistent use of tabs and spaces in indentation</span>
-
 </pre></div>
 </div>
 </div>

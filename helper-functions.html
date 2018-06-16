@@ -78,7 +78,6 @@ track of and maintain the line and column information in <code class="docutils l
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;sum([[1, 2]][0])&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">))</span>
 <span class="go">b&#39;sum([[1, 2]][0])&#39;</span>
-
 </pre></div>
 </div>
 <p>If only the token type and token names are given (iterable of 2-tuples),
@@ -89,7 +88,6 @@ resulting string is syntactically valid (or rather, to ensure that it
 tokenizes back in the same way).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)])</span>
 <span class="go">b&#39;sum ([[1 ,2 ]][0 ])&#39;</span>
-
 </pre></div>
 </div>
 <p>2-tuples and 5-tuples can be mixed (for instance, you can add new tokens to a
@@ -115,7 +113,6 @@ and uses its own spacing.</p>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">untokenize</span><span class="p">(</span><span class="n">new_tokens</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">split_string</span><span class="p">(</span><span class="s2">&quot;print(&#39;hello &#39;) and print(&#39;world&#39;)&quot;</span><span class="p">)</span>
 <span class="go">&quot;print(&#39;h&#39; &#39;e&#39; &#39;l&#39; &#39;l&#39; &#39;o&#39; &#39; &#39;)and print (&#39;w&#39; &#39;o&#39; &#39;r&#39; &#39;l&#39; &#39;d&#39;)&quot;</span>
-
 </pre></div>
 </div>
 <p>If you want to use the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module to extend the Python language
@@ -141,7 +138,6 @@ Invalid encodings will cause it to raise a
 <a class="reference external" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">detect_encoding</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;# -*- coding: ascii -*-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
 <span class="go">(&#39;ascii&#39;, [b&#39;# -*- coding: ascii -*-&#39;])</span>
-
 </pre></div>
 </div>
 </div>
@@ -164,44 +160,44 @@ correct encoding).</p>
 line and column positions, the token type, and the token string. If the <code class="docutils literal notranslate"><span class="pre">-e</span></code>
 flag is used, the token type for operators is the exact type. Otherwise the
 <a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a> type is used.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -m tokenize example.py
-0,0-0,0:            ENCODING       &#39;utf-8&#39;
-1,0-1,43:           COMMENT        &#39;# This is a an example file to be tokenized&#39;
-1,43-1,44:          NL             &#39;\n&#39;
-2,0-2,1:            NL             &#39;\n&#39;
-3,0-3,3:            NAME           &#39;def&#39;
-3,4-3,7:            NAME           &#39;two&#39;
-3,7-3,8:            OP             &#39;(&#39;
-3,8-3,9:            OP             &#39;)&#39;
-3,9-3,10:           OP             &#39;:&#39;
-3,10-3,11:          NEWLINE        &#39;\n&#39;
-4,0-4,4:            INDENT         &#39;    &#39;
-4,4-4,10:           NAME           &#39;return&#39;
-4,11-4,12:          NUMBER         &#39;1&#39;
-4,13-4,14:          OP             &#39;+&#39;
-4,15-4,16:          NUMBER         &#39;1&#39;
-4,16-4,17:          NEWLINE        &#39;\n&#39;
-5,0-5,0:            DEDENT         &#39;&#39;
-5,0-5,0:            ENDMARKER      &#39;&#39;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python -m tokenize example.py
+<span class="m">0</span>,0-0,0:            ENCODING       <span class="s1">&#39;utf-8&#39;</span>
+<span class="m">1</span>,0-1,43:           COMMENT        <span class="s1">&#39;# This is a an example file to be tokenized&#39;</span>
+<span class="m">1</span>,43-1,44:          NL             <span class="s1">&#39;\n&#39;</span>
+<span class="m">2</span>,0-2,1:            NL             <span class="s1">&#39;\n&#39;</span>
+<span class="m">3</span>,0-3,3:            NAME           <span class="s1">&#39;def&#39;</span>
+<span class="m">3</span>,4-3,7:            NAME           <span class="s1">&#39;two&#39;</span>
+<span class="m">3</span>,7-3,8:            OP             <span class="s1">&#39;(&#39;</span>
+<span class="m">3</span>,8-3,9:            OP             <span class="s1">&#39;)&#39;</span>
+<span class="m">3</span>,9-3,10:           OP             <span class="s1">&#39;:&#39;</span>
+<span class="m">3</span>,10-3,11:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">4</span>,0-4,4:            INDENT         <span class="s1">&#39;    &#39;</span>
+<span class="m">4</span>,4-4,10:           NAME           <span class="s1">&#39;return&#39;</span>
+<span class="m">4</span>,11-4,12:          NUMBER         <span class="s1">&#39;1&#39;</span>
+<span class="m">4</span>,13-4,14:          OP             <span class="s1">&#39;+&#39;</span>
+<span class="m">4</span>,15-4,16:          NUMBER         <span class="s1">&#39;1&#39;</span>
+<span class="m">4</span>,16-4,17:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">5</span>,0-5,0:            DEDENT         <span class="s1">&#39;&#39;</span>
+<span class="m">5</span>,0-5,0:            ENDMARKER      <span class="s1">&#39;&#39;</span>
 $ python -m tokenize -e example.py
-0,0-0,0:            ENCODING       &#39;utf-8&#39;
-1,0-1,43:           COMMENT        &#39;# This is a an example file to be tokenized&#39;
-1,43-1,44:          NL             &#39;\n&#39;
-2,0-2,1:            NL             &#39;\n&#39;
-3,0-3,3:            NAME           &#39;def&#39;
-3,4-3,7:            NAME           &#39;two&#39;
-3,7-3,8:            LPAR           &#39;(&#39;
-3,8-3,9:            RPAR           &#39;)&#39;
-3,9-3,10:           COLON          &#39;:&#39;
-3,10-3,11:          NEWLINE        &#39;\n&#39;
-4,0-4,4:            INDENT         &#39;    &#39;
-4,4-4,10:           NAME           &#39;return&#39;
-4,11-4,12:          NUMBER         &#39;1&#39;
-4,13-4,14:          PLUS           &#39;+&#39;
-4,15-4,16:          NUMBER         &#39;1&#39;
-4,16-4,17:          NEWLINE        &#39;\n&#39;
-5,0-5,0:            DEDENT         &#39;&#39;
-5,0-5,0:            ENDMARKER      &#39;&#39;
+<span class="m">0</span>,0-0,0:            ENCODING       <span class="s1">&#39;utf-8&#39;</span>
+<span class="m">1</span>,0-1,43:           COMMENT        <span class="s1">&#39;# This is a an example file to be tokenized&#39;</span>
+<span class="m">1</span>,43-1,44:          NL             <span class="s1">&#39;\n&#39;</span>
+<span class="m">2</span>,0-2,1:            NL             <span class="s1">&#39;\n&#39;</span>
+<span class="m">3</span>,0-3,3:            NAME           <span class="s1">&#39;def&#39;</span>
+<span class="m">3</span>,4-3,7:            NAME           <span class="s1">&#39;two&#39;</span>
+<span class="m">3</span>,7-3,8:            LPAR           <span class="s1">&#39;(&#39;</span>
+<span class="m">3</span>,8-3,9:            RPAR           <span class="s1">&#39;)&#39;</span>
+<span class="m">3</span>,9-3,10:           COLON          <span class="s1">&#39;:&#39;</span>
+<span class="m">3</span>,10-3,11:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">4</span>,0-4,4:            INDENT         <span class="s1">&#39;    &#39;</span>
+<span class="m">4</span>,4-4,10:           NAME           <span class="s1">&#39;return&#39;</span>
+<span class="m">4</span>,11-4,12:          NUMBER         <span class="s1">&#39;1&#39;</span>
+<span class="m">4</span>,13-4,14:          PLUS           <span class="s1">&#39;+&#39;</span>
+<span class="m">4</span>,15-4,16:          NUMBER         <span class="s1">&#39;1&#39;</span>
+<span class="m">4</span>,16-4,17:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">5</span>,0-5,0:            DEDENT         <span class="s1">&#39;&#39;</span>
+<span class="m">5</span>,0-5,0:            ENDMARKER      <span class="s1">&#39;&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -299,14 +295,12 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 <span class="go">              [&#39;power&#39;, [&#39;atom_expr&#39;, [&#39;atom&#39;, [&#39;NAME&#39;, &#39;True&#39;]]]]]]]]]]]]]]]]],</span>
 <span class="go"> [&#39;NEWLINE&#39;, &#39;&#39;],</span>
 <span class="go"> [&#39;ENDMARKER&#39;, &#39;&#39;]]</span>
-
 </pre></div>
 </div>
 <p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <a class="reference external" href="intro.html">intro</a>,
 or the <code class="docutils literal notranslate"><span class="pre">ast</span></code> representation:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span>
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=Str(s=&#39;a&#39;), op=Add(), right=NameConstant(value=True)))])&quot;</span>
-
 </pre></div>
 </div>
 <p>The following are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t particularly
