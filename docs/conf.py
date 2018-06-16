@@ -115,7 +115,7 @@ html_theme_options = {
     'gray_3': '#D2B48C',
 
     # Remove gray background from inline code
-    'code_bg': '',
+    'code_bg': '#F5F5DC',
 
     # Fonts
     'font_family': "Palatino, 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif",
