@@ -65,6 +65,21 @@ members. Instead use something like "``for toknum, tokval, start, end, line in
 tokenize.generate_tokens(...):``" (this pattern can be used in Python 3 as
 well, see the `Usage <usage.html#calling-syntax>`_ section).
 
+
+Contributing
+============
+
+`Contributions <https://github.com/asmeurer/brown-water-python>`_ are welcome.
+So are `questions <https://github.com/asmeurer/brown-water-python/issues>`_.
+My goal here is to help people to understand the ``tokenize`` module, so if
+something is not clear, `please let me know
+<https://github.com/asmeurer/brown-water-python/issues>`_. If you see
+something written here that is wrong, please make a `pull request
+<https://github.com/asmeurer/brown-water-python/pulls>`_ correcting it. I'm
+not an expert at ``tokenize``. I mainly know what is written here from trial
+and error and from reading the `source code
+<https://github.com/python/cpython/blob/master/Lib/tokenize.py>`_.
+
 Table of Contents
 =================
 
