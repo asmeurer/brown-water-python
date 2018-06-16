@@ -102,3 +102,7 @@ construct to embed reST in the Markdown.
 
 Everything in this repo is licensed under the MIT license. See the LICENSE
 file.
+
+The Water Python image is by Matt from Melbourne, Australia [CC BY
+2.0](https://creativecommons.org/licenses/by/2.0), via [Wikimedia
+Commons](https://commons.wikimedia.org/wiki/File:Water_Python_(Liasis_mackloti)_(8692394648).jpg).
