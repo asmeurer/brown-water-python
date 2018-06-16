@@ -13,7 +13,7 @@ body {
 
 
 div.document {
-    width: 940px;
+    width: 1000px;
     margin: 30px auto 0 auto;
 }
 
@@ -47,7 +47,7 @@ div.body > .section {
 }
 
 div.footer {
-    width: 940px;
+    width: 1000px;
     margin: 20px auto 30px auto;
     font-size: 14px;
     color: #888;
@@ -556,7 +556,7 @@ a:hover tt, a:hover code {
         width: 102.5%;
         margin: 50px -30px -20px -30px;
         padding: 10px 20px;
-        background: #333;
+        background: #FFF8E7;
         color: #FFF;
     }
 
@@ -566,7 +566,7 @@ a:hover tt, a:hover code {
     }
 
     div.sphinxsidebar a {
-        color: #D2B48C;
+        color: #6B4423;
     }
 
     div.sphinxsidebar p.logo {

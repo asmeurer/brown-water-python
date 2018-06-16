@@ -18,3 +18,13 @@ nav#rellinks {
 nav#rellinks li+li:before {
     content: "";
 }
+
+div.sphinxsidebar h3, div.sphinxsidebar h4, div.sphinxsidebar p,
+div.sphinxsidebar h3 a {
+    /* Narrow sidebar link */
+    color: #6B4423;
+}
+
+div.sphinxsidebar p.logo {
+    display: inline;
+}

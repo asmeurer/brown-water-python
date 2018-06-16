@@ -476,7 +476,8 @@ parentheses or braces in a piece of Python code. The function handles `()`,
 ...             exact_type = tok.exact_type
 ...             if exact_type == tokenize.ERRORTOKEN and tok.string[0] in '"\'':
 ...                 # There is an unclosed string. If we do not break here,
-...                 # tokenize will tokenize the stuff after the string delimiter.
+...                 # tokenize will tokenize the stuff after the string
+...                 # delimiter.
 ...                 break
 ...             elif exact_type in braces:
 ...                 stack.append(tok)
