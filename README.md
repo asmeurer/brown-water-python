@@ -80,7 +80,7 @@ For code that prints something and then has an exception, you'll have to skip
 it entirely (`# doctest: +SKIP`), as the doctest module does not support this.
 
 As a final note, the doctester won't work correctly unless you include a blank
-line before the end \`\`\` (it will think it is part of the output).
+line before the end \`\`\` (otherwise it will think it is part of the output).
 
 ## Contributing
 
