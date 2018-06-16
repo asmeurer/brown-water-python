@@ -438,7 +438,7 @@ dl pre, blockquote pre, li pre {
 }
 
 tt, code {
-    background-color: ;
+    background-color: #F5F5DC;
     color: #222;
     /* padding: 1px 2px; */
 }
