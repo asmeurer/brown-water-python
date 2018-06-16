@@ -173,9 +173,9 @@ expression matching, `tokenize`, and `ast` to find or modify constructs
 in Python source code. No one method is the correct solution. It depends
 on what trade-offs you want to make between false positives, false
 negatives, maintainability, and the ability or inability to work with
-invalid or incomplete code. The table is not organized as \"pros and
-cons\" because some things may be pros (like, the ability to work with
-incomplete code) or cons (like, accepting invalid Python), depending on
+invalid or incomplete code. The table is not organized as "pros and
+cons" because some things may be pros (like the ability to work with
+incomplete code) or cons (like accepting invalid Python), depending on
 what you are trying to do.
 
 ```eval_rst
