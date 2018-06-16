@@ -120,7 +120,11 @@ By tradition, unused values are often replaced by `_`. You can also unpack the
 
 ```
 
-The other is to use it as-is, and access the members via attributes.
+The other is to use it as-is, and access the members via attributes. I like
+using `tok` as the variable name for the tokens. `token` can be confused with
+the [module name](https://docs.python.org/3/library/token.html), so I don't
+recommend using that (even though I recommend only importing `tokenize`, which
+includes all the names from `token`).
 
 ```py
 >>> for tok in tokenize_string('hello + tokenize'):

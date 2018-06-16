@@ -65,17 +65,17 @@ hide the Python prompts and outputs.</p>
 </div>
 <div class="section" id="processing-tokens">
 <span id="processing-tokens"></span><h2>Processing Tokens<a class="headerlink" href="#processing-tokens" title="Permalink to this headline">¶</a></h2>
-<p>These examples show different ways that you can process tokens.</p>
+<p>These examples show different ways that tokens can be processed.</p>
 <div class="section" id="inside-string">
 <span id="inside-string"></span><h3><code class="docutils literal notranslate"><span class="pre">inside_string()</span></code><a class="headerlink" href="#inside-string" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">inside_string(s,</span> <span class="pre">row,</span> <span class="pre">col)</span></code> takes the string <code class="docutils literal notranslate"><span class="pre">s</span></code> and determines if position
-at <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is inside a <code class="docutils literal notranslate"><span class="pre">STRING</span></code> token.</p>
+<p><code class="docutils literal notranslate"><span class="pre">inside_string(s,</span> <span class="pre">row,</span> <span class="pre">col)</span></code> takes the Python code <code class="docutils literal notranslate"><span class="pre">s</span></code> and determines if
+position at <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is inside a <code class="docutils literal notranslate"><span class="pre">STRING</span></code> token.</p>
 <p>To simplify the example for the purposes of illustration, <code class="docutils literal notranslate"><span class="pre">inside_string</span></code>
-returns <code class="docutils literal notranslate"><span class="pre">True</span></code> even if <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is on the quote delimiter of the string,
-or a prefix character (like <code class="docutils literal notranslate"><span class="pre">r</span></code> or <code class="docutils literal notranslate"><span class="pre">f</span></code>).</p>
+returns <code class="docutils literal notranslate"><span class="pre">True</span></code> even if <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is on the quote delimiter or prefix
+character (like <code class="docutils literal notranslate"><span class="pre">r</span></code> or <code class="docutils literal notranslate"><span class="pre">f</span></code>) of the string.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">inside_string</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;</span>
-<span class="gp">... </span><span class="sd">    Returns True if row, col is inside a string in s, False otherwise.</span>
+<span class="gp">... </span><span class="sd">    Returns True if (row, col) is inside a string in s, False otherwise.</span>
 <span class="gp">...</span><span class="sd"></span>
 <span class="gp">... </span><span class="sd">    row starts at 1 and col starts at 0.</span>
 <span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
@@ -96,10 +96,10 @@ or a prefix character (like <code class="docutils literal notranslate"><span cla
 
 </pre></div>
 </div>
-<p>Let’s walk through the code. We start with the loop</p>
-<p>We don’t want the function to raise <code class="docutils literal notranslate"><span class="pre">TokenError</span></code> on uncompleted delimiters or
-unclosed multi-line strings, so we wrap the loop in a <code class="docutils literal notranslate"><span class="pre">try</span></code> block that excepts
-<a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">tokenize.TokenError</span></code></a>.</p>
+<p>Let’s walk through the code.</p>
+<p>We don’t want the function to raise <a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a> on
+uncompleted delimiters or unclosed multi-line strings, so we wrap the loop in
+a <code class="docutils literal notranslate"><span class="pre">try</span></code> block.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
 </pre></div>
 </div>
@@ -108,28 +108,26 @@ instead to indicate it isn’t used.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span>    <span class="k">for</span> <span class="n">toknum</span><span class="p">,</span> <span class="n">tokval</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 </pre></div>
 </div>
-<p>The idea is to loop through the tokens until we find one that our <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code>
-is contained in (it is between the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tokens). This may not
-actually happen, for instance, if the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is inside whitespace that
-isn’t tokenized.</p>
-<p>The first thing to check for is <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> caused
-by an unclosed single-quoted string. If an unclosed single-quote (not
-multiline) string is encountered, that is, it is closed by a newline, like</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;an unclosed string</span>
-</pre></div>
-</div>
-<p>and we haven’t reached our <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> yet, then we assume our <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code>
-is inside this unclosed string. This implicitly makes the rest of the document
-part of the unclosed string. We could also easily modify this to only assume
-the rest of the line is inside the unclosed string.</p>
+<p>The idea is to loop through the tokens until we find one that <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is
+contained in (it is between the <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and
+<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a> tokens). This may not actually happen, for
+instance, if the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is inside whitespace that isn’t tokenized.</p>
+<p>The first thing to check for is an <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>
+caused by an unclosed single-quoted string. If an unclosed single-quoted (not
+multi-line) string is encountered, that is, it is closed by a newline, like
+<code class="docutils literal notranslate"><span class="pre">&quot;an</span> <span class="pre">unclosed</span> <span class="pre">string</span></code>, and we haven’t reached our <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> yet, then we
+assume our <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is inside this unclosed string. This implicitly makes
+the rest of the document part of the unclosed string. We could also easily
+modify this to only assume the rest of the line is inside the unclosed string.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span>         <span class="k">if</span> <span class="n">toknum</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">ERRORTOKEN</span> <span class="ow">and</span> <span class="n">tokval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s1">&#39;&quot;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">:</span>
              <span class="c1"># There is an unclosed string. We haven&#39;t gotten to the</span>
              <span class="c1"># position yet, so it must be inside this string</span>
              <span class="k">return</span> <span class="bp">True</span>
 </pre></div>
 </div>
-<p>Now we have the main condition. If the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is between <code class="docutils literal notranslate"><span class="pre">start</span></code> and
-<code class="docutils literal notranslate"><span class="pre">end</span></code> of a token, we have gone as far as we need to.</p>
+<p>Now we have the main condition. If the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is between the
+<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a> of a
+token, we have gone as far as we need to.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span>         <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">:</span>
 </pre></div>
 </div>
@@ -144,16 +142,18 @@ we don’t want the function to fail.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">except</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">TokenError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 </pre></div>
 </div>
-<p>Remember that there are two possibilities for a <code class="docutils literal notranslate"><span class="pre">TokenError</span></code>. If <code class="docutils literal notranslate"><span class="pre">'statement'</span></code>
-is in the error message, there is an unclosed brace somewhere. This case also
-only happens when <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> has reached the end of the token stream, so if
-the above checks haven’t returned <code class="docutils literal notranslate"><span class="pre">True</span></code> yet, then <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> must not be
-inside a <code class="docutils literal notranslate"><span class="pre">STRING</span></code> token, so we should return <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Remember that there are two possibilities for a
+<a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a>. If <code class="docutils literal notranslate"><span class="pre">'statement'</span></code> is in the error
+message, there is an unclosed brace somewhere. This case only happens when
+<code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> has reached the end of the token stream, so if the above checks
+haven’t returned <code class="docutils literal notranslate"><span class="pre">True</span></code> yet, then <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> must not be inside a <code class="docutils literal notranslate"><span class="pre">STRING</span></code>
+token, so we should return <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">'string'</span></code> is inside the error message, there is an unclosed multi-line
 string. In this case, we want to check if we are inside this string. We can
-check the start of the multiline string in the <code class="docutils literal notranslate"><span class="pre">TokenError</span></code>. Remember that the
-message is in <code class="docutils literal notranslate"><span class="pre">e.args[0]</span></code> and the start is in <code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>. So we should return
-<code class="docutils literal notranslate"><span class="pre">True</span></code> in this case if the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> are after the <code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>, and <code class="docutils literal notranslate"><span class="pre">False</span></code>
+check the start of the multi-line string in the
+<a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a>. Remember that the message is in
+<code class="docutils literal notranslate"><span class="pre">e.args[0]</span></code> and the start is in <code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>. So we should return <code class="docutils literal notranslate"><span class="pre">True</span></code> in
+this case if the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> are after the <code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>, and <code class="docutils literal notranslate"><span class="pre">False</span></code>
 otherwise.</p>
 <p>This logic can all be written succinctly as</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Uncompleted docstring or braces.</span>
@@ -194,9 +194,9 @@ it means we never found a <code class="docutils literal notranslate"><span class
 <span class="gp">&gt;&gt;&gt; </span><span class="n">inside_string</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s2">def hello(name):</span>
 <span class="gp">... </span><span class="s2">    return &#39;hello </span><span class="si">%s</span><span class="s2">&#39; % name</span>
-<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># &#39;n&#39; in name</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># &#39; &#39; before hello(name)</span>
 <span class="go">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Check unclosed string delimieters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Check TokenError from unclosed delimiters</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">inside_string</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s2">def hello(name:</span>
 <span class="gp">... </span><span class="s2">    return &#39;hello </span><span class="si">%s</span><span class="s2">&#39; % name</span>
@@ -231,7 +231,7 @@ they are on the same line.</li>
 <div class="section" id="line-numbers">
 <span id="line-numbers"></span><h3><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code><a class="headerlink" href="#line-numbers" title="Permalink to this headline">¶</a></h3>
 <p>Let’s go back to our motivating example from the <a class="reference external" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs.
-alternatives</a> section, a function that prints the line
+Alternatives</a> section, a function that prints the line
 numbers of every function definition. <a class="reference external" href="alternatives.html#tokenize">Our
 function</a> looked like this (rewritten to use our
 <code class="docutils literal notranslate"><span class="pre">tokenize_string()</span></code> helper):</p>
@@ -239,7 +239,6 @@ function</a> looked like this (rewritten to use our
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">and</span> <span class="n">tok</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="s1">&#39;def&#39;</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">...</span>
 
 </pre></div>
 </div>
@@ -251,8 +250,8 @@ will just let them bubble up. However, <a class="reference external" href="usage
 simply means that the input had an unclosed brace or multi-line string. In the
 former case, the tokenization reaches the end of the input before the
 exception is raised, and in the latter case, the remainder of the input is
-inside the unclosed multi-line string, so we can safely ignore <code class="docutils literal notranslate"><span class="pre">TokenError</span></code> in
-either case.</p>
+inside the unclosed multi-line string, so we can safely ignore
+<a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a> in either case.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -266,7 +265,7 @@ either case.</p>
 <p>Finally, let’s consider <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> due to unclosed
 single-quoted strings. Our motivation for using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to solve this
 problem is to handle incomplete or invalid Python (otherwise, we should use
-the <a class="reference external" href="alternatives.html#ast"><code class="docutils literal notranslate"><span class="pre">ast</span></code></a> implementation, which is much simpler).
+the <a class="reference external" href="alternatives.html#ast"><code class="docutils literal notranslate"><span class="pre">ast</span></code> implementation</a>, which is much simpler).
 Thus, it makes sense to treat unclosed single-quoted strings as if they were
 closed at the end of the line.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -382,8 +381,9 @@ counter.</p>
 <span class="gp">... </span><span class="s1">        pass</span>
 <span class="gp">... </span><span class="s1">    return level</span>
 <span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use a large column number so it always looks at the fully indented line.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">indentation_level_source</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">indentation_level</span><span class="p">(</span><span class="n">indentation_level_source</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">indentation_level</span><span class="p">(</span><span class="n">indentation_level_source</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
 <span class="go">0</span>
 <span class="go">1</span>
 <span class="go">1</span>
@@ -405,16 +405,21 @@ counter.</p>
 
 </pre></div>
 </div>
+<p>An oddity worth mentioning: the comment near the end of the function is not
+considered indented more than the <code class="docutils literal notranslate"><span class="pre">except</span></code> line. Remember that the C parser,
+which <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> is based on, ignores <a class="reference external" href="tokens.html#comment">comments</a>, so true
+indentations with <a class="reference external" href="tokens.html#indent"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></a> must occur on lines with real
+code.</p>
 </div>
 <div class="section" id="mismatched-parentheses">
 <span id="mismatched-parentheses"></span><h3>Mismatched Parentheses<a class="headerlink" href="#mismatched-parentheses" title="Permalink to this headline">¶</a></h3>
 <p>This example shows how to use a very important tool when processing tokens, a
 stack. A <a class="reference external" href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)"><em>stack</em></a>
-is a data structure that operates as First In, Last Out. A stack has two basic
+is a data structure that operates as Last In, First Out. A stack has two basic
 operations, <em>push</em>, which adds something to the stack, and <em>pop</em>, which
 removes the most recently added item.</p>
 <p>In Python, a stack is usually implemented using a list. The push method is
-<code class="docutils literal notranslate"><span class="pre">list.append</span></code> and the pop method is <code class="docutils literal notranslate"><span class="pre">list.pop</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">list.append()</span></code> and the pop method is <code class="docutils literal notranslate"><span class="pre">list.pop()</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -441,15 +446,15 @@ pop it, or if it still has items when we finish processing all the
 parentheses, it means they are not balanced. Otherwise, they are. In this
 case, we could simply use a counter like we did for the previous example, and
 make sure it doesn’t go negative and ends at 0, but a stack is required to
-handle more than one type of brace, like <code class="docutils literal notranslate"><span class="pre">(())([])[]</span></code>, which of course is the
-case in Python.</p>
+handle more than one type of brace, like <code class="docutils literal notranslate"><span class="pre">(())([])[]</span></code>, which, of course, is
+the case in Python.</p>
 <p>Here is an example showing how to use a stack to find all the mismatched
 parentheses or braces in a piece of Python code. The function handles <code class="docutils literal notranslate"><span class="pre">()</span></code>,
 <code class="docutils literal notranslate"><span class="pre">[]</span></code>, and <code class="docutils literal notranslate"><span class="pre">{}</span></code> type braces.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">braces</span> <span class="o">=</span> <span class="p">{</span>
-<span class="gp">... </span>    <span class="n">tokenize</span><span class="o">.</span><span class="n">LPAR</span><span class="p">:</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">RPAR</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">tokenize</span><span class="o">.</span><span class="n">LSQB</span><span class="p">:</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">RSQB</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">tokenize</span><span class="o">.</span><span class="n">LBRACE</span><span class="p">:</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">RBRACE</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tokenize</span><span class="o">.</span><span class="n">LPAR</span><span class="p">:</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">RPAR</span><span class="p">,</span> <span class="c1"># ()</span>
+<span class="gp">... </span>    <span class="n">tokenize</span><span class="o">.</span><span class="n">LSQB</span><span class="p">:</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">RSQB</span><span class="p">,</span> <span class="c1"># []</span>
+<span class="gp">... </span>    <span class="n">tokenize</span><span class="o">.</span><span class="n">LBRACE</span><span class="p">:</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">RBRACE</span><span class="p">,</span> <span class="c1"># {}</span>
 <span class="gp">... </span><span class="p">}</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">matching_parens</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -460,8 +465,8 @@ parentheses or braces in a piece of Python code. The function handles <code clas
 <span class="gp">...</span><span class="sd"></span>
 <span class="gp">... </span><span class="sd">    Returns a tuple (matching, mismatching).</span>
 <span class="gp">...</span><span class="sd"></span>
-<span class="gp">... </span><span class="sd">    matching is a list of tuples of matching TokenInfo objects for matching</span>
-<span class="gp">... </span><span class="sd">    parentheses/braces.</span>
+<span class="gp">... </span><span class="sd">    matching is a list of tuples of matching TokenInfo objects for</span>
+<span class="gp">... </span><span class="sd">    matching parentheses/braces.</span>
 <span class="gp">...</span><span class="sd"></span>
 <span class="gp">... </span><span class="sd">    mismatching is a list of TokenInfo objects for mismatching</span>
 <span class="gp">... </span><span class="sd">    parentheses/braces.</span>
@@ -596,24 +601,24 @@ understand how the function works.</p>
 </pre></div>
 </div>
 <p>In this code block, <code class="docutils literal notranslate"><span class="pre">tok</span></code> is a closing brace and <code class="docutils literal notranslate"><span class="pre">prevtok</span></code> is the most
-recently found opening brace (<code class="docutils literal notranslate"><span class="pre">stack.pop()</span></code>). Under the current code, we append
-both braces to the <code class="docutils literal notranslate"><span class="pre">mismatching</span></code> list (keeping their order), and we continue
-to do that with <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=False</span></code>. However, if
+recently found opening brace (<code class="docutils literal notranslate"><span class="pre">stack.pop()</span></code>). Under the current code, we
+append both braces to the <code class="docutils literal notranslate"><span class="pre">mismatching</span></code> list (keeping their order), and we
+continue to do that with <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=False</span></code>. However, if
 <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=True</span></code>, we instead put the <code class="docutils literal notranslate"><span class="pre">prevtok</span></code> back on the
 stack, and still put the <code class="docutils literal notranslate"><span class="pre">tok</span></code> in the <code class="docutils literal notranslate"><span class="pre">mismatching</span></code> list. This allows
-<code class="docutils literal notranslate"><span class="pre">prevtok</span></code> to still be matched by a closing brace later.</p>
+<code class="docutils literal notranslate"><span class="pre">prevtok</span></code> to be matched by a closing brace later.</p>
 <p>For example, suppose we have <code class="docutils literal notranslate"><span class="pre">(</span> <span class="pre">}</span> <span class="pre">)</span></code>. We first append <code class="docutils literal notranslate"><span class="pre">(</span></code> to the stack, so the
 stack is <code class="docutils literal notranslate"><span class="pre">['(']</span></code>. Then when we get to <code class="docutils literal notranslate"><span class="pre">}</span></code>. We pop <code class="docutils literal notranslate"><span class="pre">(</span></code> from the stack, and see
 that it doesn’t match. If <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=False</span></code>, we consider
 these both to be mismatched, and add them to the <code class="docutils literal notranslate"><span class="pre">mismatched</span></code> list in the
 correct order (<code class="docutils literal notranslate"><span class="pre">['(',</span> <span class="pre">'}']</span></code>). If <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=True</span></code>, though,
-we only add <code class="docutils literal notranslate"><span class="pre">'}'</span></code> to the mismatched list (<code class="docutils literal notranslate"><span class="pre">['}']</span></code>), and put <code class="docutils literal notranslate"><span class="pre">(</span></code> back on the
-stack.</p>
+we only add <code class="docutils literal notranslate"><span class="pre">'}'</span></code> to the <code class="docutils literal notranslate"><span class="pre">mismatched</span></code> list and put <code class="docutils literal notranslate"><span class="pre">(</span></code> back on the stack.</p>
 <p>Then we get to <code class="docutils literal notranslate"><span class="pre">)</span></code>. In the <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=False</span></code> case, the
 stack will be empty, so it will not be considered matching, and thus be placed
 in the <code class="docutils literal notranslate"><span class="pre">mismatching</span></code> list (the <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">not</span> <span class="pre">stack:</span></code> block prior to the code we
 modified). In the <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=True</span></code> case, the stack is
-<code class="docutils literal notranslate"><span class="pre">['(']</span></code>, so <code class="docutils literal notranslate"><span class="pre">prevtok</span></code> will be <code class="docutils literal notranslate"><span class="pre">(</span></code>, which matches the <code class="docutils literal notranslate"><span class="pre">)</span></code>, so they are both put in the <code class="docutils literal notranslate"><span class="pre">matching</span></code> list.</p>
+<code class="docutils literal notranslate"><span class="pre">['(']</span></code>, so <code class="docutils literal notranslate"><span class="pre">prevtok</span></code> will be <code class="docutils literal notranslate"><span class="pre">(</span></code>, which matches the <code class="docutils literal notranslate"><span class="pre">)</span></code>, so they are both put
+in the <code class="docutils literal notranslate"><span class="pre">matching</span></code> list.</p>
 <p></details>
 </details></p>
 </div>
@@ -625,21 +630,28 @@ modified). In the <code class="docutils literal notranslate"><span class="pre">a
 <p>The general pattern we will apply here is to get the token stream from
 <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, modify it in some way, and convert it back to a bytes string
 with <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a>.</p>
-<p>When new tokens are added, <code class="docutils literal notranslate"><span class="pre">untokenize()</span></code> does not maintain whitespace between
-tokens in a human-readable way. Doing this is possible, by keeping track of
-column offsets, but we will not bother with it here. See the discussion in the
+<p>When new tokens are added,
+<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> does not maintain
+whitespace between tokens in a human-readable way. Doing this is possible, by
+keeping track of column offsets, but we will not bother with it here except
+where it is convenient. See the discussion in the
 <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> section.</p>
 <div class="section" id="converting-to">
 <span id="converting-to"></span><h3>Converting <code class="docutils literal notranslate"><span class="pre">^</span></code> to <code class="docutils literal notranslate"><span class="pre">**</span></code><a class="headerlink" href="#converting-to" title="Permalink to this headline">¶</a></h3>
 <p>Python’s syntax uses <code class="docutils literal notranslate"><span class="pre">**</span></code> for exponentiation, although many might expect it to
-use <code class="docutils literal notranslate"><span class="pre">^</span></code> instead. <code class="docutils literal notranslate"><span class="pre">^</span></code> is instead the <a class="reference external" href="https://docs.python.org/3/reference/expressions.html#binary-bitwise-operations">XOR
-operator</a>.
-Suppose you wanted to allow <code class="docutils literal notranslate"><span class="pre">^</span></code> to be written in place of <code class="docutils literal notranslate"><span class="pre">**</span></code> to represent
+use <code class="docutils literal notranslate"><span class="pre">^</span></code> instead. <code class="docutils literal notranslate"><span class="pre">^</span></code> is actually the <a class="reference external" href="https://docs.python.org/3/reference/expressions.html#binary-bitwise-operations">XOR
+operator</a>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">bin</span><span class="p">(</span><span class="mb">0b101</span> <span class="o">^</span> <span class="mb">0b001</span><span class="p">)</span>
+<span class="go">&#39;0b100&#39;</span>
+
+</pre></div>
+</div>
+<p>Suppose you don’t care about XOR, and want to allow <code class="docutils literal notranslate"><span class="pre">^</span></code> to represent
 exponentiation. You might think to use the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module and replace
 <a class="reference external" href="https://greentreesnakes.readthedocs.io/en/latest/nodes.html#BitXor"><code class="docutils literal notranslate"><span class="pre">BitXor</span></code></a>
 nodes with
 <a class="reference external" href="https://greentreesnakes.readthedocs.io/en/latest/nodes.html#Pow"><code class="docutils literal notranslate"><span class="pre">Pow</span></code></a>, but
-this will not work, because <code class="docutils literal notranslate"><span class="pre">^</span></code> has a different precedence than <code class="docutils literal notranslate"><span class="pre">**</span></code>.</p>
+this will not work, because <code class="docutils literal notranslate"><span class="pre">^</span></code> has a different precedence than <code class="docutils literal notranslate"><span class="pre">**</span></code>:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;x**2 + 1&#39;</span><span class="p">))</span>
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id=&#39;x&#39;, ctx=Load()), op=Pow(), right=Num(n=2)), op=Add(), right=Num(n=1)))])&quot;</span>
@@ -649,17 +661,19 @@ this will not work, because <code class="docutils literal notranslate"><span cla
 </pre></div>
 </div>
 <p>This is difficult to read, but it basically says that <code class="docutils literal notranslate"><span class="pre">x**2</span> <span class="pre">+</span> <span class="pre">1</span></code> is parsed
-like <code class="docutils literal notranslate"><span class="pre">(x**2)</span> <span class="pre">+</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">x^2</span> <span class="pre">+</span> <span class="pre">1</span></code> is parsed like <code class="docutils literal notranslate"><span class="pre">x^(2</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p>
+like <code class="docutils literal notranslate"><span class="pre">(x**2)</span> <span class="pre">+</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">x^2</span> <span class="pre">+</span> <span class="pre">1</span></code> is parsed like <code class="docutils literal notranslate"><span class="pre">x^(2</span> <span class="pre">+</span> <span class="pre">1)</span></code>. There’s no way to
+distinguish the two in the AST representation, because it does not keep track
+of redundant parentheses.</p>
 <p>We could do a simple <code class="docutils literal notranslate"><span class="pre">s.replace('^',</span> <span class="pre">'**')</span></code>, but this would <a class="reference external" href="alternatives.html#regular-expressions">also
 replace</a> any occurrences of <code class="docutils literal notranslate"><span class="pre">^</span></code> in
 strings and comments.</p>
-<p>Instead, we can use <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. The replacement is quite easy to do</p>
+<p>Instead, we can use <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. The replacement is quite easy to do:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">xor_to_pow</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">ENCODING</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="n">encoding</span> <span class="o">=</span> <span class="n">tok</span><span class="o">.</span><span class="n">string</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">exact_type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">CIRCUMFLEX</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">exact_type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">CIRCUMFLEX</span><span class="p">:</span> <span class="c1"># CIRCUMFLEX is ^</span>
 <span class="gp">... </span>            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tokenize</span><span class="o">.</span><span class="n">OP</span><span class="p">,</span> <span class="s1">&#39;**&#39;</span><span class="p">))</span>
 <span class="gp">... </span>        <span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
@@ -736,9 +750,9 @@ precedence.</p>
 <p>You can find some more advanced examples of extending Python’s syntax in
 SymPy’s <a class="reference external" href="https://github.com/sympy/sympy/blob/master/sympy/parsing/sympy_parser.py">parser
 module</a>,
-for example, functions to allow implicit multiplication (<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">y</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">x*y</span></code>),
-implicit function application (<code class="docutils literal notranslate"><span class="pre">sin</span> <span class="pre">x</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">sin(x)</span></code>), factorial notation (<code class="docutils literal notranslate"><span class="pre">x!</span></code>
--&gt; <code class="docutils literal notranslate"><span class="pre">factorial(x)</span></code>), and more.</p>
+for example, implicit multiplication (<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">y</span></code> ⮕ <code class="docutils literal notranslate"><span class="pre">x*y</span></code>), implicit function
+application (<code class="docutils literal notranslate"><span class="pre">sin</span> <span class="pre">x</span></code> ⮕ <code class="docutils literal notranslate"><span class="pre">sin(x)</span></code>), factorial notation (<code class="docutils literal notranslate"><span class="pre">x!</span></code> ⮕ <code class="docutils literal notranslate"><span class="pre">factorial(x)</span></code>),
+and more.</p>
 <div class="section" id="emoji-math">
 <span id="emoji-math"></span><h4>Emoji Math<a class="headerlink" href="#emoji-math" title="Permalink to this headline">¶</a></h4>
 <p>The below example is relatively simple. It allows the “emoji” mathematical
@@ -795,22 +809,32 @@ not allowed.”</p>
 </pre></div>
 </div>
 <p>We can write a function using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to backport this feature to Python
-3.5. As noted in the <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> section, in Python 3.5,
-<code class="docutils literal notranslate"><span class="pre">123_456</span></code> tokenizes as <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>). In general,
-multiple underscores between tokens will tokenize like this. Additionally,
-underscores are allowed after base specifiers, like <code class="docutils literal notranslate"><span class="pre">0x_1</span></code>. This also
-tokenizes as <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) and <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">x_1</span></code>). Since <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> and <code class="docutils literal notranslate"><span class="pre">NAME</span></code>
-tokens cannot appear next to one another in valid Python, we can simply
-combine them when they do. Finally, if an underscore appears before the <code class="docutils literal notranslate"><span class="pre">.</span></code> in
-a floating point literal, like <code class="docutils literal notranslate"><span class="pre">1_2.3_4</span></code> it will tokenize <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1</span></code>),
-<code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">_2</span></code>), <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">.3</span></code>), <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">_4</span></code>).</p>
-<p>Note that in this example, the <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> token allows us to access
-<code class="docutils literal notranslate"><span class="pre">result[-1]</span></code> unconditionally, as we know there must always be at least this
-token already processed before any <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token.</p>
-<p>We do some basic checks here to not allow spaces before underscores, which is also
-not allowed in Python 3.6. But for simplicity this function takes a garbage
-in, garbage out approach. Invalid syntax in Python 3.6, like <code class="docutils literal notranslate"><span class="pre">123a_bc</span></code> will transform to
-something that is still invalid syntax in Python 3.5 (<code class="docutils literal notranslate"><span class="pre">123abc</span></code>).</p>
+3.5. Some experimentation shows how the new literals tokenize in Python 3.5:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">123_456</span></code> tokenizes as <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and
+<a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>). In general, multiple underscores
+between tokens will tokenize like this.</li>
+<li>Additionally, underscores are allowed after base specifiers, like <code class="docutils literal notranslate"><span class="pre">0x_1</span></code>.
+This also tokenizes as <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) and
+<a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">x_1</span></code>). Since <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> and
+<a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> tokens cannot appear next to one another in valid
+Python, we can simply combine them when they do.</li>
+<li>Finally, if an underscore appears before the <code class="docutils literal notranslate"><span class="pre">.</span></code> in a floating point
+literal, like <code class="docutils literal notranslate"><span class="pre">1_2.3_4</span></code> it will tokenize <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a>
+(<code class="docutils literal notranslate"><span class="pre">1</span></code>), <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_2</span></code>), <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a>
+(<code class="docutils literal notranslate"><span class="pre">.3</span></code>), <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_4</span></code>).</li>
+</ul>
+<p>Note that in this example, the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token allows
+us to access <code class="docutils literal notranslate"><span class="pre">result[-1]</span></code> unconditionally, as we know there must always be at
+least this token already processed before any <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a>
+token. This is often a useful property the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a>
+allows us to take advantage of.</p>
+<p>We do some basic checks here to not allow spaces before underscores and double
+underscores, which are not allowed in Python 3.6. But for simplicity, this
+function takes a <a class="reference external" href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out">garbage in, garbage
+out</a> approach. Invalid
+syntax in Python 3.6, like <code class="docutils literal notranslate"><span class="pre">123a_bc</span></code>, will transform to something that is
+still invalid syntax in Python 3.5 (<code class="docutils literal notranslate"><span class="pre">123abc</span></code>).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">underscore_literals</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
@@ -822,8 +846,9 @@ something that is still invalid syntax in Python 3.5 (<code class="docutils lite
 <span class="gp">... </span>            <span class="n">encoding</span> <span class="o">=</span> <span class="n">tok</span><span class="o">.</span><span class="n">string</span>
 <span class="gp">... </span>        <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">and</span> <span class="n">result</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NUMBER</span><span class="p">:</span>
 <span class="gp">... </span>            <span class="c1"># Check that there are no spaces between the tokens</span>
-<span class="gp">... </span>            <span class="c1"># e.g., 123 _456 is not allowed</span>
-<span class="gp">... </span>            <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end</span> <span class="o">==</span> <span class="n">tok</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="c1"># e.g., 123 _456 is not allowed, and there aren&#39;t multiple</span>
+<span class="gp">... </span>            <span class="c1"># consecutive undercores, e.g., 123__456 is not allowed.</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end</span> <span class="o">==</span> <span class="n">tok</span><span class="o">.</span><span class="n">start</span> <span class="ow">and</span> <span class="s1">&#39;__&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tok</span><span class="o">.</span><span class="n">string</span><span class="p">:</span>
 <span class="gp">... </span>                <span class="n">new_tok</span> <span class="o">=</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">TokenInfo</span><span class="p">(</span>
 <span class="gp">... </span>                    <span class="n">tokenize</span><span class="o">.</span><span class="n">NUMBER</span><span class="p">,</span>
 <span class="gp">... </span>                    <span class="n">result</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">string</span> <span class="o">+</span> <span class="n">tok</span><span class="o">.</span><span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
@@ -864,21 +889,22 @@ something that is still invalid syntax in Python 3.5 (<code class="docutils lite
 
 </pre></div>
 </div>
-<p>Note that by reusing the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tokens, we are able to make
-untokenize keep the whitespace, even though characters were removed,
+<p>Note that by reusing the <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and
+<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a> tokens, we are able to make
+<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> keep the
+whitespace, even though characters were removed.
 <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> only uses the
-differences between <code class="docutils literal notranslate"><span class="pre">end</span></code> and <code class="docutils literal notranslate"><span class="pre">start</span></code> to determine how many spaces, not their
-absolute values (remember that
+differences between <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a> and
+<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> to determine how many spaces to add
+between tokens, not their absolute values (remember that
 <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> only requires the
-<code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> tuples to be nondecreasing; it doesn’t care if the actual
-column values are correct).</p>
+<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a>
+tuples to be nondecreasing; it doesn’t care if the actual column values are
+correct).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">underscore_literals</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> 
 <span class="go">&#39;10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.6+</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">underscore_literals</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> 
-<span class="go">&#39;1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.&#39;</span>
 
 </pre></div>
 </div>

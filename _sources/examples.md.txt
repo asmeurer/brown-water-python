@@ -22,22 +22,22 @@ To simplify the examples, the following helper function is used.
 
 ## Processing Tokens
 
-These examples show different ways that you can process tokens.
+These examples show different ways that tokens can be processed.
 
 ### `inside_string()`
 
-`inside_string(s, row, col)` takes the string `s` and determines if position
-at `(row, col)` is inside a `STRING` token.
+`inside_string(s, row, col)` takes the Python code `s` and determines if
+position at `(row, col)` is inside a `STRING` token.
 
 To simplify the example for the purposes of illustration, `inside_string`
-returns `True` even if `(row, col)` is on the quote delimiter of the string,
-or a prefix character (like `r` or `f`).
+returns `True` even if `(row, col)` is on the quote delimiter or prefix
+character (like `r` or `f`) of the string.
 
 
 ```py
 >>> def inside_string(s, row, col):
 ...     """
-...     Returns True if row, col is inside a string in s, False otherwise.
+...     Returns True if (row, col) is inside a string in s, False otherwise.
 ...
 ...     row starts at 1 and col starts at 0.
 ...     """
@@ -58,12 +58,11 @@ or a prefix character (like `r` or `f`).
 
 ```
 
-Let's walk through the code. We start with the loop
+Let's walk through the code.
 
-
-We don't want the function to raise `TokenError` on uncompleted delimiters or
-unclosed multi-line strings, so we wrap the loop in a `try` block that excepts
-[`tokenize.TokenError`](usage.html#tokenerror).
+We don't want the function to raise [`TokenError`](usage.html#tokenerror) on
+uncompleted delimiters or unclosed multi-line strings, so we wrap the loop in
+a `try` block.
 
 ```py
 try:
@@ -76,23 +75,18 @@ instead to indicate it isn't used.
     for toknum, tokval, start, end, _ in tokenize_string(s):
 ```
 
-The idea is to loop through the tokens until we find one that our `(row, col)`
-is contained in (it is between the `start` and `end` tokens). This may not
-actually happen, for instance, if the `(row, col)` is inside whitespace that
-isn't tokenized.
+The idea is to loop through the tokens until we find one that `(row, col)` is
+contained in (it is between the [`start`](usage.html#start-and-end) and
+[`end`](usage.html#start-and-end) tokens). This may not actually happen, for
+instance, if the `(row, col)` is inside whitespace that isn't tokenized.
 
-The first thing to check for is [`ERRORTOKEN`](tokens.html#errortoken) caused
-by an unclosed single-quoted string. If an unclosed single-quote (not
-multiline) string is encountered, that is, it is closed by a newline, like
-
-```
-"an unclosed string
-```
-
-and we haven't reached our `(row, col)` yet, then we assume our `(row, col)`
-is inside this unclosed string. This implicitly makes the rest of the document
-part of the unclosed string. We could also easily modify this to only assume
-the rest of the line is inside the unclosed string.
+The first thing to check for is an [`ERRORTOKEN`](tokens.html#errortoken)
+caused by an unclosed single-quoted string. If an unclosed single-quoted (not
+multi-line) string is encountered, that is, it is closed by a newline, like
+`"an unclosed string`, and we haven't reached our `(row, col)` yet, then we
+assume our `(row, col)` is inside this unclosed string. This implicitly makes
+the rest of the document part of the unclosed string. We could also easily
+modify this to only assume the rest of the line is inside the unclosed string.
 
 
 ```py
@@ -102,8 +96,9 @@ the rest of the line is inside the unclosed string.
              return True
 ```
 
-Now we have the main condition. If the `(row, col)` is between `start` and
-`end` of a token, we have gone as far as we need to.
+Now we have the main condition. If the `(row, col)` is between the
+[`start`](usage.html#start-and-end) and [`end`](usage.html#start-and-end) of a
+token, we have gone as far as we need to.
 
 ```py
          if start <= (row, col) <= end:
@@ -124,17 +119,19 @@ we don't want the function to fail.
 except tokenize.TokenError as e:
 ```
 
-Remember that there are two possibilities for a `TokenError`. If `'statement'`
-is in the error message, there is an unclosed brace somewhere. This case also
-only happens when `tokenize` has reached the end of the token stream, so if
-the above checks haven't returned `True` yet, then `(row, col)` must not be
-inside a `STRING` token, so we should return `False`.
+Remember that there are two possibilities for a
+[`TokenError`](usage.html#tokenerror). If `'statement'` is in the error
+message, there is an unclosed brace somewhere. This case only happens when
+`tokenize()` has reached the end of the token stream, so if the above checks
+haven't returned `True` yet, then `(row, col)` must not be inside a `STRING`
+token, so we should return `False`.
 
 If `'string'` is inside the error message, there is an unclosed multi-line
 string. In this case, we want to check if we are inside this string. We can
-check the start of the multiline string in the `TokenError`. Remember that the
-message is in `e.args[0]` and the start is in `e.args[1]`. So we should return
-`True` in this case if the `(row, col)` are after the `e.args[1]`, and `False`
+check the start of the multi-line string in the
+[`TokenError`](usage.html#tokenerror). Remember that the message is in
+`e.args[0]` and the start is in `e.args[1]`. So we should return `True` in
+this case if the `(row, col)` are after the `e.args[1]`, and `False`
 otherwise.
 
 This logic can all be written succinctly as
@@ -182,9 +179,9 @@ True
 >>> inside_string("""
 ... def hello(name):
 ...     return 'hello %s' % name
-... """, 2, 10) # 'n' in name
+... """, 2, 3) # ' ' before hello(name)
 False
->>> # Check unclosed string delimieters
+>>> # Check TokenError from unclosed delimiters
 >>> inside_string("""
 ... def hello(name:
 ...     return 'hello %s' % name
@@ -219,7 +216,7 @@ True
 ### `line_numbers()`
 
 Let's go back to our motivating example from the [`tokenize` vs.
-alternatives](alternatives.html) section, a function that prints the line
+Alternatives](alternatives.html) section, a function that prints the line
 numbers of every function definition. [Our
 function](alternatives.html#tokenize) looked like this (rewritten to use our
 `tokenize_string()` helper):
@@ -229,7 +226,6 @@ function](alternatives.html#tokenize) looked like this (rewritten to use our
 ...     for tok in tokenize_string(s):
 ...         if tok.type == tokenize.NAME and tok.string == 'def':
 ...             print(tok.start[0])
-...
 
 ```
 
@@ -242,8 +238,8 @@ will just let them bubble up. However, [`TokenError`](usage.html#tokenerror)
 simply means that the input had an unclosed brace or multi-line string. In the
 former case, the tokenization reaches the end of the input before the
 exception is raised, and in the latter case, the remainder of the input is
-inside the unclosed multi-line string, so we can safely ignore `TokenError` in
-either case.
+inside the unclosed multi-line string, so we can safely ignore
+[`TokenError`](usage.html#tokenerror) in either case.
 
 
 ```py
@@ -260,7 +256,7 @@ either case.
 Finally, let's consider [`ERRORTOKEN`](tokens.html#errortoken) due to unclosed
 single-quoted strings. Our motivation for using `tokenize` to solve this
 problem is to handle incomplete or invalid Python (otherwise, we should use
-the [`ast`](alternatives.html#ast) implementation, which is much simpler).
+the [`ast` implementation](alternatives.html#ast), which is much simpler).
 Thus, it makes sense to treat unclosed single-quoted strings as if they were
 closed at the end of the line.
 
@@ -384,8 +380,9 @@ To demonstrate the function, let's apply it to itself.
 ...         pass
 ...     return level
 ... '''
+>>> # Use a large column number so it always looks at the fully indented line.
 >>> for i in range(1, indentation_level_source.count('\n') + 2):
-...     print(indentation_level(indentation_level_source, i, 30))
+...     print(indentation_level(indentation_level_source, i, 100))
 0
 1
 1
@@ -407,18 +404,23 @@ To demonstrate the function, let's apply it to itself.
 
 ```
 
+An oddity worth mentioning: the comment near the end of the function is not
+considered indented more than the `except` line. Remember that the C parser,
+which `tokenize` is based on, ignores [comments](tokens.html#comment), so true
+indentations with [`INDENT`](tokens.html#indent) must occur on lines with real
+code.
 
 ### Mismatched Parentheses
 
 
 This example shows how to use a very important tool when processing tokens, a
 stack. A [*stack*](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
-is a data structure that operates as First In, Last Out. A stack has two basic
+is a data structure that operates as Last In, First Out. A stack has two basic
 operations, *push*, which adds something to the stack, and *pop*, which
 removes the most recently added item.
 
 In Python, a stack is usually implemented using a list. The push method is
-`list.append` and the pop method is `list.pop`.
+`list.append()` and the pop method is `list.pop()`.
 
 ```py
 >>> stack = []
@@ -448,8 +450,8 @@ pop it, or if it still has items when we finish processing all the
 parentheses, it means they are not balanced. Otherwise, they are. In this
 case, we could simply use a counter like we did for the previous example, and
 make sure it doesn't go negative and ends at 0, but a stack is required to
-handle more than one type of brace, like `(())([])[]`, which of course is the
-case in Python.
+handle more than one type of brace, like `(())([])[]`, which, of course, is
+the case in Python.
 
 Here is an example showing how to use a stack to find all the mismatched
 parentheses or braces in a piece of Python code. The function handles `()`,
@@ -457,9 +459,9 @@ parentheses or braces in a piece of Python code. The function handles `()`,
 
 ```py
 >>> braces = {
-...     tokenize.LPAR: tokenize.RPAR,
-...     tokenize.LSQB: tokenize.RSQB,
-...     tokenize.LBRACE: tokenize.RBRACE,
+...     tokenize.LPAR: tokenize.RPAR, # ()
+...     tokenize.LSQB: tokenize.RSQB, # []
+...     tokenize.LBRACE: tokenize.RBRACE, # {}
 ... }
 ...
 >>> def matching_parens(s):
@@ -470,8 +472,8 @@ parentheses or braces in a piece of Python code. The function handles `()`,
 ...
 ...     Returns a tuple (matching, mismatching).
 ...
-...     matching is a list of tuples of matching TokenInfo objects for matching
-...     parentheses/braces.
+...     matching is a list of tuples of matching TokenInfo objects for
+...     matching parentheses/braces.
 ...
 ...     mismatching is a list of TokenInfo objects for mismatching
 ...     parentheses/braces.
@@ -624,26 +626,26 @@ mismatching.append(tok)
 ```
 
 In this code block, `tok` is a closing brace and `prevtok` is the most
-recently found opening brace (`stack.pop()`). Under the current code, we append
-both braces to the `mismatching` list (keeping their order), and we continue
-to do that with `allow_intermediary_mismatches=False`. However, if
+recently found opening brace (`stack.pop()`). Under the current code, we
+append both braces to the `mismatching` list (keeping their order), and we
+continue to do that with `allow_intermediary_mismatches=False`. However, if
 `allow_intermediary_mismatches=True`, we instead put the `prevtok` back on the
 stack, and still put the `tok` in the `mismatching` list. This allows
-`prevtok` to still be matched by a closing brace later.
+`prevtok` to be matched by a closing brace later.
 
 For example, suppose we have `( } )`. We first append `(` to the stack, so the
 stack is `['(']`. Then when we get to `}`. We pop `(` from the stack, and see
 that it doesn't match. If `allow_intermediary_mismatches=False`, we consider
 these both to be mismatched, and add them to the `mismatched` list in the
 correct order (`['(', '}']`). If `allow_intermediary_mismatches=True`, though,
-we only add `'}'` to the mismatched list (`['}']`), and put `(` back on the
-stack.
+we only add `'}'` to the `mismatched` list and put `(` back on the stack.
 
 Then we get to `)`. In the `allow_intermediary_mismatches=False` case, the
 stack will be empty, so it will not be considered matching, and thus be placed
 in the `mismatching` list (the `if not stack:` block prior to the code we
 modified). In the `allow_intermediary_mismatches=True` case, the stack is
-`['(']`, so `prevtok` will be `(`, which matches the `)`, so they are both put in the `matching` list.
+`['(']`, so `prevtok` will be `(`, which matches the `)`, so they are both put
+in the `matching` list.
 
 </details>
 </details>
@@ -657,22 +659,31 @@ The general pattern we will apply here is to get the token stream from
 `tokenize()`, modify it in some way, and convert it back to a bytes string
 with [`untokenize()`](helper-functions.html#untokenize-iterable).
 
-When new tokens are added, `untokenize()` does not maintain whitespace between
-tokens in a human-readable way. Doing this is possible, by keeping track of
-column offsets, but we will not bother with it here. See the discussion in the
+When new tokens are added,
+[`untokenize()`](helper-functions.html#untokenize-iterable) does not maintain
+whitespace between tokens in a human-readable way. Doing this is possible, by
+keeping track of column offsets, but we will not bother with it here except
+where it is convenient. See the discussion in the
 [`untokenize()`](helper-functions.html#untokenize-iterable) section.
 
 ### Converting `^` to `**`
 
 Python's syntax uses `**` for exponentiation, although many might expect it to
-use `^` instead. `^` is instead the [XOR
+use `^` instead. `^` is actually the [XOR
 operator](https://docs.python.org/3/reference/expressions.html#binary-bitwise-operations).
-Suppose you wanted to allow `^` to be written in place of `**` to represent
+
+```py
+>>> bin(0b101 ^ 0b001)
+'0b100'
+
+```
+
+Suppose you don't care about XOR, and want to allow `^` to represent
 exponentiation. You might think to use the `ast` module and replace
 [`BitXor`](https://greentreesnakes.readthedocs.io/en/latest/nodes.html#BitXor)
 nodes with
 [`Pow`](https://greentreesnakes.readthedocs.io/en/latest/nodes.html#Pow), but
-this will not work, because `^` has a different precedence than `**`.
+this will not work, because `^` has a different precedence than `**`:
 
 ```py
 >>> import ast
@@ -684,13 +695,15 @@ this will not work, because `^` has a different precedence than `**`.
 ```
 
 This is difficult to read, but it basically says that `x**2 + 1` is parsed
-like `(x**2) + 1` and `x^2 + 1` is parsed like `x^(2 + 1)`.
+like `(x**2) + 1` and `x^2 + 1` is parsed like `x^(2 + 1)`. There's no way to
+distinguish the two in the AST representation, because it does not keep track
+of redundant parentheses.
 
 We could do a simple `s.replace('^', '**')`, but this would [also
 replace](alternatives.html#regular-expressions) any occurrences of `^` in
 strings and comments.
 
-Instead, we can use `tokenize`. The replacement is quite easy to do
+Instead, we can use `tokenize`. The replacement is quite easy to do:
 
 ```py
 >>> def xor_to_pow(s):
@@ -698,7 +711,7 @@ Instead, we can use `tokenize`. The replacement is quite easy to do
 ...     for tok in tokenize_string(s):
 ...         if tok.type == tokenize.ENCODING:
 ...             encoding = tok.string
-...         if tok.exact_type == tokenize.CIRCUMFLEX:
+...         if tok.exact_type == tokenize.CIRCUMFLEX: # CIRCUMFLEX is ^
 ...             result.append((tokenize.OP, '**'))
 ...         else:
 ...             result.append(tok)
@@ -782,9 +795,9 @@ precedence.
 You can find some more advanced examples of extending Python's syntax in
 SymPy's [parser
 module](https://github.com/sympy/sympy/blob/master/sympy/parsing/sympy_parser.py),
-for example, functions to allow implicit multiplication (`x y` -> `x*y`),
-implicit function application (`sin x` -> `sin(x)`), factorial notation (`x!`
--> `factorial(x)`), and more.
+for example, implicit multiplication (`x y` ⮕ `x*y`), implicit function
+application (`sin x` ⮕ `sin(x)`), factorial notation (`x!` ⮕ `factorial(x)`),
+and more.
 
 #### Emoji Math
 
@@ -852,24 +865,35 @@ For example,
 ```
 
 We can write a function using `tokenize` to backport this feature to Python
-3.5. As noted in the [`NUMBER`](tokens.html#number) section, in Python 3.5,
-`123_456` tokenizes as `NUMBER` (`123`) and `NAME` (`_456`). In general,
-multiple underscores between tokens will tokenize like this. Additionally,
-underscores are allowed after base specifiers, like `0x_1`. This also
-tokenizes as `NUMBER` (`0`) and `NAME` (`x_1`). Since `NUMBER` and `NAME`
-tokens cannot appear next to one another in valid Python, we can simply
-combine them when they do. Finally, if an underscore appears before the `.` in
-a floating point literal, like `1_2.3_4` it will tokenize `NUMBER` (`1`),
-`NAME` (`_2`), `NUMBER` (`.3`), `NAME` (`_4`).
+3.5. Some experimentation shows how the new literals tokenize in Python 3.5:
 
-Note that in this example, the `ENCODING` token allows us to access
-`result[-1]` unconditionally, as we know there must always be at least this
-token already processed before any `NAME` token.
+- `123_456` tokenizes as [`NUMBER`](tokens.html#number) (`123`) and
+  [`NAME`](tokens.html#name) (`_456`). In general, multiple underscores
+  between tokens will tokenize like this.
 
-We do some basic checks here to not allow spaces before underscores, which is also
-not allowed in Python 3.6. But for simplicity this function takes a garbage
-in, garbage out approach. Invalid syntax in Python 3.6, like `123a_bc` will transform to
-something that is still invalid syntax in Python 3.5 (`123abc`).
+- Additionally, underscores are allowed after base specifiers, like `0x_1`.
+  This also tokenizes as [`NUMBER`](tokens.html#number) (`0`) and
+  [`NAME`](tokens.html#name) (`x_1`). Since [`NUMBER`](tokens.html#number) and
+  [`NAME`](tokens.html#name) tokens cannot appear next to one another in valid
+  Python, we can simply combine them when they do.
+
+- Finally, if an underscore appears before the `.` in a floating point
+  literal, like `1_2.3_4` it will tokenize [`NUMBER`](tokens.html#number)
+  (`1`), [`NAME`](tokens.html#name) (`_2`), [`NUMBER`](tokens.html#number)
+  (`.3`), [`NAME`](tokens.html#name) (`_4`).
+
+Note that in this example, the [`ENCODING`](tokens.html#encoding) token allows
+us to access `result[-1]` unconditionally, as we know there must always be at
+least this token already processed before any [`NAME`](tokens.html#name)
+token. This is often a useful property the [`ENCODING`](tokens.html#encoding)
+allows us to take advantage of.
+
+We do some basic checks here to not allow spaces before underscores and double
+underscores, which are not allowed in Python 3.6. But for simplicity, this
+function takes a [garbage in, garbage
+out](https://en.wikipedia.org/wiki/Garbage_in,_garbage_out) approach. Invalid
+syntax in Python 3.6, like `123a_bc`, will transform to something that is
+still invalid syntax in Python 3.5 (`123abc`).
 
 ```py
 >>> import sys
@@ -883,8 +907,9 @@ something that is still invalid syntax in Python 3.5 (`123abc`).
 ...             encoding = tok.string
 ...         if tok.type == tokenize.NAME and result[-1].type == tokenize.NUMBER:
 ...             # Check that there are no spaces between the tokens
-...             # e.g., 123 _456 is not allowed
-...             if result[-1].end == tok.start:
+...             # e.g., 123 _456 is not allowed, and there aren't multiple
+...             # consecutive undercores, e.g., 123__456 is not allowed.
+...             if result[-1].end == tok.start and '__' not in tok.string:
 ...                 new_tok = tokenize.TokenInfo(
 ...                     tokenize.NUMBER,
 ...                     result[-1].string + tok.string.replace('_', ''),
@@ -925,22 +950,23 @@ something that is still invalid syntax in Python 3.5 (`123abc`).
 
 ```
 
-Note that by reusing the `start` and `end` tokens, we are able to make
-untokenize keep the whitespace, even though characters were removed,
+Note that by reusing the [`start`](usage.html#start-and-end) and
+[`end`](usage.html#start-and-end) tokens, we are able to make
+[`untokenize()`](helper-functions.html#untokenize-iterable) keep the
+whitespace, even though characters were removed.
 [`untokenize()`](helper-functions.html#untokenize-iterable) only uses the
-differences between `end` and `start` to determine how many spaces, not their
-absolute values (remember that
+differences between [`end`](usage.html#start-and-end) and
+[`start`](usage.html#start-and-end) to determine how many spaces to add
+between tokens, not their absolute values (remember that
 [`untokenize()`](helper-functions.html#untokenize-iterable) only requires the
-`start` and `end` tuples to be nondecreasing; it doesn't care if the actual
-column values are correct).
+[`start`](usage.html#start-and-end) and [`end`](usage.html#start-and-end)
+tuples to be nondecreasing; it doesn't care if the actual column values are
+correct).
 
 ```py
 >>> s = '1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.'
 >>> # In Python 3.5
 >>> underscore_literals(s) # doctest: +SKIP36, +SKIP37
 '10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.'
->>> # In Python 3.6+
->>> underscore_literals(s) # doctest: +SKIP35
-'1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.'
 
 ```
