@@ -1,3 +1,5 @@
+![logo](docs/_static/water-python.jpg)
+
 Brown Water Python: Better Docs for the Python `tokenize` Module.
 =================================================================
 
