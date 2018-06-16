@@ -1,4 +1,4 @@
-![logo](docs/_static/water-python.jpg)
+<img src="docs/_static/water-python.jpg" alt="logo" width="1898">
 
 Brown Water Python: Better Docs for the Python `tokenize` Module.
 =================================================================
