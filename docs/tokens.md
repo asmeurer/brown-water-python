@@ -823,6 +823,37 @@ TokenInfo(type=56 (ERRORTOKEN), string="'unclosed \\\ncontinued string\n", start
 TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
 ```
 
+In the case of uncontinued unclosed single quoted strings, the spaces before
+the string are also tokenized as `ERRORTOKEN`:
+
+```py
+>>> print_tokens("'an' +  'unclosed string")
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=3 (STRING), string="'an'", start=(1, 0), end=(1, 4), line="'an' +  'unclosed string")
+TokenInfo(type=53 (OP), string='+', start=(1, 5), end=(1, 6), line="'an' +  'unclosed string")
+TokenInfo(type=56 (ERRORTOKEN), string=' ', start=(1, 6), end=(1, 7), line="'an' +  'unclosed string")
+TokenInfo(type=56 (ERRORTOKEN), string=' ', start=(1, 7), end=(1, 8), line="'an' +  'unclosed string")
+TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 8), end=(1, 9), line="'an' +  'unclosed string")
+TokenInfo(type=1 (NAME), string='unclosed', start=(1, 9), end=(1, 17), line="'an' +  'unclosed string")
+TokenInfo(type=1 (NAME), string='string', start=(1, 18), end=(1, 24), line="'an' +  'unclosed string")
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+```
+
+This doesn't apply to unclosed continued strings:
+
+```py
+>>> print_tokens(r"""
+... 'an' +  'unclosed\
+... continued string
+... """)
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=3 (STRING), string="'an'", start=(2, 0), end=(2, 4), line="'an' +  'unclosed\\\n")
+TokenInfo(type=53 (OP), string='+', start=(2, 5), end=(2, 6), line="'an' +  'unclosed\\\n")
+TokenInfo(type=56 (ERRORTOKEN), string="'unclosed\\\ncontinued string\n", start=(2, 8), end=(3, 17), line="'an' +  'unclosed\\\n")
+TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
+```
+
 Therefore, code that handles `ERRORTOKEN` specifically for unclosed strings
 should check `tok.string[0] in '"\''`.
 
