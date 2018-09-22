@@ -949,6 +949,33 @@ error token. Otherwise only the start quote delimiter is.</p>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(4, 0), end=(4, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
+<p>In the case of uncontinued unclosed single quoted strings, the spaces before
+the string are also tokenized as <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&#39;an&#39; +  &#39;unclosed string&quot;</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;an&#39;&quot;, start=(1, 0), end=(1, 4), line=&quot;&#39;an&#39; +  &#39;unclosed string&quot;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 5), end=(1, 6), line=&quot;&#39;an&#39; +  &#39;unclosed string&quot;)</span>
+<span class="go">TokenInfo(type=56 (ERRORTOKEN), string=&#39; &#39;, start=(1, 6), end=(1, 7), line=&quot;&#39;an&#39; +  &#39;unclosed string&quot;)</span>
+<span class="go">TokenInfo(type=56 (ERRORTOKEN), string=&#39; &#39;, start=(1, 7), end=(1, 8), line=&quot;&#39;an&#39; +  &#39;unclosed string&quot;)</span>
+<span class="go">TokenInfo(type=56 (ERRORTOKEN), string=&quot;&#39;&quot;, start=(1, 8), end=(1, 9), line=&quot;&#39;an&#39; +  &#39;unclosed string&quot;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;unclosed&#39;, start=(1, 9), end=(1, 17), line=&quot;&#39;an&#39; +  &#39;unclosed string&quot;)</span>
+<span class="go">TokenInfo(type=1 (NAME), string=&#39;string&#39;, start=(1, 18), end=(1, 24), line=&quot;&#39;an&#39; +  &#39;unclosed string&quot;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
+</pre></div>
+</div>
+<p>This doesn’t apply to unclosed continued strings:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">&#39;an&#39; +  &#39;unclosed\</span>
+<span class="gp">... </span><span class="s2">continued string</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=58 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;an&#39;&quot;, start=(2, 0), end=(2, 4), line=&quot;&#39;an&#39; +  &#39;unclosed\\\n&quot;)</span>
+<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(2, 5), end=(2, 6), line=&quot;&#39;an&#39; +  &#39;unclosed\\\n&quot;)</span>
+<span class="go">TokenInfo(type=56 (ERRORTOKEN), string=&quot;&#39;unclosed\\\ncontinued string\n&quot;, start=(2, 8), end=(3, 17), line=&quot;&#39;an&#39; +  &#39;unclosed\\\n&quot;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(4, 0), end=(4, 0), line=&#39;&#39;)</span>
+</pre></div>
+</div>
 <p>Therefore, code that handles <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> specifically for unclosed strings
 should check <code class="docutils literal notranslate"><span class="pre">tok.string[0]</span> <span class="pre">in</span> <span class="pre">'&quot;\''</span></code>.</p>
 </div>
@@ -1250,7 +1277,7 @@ different than in 3.5 and 3.6.</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6+</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.10+</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
