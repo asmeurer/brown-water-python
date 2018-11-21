@@ -17,6 +17,12 @@ As an additional feature, it automatically ignores ``` at the end of a
 doctest, preventing the need to add an empty line to the end of every doctest
 in Markdown.
 
+This also automatically makes some replacements to text to allow testing to be
+uniform in Python 3.5, 3.6, and 3.7 due to some token number changes (for
+instance, tokenize.ENCODING is 59 in Python 3.5/3.6 and 57 in Python 3.7).
+That way we can just write the output as it appears in Python 3.7 without
+using ellipses or skipping in 3.5/3.6.
+
 WARNING: This file registers these flags globally in the standard library
 doctest module and monkeypatches the DoctestRunner object. It should only be
 run as a standalone script. Do not attempt to import it.
@@ -32,6 +38,8 @@ SKIP35 = register_optionflag("SKIP35")
 SKIP36 = register_optionflag("SKIP36")
 SKIP37 = register_optionflag("SKIP37")
 
+PY37 = sys.version_info[1] == 7
+
 if sys.version_info[1] == 5:
     SKIP_THIS_VERSION = SKIP35
 elif sys.version_info[1] == 6:
@@ -44,6 +52,17 @@ else:
 
 orig_run = DocTestRunner.run
 
+token_37_to_36 = {
+    'type=57 (ENCODING)': 'type=59 (ENCODING)',
+    'type=54 (ERRORTOKEN)': 'type=56 (ERRORTOKEN)',
+    'type=56 (NL)': 'type=58 (NL)',
+    'type=55 (COMMENT)': 'type=57 (COMMENT)',
+
+    # TokenInfo doctests in usage.md
+    'toknum: 57': 'toknum: 59',
+    'type: 57': 'type: 59',
+}
+
 def run(self, test, **kwargs):
     filtered_examples = []
     for example in test.examples:
@@ -51,6 +70,12 @@ def run(self, test, **kwargs):
             # Remove ```
             example.want = example.want.replace('```\n', '')
             example.exc_msg = example.exc_msg and example.exc_msg.replace('```\n', '')
+
+            # All doctest output should be as in Python 3.7, unless it is
+            # skipped in 3.7
+            if not PY37 and SKIP37 not in example.options:
+                for old, new in token_37_to_36.items():
+                    example.want = example.want.replace(old, new)
 
             filtered_examples.append(example)
     test.examples = filtered_examples
