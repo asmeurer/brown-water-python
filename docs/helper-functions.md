@@ -267,8 +267,11 @@ like for the code `("a") + True`.
 Compare this to the `tokenize` representation seen in the [intro](intro.html),
 or the `ast` representation:
 
+<!-- This is skipped in Python 3.8 because it changes Num to Constant. -->
+<!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. -->
+
 ```py
->>> ast.dump(ast.parse('("a") + True'))
+>>> ast.dump(ast.parse('("a") + True')) # doctest: +SKIP38
 "Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
 ```
 

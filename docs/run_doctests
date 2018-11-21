@@ -47,7 +47,7 @@ elif sys.version_info[1] == 6:
     SKIP_THIS_VERSION = SKIP36
 elif sys.version_info[1] == 7:
     SKIP_THIS_VERSION = SKIP37
-elif sys.version_info[1] == 7:
+elif sys.version_info[1] == 8:
     SKIP_THIS_VERSION = SKIP38
 else:
     warnings.warn("Unrecognized Python version: %s.%s" % sys.version_info[:2])

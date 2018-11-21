@@ -946,6 +946,6 @@ correct).
 ```py
 >>> s = '1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.'
 >>> # In Python 3.5
->>> underscore_literals(s) # doctest: +SKIP36, +SKIP37
+>>> underscore_literals(s) # doctest: +SKIP36, +SKIP37, +SKIP38
 '10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.'
 ```
