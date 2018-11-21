@@ -16,7 +16,6 @@ matrix:
     - python: 3.7
       dist: xenial
       sudo: true
-  include:
     - python: "nightly"
       dist: xenial
       sudo: true
