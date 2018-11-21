@@ -641,7 +641,7 @@ This bug has been fixed in Python 3.7.
 
 ```py
 >>> # Python 3.7+ behavior
->>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...').readline):
+>>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...\n').readline):
 ...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP35, +SKIP36
 ENCODING ENCODING 'utf-8'
 NAME NAME 'def'
@@ -652,6 +652,7 @@ OP RARROW '->'
 NAME NAME 'list'
 OP COLON ':'
 OP ELLIPSIS '...'
+NEWLINE NEWLINE '\n'
 ENDMARKER ENDMARKER ''
 ```
 
