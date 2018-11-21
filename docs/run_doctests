@@ -37,8 +37,9 @@ from doctest import DocTestRunner, register_optionflag, _test
 SKIP35 = register_optionflag("SKIP35")
 SKIP36 = register_optionflag("SKIP36")
 SKIP37 = register_optionflag("SKIP37")
+SKIP38 = register_optionflag("SKIP38")
 
-PY37 = sys.version_info[1] == 7
+PY37 = sys.version_info[1] >= 7
 
 if sys.version_info[1] == 5:
     SKIP_THIS_VERSION = SKIP35
@@ -46,9 +47,11 @@ elif sys.version_info[1] == 6:
     SKIP_THIS_VERSION = SKIP36
 elif sys.version_info[1] == 7:
     SKIP_THIS_VERSION = SKIP37
+elif sys.version_info[1] == 7:
+    SKIP_THIS_VERSION = SKIP38
 else:
     warnings.warn("Unrecognized Python version: %s.%s" % sys.version_info[:2])
-    SKIP_THIS_VERSION = SKIP37
+    SKIP_THIS_VERSION = SKIP38
 
 orig_run = DocTestRunner.run
 
