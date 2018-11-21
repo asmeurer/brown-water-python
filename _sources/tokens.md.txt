@@ -9,7 +9,10 @@ relied on. Instead, refer to tokens by their variable names, and use the
 could change between Python versions, for instance, if new tokens are added or
 removed (and indeed, certain token integer values are different between Python
 3.6 and 3.7 due to the [`ASYNC`](#async) and [`AWAIT`](#await) tokens being
-removed).
+removed). In the examples below, the token number shown in the output is the
+number from Python 3.7 (except in the examples that do not run in Python 3.7).
+I note this only for clarity: one should always use the token variable names
+and never use the integer value of a token directly.
 
 The reason the token types are represented this way is that the actual
 tokenizer used by the Python interpreter is not the `tokenize` module; it is a
@@ -66,7 +69,7 @@ yielded.
 
 ```py
 >>> print_tokens('x + 1\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=1 (NAME), string='x', start=(1, 0), end=(1, 1), line='x + 1\n')
 TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='x + 1\n')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 4), end=(1, 5), line='x + 1\n')
@@ -76,7 +79,7 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 
 ```py
 >>> print_tokens('')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=0 (ENDMARKER), string='', start=(1, 0), end=(1, 0), line='')
 ```
 
@@ -91,7 +94,7 @@ as `for`, `def`, and `True`.
 
 ```py
 >>> print_tokens('a or α\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a or α\n')
 TokenInfo(type=1 (NAME), string='or', start=(1, 2), end=(1, 4), line='a or α\n')
 TokenInfo(type=1 (NAME), string='α', start=(1, 5), end=(1, 6), line='a or α\n')
@@ -136,7 +139,7 @@ binary, octal, and hexadecimal integer literals, floating point numbers
 
 ```py
 >>> print_tokens('10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='10', start=(1, 0), end=(1, 2), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
 TokenInfo(type=53 (OP), string='+', start=(1, 3), end=(1, 4), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
 TokenInfo(type=2 (NUMBER), string='0b101', start=(1, 5), end=(1, 10), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
@@ -159,7 +162,7 @@ tokenize as `NUMBER` (`1`), `OP` (`+`), `NUMBER` (`2j`).
 
 ```py
 >>> print_tokens('1+2j\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1+2j\n')
 TokenInfo(type=53 (OP), string='+', start=(1, 1), end=(1, 2), line='1+2j\n')
 TokenInfo(type=2 (NUMBER), string='2j', start=(1, 2), end=(1, 4), line='1+2j\n')
@@ -171,19 +174,19 @@ Invalid numeric literals may tokenize as multiple numeric literals.
 
 ```py
 >>> print_tokens('012\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='0', start=(1, 0), end=(1, 1), line='012\n')
 TokenInfo(type=2 (NUMBER), string='12', start=(1, 1), end=(1, 3), line='012\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 3), end=(1, 4), line='012\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> print_tokens('0x1.0\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='0x1', start=(1, 0), end=(1, 3), line='0x1.0\n')
 TokenInfo(type=2 (NUMBER), string='.0', start=(1, 3), end=(1, 5), line='0x1.0\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 5), end=(1, 6), line='0x1.0\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> print_tokens('0o184\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='0o1', start=(1, 0), end=(1, 3), line='0o184\n')
 TokenInfo(type=2 (NUMBER), string='84', start=(1, 3), end=(1, 5), line='0o184\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 5), end=(1, 6), line='0o184\n')
@@ -198,7 +201,7 @@ full input.
 >>> 1.0000000000000001
 1.0
 >>> print_tokens('1.0000000000000001\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='1.0000000000000001', start=(1, 0), end=(1, 18), line='1.0000000000000001\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 18), end=(1, 19), line='1.0000000000000001\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
@@ -219,7 +222,7 @@ like `123_456`.
 ```py
 >>> # Python 3.6+ only.
 >>> print_tokens('123_456\n') # doctest: +SKIP35
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='123_456', start=(1, 0), end=(1, 7), line='123_456\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 7), end=(1, 8), line='123_456\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
@@ -252,8 +255,8 @@ multi-line strings, or "docstrings"), raw, "unicode", bytes, and f-strings
 >>> print_tokens("""
 ... "I" + 'love' + '''tokenize'''
 ... """)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=3 (STRING), string='"I"', start=(2, 0), end=(2, 3), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
 TokenInfo(type=53 (OP), string='+', start=(2, 4), end=(2, 5), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
 TokenInfo(type=3 (STRING), string="'love'", start=(2, 6), end=(2, 12), line='"I" + \'love\' + \'\'\'tokenize\'\'\'\n')
@@ -269,7 +272,7 @@ Note that even though Python implicitly concatenates string literals,
 
 ```py
 >>> print_tokens('"this is" " fun"\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string='"this is"', start=(1, 0), end=(1, 9), line='"this is" " fun"\n')
 TokenInfo(type=3 (STRING), string='" fun"', start=(1, 10), end=(1, 16), line='"this is" " fun"\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 16), end=(1, 17), line='"this is" " fun"\n')
@@ -282,7 +285,7 @@ included in the tokenized string.
 
 ```py
 >>> print_tokens("rb'\hello'\n")
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string="rb'\\hello'", start=(1, 0), end=(1, 10), line="rb'\\hello'\n")
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 10), end=(1, 11), line="rb'\\hello'\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
@@ -293,7 +296,7 @@ f-strings (Python 3.6+) are parsed as a single `STRING` token.
 ```py
 >>> # Python 3.6+ only.
 >>> print_tokens('f"{a + b}"\n') # doctest: +SKIP35
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string='f"{a + b}"', start=(1, 0), end=(1, 10), line='f"{a + b}"\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 10), end=(1, 11), line='f"{a + b}"\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
@@ -331,8 +334,8 @@ it were not in a string.
 
 ```py
 >>> print_tokens("'unclosed + string\n")
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string\n")
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=54 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string\n")
 TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unclosed + string\n")
 TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string\n")
 TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string\n")
@@ -351,7 +354,7 @@ when it reaches it.
 
 ```py
 >>> print_tokens("'an ' + '''unclosed multi-line string\n") # doctest: +SKIP
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string="'an '", start=(1, 0), end=(1, 5), line="'an ' + '''unclosed multi-line string\n")
 TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line="'an ' + '''unclosed multi-line string\n")
 Traceback (most recent call last):
@@ -371,7 +374,7 @@ interpreter.
 
 ```py
 >>> print_tokens(r"'\N{NOT REAL}'" + '\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string="'\\N{NOT REAL}'", start=(1, 0), end=(1, 14), line="'\\N{NOT REAL}'\n")
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 14), end=(1, 15), line="'\\N{NOT REAL}'\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
@@ -402,7 +405,7 @@ Python code use [`NL`](#nl).
 ... def hello():
 ...     return 'hello world'
 ... """)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=1 (NAME), string='def', start=(1, 0), end=(1, 3), line='def hello():\n')
 TokenInfo(type=1 (NAME), string='hello', start=(1, 4), end=(1, 9), line='def hello():\n')
 TokenInfo(type=53 (OP), string='(', start=(1, 9), end=(1, 10), line='def hello():\n')
@@ -421,7 +424,7 @@ Windows-style newlines (`\r\n`) are tokenized as a single token.
 
 ```py
 >>> print_tokens("1\n2\r\n")
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 1), end=(1, 2), line='1\n')
 TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2\r\n')
@@ -465,8 +468,8 @@ Consider the following pseudo-example:
 ... 5
 ...
 ... """)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=2 (NUMBER), string='1', start=(2, 0), end=(2, 1), line='1\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 1), end=(2, 2), line='1\n')
 TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line='    2\n')
@@ -481,7 +484,7 @@ TokenInfo(type=6 (DEDENT), string='', start=(6, 0), end=(6, 0), line='5\n')
 TokenInfo(type=6 (DEDENT), string='', start=(6, 0), end=(6, 0), line='5\n')
 TokenInfo(type=2 (NUMBER), string='5', start=(6, 0), end=(6, 1), line='5\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(6, 1), end=(6, 2), line='5\n')
-TokenInfo(type=58 (NL), string='\n', start=(7, 0), end=(7, 1), line='\n')
+TokenInfo(type=56 (NL), string='\n', start=(7, 0), end=(7, 1), line='\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(8, 0), end=(8, 0), line='')
 ```
 
@@ -495,12 +498,12 @@ There is one `INDENT` before the `2-3` block, one `INDENT` before `4`, and two
 ... (1 +
 ...     2)
 ... """)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=53 (OP), string='(', start=(2, 0), end=(2, 1), line='(1 +\n')
 TokenInfo(type=2 (NUMBER), string='1', start=(2, 1), end=(2, 2), line='(1 +\n')
 TokenInfo(type=53 (OP), string='+', start=(2, 3), end=(2, 4), line='(1 +\n')
-TokenInfo(type=58 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
+TokenInfo(type=56 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
 TokenInfo(type=2 (NUMBER), string='2', start=(3, 4), end=(3, 5), line='    2)\n')
 TokenInfo(type=53 (OP), string=')', start=(3, 5), end=(3, 6), line='    2)\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 6), end=(3, 7), line='    2)\n')
@@ -521,8 +524,8 @@ raises [`IndentationError`](usage.html#indentationerror).
 ... \t\tx -= 1
 ... \tprint('Go!')
 ... """)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=1 (NAME), string='def', start=(2, 0), end=(2, 3), line='def countdown(x):\n')
 TokenInfo(type=1 (NAME), string='countdown', start=(2, 4), end=(2, 13), line='def countdown(x):\n')
 TokenInfo(type=53 (OP), string='(', start=(2, 13), end=(2, 14), line='def countdown(x):\n')
@@ -566,8 +569,8 @@ TokenInfo(type=0 (ENDMARKER), string='', start=(8, 0), end=(8, 0), line='')
 ... \t\tx -= 1
 ...     print('Go!')
 ... """) # doctest: +SKIP
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=1 (NAME), string='def', start=(2, 0), end=(2, 3), line='def countdown(x):\n')
 TokenInfo(type=1 (NAME), string='countdown', start=(2, 4), end=(2, 13), line='def countdown(x):\n')
 TokenInfo(type=53 (OP), string='(', start=(2, 13), end=(2, 14), line='def countdown(x):\n')
@@ -711,8 +714,8 @@ valid variable names outside of an `async def` blocks.
 
 ```py
 >>> # This is valid Python in Python 3.5 and 3.6. It isn't in Python 3.7.
->>> async = 1
->>> print_tokens("async = 1\n")
+>>> async = 1 # doctest: +SKIP37
+>>> print_tokens("async = 1\n") # doctest: +SKIP37
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=1 (NAME), string='async', start=(1, 0), end=(1, 5), line='async = 1\n')
 TokenInfo(type=53 (OP), string='=', start=(1, 6), end=(1, 7), line='async = 1\n')
@@ -814,15 +817,15 @@ character is tokenized separately.
 
 ```py
 >>> print_tokens("1!!\n")
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1!!\n')
-TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 1), end=(1, 2), line='1!!\n')
-TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 2), end=(1, 3), line='1!!\n')
+TokenInfo(type=54 (ERRORTOKEN), string='!', start=(1, 1), end=(1, 2), line='1!!\n')
+TokenInfo(type=54 (ERRORTOKEN), string='!', start=(1, 2), end=(1, 3), line='1!!\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 3), end=(1, 4), line='1!!\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> print_tokens('💯\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (ERRORTOKEN), string='💯', start=(1, 0), end=(1, 1), line='💯\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=54 (ERRORTOKEN), string='💯', start=(1, 0), end=(1, 1), line='💯\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 1), end=(1, 2), line='💯\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
@@ -833,8 +836,8 @@ a newline. See the [`STRING`](#error-behavior) section for more information.
 
 ```py
 >>> print_tokens("'unclosed + string\n")
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string\n")
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=54 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string\n")
 TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unclosed + string\n")
 TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string\n")
 TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string\n")
@@ -850,9 +853,9 @@ error token. Otherwise only the start quote delimiter is.
 ... 'unclosed \
 ... continued string
 ... """)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
-TokenInfo(type=56 (ERRORTOKEN), string="'unclosed \\\ncontinued string\n", start=(2, 0), end=(3, 17), line="'unclosed \\\n")
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=54 (ERRORTOKEN), string="'unclosed \\\ncontinued string\n", start=(2, 0), end=(3, 17), line="'unclosed \\\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
 ```
 
@@ -861,12 +864,12 @@ the string are also tokenized as `ERRORTOKEN`:
 
 ```py
 >>> print_tokens("'an' +  'unclosed string\n")
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=3 (STRING), string="'an'", start=(1, 0), end=(1, 4), line="'an' +  'unclosed string\n")
 TokenInfo(type=53 (OP), string='+', start=(1, 5), end=(1, 6), line="'an' +  'unclosed string\n")
-TokenInfo(type=56 (ERRORTOKEN), string=' ', start=(1, 6), end=(1, 7), line="'an' +  'unclosed string\n")
-TokenInfo(type=56 (ERRORTOKEN), string=' ', start=(1, 7), end=(1, 8), line="'an' +  'unclosed string\n")
-TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 8), end=(1, 9), line="'an' +  'unclosed string\n")
+TokenInfo(type=54 (ERRORTOKEN), string=' ', start=(1, 6), end=(1, 7), line="'an' +  'unclosed string\n")
+TokenInfo(type=54 (ERRORTOKEN), string=' ', start=(1, 7), end=(1, 8), line="'an' +  'unclosed string\n")
+TokenInfo(type=54 (ERRORTOKEN), string="'", start=(1, 8), end=(1, 9), line="'an' +  'unclosed string\n")
 TokenInfo(type=1 (NAME), string='unclosed', start=(1, 9), end=(1, 17), line="'an' +  'unclosed string\n")
 TokenInfo(type=1 (NAME), string='string', start=(1, 18), end=(1, 24), line="'an' +  'unclosed string\n")
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 24), end=(1, 25), line="'an' +  'unclosed string\n")
@@ -880,11 +883,11 @@ This doesn't apply to unclosed continued strings:
 ... 'an' +  'unclosed\
 ... continued string
 ... """)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=3 (STRING), string="'an'", start=(2, 0), end=(2, 4), line="'an' +  'unclosed\\\n")
 TokenInfo(type=53 (OP), string='+', start=(2, 5), end=(2, 6), line="'an' +  'unclosed\\\n")
-TokenInfo(type=56 (ERRORTOKEN), string="'unclosed\\\ncontinued string\n", start=(2, 8), end=(3, 17), line="'an' +  'unclosed\\\n")
+TokenInfo(type=54 (ERRORTOKEN), string="'unclosed\\\ncontinued string\n", start=(2, 8), end=(3, 17), line="'an' +  'unclosed\\\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
 ```
 
@@ -902,16 +905,16 @@ lines, each line is tokenized separately.
 ... # This is another comment
 ... f() # This is a third comment
 ... """)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
-TokenInfo(type=57 (COMMENT), string='# This is a comment', start=(2, 0), end=(2, 19), line='# This is a comment\n')
-TokenInfo(type=58 (NL), string='\n', start=(2, 19), end=(2, 20), line='# This is a comment\n')
-TokenInfo(type=57 (COMMENT), string='# This is another comment', start=(3, 0), end=(3, 25), line='# This is another comment\n')
-TokenInfo(type=58 (NL), string='\n', start=(3, 25), end=(3, 26), line='# This is another comment\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=55 (COMMENT), string='# This is a comment', start=(2, 0), end=(2, 19), line='# This is a comment\n')
+TokenInfo(type=56 (NL), string='\n', start=(2, 19), end=(2, 20), line='# This is a comment\n')
+TokenInfo(type=55 (COMMENT), string='# This is another comment', start=(3, 0), end=(3, 25), line='# This is another comment\n')
+TokenInfo(type=56 (NL), string='\n', start=(3, 25), end=(3, 26), line='# This is another comment\n')
 TokenInfo(type=1 (NAME), string='f', start=(4, 0), end=(4, 1), line='f() # This is a third comment\n')
 TokenInfo(type=53 (OP), string='(', start=(4, 1), end=(4, 2), line='f() # This is a third comment\n')
 TokenInfo(type=53 (OP), string=')', start=(4, 2), end=(4, 3), line='f() # This is a third comment\n')
-TokenInfo(type=57 (COMMENT), string='# This is a third comment', start=(4, 4), end=(4, 29), line='f() # This is a third comment\n')
+TokenInfo(type=55 (COMMENT), string='# This is a third comment', start=(4, 4), end=(4, 29), line='f() # This is a third comment\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 29), end=(4, 30), line='f() # This is a third comment\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
 ```
@@ -936,11 +939,11 @@ There are two situations where newlines are tokenized as `NL`:
    >>> print_tokens("""(1 +
    ... 2)
    ... """)
-   TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+   TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
    TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='(1 +\n')
    TokenInfo(type=2 (NUMBER), string='1', start=(1, 1), end=(1, 2), line='(1 +\n')
    TokenInfo(type=53 (OP), string='+', start=(1, 3), end=(1, 4), line='(1 +\n')
-   TokenInfo(type=58 (NL), string='\n', start=(1, 4), end=(1, 5), line='(1 +\n')
+   TokenInfo(type=56 (NL), string='\n', start=(1, 4), end=(1, 5), line='(1 +\n')
    TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2)\n')
    TokenInfo(type=53 (OP), string=')', start=(2, 1), end=(2, 2), line='2)\n')
    TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 2), end=(2, 3), line='2)\n')
@@ -954,11 +957,11 @@ There are two situations where newlines are tokenized as `NL`:
    ... # Comment line
    ...
    ... """)
-   TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-   TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
-   TokenInfo(type=57 (COMMENT), string='# Comment line', start=(2, 0), end=(2, 14), line='# Comment line\n')
-   TokenInfo(type=58 (NL), string='\n', start=(2, 14), end=(2, 15), line='# Comment line\n')
-   TokenInfo(type=58 (NL), string='\n', start=(3, 0), end=(3, 1), line='\n')
+   TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+   TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+   TokenInfo(type=55 (COMMENT), string='# Comment line', start=(2, 0), end=(2, 14), line='# Comment line\n')
+   TokenInfo(type=56 (NL), string='\n', start=(2, 14), end=(2, 15), line='# Comment line\n')
+   TokenInfo(type=56 (NL), string='\n', start=(3, 0), end=(3, 1), line='\n')
    TokenInfo(type=0 (ENDMARKER), string='', start=(4, 0), end=(4, 0), line='')
    ```
 
@@ -970,7 +973,7 @@ always use the line numbers in the `start` and `end` attributes of the
 
 ```py
 >>> print_tokens('1 + \\\n2\n')
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1 + \\\n')
 TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='1 + \\\n')
 TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2\n')
@@ -1008,14 +1011,14 @@ The `start` and `end` line and column numbers for `ENCODING` will always be
 
 ```py
 >>> print_tokens("# The default encoding is utf-8\n")
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=57 (COMMENT), string='# The default encoding is utf-8', start=(1, 0), end=(1, 31), line='# The default encoding is utf-8\n')
-TokenInfo(type=58 (NL), string='\n', start=(1, 31), end=(1, 32), line='# The default encoding is utf-8\n')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=55 (COMMENT), string='# The default encoding is utf-8', start=(1, 0), end=(1, 31), line='# The default encoding is utf-8\n')
+TokenInfo(type=56 (NL), string='\n', start=(1, 31), end=(1, 32), line='# The default encoding is utf-8\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> print_tokens("# -*- coding: ascii -*-\n")
-TokenInfo(type=59 (ENCODING), string='ascii', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=57 (COMMENT), string='# -*- coding: ascii -*-', start=(1, 0), end=(1, 23), line='# -*- coding: ascii -*-\n')
-TokenInfo(type=58 (NL), string='\n', start=(1, 23), end=(1, 24), line='# -*- coding: ascii -*-\n')
+TokenInfo(type=57 (ENCODING), string='ascii', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=55 (COMMENT), string='# -*- coding: ascii -*-', start=(1, 0), end=(1, 23), line='# -*- coding: ascii -*-\n')
+TokenInfo(type=56 (NL), string='\n', start=(1, 23), end=(1, 24), line='# -*- coding: ascii -*-\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 

@@ -16,7 +16,7 @@ An example should clarify things. Consider the string of partial Python code,
 >>> string = '("a") + True -\n'
 >>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
 ...     print(tok)
-TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='("a") + True -\n')
 TokenInfo(type=3 (STRING), string='"a"', start=(1, 1), end=(1, 4), line='("a") + True -\n')
 TokenInfo(type=53 (OP), string=')', start=(1, 4), end=(1, 5), line='("a") + True -\n')
@@ -67,7 +67,7 @@ I chose this example to demonstrate a few things:
     >>> string = '("a" + True -'
     >>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
     ...     print(tok) # doctest: +SKIP
-    TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+    TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
     TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='("a" + True -')
     TokenInfo(type=3 (STRING), string='"a"', start=(1, 1), end=(1, 4), line='("a" + True -')
     TokenInfo(type=53 (OP), string='+', start=(1, 5), end=(1, 6), line='("a" + True -')
@@ -121,9 +121,9 @@ I chose this example to demonstrate a few things:
     >>> string = 'a$b\n'
     >>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
     ...     print(tok)
-    TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+    TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
     TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a$b\n')
-    TokenInfo(type=56 (ERRORTOKEN), string='$', start=(1, 1), end=(1, 2), line='a$b\n')
+    TokenInfo(type=54 (ERRORTOKEN), string='$', start=(1, 1), end=(1, 2), line='a$b\n')
     TokenInfo(type=1 (NAME), string='b', start=(1, 2), end=(1, 3), line='a$b\n')
     TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 3), end=(1, 4), line='a$b\n')
     TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
