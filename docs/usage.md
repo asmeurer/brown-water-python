@@ -68,12 +68,13 @@ helper function.
 >>> import io
 >>> def tokenize_string(s):
 ...     return tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline)
->>> for tok in tokenize_string('hello + tokenize'):
+>>> for tok in tokenize_string('hello + tokenize\n'):
 ...     print(tok)
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=1 (NAME), string='hello', start=(1, 0), end=(1, 5), line='hello + tokenize')
-TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line='hello + tokenize')
-TokenInfo(type=1 (NAME), string='tokenize', start=(1, 8), end=(1, 16), line='hello + tokenize')
+TokenInfo(type=1 (NAME), string='hello', start=(1, 0), end=(1, 5), line='hello + tokenize\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line='hello + tokenize\n')
+TokenInfo(type=1 (NAME), string='tokenize', start=(1, 8), end=(1, 16), line='hello + tokenize\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 16), end=(1, 17), line='hello + tokenize\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -94,12 +95,13 @@ two ways to work with `TokenInfo` objects. One is to unpack the tuple,
 typically in the `for` statement:
 
 ```py
->>> for toknum, tokval, start, end, line in tokenize_string('hello + tokenize'):
+>>> for toknum, tokval, start, end, line in tokenize_string('hello + tokenize\n'):
 ...     print("toknum:", toknum, "tokval:", repr(tokval), "start:", start, "end:", end, "line:", repr(line))
 toknum: 59 tokval: 'utf-8' start: (0, 0) end: (0, 0) line: ''
-toknum: 1 tokval: 'hello' start: (1, 0) end: (1, 5) line: 'hello + tokenize'
-toknum: 53 tokval: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize'
-toknum: 1 tokval: 'tokenize' start: (1, 8) end: (1, 16) line: 'hello + tokenize'
+toknum: 1 tokval: 'hello' start: (1, 0) end: (1, 5) line: 'hello + tokenize\n'
+toknum: 53 tokval: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize\n'
+toknum: 1 tokval: 'tokenize' start: (1, 8) end: (1, 16) line: 'hello + tokenize\n'
+toknum: 4 tokval: '\n' start: (1, 16) end: (1, 17) line: 'hello + tokenize\n'
 toknum: 0 tokval: '' start: (2, 0) end: (2, 0) line: ''
 ```
 
@@ -107,12 +109,13 @@ By tradition, unused values are often replaced by `_`. You can also unpack the
 `start` and `end` tuples directly.
 
 ```py
->>> for _, tokval, (start_line, start_col), (end_line, end_col), _ in tokenize_string('hello + tokenize'):
+>>> for _, tokval, (start_line, start_col), (end_line, end_col), _ in tokenize_string('hello + tokenize\n'):
 ...     print("{tokval!r} on lines {start_line} to {end_line} on columns {start_col} to {end_col}".format(tokval=tokval, start_line=start_line, end_line=end_line, start_col=start_col, end_col=end_col))
 'utf-8' on lines 0 to 0 on columns 0 to 0
 'hello' on lines 1 to 1 on columns 0 to 5
 '+' on lines 1 to 1 on columns 6 to 7
 'tokenize' on lines 1 to 1 on columns 8 to 16
+'\n' on lines 1 to 1 on columns 16 to 17
 '' on lines 2 to 2 on columns 0 to 0
 ```
 
@@ -123,12 +126,13 @@ recommend using that (even though I recommend only importing `tokenize`, which
 includes all the names from `token`).
 
 ```py
->>> for tok in tokenize_string('hello + tokenize'):
+>>> for tok in tokenize_string('hello + tokenize\n'):
 ...     print("type:", tok.type, "string:", repr(tok.string), "start:", tok.start, "end:", tok.end, "line:", repr(tok.line))
 type: 59 string: 'utf-8' start: (0, 0) end: (0, 0) line: ''
-type: 1 string: 'hello' start: (1, 0) end: (1, 5) line: 'hello + tokenize'
-type: 53 string: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize'
-type: 1 string: 'tokenize' start: (1, 8) end: (1, 16) line: 'hello + tokenize'
+type: 1 string: 'hello' start: (1, 0) end: (1, 5) line: 'hello + tokenize\n'
+type: 53 string: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize\n'
+type: 1 string: 'tokenize' start: (1, 8) end: (1, 16) line: 'hello + tokenize\n'
+type: 4 string: '\n' start: (1, 16) end: (1, 17) line: 'hello + tokenize\n'
 type: 0 string: '' start: (2, 0) end: (2, 0) line: ''
 ```
 
@@ -213,7 +217,7 @@ character. If both are present, or if the PEP 263 encoding is invalid,
 `SyntaxError` is raised.
 
 ```py
->>> tokenize.tokenize(io.BytesIO(b"# -*- coding: invalid -*-").readline)
+>>> tokenize.tokenize(io.BytesIO(b"# -*- coding: invalid -*-\n").readline)
 Traceback (most recent call last):
   ...
 SyntaxError: unknown encoding: invalid

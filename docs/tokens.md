@@ -65,11 +65,12 @@ For most applications it is not necessary to explicitly worry about
 yielded.
 
 ```py
->>> print_tokens('x + 1')
+>>> print_tokens('x + 1\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=1 (NAME), string='x', start=(1, 0), end=(1, 1), line='x + 1')
-TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='x + 1')
-TokenInfo(type=2 (NUMBER), string='1', start=(1, 4), end=(1, 5), line='x + 1')
+TokenInfo(type=1 (NAME), string='x', start=(1, 0), end=(1, 1), line='x + 1\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='x + 1\n')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 4), end=(1, 5), line='x + 1\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 5), end=(1, 6), line='x + 1\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -89,11 +90,12 @@ as `for`, `def`, and `True`.
 
 
 ```py
->>> print_tokens('a or α')
+>>> print_tokens('a or α\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a or α')
-TokenInfo(type=1 (NAME), string='or', start=(1, 2), end=(1, 4), line='a or α')
-TokenInfo(type=1 (NAME), string='α', start=(1, 5), end=(1, 6), line='a or α')
+TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a or α\n')
+TokenInfo(type=1 (NAME), string='or', start=(1, 2), end=(1, 4), line='a or α\n')
+TokenInfo(type=1 (NAME), string='α', start=(1, 5), end=(1, 6), line='a or α\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 6), end=(1, 7), line='a or α\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -133,21 +135,22 @@ binary, octal, and hexadecimal integer literals, floating point numbers
 (including scientific notation), and imaginary number literals (like `1j`).
 
 ```py
->>> print_tokens('10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+>>> print_tokens('10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='10', start=(1, 0), end=(1, 2), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=53 (OP), string='+', start=(1, 3), end=(1, 4), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=2 (NUMBER), string='0b101', start=(1, 5), end=(1, 10), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=53 (OP), string='+', start=(1, 11), end=(1, 12), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=2 (NUMBER), string='0o10', start=(1, 13), end=(1, 17), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=53 (OP), string='+', start=(1, 18), end=(1, 19), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=2 (NUMBER), string='0xa', start=(1, 20), end=(1, 23), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=53 (OP), string='-', start=(1, 24), end=(1, 25), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=2 (NUMBER), string='1.0', start=(1, 26), end=(1, 29), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=53 (OP), string='+', start=(1, 30), end=(1, 31), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=2 (NUMBER), string='1e1', start=(1, 32), end=(1, 35), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=53 (OP), string='+', start=(1, 36), end=(1, 37), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
-TokenInfo(type=2 (NUMBER), string='1j', start=(1, 38), end=(1, 40), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j')
+TokenInfo(type=2 (NUMBER), string='10', start=(1, 0), end=(1, 2), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 3), end=(1, 4), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=2 (NUMBER), string='0b101', start=(1, 5), end=(1, 10), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 11), end=(1, 12), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=2 (NUMBER), string='0o10', start=(1, 13), end=(1, 17), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 18), end=(1, 19), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=2 (NUMBER), string='0xa', start=(1, 20), end=(1, 23), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=53 (OP), string='-', start=(1, 24), end=(1, 25), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=2 (NUMBER), string='1.0', start=(1, 26), end=(1, 29), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 30), end=(1, 31), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=2 (NUMBER), string='1e1', start=(1, 32), end=(1, 35), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 36), end=(1, 37), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=2 (NUMBER), string='1j', start=(1, 38), end=(1, 40), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 40), end=(1, 41), line='10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -155,31 +158,35 @@ Note that even though literals like `1+2j` are a single `complex` type, they
 tokenize as `NUMBER` (`1`), `OP` (`+`), `NUMBER` (`2j`).
 
 ```py
->>> print_tokens('1+2j')
+>>> print_tokens('1+2j\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1+2j')
-TokenInfo(type=53 (OP), string='+', start=(1, 1), end=(1, 2), line='1+2j')
-TokenInfo(type=2 (NUMBER), string='2j', start=(1, 2), end=(1, 4), line='1+2j')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1+2j\n')
+TokenInfo(type=53 (OP), string='+', start=(1, 1), end=(1, 2), line='1+2j\n')
+TokenInfo(type=2 (NUMBER), string='2j', start=(1, 2), end=(1, 4), line='1+2j\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 4), end=(1, 5), line='1+2j\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
 Invalid numeric literals may tokenize as multiple numeric literals.
 
 ```py
->>> print_tokens('012')
+>>> print_tokens('012\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='0', start=(1, 0), end=(1, 1), line='012')
-TokenInfo(type=2 (NUMBER), string='12', start=(1, 1), end=(1, 3), line='012')
+TokenInfo(type=2 (NUMBER), string='0', start=(1, 0), end=(1, 1), line='012\n')
+TokenInfo(type=2 (NUMBER), string='12', start=(1, 1), end=(1, 3), line='012\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 3), end=(1, 4), line='012\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
->>> print_tokens('0x1.0')
+>>> print_tokens('0x1.0\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='0x1', start=(1, 0), end=(1, 3), line='0x1.0')
-TokenInfo(type=2 (NUMBER), string='.0', start=(1, 3), end=(1, 5), line='0x1.0')
+TokenInfo(type=2 (NUMBER), string='0x1', start=(1, 0), end=(1, 3), line='0x1.0\n')
+TokenInfo(type=2 (NUMBER), string='.0', start=(1, 3), end=(1, 5), line='0x1.0\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 5), end=(1, 6), line='0x1.0\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
->>> print_tokens('0o184')
+>>> print_tokens('0o184\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='0o1', start=(1, 0), end=(1, 3), line='0o184')
-TokenInfo(type=2 (NUMBER), string='84', start=(1, 3), end=(1, 5), line='0o184')
+TokenInfo(type=2 (NUMBER), string='0o1', start=(1, 0), end=(1, 3), line='0o184\n')
+TokenInfo(type=2 (NUMBER), string='84', start=(1, 3), end=(1, 5), line='0o184\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 5), end=(1, 6), line='0o184\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -190,9 +197,10 @@ full input.
 ```py
 >>> 1.0000000000000001
 1.0
->>> print_tokens('1.0000000000000001')
+>>> print_tokens('1.0000000000000001\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='1.0000000000000001', start=(1, 0), end=(1, 18), line='1.0000000000000001')
+TokenInfo(type=2 (NUMBER), string='1.0000000000000001', start=(1, 0), end=(1, 18), line='1.0000000000000001\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 18), end=(1, 19), line='1.0000000000000001\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> import ast
 >>> ast.dump(ast.parse('1.0000000000000001'))
@@ -210,9 +218,10 @@ like `123_456`.
 
 ```py
 >>> # Python 3.6+ only.
->>> print_tokens('123_456') # doctest: +SKIP
+>>> print_tokens('123_456\n') # doctest: +SKIP35
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='123_456', start=(1, 0), end=(1, 7), line='123_456')
+TokenInfo(type=2 (NUMBER), string='123_456', start=(1, 0), end=(1, 7), line='123_456\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 7), end=(1, 8), line='123_456\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -221,11 +230,12 @@ In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME`
 
 ```py
 >>> # The behavior in Python 3.5
->>> print_tokens('123_456') # doctest: +SKIP
-    TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-    TokenInfo(type=2 (NUMBER), string='123', start=(1, 0), end=(1, 3), line='123_456')
-    TokenInfo(type=1 (NAME), string='_456', start=(1, 3), end=(1, 7), line='123_456')
-    TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+>>> print_tokens('123_456\n') # doctest: +SKIP36 +SKIP37
+TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=2 (NUMBER), string='123', start=(1, 0), end=(1, 3), line='123_456\n')
+TokenInfo(type=1 (NAME), string='_456', start=(1, 3), end=(1, 7), line='123_456\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 7), end=(1, 8), line='123_456\n')
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
 In the [examples](examples.html#backporting-underscores-in-numeric-literals)
@@ -258,10 +268,11 @@ Note that even though Python implicitly concatenates string literals,
 `tokenize` tokenizes them separately.
 
 ```py
->>> print_tokens('"this is" " fun"')
+>>> print_tokens('"this is" " fun"\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=3 (STRING), string='"this is"', start=(1, 0), end=(1, 9), line='"this is" " fun"')
-TokenInfo(type=3 (STRING), string='" fun"', start=(1, 10), end=(1, 16), line='"this is" " fun"')
+TokenInfo(type=3 (STRING), string='"this is"', start=(1, 0), end=(1, 9), line='"this is" " fun"\n')
+TokenInfo(type=3 (STRING), string='" fun"', start=(1, 10), end=(1, 16), line='"this is" " fun"\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 16), end=(1, 17), line='"this is" " fun"\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -270,9 +281,10 @@ In the case of raw, "unicode", bytes, and f-strings, the string prefix is
 included in the tokenized string.
 
 ```py
->>> print_tokens("rb'\hello'")
+>>> print_tokens("rb'\hello'\n")
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=3 (STRING), string="rb'\\hello'", start=(1, 0), end=(1, 10), line="rb'\\hello'")
+TokenInfo(type=3 (STRING), string="rb'\\hello'", start=(1, 0), end=(1, 10), line="rb'\\hello'\n")
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 10), end=(1, 11), line="rb'\\hello'\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -280,9 +292,10 @@ f-strings (Python 3.6+) are parsed as a single `STRING` token.
 
 ```py
 >>> # Python 3.6+ only.
->>> print_tokens('f"{a + b}"') # doctest: +SKIP35
+>>> print_tokens('f"{a + b}"\n') # doctest: +SKIP35
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=3 (STRING), string='f"{a + b}"', start=(1, 0), end=(1, 10), line='f"{a + b}"')
+TokenInfo(type=3 (STRING), string='f"{a + b}"', start=(1, 0), end=(1, 10), line='f"{a + b}"\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 10), end=(1, 11), line='f"{a + b}"\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -317,12 +330,13 @@ tokenized as [`ERRORTOKEN`](#errortoken), and the remainder is tokenized as if
 it were not in a string.
 
 ```py
->>> print_tokens("'unclosed + string")
+>>> print_tokens("'unclosed + string\n")
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string")
-TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unclosed + string")
-TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string")
-TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string")
+TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string\n")
+TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unclosed + string\n")
+TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string\n")
+TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string\n")
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 18), end=(1, 19), line="'unclosed + string\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -336,10 +350,10 @@ is not closed, `tokenize` will raise [`TokenError`](usage.html#tokenerror)
 when it reaches it.
 
 ```py
->>> print_tokens("'an ' + '''unclosed multi-line string") # doctest: +SKIP
+>>> print_tokens("'an ' + '''unclosed multi-line string\n") # doctest: +SKIP
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=3 (STRING), string="'an '", start=(1, 0), end=(1, 5), line="'an ' + '''unclosed multi-line string")
-TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line="'an ' + '''unclosed multi-line string")
+TokenInfo(type=3 (STRING), string="'an '", start=(1, 0), end=(1, 5), line="'an ' + '''unclosed multi-line string\n")
+TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line="'an ' + '''unclosed multi-line string\n")
 Traceback (most recent call last):
     ...
     raise TokenError("EOF in multi-line string", strstart)
@@ -356,9 +370,10 @@ tokenize without any errors, but raise `SyntaxError` when parsed by the
 interpreter.
 
 ```py
->>> print_tokens(r"'\N{NOT REAL}'")
+>>> print_tokens(r"'\N{NOT REAL}'" + '\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=3 (STRING), string="'\\N{NOT REAL}'", start=(1, 0), end=(1, 14), line="'\\N{NOT REAL}'")
+TokenInfo(type=3 (STRING), string="'\\N{NOT REAL}'", start=(1, 0), end=(1, 14), line="'\\N{NOT REAL}'\n")
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 14), end=(1, 15), line="'\\N{NOT REAL}'\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> eval(r"'\N{NOT REAL}'")
 Traceback (most recent call last):
@@ -413,6 +428,17 @@ TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2\r\n')
 TokenInfo(type=4 (NEWLINE), string='\r\n', start=(2, 1), end=(2, 3), line='2\r\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
 ```
+
+Starting in Python 3.6.7 and 3.7.1, `NEWLINE` is emitted at the end of all
+tokenize input even if it doesn't end in a newline (with the exception of
+lines that are just comments). This change was made for consistency with the
+internal tokenize.c module used by Python itself. Implicit `NEWLINE`s have the
+`line` set to `''`. This change was not made to Python 3.5, which is already
+in ["security fix
+only"](https://devguide.python.org/#status-of-python-branches). The examples
+in this document all use the 3.6.7+ behavior. If consistency is desired, one
+can always force the input to end in a newline. This is why every example in
+this file has a newline at the end.
 
 ### `INDENT`
 ### `DEDENT`
@@ -593,7 +619,7 @@ correct type.
 
 ```py
 >>> # Python 3.5 and 3.6 behavior
->>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...').readline):
+>>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...\n').readline):
 ...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP37
 ENCODING ENCODING 'utf-8'
 NAME NAME 'def'
@@ -604,6 +630,7 @@ OP OP '->'
 NAME NAME 'list'
 OP COLON ':'
 OP OP '...'
+NEWLINE NEWLINE '\n'
 ENDMARKER ENDMARKER ''
 ```
 
@@ -639,7 +666,7 @@ below).
 
 ```py
 >>> import io
->>> for tok in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
+>>> for tok in tokenize.tokenize(io.BytesIO(b'[1+2]\n').readline):
 ...     print(tokenize.tok_name[tok.type], repr(tok.string))
 ENCODING 'utf-8'
 OP '['
@@ -647,8 +674,9 @@ NUMBER '1'
 OP '+'
 NUMBER '2'
 OP ']'
+NEWLINE '\n'
 ENDMARKER ''
->>> for tok in tokenize.tokenize(io.BytesIO(b'[1+2]').readline):
+>>> for tok in tokenize.tokenize(io.BytesIO(b'[1+2]\n').readline):
 ...     print(tokenize.tok_name[tok.exact_type], repr(tok.string))
 ENCODING 'utf-8'
 LSQB '['
@@ -656,6 +684,7 @@ NUMBER '1'
 PLUS '+'
 NUMBER '2'
 RSQB ']'
+NEWLINE '\n'
 ENDMARKER ''
 ```
 
@@ -683,11 +712,12 @@ valid variable names outside of an `async def` blocks.
 ```py
 >>> # This is valid Python in Python 3.5 and 3.6. It isn't in Python 3.7.
 >>> async = 1
->>> print_tokens("async = 1")
+>>> print_tokens("async = 1\n")
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=1 (NAME), string='async', start=(1, 0), end=(1, 5), line='async = 1')
-TokenInfo(type=53 (OP), string='=', start=(1, 6), end=(1, 7), line='async = 1')
-TokenInfo(type=2 (NUMBER), string='1', start=(1, 8), end=(1, 9), line='async = 1')
+TokenInfo(type=1 (NAME), string='async', start=(1, 0), end=(1, 5), line='async = 1\n')
+TokenInfo(type=53 (OP), string='=', start=(1, 6), end=(1, 7), line='async = 1\n')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 8), end=(1, 9), line='async = 1\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 9), end=(1, 10), line='async = 1\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -783,15 +813,17 @@ process extensions to Python syntax (see the
 character is tokenized separately.
 
 ```py
->>> print_tokens("1!!")
+>>> print_tokens("1!!\n")
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1!!')
-TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 1), end=(1, 2), line='1!!')
-TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 2), end=(1, 3), line='1!!')
+TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1!!\n')
+TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 1), end=(1, 2), line='1!!\n')
+TokenInfo(type=56 (ERRORTOKEN), string='!', start=(1, 2), end=(1, 3), line='1!!\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 3), end=(1, 4), line='1!!\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
->>> print_tokens('💯')
+>>> print_tokens('💯\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (ERRORTOKEN), string='💯', start=(1, 0), end=(1, 1), line='💯')
+TokenInfo(type=56 (ERRORTOKEN), string='💯', start=(1, 0), end=(1, 1), line='💯\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 1), end=(1, 2), line='💯\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -800,12 +832,13 @@ a newline. See the [`STRING`](#error-behavior) section for more information.
 
 
 ```py
->>> print_tokens("'unclosed + string")
+>>> print_tokens("'unclosed + string\n")
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string")
-TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unclosed + string")
-TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string")
-TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string")
+TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 0), end=(1, 1), line="'unclosed + string\n")
+TokenInfo(type=1 (NAME), string='unclosed', start=(1, 1), end=(1, 9), line="'unclosed + string\n")
+TokenInfo(type=53 (OP), string='+', start=(1, 10), end=(1, 11), line="'unclosed + string\n")
+TokenInfo(type=1 (NAME), string='string', start=(1, 12), end=(1, 18), line="'unclosed + string\n")
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 18), end=(1, 19), line="'unclosed + string\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -827,15 +860,16 @@ In the case of uncontinued unclosed single quoted strings, the spaces before
 the string are also tokenized as `ERRORTOKEN`:
 
 ```py
->>> print_tokens("'an' +  'unclosed string")
+>>> print_tokens("'an' +  'unclosed string\n")
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=3 (STRING), string="'an'", start=(1, 0), end=(1, 4), line="'an' +  'unclosed string")
-TokenInfo(type=53 (OP), string='+', start=(1, 5), end=(1, 6), line="'an' +  'unclosed string")
-TokenInfo(type=56 (ERRORTOKEN), string=' ', start=(1, 6), end=(1, 7), line="'an' +  'unclosed string")
-TokenInfo(type=56 (ERRORTOKEN), string=' ', start=(1, 7), end=(1, 8), line="'an' +  'unclosed string")
-TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 8), end=(1, 9), line="'an' +  'unclosed string")
-TokenInfo(type=1 (NAME), string='unclosed', start=(1, 9), end=(1, 17), line="'an' +  'unclosed string")
-TokenInfo(type=1 (NAME), string='string', start=(1, 18), end=(1, 24), line="'an' +  'unclosed string")
+TokenInfo(type=3 (STRING), string="'an'", start=(1, 0), end=(1, 4), line="'an' +  'unclosed string\n")
+TokenInfo(type=53 (OP), string='+', start=(1, 5), end=(1, 6), line="'an' +  'unclosed string\n")
+TokenInfo(type=56 (ERRORTOKEN), string=' ', start=(1, 6), end=(1, 7), line="'an' +  'unclosed string\n")
+TokenInfo(type=56 (ERRORTOKEN), string=' ', start=(1, 7), end=(1, 8), line="'an' +  'unclosed string\n")
+TokenInfo(type=56 (ERRORTOKEN), string="'", start=(1, 8), end=(1, 9), line="'an' +  'unclosed string\n")
+TokenInfo(type=1 (NAME), string='unclosed', start=(1, 9), end=(1, 17), line="'an' +  'unclosed string\n")
+TokenInfo(type=1 (NAME), string='string', start=(1, 18), end=(1, 24), line="'an' +  'unclosed string\n")
+TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 24), end=(1, 25), line="'an' +  'unclosed string\n")
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
@@ -900,14 +934,16 @@ There are two situations where newlines are tokenized as `NL`:
 
    ```py
    >>> print_tokens("""(1 +
-   ... 2)""")
+   ... 2)
+   ... """)
    TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
    TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='(1 +\n')
    TokenInfo(type=2 (NUMBER), string='1', start=(1, 1), end=(1, 2), line='(1 +\n')
    TokenInfo(type=53 (OP), string='+', start=(1, 3), end=(1, 4), line='(1 +\n')
    TokenInfo(type=58 (NL), string='\n', start=(1, 4), end=(1, 5), line='(1 +\n')
-   TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2)')
-   TokenInfo(type=53 (OP), string=')', start=(2, 1), end=(2, 2), line='2)')
+   TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2)\n')
+   TokenInfo(type=53 (OP), string=')', start=(2, 1), end=(2, 2), line='2)\n')
+   TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 2), end=(2, 3), line='2)\n')
    TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
    ```
 
@@ -933,11 +969,12 @@ always use the line numbers in the `start` and `end` attributes of the
 [`NEWLINE`](#newline) and `NL` tokens.
 
 ```py
->>> print_tokens('1 + \\\n2')
+>>> print_tokens('1 + \\\n2\n')
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='1', start=(1, 0), end=(1, 1), line='1 + \\\n')
 TokenInfo(type=53 (OP), string='+', start=(1, 2), end=(1, 3), line='1 + \\\n')
-TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2')
+TokenInfo(type=2 (NUMBER), string='2', start=(2, 0), end=(2, 1), line='2\n')
+TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 1), end=(2, 2), line='2\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(3, 0), end=(3, 0), line='')
 ```
 
@@ -970,15 +1007,15 @@ The `start` and `end` line and column numbers for `ENCODING` will always be
 `(0, 0)`.
 
 ```py
->>> print_tokens("# The default encoding is utf-8")
+>>> print_tokens("# The default encoding is utf-8\n")
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=57 (COMMENT), string='# The default encoding is utf-8', start=(1, 0), end=(1, 31), line='# The default encoding is utf-8')
-TokenInfo(type=58 (NL), string='', start=(1, 31), end=(1, 31), line='# The default encoding is utf-8')
+TokenInfo(type=57 (COMMENT), string='# The default encoding is utf-8', start=(1, 0), end=(1, 31), line='# The default encoding is utf-8\n')
+TokenInfo(type=58 (NL), string='\n', start=(1, 31), end=(1, 32), line='# The default encoding is utf-8\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
->>> print_tokens("# -*- coding: ascii -*-")
+>>> print_tokens("# -*- coding: ascii -*-\n")
 TokenInfo(type=59 (ENCODING), string='ascii', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=57 (COMMENT), string='# -*- coding: ascii -*-', start=(1, 0), end=(1, 23), line='# -*- coding: ascii -*-')
-TokenInfo(type=58 (NL), string='', start=(1, 23), end=(1, 23), line='# -*- coding: ascii -*-')
+TokenInfo(type=57 (COMMENT), string='# -*- coding: ascii -*-', start=(1, 0), end=(1, 23), line='# -*- coding: ascii -*-\n')
+TokenInfo(type=58 (NL), string='\n', start=(1, 23), end=(1, 24), line='# -*- coding: ascii -*-\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
 
