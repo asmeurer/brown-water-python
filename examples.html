@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Examples &#8212; Brown Water Python  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,6 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Helper Functions" href="helper-functions.html" />
@@ -47,7 +46,7 @@
           <div class="body" role="main">
             
   <div class="section" id="examples">
-<span id="examples"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <p>Here are some examples that use <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>.</p>
 <p>To copy the examples, click the <strong><code style="color:#c65d09;
 font-size:18px">&gt;&gt;&gt;</code></strong> button on the top right of the code block to
@@ -63,10 +62,10 @@ hide the Python prompts and outputs.</p>
 </pre></div>
 </div>
 <div class="section" id="processing-tokens">
-<span id="processing-tokens"></span><h2>Processing Tokens<a class="headerlink" href="#processing-tokens" title="Permalink to this headline">¶</a></h2>
+<h2>Processing Tokens<a class="headerlink" href="#processing-tokens" title="Permalink to this headline">¶</a></h2>
 <p>These examples show different ways that tokens can be processed.</p>
 <div class="section" id="inside-string">
-<span id="inside-string"></span><h3><code class="docutils literal notranslate"><span class="pre">inside_string()</span></code><a class="headerlink" href="#inside-string" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">inside_string()</span></code><a class="headerlink" href="#inside-string" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">inside_string(s,</span> <span class="pre">row,</span> <span class="pre">col)</span></code> takes the Python code <code class="docutils literal notranslate"><span class="pre">s</span></code> and determines if
 position at <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is inside a <code class="docutils literal notranslate"><span class="pre">STRING</span></code> token.</p>
 <p>To simplify the example for the purposes of illustration, <code class="docutils literal notranslate"><span class="pre">inside_string</span></code>
@@ -208,25 +207,25 @@ it means we never found a <code class="docutils literal notranslate"><span class
 </pre></div>
 </div>
 <div class="section" id="exercises">
-<span id="exercises"></span><h4>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h4>
+<h4>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
-<li>Modify <code class="docutils literal notranslate"><span class="pre">inside_string</span></code> to return <code class="docutils literal notranslate"><span class="pre">False</span></code> if <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is on a prefix or
+<li><p>Modify <code class="docutils literal notranslate"><span class="pre">inside_string</span></code> to return <code class="docutils literal notranslate"><span class="pre">False</span></code> if <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is on a prefix or
 quote character. For instance in <code class="docutils literal notranslate"><span class="pre">rb'abc'</span></code> it should only return True on the
 <code class="docutils literal notranslate"><span class="pre">abc</span></code> part of the string. (<em>This is more challenging than it may sound. Be
-sure to write lots of test cases</em>)</li>
-<li>Right now if <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is a whitespace character that is not tokenized,
+sure to write lots of test cases</em>)</p></li>
+<li><p>Right now if <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is a whitespace character that is not tokenized,
 the loop will pass over it and tokenize the entire input before returning
-<code class="docutils literal notranslate"><span class="pre">False</span></code>. Make this more efficient</li>
-<li>Only consider characters to be inside an unclosed single-quoted string if
-they are on the same line.</li>
-<li>Write a version of <code class="docutils literal notranslate"><span class="pre">inside_string()</span></code> using
+<code class="docutils literal notranslate"><span class="pre">False</span></code>. Make this more efficient</p></li>
+<li><p>Only consider characters to be inside an unclosed single-quoted string if
+they are on the same line.</p></li>
+<li><p>Write a version of <code class="docutils literal notranslate"><span class="pre">inside_string()</span></code> using
 <a class="reference external" href="https://parso.readthedocs.io/en/latest/">parso</a>’s tokenizer
-(<code class="docutils literal notranslate"><span class="pre">parso.python.tokenize.tokenize()</span></code>).</li>
+(<code class="docutils literal notranslate"><span class="pre">parso.python.tokenize.tokenize()</span></code>).</p></li>
 </ul>
 </div>
 </div>
 <div class="section" id="line-numbers">
-<span id="line-numbers"></span><h3><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code><a class="headerlink" href="#line-numbers" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code><a class="headerlink" href="#line-numbers" title="Permalink to this headline">¶</a></h3>
 <p>Let’s go back to our motivating example from the <a class="reference external" href="alternatives.html"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs.
 Alternatives</a> section, a function that prints the line
 numbers of every function definition. <a class="reference external" href="alternatives.html#tokenize">Our
@@ -328,7 +327,7 @@ behavior.</p>
 </div>
 </div>
 <div class="section" id="indentation-level">
-<span id="indentation-level"></span><h3>Indentation Level<a class="headerlink" href="#indentation-level" title="Permalink to this headline">¶</a></h3>
+<h3>Indentation Level<a class="headerlink" href="#indentation-level" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="tokens.html#indent"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></a> and <a class="reference external" href="tokens.html#dedent"><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code></a> tokens are
 always balanced in the token stream (unless there is an
 <a class="reference external" href="usage.html#indentationerror"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></a>), so it is easy to detect the
@@ -403,7 +402,7 @@ indentations with <a class="reference external" href="tokens.html#indent"><code 
 code.</p>
 </div>
 <div class="section" id="mismatched-parentheses">
-<span id="mismatched-parentheses"></span><h3>Mismatched Parentheses<a class="headerlink" href="#mismatched-parentheses" title="Permalink to this headline">¶</a></h3>
+<h3>Mismatched Parentheses<a class="headerlink" href="#mismatched-parentheses" title="Permalink to this headline">¶</a></h3>
 <p>This example shows how to use a very important tool when processing tokens, a
 stack. A <a class="reference external" href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)"><em>stack</em></a>
 is a data structure that operates as Last In, First Out. A stack has two basic
@@ -509,7 +508,7 @@ parentheses or braces in a piece of Python code. The function handles <code clas
 </pre></div>
 </div>
 <div class="section" id="exercise">
-<span id="exercise"></span><h4>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline">¶</a></h4>
+<h4>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline">¶</a></h4>
 <p>Add a flag, <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches</span></code>, which when <code class="docutils literal notranslate"><span class="pre">True</span></code>, allows an
 opening brace to still be considered matching if it is closed with the wrong
 brace but later closed with the correct brace (<code class="docutils literal notranslate"><span class="pre">False</span></code> would give the current
@@ -568,12 +567,10 @@ highlight mismatching braces, as it would be more likely to highlight only the
 <p>Since this exercise is relatively difficult, I’m providing the solution. I
 recommend trying to solve it yourself first, as it will really force you to
 understand how the function works.</p>
-<p><details>
-<summary>Click here to show the solution</summary></p>
-<p>No really, do try it yourself first. At least think about it.</p>
-<p><details>
-<summary>I’ve thought about it. Show the solution</summary></p>
-<p>Replace</p>
+<details>
+<summary>Click here to show the solution</summary><p>No really, do try it yourself first. At least think about it.</p>
+<details>
+<summary>I've thought about it. Show the solution</summary><p>Replace</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">mismatching</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">prevtok</span><span class="p">)</span>
 <span class="n">mismatching</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
 </pre></div>
@@ -605,13 +602,12 @@ in the <code class="docutils literal notranslate"><span class="pre">mismatching<
 modified). In the <code class="docutils literal notranslate"><span class="pre">allow_intermediary_mismatches=True</span></code> case, the stack is
 <code class="docutils literal notranslate"><span class="pre">['(']</span></code>, so <code class="docutils literal notranslate"><span class="pre">prevtok</span></code> will be <code class="docutils literal notranslate"><span class="pre">(</span></code>, which matches the <code class="docutils literal notranslate"><span class="pre">)</span></code>, so they are both put
 in the <code class="docutils literal notranslate"><span class="pre">matching</span></code> list.</p>
-<p></details>
-</details></p>
-</div>
+</details>
+</details></div>
 </div>
 </div>
 <div class="section" id="modifying-tokens">
-<span id="modifying-tokens"></span><h2>Modifying Tokens<a class="headerlink" href="#modifying-tokens" title="Permalink to this headline">¶</a></h2>
+<h2>Modifying Tokens<a class="headerlink" href="#modifying-tokens" title="Permalink to this headline">¶</a></h2>
 <p>These examples show some ways that you can modify the token stream.</p>
 <p>The general pattern we will apply here is to get the token stream from
 <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, modify it in some way, and convert it back to a bytes string
@@ -623,7 +619,7 @@ keeping track of column offsets, but we will not bother with it here except
 where it is convenient. See the discussion in the
 <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> section.</p>
 <div class="section" id="converting-to">
-<span id="converting-to"></span><h3>Converting <code class="docutils literal notranslate"><span class="pre">^</span></code> to <code class="docutils literal notranslate"><span class="pre">**</span></code><a class="headerlink" href="#converting-to" title="Permalink to this headline">¶</a></h3>
+<h3>Converting <code class="docutils literal notranslate"><span class="pre">^</span></code> to <code class="docutils literal notranslate"><span class="pre">**</span></code><a class="headerlink" href="#converting-to" title="Permalink to this headline">¶</a></h3>
 <p>Python’s syntax uses <code class="docutils literal notranslate"><span class="pre">**</span></code> for exponentiation, although many might expect it to
 use <code class="docutils literal notranslate"><span class="pre">^</span></code> instead. <code class="docutils literal notranslate"><span class="pre">^</span></code> is actually the <a class="reference external" href="https://docs.python.org/3/reference/expressions.html#binary-bitwise-operations">XOR
 operator</a>.</p>
@@ -637,8 +633,7 @@ exponentiation. You might think to use the <code class="docutils literal notrans
 nodes with
 <a class="reference external" href="https://greentreesnakes.readthedocs.io/en/latest/nodes.html#Pow"><code class="docutils literal notranslate"><span class="pre">Pow</span></code></a>, but
 this will not work, because <code class="docutils literal notranslate"><span class="pre">^</span></code> has a different precedence than <code class="docutils literal notranslate"><span class="pre">**</span></code>:</p>
-<!-- These are skipped in Python 3.8 because it changes Num to Constant. -->
-<!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
+<!-- These are skipped in Python 3.8 because it changes Num to Constant. --><!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;x**2 + 1&#39;</span><span class="p">))</span> 
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id=&#39;x&#39;, ctx=Load()), op=Pow(), right=Num(n=2)), op=Add(), right=Num(n=1)))])&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;x^2 + 1&#39;</span><span class="p">))</span> 
@@ -675,7 +670,7 @@ is to redefine the column offsets for the new token and all subsequent tokens
 on that line to avoid this issue.</p>
 </div>
 <div class="section" id="wrapping-floats-with-decimal-decimal">
-<span id="wrapping-floats-with-decimal-decimal"></span><h3>Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code><a class="headerlink" href="#wrapping-floats-with-decimal-decimal" title="Permalink to this headline">¶</a></h3>
+<h3>Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code><a class="headerlink" href="#wrapping-floats-with-decimal-decimal" title="Permalink to this headline">¶</a></h3>
 <p>This example is modified from the <a class="reference external" href="https://docs.python.org/3/library/tokenize.html#examples">example in the standard library
 docs</a> for
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. It is a good example for modifying tokens because the logic is not
@@ -722,7 +717,7 @@ avoid rounding the input. An exercise for the reader is to extend
 </div>
 </div>
 <div class="section" id="extending-python-s-syntax">
-<span id="extending-python-s-syntax"></span><h3>Extending Python’s Syntax<a class="headerlink" href="#extending-python-s-syntax" title="Permalink to this headline">¶</a></h3>
+<h3>Extending Python’s Syntax<a class="headerlink" href="#extending-python-s-syntax" title="Permalink to this headline">¶</a></h3>
 <p>Because <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> emits <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> on any
 unrecognized operators, it can be used to add extensions to the Python syntax.
 This can be challenging to do in general, as you may need to do significant
@@ -735,7 +730,7 @@ for example, implicit multiplication (<code class="docutils literal notranslate"
 application (<code class="docutils literal notranslate"><span class="pre">sin</span> <span class="pre">x</span></code> ⮕ <code class="docutils literal notranslate"><span class="pre">sin(x)</span></code>), factorial notation (<code class="docutils literal notranslate"><span class="pre">x!</span></code> ⮕ <code class="docutils literal notranslate"><span class="pre">factorial(x)</span></code>),
 and more.</p>
 <div class="section" id="emoji-math">
-<span id="emoji-math"></span><h4>Emoji Math<a class="headerlink" href="#emoji-math" title="Permalink to this headline">¶</a></h4>
+<h4>Emoji Math<a class="headerlink" href="#emoji-math" title="Permalink to this headline">¶</a></h4>
 <p>The below example is relatively simple. It allows the “emoji” mathematical
 symbols ➕, ➖, ➗, and ✖ to be used instead of their ASCII counterparts.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">emoji_map</span> <span class="o">=</span> <span class="p">{</span>
@@ -765,8 +760,8 @@ we can use 5-tuples and keep the column offsets intact, making
 <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> maintain
 the whitespace of the input.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">These emoji may often appear as two characters, for instance, ✖ may often
+<p class="admonition-title">Note</p>
+<p>These emoji may often appear as two characters, for instance, ✖ may often
 appear instead as ✖️, which is ✖ (<code class="docutils literal notranslate"><span class="pre">HEAVY</span> <span class="pre">MULTIPLICATION</span> <span class="pre">X</span></code>) + (<code class="docutils literal notranslate"><span class="pre">VARIATION</span>
 <span class="pre">SELECTOR-16</span></code>). The <code class="docutils literal notranslate"><span class="pre">VARIATION</span> <span class="pre">SELECTOR-16</span></code> is an invisible character which
 forces it to render as an emoji. The above example does not include the
@@ -775,7 +770,7 @@ function to work with this.</p>
 </div>
 </div>
 <div class="section" id="backporting-underscores-in-numeric-literals">
-<span id="backporting-underscores-in-numeric-literals"></span><h4>Backporting Underscores in Numeric Literals<a class="headerlink" href="#backporting-underscores-in-numeric-literals" title="Permalink to this headline">¶</a></h4>
+<h4>Backporting Underscores in Numeric Literals<a class="headerlink" href="#backporting-underscores-in-numeric-literals" title="Permalink to this headline">¶</a></h4>
 <p>Python 3.6 added a new syntactic feature that allows <a class="reference external" href="https://docs.python.org/3/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals">underscores in numeric
 literals</a>.
 To quote the docs, “single underscores are allowed between digits and after
@@ -790,18 +785,18 @@ not allowed.”</p>
 <p>We can write a function using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to backport this feature to Python
 3.5. Some experimentation shows how the new literals tokenize in Python 3.5:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">123_456</span></code> tokenizes as <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and
+<li><p><code class="docutils literal notranslate"><span class="pre">123_456</span></code> tokenizes as <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and
 <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>). In general, multiple underscores
-between tokens will tokenize like this.</li>
-<li>Additionally, underscores are allowed after base specifiers, like <code class="docutils literal notranslate"><span class="pre">0x_1</span></code>.
+between tokens will tokenize like this.</p></li>
+<li><p>Additionally, underscores are allowed after base specifiers, like <code class="docutils literal notranslate"><span class="pre">0x_1</span></code>.
 This also tokenizes as <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) and
 <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">x_1</span></code>). Since <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> and
 <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> tokens cannot appear next to one another in valid
-Python, we can simply combine them when they do.</li>
-<li>Finally, if an underscore appears before the <code class="docutils literal notranslate"><span class="pre">.</span></code> in a floating point
+Python, we can simply combine them when they do.</p></li>
+<li><p>Finally, if an underscore appears before the <code class="docutils literal notranslate"><span class="pre">.</span></code> in a floating point
 literal, like <code class="docutils literal notranslate"><span class="pre">1_2.3_4</span></code> it will tokenize <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a>
 (<code class="docutils literal notranslate"><span class="pre">1</span></code>), <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_2</span></code>), <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a>
-(<code class="docutils literal notranslate"><span class="pre">.3</span></code>), <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_4</span></code>).</li>
+(<code class="docutils literal notranslate"><span class="pre">.3</span></code>), <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_4</span></code>).</p></li>
 </ul>
 <p>Note that in this example, the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token allows
 us to access <code class="docutils literal notranslate"><span class="pre">result[-1]</span></code> unconditionally, as we know there must always be at
@@ -1019,13 +1014,11 @@ correct).</p>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -1038,7 +1031,7 @@ correct).</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.10+</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

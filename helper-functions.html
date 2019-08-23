@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Helper Functions &#8212; Brown Water Python  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,6 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Examples" href="examples.html" />
@@ -52,11 +51,11 @@
           <div class="body" role="main">
             
   <div class="section" id="helper-functions">
-<span id="helper-functions"></span><h1>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h1>
+<h1>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h1>
 <p>In addition to the primary <a class="reference external" href="usage.html"><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code></a> entry-point, the
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module has several additional helper functions.</p>
 <div class="section" id="untokenize-iterable">
-<span id="untokenize-iterable"></span><h2><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code><a class="headerlink" href="#untokenize-iterable" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code><a class="headerlink" href="#untokenize-iterable" title="Permalink to this headline">¶</a></h2>
 <p>Converts an iterable of tokens into a bytes string. The string is encoded
 using the encoding of the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token. If there
 is no <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> token present, the string is returned decoded (a <code class="docutils literal notranslate"><span class="pre">str</span></code>
@@ -125,7 +124,7 @@ column information near the tokens you modify. The <code class="docutils literal
 provide any tools to help with this.</p>
 </div>
 <div class="section" id="detect-encoding-readline">
-<span id="detect-encoding-readline"></span><h2><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code><a class="headerlink" href="#detect-encoding-readline" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code><a class="headerlink" href="#detect-encoding-readline" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding">official
 docs</a>
 for this function are helpful. This is the function used by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> to
@@ -140,9 +139,23 @@ Invalid encodings will cause it to raise a
 <span class="go">(&#39;ascii&#39;, [b&#39;# -*- coding: ascii -*-&#39;])</span>
 </pre></div>
 </div>
+<p>This function should be used to detect the encoding of a Python source file
+before opening it in text mode. For example</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;file.py&#39;</span><span class="p">,</span> <span class="s1">&#39;br&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">encoding</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">detect_encoding</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;file.py&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>Otherwise, the text read from the file may not be parsable as Python. For
+example, <code class="docutils literal notranslate"><span class="pre">ast.parse</span></code> may fail if text from the file is read with the wrong
+encoding. For example, if a file starts with a <a class="reference external" href="https://en.wikipedia.org/wiki/Byte_order_mark">Unicode BOM
+character</a>, <code class="docutils literal notranslate"><span class="pre">ast.parse</span></code> will
+fail if the file is not opened with the proper encoding.</p>
 </div>
 <div class="section" id="tokenize-open-filename">
-<span id="tokenize-open-filename"></span><h2><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code><a class="headerlink" href="#tokenize-open-filename" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code><a class="headerlink" href="#tokenize-open-filename" title="Permalink to this headline">¶</a></h2>
 <p>This is an alternative to the built-in <code class="docutils literal notranslate"><span class="pre">open()</span></code> function that automatically
 opens a Python file in text mode with the correct encoding, as detected by
 <a class="reference external" href="#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>.</p>
@@ -155,7 +168,7 @@ do otherwise (opening a Python source file in text mode using the syntactically
 correct encoding).</p>
 </div>
 <div class="section" id="command-line-usage">
-<span id="command-line-usage"></span><h2>Command Line Usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">¶</a></h2>
+<h2>Command Line Usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module can be called from the command line using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">tokenize</span> <span class="pre">filename.py</span></code>. This prints three columns, representing the start-end
 line and column positions, the token type, and the token string. If the <code class="docutils literal notranslate"><span class="pre">-e</span></code>
 flag is used, the token type for operators is the exact type. Otherwise the
@@ -202,7 +215,7 @@ $ python -m tokenize -e example.py
 </div>
 </div>
 <div class="section" id="helper-functions-related-to-the-parser-module">
-<span id="helper-functions-related-to-the-parser-module"></span><h2>Helper Functions Related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module<a class="headerlink" href="#helper-functions-related-to-the-parser-module" title="Permalink to this headline">¶</a></h2>
+<h2>Helper Functions Related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module<a class="headerlink" href="#helper-functions-related-to-the-parser-module" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.</p>
@@ -299,15 +312,14 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 </div>
 <p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <a class="reference external" href="intro.html">intro</a>,
 or the <code class="docutils literal notranslate"><span class="pre">ast</span></code> representation:</p>
-<!-- This is skipped in Python 3.8 because it changes Num to Constant. -->
-<!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span> 
+<!-- This is skipped in Python 3.8 because it changes Num to Constant. --><!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span> 
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=Str(s=&#39;a&#39;), op=Add(), right=NameConstant(value=True)))])&quot;</span>
 </pre></div>
 </div>
 <p>The following are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t particularly
 useful outside of the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module.</p>
 <div class="section" id="nt-offset">
-<span id="nt-offset"></span><h3><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code><a class="headerlink" href="#nt-offset" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code><a class="headerlink" href="#nt-offset" title="Permalink to this headline">¶</a></h3>
 <p>The greatest possible terminal token number. This is not useful unless you
 intend to use the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module. <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> never emits this token. Even
 if you are using the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module, you would generally use one of the
@@ -315,21 +327,21 @@ functions below instead of this token type. The current value of this constant
 is 256.</p>
 </div>
 <div class="section" id="isterminal-x">
-<span id="isterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code><a class="headerlink" href="#isterminal-x" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code><a class="headerlink" href="#isterminal-x" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> is <code class="docutils literal notranslate"><span class="pre">x</span></code> is a terminal token type. It is
 equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">NT_OFFSET</span></code>. Every token in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module (except for
 <code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code>) is a terminal node. It returns <code class="docutils literal notranslate"><span class="pre">False</span></code> for every token in the
 <code class="docutils literal notranslate"><span class="pre">symbol</span></code> module.</p>
 </div>
 <div class="section" id="isnonterminal-x">
-<span id="isnonterminal-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code><a class="headerlink" href="#isnonterminal-x" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code><a class="headerlink" href="#isnonterminal-x" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> is a nonterminal token type. It is
 equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;=</span> <span class="pre">NT_OFFSET</span></code>. The only nonterminal “token” in the <code class="docutils literal notranslate"><span class="pre">token</span></code>
 module is <code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code> itself. It returns <code class="docutils literal notranslate"><span class="pre">True</span></code> for every token in the
 <code class="docutils literal notranslate"><span class="pre">symbol</span></code> module.</p>
 </div>
 <div class="section" id="iseof-x">
-<span id="iseof-x"></span><h3><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code><a class="headerlink" href="#iseof-x" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code><a class="headerlink" href="#iseof-x" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code> returns true if <code class="docutils literal notranslate"><span class="pre">x</span></code> is the end of input marker token type. It is
 equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">ENDMARKER</span></code>. This is also mostly useless, as the
 <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> function ends iteration after it emits this token.</p>
@@ -470,13 +482,11 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -489,7 +499,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.10+</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

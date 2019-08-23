@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Usage &#8212; Brown Water Python  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,6 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Token Types" href="tokens.html" />
@@ -52,7 +51,7 @@
           <div class="body" role="main">
             
   <div class="section" id="usage">
-<span id="usage"></span><h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module has several quirks which make it complicated to work
 with (in my opinion, more complicated than necessary, but it is what it is).</p>
 <p>The primary motivation of this guide is to document these quirks and
@@ -70,7 +69,7 @@ reports</a> and <a class="reference external" href="https://github.com/asmeurer/
 requests</a> are most
 welcome.</p>
 <div class="section" id="calling-syntax">
-<span id="calling-syntax"></span><h2>Calling Syntax<a class="headerlink" href="#calling-syntax" title="Permalink to this headline">¶</a></h2>
+<h2>Calling Syntax<a class="headerlink" href="#calling-syntax" title="Permalink to this headline">¶</a></h2>
 <p>The first thing you’ll notice when using <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> is that its calling API
 is rather odd. It does not accept a string. It does not accept a file-like
 object either. Rather, it requires <strong>the <code class="docutils literal notranslate"><span class="pre">readline</span></code> method of a bytes-mode file-like
@@ -134,7 +133,7 @@ to convert the <code class="docutils literal notranslate"><span class="pre">toke
 purposes. Not only is this inefficient, it makes it impossible to deal with <a class="reference external" href="#exceptions">exceptions</a>.</p>
 </div>
 <div class="section" id="tokeninfo">
-<span id="tokeninfo"></span><h2><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code><a class="headerlink" href="#tokeninfo" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code><a class="headerlink" href="#tokeninfo" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> generator yields <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> namedtuple objects. There are
 two ways to work with <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects. One is to unpack the tuple,
 typically in the <code class="docutils literal notranslate"><span class="pre">for</span></code> statement:</p>
@@ -184,12 +183,12 @@ you should use depends on your preference on these tradeoffs. I personally
 recommend the second form (<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">tok</span> <span class="pre">in</span> <span class="pre">tokenize(...):</span> <span class="pre">...</span> <span class="pre">tok.type,</span> <span class="pre">etc.</span></code>),
 unless you have the <code class="docutils literal notranslate"><span class="pre">(toknum,</span> <span class="pre">tokstr,</span> <span class="pre">start,</span> <span class="pre">end,</span> <span class="pre">line)</span></code> order memorized.</p>
 <div class="section" id="type">
-<span id="type"></span><h3><code class="docutils literal notranslate"><span class="pre">type</span></code><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">type</span></code><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
 <p>The token types are outlined in detail in the <a class="reference external" href="tokens.html">Token Types</a>
 section.</p>
 </div>
 <div class="section" id="string">
-<span id="string"></span><h3><code class="docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
 <p>The chunk of code that is tokenized. For token types where the string is
 meaningless, such as <a class="reference external" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a>, the string is
 empty.</p>
@@ -198,7 +197,7 @@ which does not appear literally in the code, which is why for <code class="docut
 line and column numbers are 0 and the <code class="docutils literal notranslate"><span class="pre">line</span></code> is the empty string.</p>
 </div>
 <div class="section" id="start-and-end">
-<span id="start-and-end"></span><h3><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code><a class="headerlink" href="#start-and-end" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code><a class="headerlink" href="#start-and-end" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> are tuples of (line number, column number) for the line and
 column numbers of the start and end of the tokenized string. <strong>Line numbers
 start at 1 and column numbers start at 0</strong>. The line and column numbers for
@@ -215,7 +214,7 @@ can include newlines (in particular, escaped newlines, see
 <a class="reference external" href="tokens.html#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>).</p>
 </div>
 <div class="section" id="line">
-<span id="line"></span><h3><code class="docutils literal notranslate"><span class="pre">line</span></code><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">line</span></code><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">line</span></code> gives the full line that the token comes from. This is useful for
 reconstructing the whitespace between tokens (never assume that the whitespace
 between tokens is space characters—it could also consist of escaped newlines
@@ -224,7 +223,7 @@ relating to the tokenization.</p>
 </div>
 </div>
 <div class="section" id="exceptions">
-<span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> has two failure modes: <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> and
 exceptions. When a non-fatal error occurs, some text will be tokenized as an
 <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>, and tokenizing will continue on the
@@ -238,7 +237,7 @@ the exception and deal with it or let it bubble up to the caller.</p>
 <p>These are the exceptions that can be raised from <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>. An exception
 other than these likely indicates incorrect <a class="reference external" href="#calling-syntax">input</a>.</p>
 <div class="section" id="syntaxerror">
-<span id="syntaxerror"></span><h3><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code><a class="headerlink" href="#syntaxerror" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code><a class="headerlink" href="#syntaxerror" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code> is raised when the input has an invalid encoding. The encoding
 is detected using the <a class="reference external" href="helper-functions.html#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>
 function, which uses either a <a class="reference external" href="https://www.python.org/dev/peps/pep-0263/">PEP
@@ -255,7 +254,7 @@ character. If both are present, or if the PEP 263 encoding is invalid,
 <p>See also <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a>.</p>
 </div>
 <div class="section" id="tokenerror">
-<span id="tokenerror"></span><h3><code class="docutils literal notranslate"><span class="pre">TokenError</span></code><a class="headerlink" href="#tokenerror" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">TokenError</span></code><a class="headerlink" href="#tokenerror" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">tokenize.TokenError</span></code> is raised in two situations. The only way to distinguish
 the two is to inspect the exception message. In both cases, <code class="docutils literal notranslate"><span class="pre">TokenError</span></code> is
 raised if the end of the input (<code class="docutils literal notranslate"><span class="pre">EOF</span></code>) is reached without a delimiter being
@@ -266,7 +265,7 @@ typically desirable to process the tokens from <code class="docutils literal not
 <a class="reference external" href="#start-and-end">start</a> line and column number for the part of the input that
 was not tokenized due to the exception.</p>
 <ol>
-<li><p class="first"><strong>EOF in multi-line string</strong></p>
+<li><p><strong>EOF in multi-line string</strong></p>
 <p>This happens if a triple-quoted string (i.e., a multi-line string, or
 “docstring”), is not closed at the end of the input. This exception can be
 detected by checking <code class="docutils literal notranslate"><span class="pre">'string'</span> <span class="pre">in</span> <span class="pre">e.args[0]</span></code>.</p>
@@ -288,11 +287,10 @@ detected by checking <code class="docutils literal notranslate"><span class="pre
 <span class="gt">Traceback (most recent call last):</span>
   <span class="c">...</span>
 <span class="gr">tokenize.TokenError</span>: <span class="n">(&#39;EOF in multi-line string&#39;, (3, 4))</span>
-
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>EOF in multi-line statement</strong></p>
+<li><p><strong>EOF in multi-line statement</strong></p>
 <p>This error occurs when an unclosed brace is found. Note that <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>
 does not necessarily stop parsing as soon as the input is syntactically
 invalid, as it only has limited knowledge of Python syntax. In fact, in the
@@ -322,7 +320,6 @@ exception can be detected by checking <code class="docutils literal notranslate"
 <span class="gt">Traceback (most recent call last):</span>
   <span class="c">...</span>
 <span class="gr">tokenize.TokenError</span>: <span class="n">(&#39;EOF in multi-line statement&#39;, (5, 0))</span>
-
 </pre></div>
 </div>
 </li>
@@ -380,7 +377,7 @@ See also the <a class="reference external" href="examples.html">examples</a>.</p
 </div>
 </div>
 <div class="section" id="indentationerror">
-<span id="indentationerror"></span><h3><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code><a class="headerlink" href="#indentationerror" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code><a class="headerlink" href="#indentationerror" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> raises <code class="docutils literal notranslate"><span class="pre">IndentationError</span></code> if an unindent does not match an outer
 indentation level.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&quot;&quot;</span>
@@ -402,7 +399,6 @@ indentation level.</p>
     <span class="n">f</span>
     <span class="o">^</span>
 <span class="gr">IndentationError</span>: <span class="n">unindent does not match any outer indentation level</span>
-
 </pre></div>
 </div>
 <p>This error is difficult to recover from. If you need to handle tokenizing
@@ -583,13 +579,11 @@ tabs and spaces.</p>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -602,7 +596,7 @@ tabs and spaces.</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.10+</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
