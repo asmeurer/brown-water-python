@@ -373,25 +373,25 @@ counter.</p>
 <span class="gp">... </span><span class="s1">    return level</span>
 <span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use a large column number so it always looks at the fully indented line.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">indentation_level_source</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">indentation_level</span><span class="p">(</span><span class="n">indentation_level_source</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
-<span class="go">0</span>
-<span class="go">1</span>
-<span class="go">1</span>
-<span class="go">1</span>
-<span class="go">1</span>
-<span class="go">1</span>
-<span class="go">2</span>
-<span class="go">3</span>
-<span class="go">4</span>
-<span class="go">3</span>
-<span class="go">4</span>
-<span class="go">3</span>
-<span class="go">4</span>
-<span class="go">1</span>
-<span class="go">1</span>
-<span class="go">2</span>
-<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">indentation_level_source</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span> 
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">indentation_level</span><span class="p">(</span><span class="n">indentation_level_source</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">indentation_level_source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">0 def indentation_level(s, row, col):</span>
+<span class="go">1     &quot;&quot;&quot;</span>
+<span class="go">1     Returns the indentation level of the code at (row, col)</span>
+<span class="go">1     &quot;&quot;&quot;</span>
+<span class="go">1     level = 0</span>
+<span class="go">1     try:</span>
+<span class="go">2         for tok in tokenize_string(s):</span>
+<span class="go">3             if tok.start &gt;= (row, col):</span>
+<span class="go">4                 return level</span>
+<span class="go">3             if tok.type == tokenize.INDENT:</span>
+<span class="go">4                 level += 1</span>
+<span class="go">3             if tok.type == tokenize.DEDENT:</span>
+<span class="go">4                 level -= 1</span>
+<span class="go">1     except tokenize.TokenError:</span>
+<span class="go">1         # Ignore TokenError (we don&#39;t care about incomplete code)</span>
+<span class="go">2         pass</span>
+<span class="go">1     return level</span>
 <span class="go">0</span>
 </pre></div>
 </div>

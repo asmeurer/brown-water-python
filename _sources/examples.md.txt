@@ -373,25 +373,25 @@ To demonstrate the function, let's apply it to itself.
 ...     return level
 ... '''
 >>> # Use a large column number so it always looks at the fully indented line.
->>> for i in range(1, indentation_level_source.count('\n') + 2):
-...     print(indentation_level(indentation_level_source, i, 100))
-0
-1
-1
-1
-1
-1
-2
-3
-4
-3
-4
-3
-4
-1
-1
-2
-1
+>>> for i in range(1, indentation_level_source.count('\n') + 2): # doctest: +NORMALIZE_WHITESPACE
+...     print(indentation_level(indentation_level_source, i, 100), indentation_level_source.split('\n')[i-1])
+0 def indentation_level(s, row, col):
+1     """
+1     Returns the indentation level of the code at (row, col)
+1     """
+1     level = 0
+1     try:
+2         for tok in tokenize_string(s):
+3             if tok.start >= (row, col):
+4                 return level
+3             if tok.type == tokenize.INDENT:
+4                 level += 1
+3             if tok.type == tokenize.DEDENT:
+4                 level -= 1
+1     except tokenize.TokenError:
+1         # Ignore TokenError (we don't care about incomplete code)
+2         pass
+1     return level
 0
 ```
 
