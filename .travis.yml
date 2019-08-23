@@ -23,8 +23,6 @@ matrix:
 install:
   - pip install sphinx doctr recommonmark
   - source activate test-environment
-  # Needed for the build to not error. https://github.com/sphinx-doc/sphinx/pull/5052
-  - pip install git+https://github.com/sphinx-doc/sphinx@1.7
   # Needed for show_relabars, https://github.com/bitprophet/alabaster/pull/135
   - pip install -U git+https://github.com/asmeurer/alabaster/@rellinks-classes
 
