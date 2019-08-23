@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>The Token Types &#8212; Brown Water Python  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,6 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Helper Functions" href="helper-functions.html" />
@@ -52,7 +51,7 @@
           <div class="body" role="main">
             
   <div class="section" id="the-token-types">
-<span id="the-token-types"></span><h1>The Token Types<a class="headerlink" href="#the-token-types" title="Permalink to this headline">¶</a></h1>
+<h1>The Token Types<a class="headerlink" href="#the-token-types" title="Permalink to this headline">¶</a></h1>
 <p>Every token produced by the tokenizer has a type. These types are represented
 by integer constants. The actual integer value of the token constants is not
 important (except for <a class="reference external" href="#n-tokens"><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code></a>), and should never be used or
@@ -82,7 +81,7 @@ Furthermore, the aforementioned <a class="reference external" href="#nl"><code c
 <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> tokens are not importable from <code class="docutils literal notranslate"><span class="pre">token</span></code> prior to Python 3.7,
 only from <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>.</p>
 <div class="section" id="the-tok-name-dictionary">
-<span id="the-tok-name-dictionary"></span><h2>The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary<a class="headerlink" href="#the-tok-name-dictionary" title="Permalink to this headline">¶</a></h2>
+<h2>The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary<a class="headerlink" href="#the-tok-name-dictionary" title="Permalink to this headline">¶</a></h2>
 <p>The dictionary <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> maps the tokens back to their names:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">STRING</span>
@@ -93,7 +92,7 @@ only from <code class="docutils literal notranslate"><span class="pre">tokenize<
 </div>
 </div>
 <div class="section" id="the-tokens">
-<span id="the-tokens"></span><h2>The Tokens<a class="headerlink" href="#the-tokens" title="Permalink to this headline">¶</a></h2>
+<h2>The Tokens<a class="headerlink" href="#the-tokens" title="Permalink to this headline">¶</a></h2>
 <p>To simplify the below sections, the following utility function is used for all
 the examples:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
@@ -103,7 +102,7 @@ the examples:</p>
 </pre></div>
 </div>
 <div class="section" id="endmarker">
-<span id="endmarker"></span><h3><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code><a class="headerlink" href="#endmarker" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code><a class="headerlink" href="#endmarker" title="Permalink to this headline">¶</a></h3>
 <p>This is always the last token emitted by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, unless it raises an
 exception. The <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">line</span></code> attributes are always <code class="docutils literal notranslate"><span class="pre">''</span></code>. The <code class="docutils literal notranslate"><span class="pre">start</span></code> and
 <code class="docutils literal notranslate"><span class="pre">end</span></code> lines are always one more than the total number of lines in the input,
@@ -127,7 +126,7 @@ yielded.</p>
 </div>
 </div>
 <div class="section" id="name">
-<span id="name"></span><h3><code class="docutils literal notranslate"><span class="pre">NAME</span></code><a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">NAME</span></code><a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token type is used for any Python identifier, as well as every
 keyword.
 <a class="reference external" href="https://docs.python.org/3/reference/lexical_analysis.html#keywords"><em>Keywords</em></a>
@@ -169,7 +168,7 @@ discouraged.</p>
 </div>
 </div>
 <div class="section" id="number">
-<span id="number"></span><h3><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code><a class="headerlink" href="#number" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code><a class="headerlink" href="#number" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> token type is used for any numeric literal, including (decimal) integer literals,
 binary, octal, and hexadecimal integer literals, floating point numbers
 (including scientific notation), and imaginary number literals (like <code class="docutils literal notranslate"><span class="pre">1j</span></code>).</p>
@@ -227,8 +226,7 @@ tokenize as <code class="docutils literal notranslate"><span class="pre">NUMBER<
 <p>One advantage of using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> over <code class="docutils literal notranslate"><span class="pre">ast</span></code> is that floating point numbers
 are not rounded at the tokenization stage, so it is possible to access the
 full input.</p>
-<!-- The ast doctest is skipped in Python 3.8 because it changes Num to Constant. -->
-<!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">1.0000000000000001</span>
+<!-- The ast doctest is skipped in Python 3.8 because it changes Num to Constant. --><!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">1.0000000000000001</span>
 <span class="go">1.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;1.0000000000000001</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
@@ -270,7 +268,7 @@ like <code class="docutils literal notranslate"><span class="pre">123_456</span>
 we will see how to use <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to backport this feature to Python 3.5.</p>
 </div>
 <div class="section" id="string">
-<span id="string"></span><h3><code class="docutils literal notranslate"><span class="pre">STRING</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">STRING</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">STRING</span></code> token type matches any string literal, including single quoted,
 double quoted strings, triple- single and double quoted strings (i.e.,
 multi-line strings, or “docstrings”), raw, “unicode”, bytes, and f-strings
@@ -338,7 +336,7 @@ trying to strip the quotes manually, which is error prone, or using raw
 </pre></div>
 </div>
 <div class="section" id="error-behavior">
-<span id="error-behavior"></span><h4>Error Behavior<a class="headerlink" href="#error-behavior" title="Permalink to this headline">¶</a></h4>
+<h4>Error Behavior<a class="headerlink" href="#error-behavior" title="Permalink to this headline">¶</a></h4>
 <p>If a single quoted string is unclosed, the opening string delimiter is
 tokenized as <a class="reference external" href="#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>, and the remainder is tokenized as if
 it were not in a string.</p>
@@ -398,7 +396,7 @@ function, which is safe to use on untrusted input.</p>
 </div>
 </div>
 <div class="section" id="newline">
-<span id="newline"></span><h3><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code><a class="headerlink" href="#newline" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code><a class="headerlink" href="#newline" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code> token type represents a newline character (<code class="docutils literal notranslate"><span class="pre">\n</span></code> or <code class="docutils literal notranslate"><span class="pre">\r\n</span></code>) that
 ends a logical line of Python code. Newlines that do not end a logical line of
 Python code use <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>.</p>
@@ -443,10 +441,10 @@ can always force the input to end in a newline. This is why every example in
 this file has a newline at the end.</p>
 </div>
 <div class="section" id="indent">
-<span id="indent"></span><h3><code class="docutils literal notranslate"><span class="pre">INDENT</span></code><a class="headerlink" href="#indent" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">INDENT</span></code><a class="headerlink" href="#indent" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="dedent">
-<span id="dedent"></span><h3><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code><a class="headerlink" href="#dedent" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code><a class="headerlink" href="#dedent" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">INDENT</span></code> token type represents the indentation for indented blocks. The
 indentation itself (the text from the beginning of the line to the first
 nonwhitespace character) is in the <code class="docutils literal notranslate"><span class="pre">string</span></code> attribute. <code class="docutils literal notranslate"><span class="pre">INDENT</span></code> is emitted
@@ -602,10 +600,10 @@ determined by incrementing and decrementing a counter for each <code class="docu
 <code class="docutils literal notranslate"><span class="pre">DEDENT</span></code> token. See the <a class="reference external" href="examples.html#indentation-level">examples</a>.</p>
 </div>
 <div class="section" id="rarrow">
-<span id="rarrow"></span><h3><code class="docutils literal notranslate"><span class="pre">RARROW</span></code><a class="headerlink" href="#rarrow" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">RARROW</span></code><a class="headerlink" href="#rarrow" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="ellipsis">
-<span id="ellipsis"></span><h3><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code><a class="headerlink" href="#ellipsis" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code><a class="headerlink" href="#ellipsis" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">RARROW</span></code> and <code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> tokens tokenize as <a class="reference external" href="#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>. However, due to a
 <a class="reference external" href="https://bugs.python.org/issue24622">bug</a> present in Python versions prior to
 3.7, the <code class="docutils literal notranslate"><span class="pre">exact_type</span></code> attribute of these tokens will be <code class="docutils literal notranslate"><span class="pre">OP</span></code> instead of the
@@ -645,7 +643,7 @@ correct type.</p>
 </div>
 </div>
 <div class="section" id="op">
-<span id="op"></span><h3><code class="docutils literal notranslate"><span class="pre">OP</span></code><a class="headerlink" href="#op" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">OP</span></code><a class="headerlink" href="#op" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">OP</span></code> is a generic token type for all operators, delimiters, and the ellipsis
 literal. This does not include characters and operators that are not
 recognized by the parser (these are parsed as <a class="reference external" href="#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>).</p>
@@ -679,172 +677,171 @@ below).</p>
 </div>
 <p>The following table lists all exact <code class="docutils literal notranslate"><span class="pre">OP</span></code> types and their corresponding
 characters.</p>
-<!-- The table below is generated with exact_type_table.py --><table border="1" class="docutils">
+<!-- The table below is generated with exact_type_table.py --><table class="docutils align-default">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col style="width: 50%" />
+<col style="width: 50%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Exact token type</th>
-<th class="head">String value</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Exact token type</p></th>
+<th class="head"><p>String value</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">LPAR</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">(</span></code></td>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LPAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RPAR</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">)</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RPAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">)</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">LSQB</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">[</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LSQB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RSQB</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">]</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RSQB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">]</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">COLON</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">:</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">COLON</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">COMMA</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">,</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">COMMA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">,</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SEMI</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">;</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SEMI</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">;</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PLUS</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">+</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PLUS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">MINUS</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">-</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MINUS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">STAR</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">*</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SLASH</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">/</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SLASH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">VBAR</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">|</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VBAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">|</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AMPER</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&amp;</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AMPER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&amp;</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">LESS</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&lt;</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LESS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">GREATER</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&gt;</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GREATER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">EQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DOT</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">.</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DOT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PERCENT</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">%</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PERCENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">%</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">LBRACE</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">{</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LBRACE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RBRACE</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">}</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RBRACE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">}</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EQEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">==</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EQEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">==</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NOTEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">!=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NOTEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">!=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">LESSEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&lt;=</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LESSEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">GREATEREQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&gt;=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GREATEREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TILDE</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">~</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TILDE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">~</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CIRCUMFLEX</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">^</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CIRCUMFLEX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">^</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">LEFTSHIFT</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LEFTSHIFT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RIGHTSHIFT</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RIGHTSHIFT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DOUBLESTAR</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">**</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DOUBLESTAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">**</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PLUSEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">+=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PLUSEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">MINEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">-=</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MINEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-=</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">STAREQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">*=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STAREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SLASHEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">/=</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SLASHEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/=</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PERCENTEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">%=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PERCENTEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">%=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AMPEREQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&amp;=</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AMPEREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&amp;=</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">VBAREQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">|=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VBAREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">|=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CIRCUMFLEXEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">^=</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CIRCUMFLEXEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">^=</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">LEFTSHIFTEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&lt;&lt;=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LEFTSHIFTEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;&lt;=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RIGHTSHIFTEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&gt;&gt;=</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RIGHTSHIFTEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;&gt;=</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DOUBLESTAREQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">**=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DOUBLESTAREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">**=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DOUBLESLASH</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">//</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DOUBLESLASH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">//</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DOUBLESLASHEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">//=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DOUBLESLASHEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">//=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AT</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&#64;</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ATEQUAL</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">&#64;=</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ATEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;=</span></code></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RARROW</span></code> <a class="footnote-reference" href="#f1" id="id1">[1]</a></td>
-<td><code class="docutils literal notranslate"><span class="pre">-&gt;</span></code></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RARROW</span></code> <a class="footnote-reference brackets" href="#f1" id="id1">1</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-&gt;</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> <a class="footnote-reference" href="#f1" id="id2">[1]</a></td>
-<td><code class="docutils literal notranslate"><span class="pre">...</span></code></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> <a class="footnote-reference brackets" href="#f1" id="id2">1</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="f1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>)</em> Due to a <a class="reference external" href="https://bugs.python.org/issue24622">bug</a>, the
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
+<dd><p>Due to a <a class="reference external" href="https://bugs.python.org/issue24622">bug</a>, the
 <code class="docutils literal notranslate"><span class="pre">exact_type</span></code> for <code class="docutils literal notranslate"><span class="pre">RARROW</span></code> and <code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> tokens is <code class="docutils literal notranslate"><span class="pre">OP</span></code> in Python
-versions prior to 3.7. See <a class="reference external" href="#rarrow">above</a>.</td></tr>
-</tbody>
-</table>
+versions prior to 3.7. See <a class="reference external" href="#rarrow">above</a>.</p>
+</dd>
+</dl>
 </div>
 <div class="section" id="await">
-<span id="await"></span><h3><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code><a class="headerlink" href="#await" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code><a class="headerlink" href="#await" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="async">
-<span id="async"></span><h3><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code><a class="headerlink" href="#async" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code><a class="headerlink" href="#async" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">AWAIT</span></code> and <code class="docutils literal notranslate"><span class="pre">ASYNC</span></code> token types are used to tokenize the <code class="docutils literal notranslate"><span class="pre">await</span></code> and
 <code class="docutils literal notranslate"><span class="pre">async</span></code> keywords in Python 3.5 and 3.6. They do not exist in Python 3.7+.</p>
 <p>In Python 3.5 and 3.6, <code class="docutils literal notranslate"><span class="pre">await</span></code> and <code class="docutils literal notranslate"><span class="pre">async</span></code> are pseudo-keywords. To aid the
@@ -940,7 +937,7 @@ and <code class="docutils literal notranslate"><span class="pre">async</span></c
 </div>
 </div>
 <div class="section" id="errortoken">
-<span id="errortoken"></span><h3><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code><a class="headerlink" href="#errortoken" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code><a class="headerlink" href="#errortoken" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> type is used for any character that isn’t recognized. Inputs
 that tokenize <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>s cannot be valid Python, but this token type is
 used so that applications that process tokens can do error recovery, as the
@@ -1018,7 +1015,7 @@ the string are also tokenized as <code class="docutils literal notranslate"><spa
 should check <code class="docutils literal notranslate"><span class="pre">tok.string[0]</span> <span class="pre">in</span> <span class="pre">'&quot;\''</span></code>.</p>
 </div>
 <div class="section" id="comment">
-<span id="comment"></span><h3><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code><a class="headerlink" href="#comment" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code><a class="headerlink" href="#comment" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">COMMENT</span></code> token type represents a comment. If a comment spans multiple
 lines, each line is tokenized separately.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
@@ -1047,13 +1044,13 @@ importable from the <code class="docutils literal notranslate"><span class="pre"
 module as well.</p>
 </div>
 <div class="section" id="nl">
-<span id="nl"></span><h3><code class="docutils literal notranslate"><span class="pre">NL</span></code><a class="headerlink" href="#nl" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">NL</span></code><a class="headerlink" href="#nl" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NL</span></code> token type represents newline characters (<code class="docutils literal notranslate"><span class="pre">\n</span></code> or <code class="docutils literal notranslate"><span class="pre">\r\n</span></code>) that do not
 end logical lines of code. Newlines that do end logical lines of Python code
 area tokenized using the <a class="reference external" href="#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a> token type.</p>
 <p>There are two situations where newlines are tokenized as <code class="docutils literal notranslate"><span class="pre">NL</span></code>:</p>
 <ol>
-<li><p class="first">Newlines that end lines that are continued after unclosed braces.</p>
+<li><p>Newlines that end lines that are continued after unclosed braces.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;(1 +</span>
 <span class="gp">... </span><span class="s2">2)</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
@@ -1069,7 +1066,7 @@ area tokenized using the <a class="reference external" href="#newline"><code cla
 </pre></div>
 </div>
 </li>
-<li><p class="first">Newlines that end empty lines or lines that only have comments.</p>
+<li><p>Newlines that end empty lines or lines that only have comments.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s2"># Comment line</span>
 <span class="gp">...</span><span class="s2"></span>
@@ -1105,7 +1102,7 @@ importable from <code class="docutils literal notranslate"><span class="pre">tok
 as well.</p>
 </div>
 <div class="section" id="encoding">
-<span id="encoding"></span><h3><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code><a class="headerlink" href="#encoding" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code><a class="headerlink" href="#encoding" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> is a special token type that represents the encoding of the input.
 It is always the first token emitted by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, unless the detected
 encoding is invalid, in which case it raises <a class="reference external" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>. The encoding is detected via either a <a class="reference external" href="https://www.python.org/dev/peps/pep-0263/">PEP
@@ -1148,7 +1145,7 @@ is only importable from <code class="docutils literal notranslate"><span class="
 module as well.</p>
 </div>
 <div class="section" id="n-tokens">
-<span id="n-tokens"></span><h3><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code><a class="headerlink" href="#n-tokens" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code><a class="headerlink" href="#n-tokens" title="Permalink to this headline">¶</a></h3>
 <p>The number of token types (not including
 <a class="reference external" href="helper-functions.html#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a> or itself).</p>
 <p>In Python 3.5 and 3.6, <code class="docutils literal notranslate"><span class="pre">token.N_TOKENS</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize.N_TOKENS</span></code> are different,
@@ -1299,13 +1296,11 @@ different than in 3.5 and 3.6.</p>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -1318,7 +1313,7 @@ different than in 3.5 and 3.6.</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.10+</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

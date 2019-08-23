@@ -101,6 +101,23 @@ Invalid encodings will cause it to raise a
 ('ascii', [b'# -*- coding: ascii -*-'])
 ```
 
+This function should be used to detect the encoding of a Python source file
+before opening it in text mode. For example
+
+```py
+with open('file.py', 'br') as f:
+    encoding, _ = tokenize.detect_encoding(f.readline)
+
+with open('file.py', encoding=encoding) as f:
+    ...
+```
+
+Otherwise, the text read from the file may not be parsable as Python. For
+example, `ast.parse` may fail if text from the file is read with the wrong
+encoding. For example, if a file starts with a [Unicode BOM
+character](https://en.wikipedia.org/wiki/Byte_order_mark), `ast.parse` will
+fail if the file is not opened with the proper encoding.
+
 ## `tokenize.open(filename)`
 
 This is an alternative to the built-in `open()` function that automatically

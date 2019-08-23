@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>What is Tokenization? &#8212; Brown Water Python  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,6 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="tokenize vs. Alternatives" href="alternatives.html" />
@@ -52,7 +51,7 @@
           <div class="body" role="main">
             
   <div class="section" id="what-is-tokenization">
-<span id="what-is-tokenization"></span><h1>What is Tokenization?<a class="headerlink" href="#what-is-tokenization" title="Permalink to this headline">¶</a></h1>
+<h1>What is Tokenization?<a class="headerlink" href="#what-is-tokenization" title="Permalink to this headline">¶</a></h1>
 <p>In the field of parsing, a
 <a class="reference external" href="https://en.wikipedia.org/wiki/Lexical_analysis"><em>tokenizer</em></a>, also called a
 <em>lexer</em>, is a program that takes a string of characters and splits it into
@@ -81,16 +80,14 @@ language.</p>
 now).</p>
 <p>I chose this example to demonstrate a few things:</p>
 <ul>
-<li><p class="first">The <em>Tokens</em> in Python are things like parentheses, strings, operators,
-keywords, and variable names.</p>
-</li>
-<li><p class="first">Every token is a represented by <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> called <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>, which has
+<li><p>The <em>Tokens</em> in Python are things like parentheses, strings, operators,
+keywords, and variable names.</p></li>
+<li><p>Every token is a represented by <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> called <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>, which has
 a <code class="docutils literal notranslate"><span class="pre">type</span></code>, represented by an integer constant, and a <code class="docutils literal notranslate"><span class="pre">string</span></code>, which is the
 substring of the input representing the given token. The <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> also
 gives line and column information that indicates exactly where in the
-input string the token was found.</p>
-</li>
-<li><p class="first">The input does not need to be valid Python. Our input, <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span></code> is
+input string the token was found.</p></li>
+<li><p>The input does not need to be valid Python. Our input, <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span></code> is
 not valid Python. It is, however, a potential beginning of a valid Python
 string. If a valid Python expression were to be added to the end of the
 input, completing the subtraction operator, such as <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span> <span class="pre">-</span> <span class="pre">x</span></code>, it
@@ -125,20 +122,18 @@ exception in the same snippet. --><div class="highlight-py notranslate"><div cla
 conditions can occur, so that code that attempts to tokenize partial
 Python code can deal with them properly.</p>
 </li>
-<li><p class="first">Syntactically irrelevant aspects of the input such as redundant
+<li><p>Syntactically irrelevant aspects of the input such as redundant
 parentheses are maintained. The parentheses around the <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> in the input
 string are completely unnecessary, but they are included as tokens anyway.
 This does not apply to whitespace, however
 (<a class="reference external" href="tokens.html#indent">indentation</a> is an exception to this, as we will see
 later), although the whitespace between tokens can generally be deduced
-from the additional information procided in the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>.</p>
-</li>
-<li><p class="first">The input need not be semantically meaningful in anyway. The input string,
+from the additional information procided in the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>.</p></li>
+<li><p>The input need not be semantically meaningful in anyway. The input string,
 even if completed, can only raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> because <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span> <span class="pre">+</span> <span class="pre">True</span></code> is
 not allowed by Python. The tokenize module does not know or care about
-objects, types, or any high-level Python constructs.</p>
-</li>
-<li><p class="first">Some tokens can be right next to one another in the input string. Other
+objects, types, or any high-level Python constructs.</p></li>
+<li><p>Some tokens can be right next to one another in the input string. Other
 tokens must be separated by a space (for instance, <code class="docutils literal notranslate"><span class="pre">foriinrange(10)</span></code> will
 tokenize differently from <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">range(10)</span></code>). The complete set of rules
 for when spaces are required or not required to separate Python tokens is
@@ -149,15 +144,13 @@ an example, consider that <code class="docutils literal notranslate"><span class
 into three tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1j</span></code>), <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">and</span></code>), and <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code>)).
 One use-case of the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module is to combine tokens into valid
 Python using the <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize</span></code></a>
-function, which handles these details automatically.</p>
-</li>
-<li><p class="first">All parentheses and operators are tokenized as <a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>.
+function, which handles these details automatically.</p></li>
+<li><p>All parentheses and operators are tokenized as <a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>.
 Both variable names and keywords are tokenized as
 <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a>. To determine the exact type of a token often
 requires further inspection than simply looking at the <code class="docutils literal notranslate"><span class="pre">type</span></code> (this guide
-will detail exactly how to do this).</p>
-</li>
-<li><p class="first">The above example does not show it, but even code that can never be valid
+will detail exactly how to do this).</p></li>
+<li><p>The above example does not show it, but even code that can never be valid
 Python is often tokenized. For example:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;a$b</span><span class="se">\n</span><span class="s1">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
@@ -180,14 +173,13 @@ with f-strings. In Python 3.5, <code class="docutils literal notranslate"><span 
 (<code class="docutils literal notranslate"><span class="pre">f</span></code>) and <code class="docutils literal notranslate"><span class="pre">STRING</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;{a}&quot;</span></code>). In Python 3.6, it tokenizes as one token,
 <code class="docutils literal notranslate"><span class="pre">STRING</span></code> (<code class="docutils literal notranslate"><span class="pre">f&quot;{a}&quot;</span></code>).</p>
 </li>
-<li><p class="first">Finally, the key thing to understand about tokenization is that tokens are
+<li><p>Finally, the key thing to understand about tokenization is that tokens are
 a very low level abstraction of the Python syntax. The same token may have
 different meanings in different contexts. For example, in <code class="docutils literal notranslate"><span class="pre">[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code>
 token is part of a list literal, whereas in <code class="docutils literal notranslate"><span class="pre">a[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code> token is part
 of a slice. If you want to manipulate higher level abstractions, you might
 want to use the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module instead (see the <a class="reference external" href="alternatives.html">next
-section</a>).</p>
-</li>
+section</a>).</p></li>
 </ul>
 </div>
 
@@ -324,13 +316,11 @@ section</a>).</p>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -343,7 +333,7 @@ section</a>).</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.10+</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
