@@ -14,7 +14,7 @@ help:
 
 .PHONY: help Makefile
 
-html: SPHINXOPTS += -W
+# html: SPHINXOPTS += -W
 html: exact_type_table.txt
 
 livehtml: exact_type_table.txt
