@@ -444,7 +444,7 @@ in ["security fix
 only"](https://devguide.python.org/#status-of-python-branches). The examples
 in this document all use the 3.6.7+ behavior. If consistency is desired, one
 can always force the input to end in a newline. This is why every example in
-this file has a newline at the end.
+this document has a newline at the end.
 
 ### `INDENT`
 ### `DEDENT`
