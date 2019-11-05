@@ -237,7 +237,7 @@ like for the code `("a") + True`.
 ...     toname(l)
 ...     return l
 >>> st = parser.expr('("a") + True')
->>> pprint.pprint(pretty(st))
+>>> pprint.pprint(pretty(st)) # doctest: +SKIP35, +SKIP36, +SKIP37
 ['eval_input',
  ['testlist',
   ['test',
@@ -257,21 +257,22 @@ like for the code `("a") + True`.
                 ['atom',
                  ['LPAR', '('],
                  ['testlist_comp',
-                  ['test',
-                   ['or_test',
-                    ['and_test',
-                     ['not_test',
-                      ['comparison',
-                       ['expr',
-                        ['xor_expr',
-                         ['and_expr',
-                          ['shift_expr',
-                           ['arith_expr',
-                            ['term',
-                             ['factor',
-                              ['power',
-                               ['atom_expr',
-                                ['atom', ['STRING', '"a"']]]]]]]]]]]]]]]]],
+                  ['namedexpr_test',
+                   ['test',
+                    ['or_test',
+                     ['and_test',
+                      ['not_test',
+                       ['comparison',
+                        ['expr',
+                         ['xor_expr',
+                          ['and_expr',
+                           ['shift_expr',
+                            ['arith_expr',
+                             ['term',
+                              ['factor',
+                               ['power',
+                                ['atom_expr',
+                                 ['atom', ['STRING', '"a"']]]]]]]]]]]]]]]]]],
                  ['RPAR', ')']]]]]],
             ['PLUS', '+'],
             ['term',
@@ -283,9 +284,6 @@ like for the code `("a") + True`.
 
 Compare this to the `tokenize` representation seen in the [intro](intro.html),
 or the `ast` representation:
-
-<!-- This is skipped in Python 3.8 because it changes Num to Constant. -->
-<!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. -->
 
 ```py
 >>> ast.dump(ast.parse('("a") + True')) # doctest: +SKIP38

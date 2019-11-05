@@ -670,15 +670,12 @@ nodes with
 [`Pow`](https://greentreesnakes.readthedocs.io/en/latest/nodes.html#Pow), but
 this will not work, because `^` has a different precedence than `**`:
 
-<!-- These are skipped in Python 3.8 because it changes Num to Constant. -->
-<!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. -->
-
 ```py
 >>> import ast
->>> ast.dump(ast.parse('x**2 + 1')) # doctest: +SKIP38
-"Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id='x', ctx=Load()), op=Pow(), right=Num(n=2)), op=Add(), right=Num(n=1)))])"
->>> ast.dump(ast.parse('x^2 + 1')) # doctest: +SKIP38
-"Module(body=[Expr(value=BinOp(left=Name(id='x', ctx=Load()), op=BitXor(), right=BinOp(left=Num(n=2), op=Add(), right=Num(n=1))))])"
+>>> ast.dump(ast.parse('x**2 + 1')) # doctest: +SKIP35, +SKIP36, +SKIP37
+"Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id='x', ctx=Load()), op=Pow(), right=Constant(value=2, kind=None)), op=Add(), right=Constant(value=1, kind=None)))], type_ignores=[])"
+>>> ast.dump(ast.parse('x^2 + 1')) # doctest: +SKIP35, +SKIP36, +SKIP37
+"Module(body=[Expr(value=BinOp(left=Name(id='x', ctx=Load()), op=BitXor(), right=BinOp(left=Constant(value=2, kind=None), op=Add(), right=Constant(value=1, kind=None))))], type_ignores=[])"
 ```
 
 This is difficult to read, but it basically says that `x**2 + 1` is parsed

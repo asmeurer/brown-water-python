@@ -40,6 +40,7 @@ SKIP37 = register_optionflag("SKIP37")
 SKIP38 = register_optionflag("SKIP38")
 
 PY37 = sys.version_info[1] >= 7
+PY38 = sys.version_info[1] >= 8
 
 if sys.version_info[1] == 5:
     SKIP_THIS_VERSION = SKIP35
@@ -55,15 +56,32 @@ else:
 
 orig_run = DocTestRunner.run
 
-token_37_to_36 = {
-    'type=57 (ENCODING)': 'type=59 (ENCODING)',
-    'type=54 (ERRORTOKEN)': 'type=56 (ERRORTOKEN)',
-    'type=56 (NL)': 'type=58 (NL)',
-    'type=55 (COMMENT)': 'type=57 (COMMENT)',
+token_38_to_36 = {
+    'type=62 (ENCODING)': 'type=59 (ENCODING)',
+    'type=59 (ERRORTOKEN)': 'type=56 (ERRORTOKEN)',
+    'type=61 (NL)': 'type=58 (NL)',
+    'type=60 (COMMENT)': 'type=57 (COMMENT)',
+    'type=54 (OP)': 'type=53 (OP)',
 
     # TokenInfo doctests in usage.md
-    'toknum: 57': 'toknum: 59',
-    'type: 57': 'type: 59',
+    'toknum: 62': 'toknum: 59',
+    'toknum: 54': 'toknum: 53',
+    'type: 62': 'type: 59',
+    'type: 54': 'type: 53',
+}
+
+token_38_to_37 = {
+    'type=62 (ENCODING)': 'type=57 (ENCODING)',
+    'type=59 (ERRORTOKEN)': 'type=54 (ERRORTOKEN)',
+    'type=61 (NL)': 'type=56 (NL)',
+    'type=60 (COMMENT)': 'type=55 (COMMENT)',
+    'type=54 (OP)': 'type=53 (OP)',
+
+    # TokenInfo doctests in usage.md
+    'toknum: 62': 'toknum: 57',
+    'toknum: 54': 'toknum: 53',
+    'type: 62': 'type: 57',
+    'type: 54': 'type: 53',
 }
 
 def run(self, test, **kwargs):
@@ -74,10 +92,14 @@ def run(self, test, **kwargs):
             example.want = example.want.replace('```\n', '')
             example.exc_msg = example.exc_msg and example.exc_msg.replace('```\n', '')
 
-            # All doctest output should be as in Python 3.7, unless it is
-            # skipped in 3.7
-            if not PY37 and SKIP37 not in example.options:
-                for old, new in token_37_to_36.items():
+            # All doctest output should be as in Python 3.8, unless it is
+            # skipped in 3.8
+            if not PY38 and SKIP38 not in example.options:
+                if PY37:
+                    repl = token_38_to_37
+                else:
+                    repl = token_38_to_36
+                for old, new in repl.items():
                     example.want = example.want.replace(old, new)
 
             filtered_examples.append(example)
