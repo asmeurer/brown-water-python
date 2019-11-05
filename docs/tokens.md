@@ -815,6 +815,26 @@ module, but they are not tokenized by default (the behavior is the same as in
 `ast.parse()`](https://docs.python.org/3/library/ast.html) which allows
 parsing Python as older versions would.
 
+### `TYPE_IGNORE`
+
+### `TYPE_COMMENT`
+
+`TYPE_IGNORE` and `TYPE_COMMENT` are included here for completeness, since
+they are in the [`tok_name`](#the-tok-name-dictionary) dictionary. They are
+used in the C tokenizer to tokenize type comments, but the Python tokenizer
+does not yet tokenize them. This presumably will change in the future, as the
+Python tokenizer is generally made to have the same behavior as the C tokenizer.
+
+```py
+>>> # Python 3.8.0
+>>> print_tokens('# type: ignore') # doctest: +SKIP35, +SKIP36, +SKIP37
+TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='') 62
+TokenInfo(type=60 (COMMENT), string='# type: ignore', start=(1, 0), end=(1, 14), line='# type: ignore') 60
+TokenInfo(type=61 (NL), string='', start=(1, 14), end=(1, 14), line='# type: ignore') 61
+TokenInfo(type=4 (NEWLINE), string='', start=(1, 14), end=(1, 15), line='') 4
+TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='') 0
+```
+
 ### `ERRORTOKEN`
 
 The `ERRORTOKEN` type is used for any character that isn't recognized. Inputs
