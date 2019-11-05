@@ -809,6 +809,12 @@ TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
 TokenInfo(type=0 (ENDMARKER), string='', start=(5, 0), end=(5, 0), line='')
 ```
 
+In Python 3.8, the `ASYNC` and `AWAIT` tokens have been readded to the `token`
+module, but they are not tokenized by default (the behavior is the same as in
+3.7). They are there only facilitate the new [`feature_version` flag to
+`ast.parse()`](https://docs.python.org/3/library/ast.html) which allows
+parsing Python as older versions would.
+
 ### `ERRORTOKEN`
 
 The `ERRORTOKEN` type is used for any character that isn't recognized. Inputs
