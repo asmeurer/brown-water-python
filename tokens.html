@@ -111,16 +111,16 @@ and the <code class="docutils literal notranslate"><span class="pre">start</span
 <code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code>, because <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> stops iteration after the last token is
 yielded.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;x + 1</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(1, 0), end=(1, 1), line=&#39;x + 1\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 2), end=(1, 3), line=&#39;x + 1\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 2), end=(1, 3), line=&#39;x + 1\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 4), end=(1, 5), line=&#39;x + 1\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 5), end=(1, 6), line=&#39;x + 1\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(1, 0), end=(1, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
@@ -133,7 +133,7 @@ keyword.
 are Python names that are reserved, that is, they cannot be assigned to, such
 as <code class="docutils literal notranslate"><span class="pre">for</span></code>, <code class="docutils literal notranslate"><span class="pre">def</span></code>, and <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;a or α</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;a&#39;, start=(1, 0), end=(1, 1), line=&#39;a or α\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;or&#39;, start=(1, 2), end=(1, 4), line=&#39;a or α\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;α&#39;, start=(1, 5), end=(1, 6), line=&#39;a or α\n&#39;)</span>
@@ -173,19 +173,19 @@ discouraged.</p>
 binary, octal, and hexadecimal integer literals, floating point numbers
 (including scientific notation), and imaginary number literals (like <code class="docutils literal notranslate"><span class="pre">1j</span></code>).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;10&#39;, start=(1, 0), end=(1, 2), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 3), end=(1, 4), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 3), end=(1, 4), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;0b101&#39;, start=(1, 5), end=(1, 10), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 11), end=(1, 12), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 11), end=(1, 12), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;0o10&#39;, start=(1, 13), end=(1, 17), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 18), end=(1, 19), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 18), end=(1, 19), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;0xa&#39;, start=(1, 20), end=(1, 23), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;-&#39;, start=(1, 24), end=(1, 25), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;-&#39;, start=(1, 24), end=(1, 25), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1.0&#39;, start=(1, 26), end=(1, 29), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 30), end=(1, 31), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 30), end=(1, 31), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1e1&#39;, start=(1, 32), end=(1, 35), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 36), end=(1, 37), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 36), end=(1, 37), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1j&#39;, start=(1, 38), end=(1, 40), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 40), end=(1, 41), line=&#39;10 + 0b101 + 0o10 + 0xa - 1.0 + 1e1 + 1j\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -194,9 +194,9 @@ binary, octal, and hexadecimal integer literals, floating point numbers
 <p>Note that even though literals like <code class="docutils literal notranslate"><span class="pre">1+2j</span></code> are a single <code class="docutils literal notranslate"><span class="pre">complex</span></code> type, they
 tokenize as <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1</span></code>), <code class="docutils literal notranslate"><span class="pre">OP</span></code> (<code class="docutils literal notranslate"><span class="pre">+</span></code>), <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">2j</span></code>).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;1+2j</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 0), end=(1, 1), line=&#39;1+2j\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 1), end=(1, 2), line=&#39;1+2j\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 1), end=(1, 2), line=&#39;1+2j\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;2j&#39;, start=(1, 2), end=(1, 4), line=&#39;1+2j\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 4), end=(1, 5), line=&#39;1+2j\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -204,19 +204,19 @@ tokenize as <code class="docutils literal notranslate"><span class="pre">NUMBER<
 </div>
 <p>Invalid numeric literals may tokenize as multiple numeric literals.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;012</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;0&#39;, start=(1, 0), end=(1, 1), line=&#39;012\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;12&#39;, start=(1, 1), end=(1, 3), line=&#39;012\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 3), end=(1, 4), line=&#39;012\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;0x1.0</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;0x1&#39;, start=(1, 0), end=(1, 3), line=&#39;0x1.0\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;.0&#39;, start=(1, 3), end=(1, 5), line=&#39;0x1.0\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 5), end=(1, 6), line=&#39;0x1.0\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;0o184</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;0o1&#39;, start=(1, 0), end=(1, 3), line=&#39;0o184\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;84&#39;, start=(1, 3), end=(1, 5), line=&#39;0o184\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 5), end=(1, 6), line=&#39;0o184\n&#39;)</span>
@@ -229,7 +229,7 @@ full input.</p>
 <!-- The ast doctest is skipped in Python 3.8 because it changes Num to Constant. --><!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">1.0000000000000001</span>
 <span class="go">1.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;1.0000000000000001</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1.0000000000000001&#39;, start=(1, 0), end=(1, 18), line=&#39;1.0000000000000001\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 18), end=(1, 19), line=&#39;1.0000000000000001\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -247,7 +247,7 @@ separators</a>,
 like <code class="docutils literal notranslate"><span class="pre">123_456</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Python 3.6+ only.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;123_456</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;123_456&#39;, start=(1, 0), end=(1, 7), line=&#39;123_456\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 7), end=(1, 8), line=&#39;123_456\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -276,12 +276,12 @@ multi-line strings, or “docstrings”), raw, “unicode”, bytes, and f-strin
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s2">&quot;I&quot; + &#39;love&#39; + &#39;&#39;&#39;tokenize&#39;&#39;&#39;</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&#39;&quot;I&quot;&#39;, start=(2, 0), end=(2, 3), line=&#39;&quot;I&quot; + \&#39;love\&#39; + \&#39;\&#39;\&#39;tokenize\&#39;\&#39;\&#39;\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(2, 4), end=(2, 5), line=&#39;&quot;I&quot; + \&#39;love\&#39; + \&#39;\&#39;\&#39;tokenize\&#39;\&#39;\&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(2, 4), end=(2, 5), line=&#39;&quot;I&quot; + \&#39;love\&#39; + \&#39;\&#39;\&#39;tokenize\&#39;\&#39;\&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;love&#39;&quot;, start=(2, 6), end=(2, 12), line=&#39;&quot;I&quot; + \&#39;love\&#39; + \&#39;\&#39;\&#39;tokenize\&#39;\&#39;\&#39;\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(2, 13), end=(2, 14), line=&#39;&quot;I&quot; + \&#39;love\&#39; + \&#39;\&#39;\&#39;tokenize\&#39;\&#39;\&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(2, 13), end=(2, 14), line=&#39;&quot;I&quot; + \&#39;love\&#39; + \&#39;\&#39;\&#39;tokenize\&#39;\&#39;\&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;&#39;&#39;tokenize&#39;&#39;&#39;&quot;, start=(2, 15), end=(2, 29), line=&#39;&quot;I&quot; + \&#39;love\&#39; + \&#39;\&#39;\&#39;tokenize\&#39;\&#39;\&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 29), end=(2, 30), line=&#39;&quot;I&quot; + \&#39;love\&#39; + \&#39;\&#39;\&#39;tokenize\&#39;\&#39;\&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(3, 0), end=(3, 0), line=&#39;&#39;)</span>
@@ -290,7 +290,7 @@ multi-line strings, or “docstrings”), raw, “unicode”, bytes, and f-strin
 <p>Note that even though Python implicitly concatenates string literals,
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> tokenizes them separately.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;&quot;this is&quot; &quot; fun&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&#39;&quot;this is&quot;&#39;, start=(1, 0), end=(1, 9), line=&#39;&quot;this is&quot; &quot; fun&quot;\n&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&#39;&quot; fun&quot;&#39;, start=(1, 10), end=(1, 16), line=&#39;&quot;this is&quot; &quot; fun&quot;\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 16), end=(1, 17), line=&#39;&quot;this is&quot; &quot; fun&quot;\n&#39;)</span>
@@ -300,7 +300,7 @@ multi-line strings, or “docstrings”), raw, “unicode”, bytes, and f-strin
 <p>In the case of raw, “unicode”, bytes, and f-strings, the string prefix is
 included in the tokenized string.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;rb&#39;\hello&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&quot;rb&#39;\\hello&#39;&quot;, start=(1, 0), end=(1, 10), line=&quot;rb&#39;\\hello&#39;\n&quot;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 10), end=(1, 11), line=&quot;rb&#39;\\hello&#39;\n&quot;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -309,7 +309,7 @@ included in the tokenized string.</p>
 <p>f-strings (Python 3.6+) are parsed as a single <code class="docutils literal notranslate"><span class="pre">STRING</span></code> token.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Python 3.6+ only.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;f&quot;{a + b}&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&#39;f&quot;{a + b}&quot;&#39;, start=(1, 0), end=(1, 10), line=&#39;f&quot;{a + b}&quot;\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 10), end=(1, 11), line=&#39;f&quot;{a + b}&quot;\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -341,10 +341,10 @@ trying to strip the quotes manually, which is error prone, or using raw
 tokenized as <a class="reference external" href="#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>, and the remainder is tokenized as if
 it were not in a string.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&#39;unclosed + string</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&quot;&#39;&quot;, start=(1, 0), end=(1, 1), line=&quot;&#39;unclosed + string\n&quot;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&quot;&#39;&quot;, start=(1, 0), end=(1, 1), line=&quot;&#39;unclosed + string\n&quot;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;unclosed&#39;, start=(1, 1), end=(1, 9), line=&quot;&#39;unclosed + string\n&quot;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 10), end=(1, 11), line=&quot;&#39;unclosed + string\n&quot;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 10), end=(1, 11), line=&quot;&#39;unclosed + string\n&quot;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;string&#39;, start=(1, 12), end=(1, 18), line=&quot;&#39;unclosed + string\n&quot;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 18), end=(1, 19), line=&quot;&#39;unclosed + string\n&quot;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -358,9 +358,9 @@ want an unclosed string to highlight the rest of the document as a string
 is not closed, <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> will raise <a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a>
 when it reaches it.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&#39;an &#39; + &#39;&#39;&#39;unclosed multi-line string</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> 
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;an &#39;&quot;, start=(1, 0), end=(1, 5), line=&quot;&#39;an &#39; + &#39;&#39;&#39;unclosed multi-line string\n&quot;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 6), end=(1, 7), line=&quot;&#39;an &#39; + &#39;&#39;&#39;unclosed multi-line string\n&quot;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 6), end=(1, 7), line=&quot;&#39;an &#39; + &#39;&#39;&#39;unclosed multi-line string\n&quot;)</span>
 <span class="gt">Traceback (most recent call last):</span>
     <span class="o">...</span>
     <span class="k">raise</span> <span class="n">TokenError</span><span class="p">(</span><span class="s2">&quot;EOF in multi-line string&quot;</span><span class="p">,</span> <span class="n">strstart</span><span class="p">)</span>
@@ -375,7 +375,7 @@ string is multi-line, the remainder of the input from where the
 tokenize without any errors, but raise <code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code> when parsed by the
 interpreter.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&#39;\N{NOT REAL}&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;\\N{NOT REAL}&#39;&quot;, start=(1, 0), end=(1, 14), line=&quot;&#39;\\N{NOT REAL}&#39;\n&quot;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 14), end=(1, 15), line=&quot;&#39;\\N{NOT REAL}&#39;\n&quot;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -404,12 +404,12 @@ Python code use <a class="reference external" href="#nl"><code class="docutils l
 <span class="gp">... </span><span class="s2">def hello():</span>
 <span class="gp">... </span><span class="s2">    return &#39;hello world&#39;</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(1, 0), end=(1, 3), line=&#39;def hello():\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;hello&#39;, start=(1, 4), end=(1, 9), line=&#39;def hello():\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(1, 9), end=(1, 10), line=&#39;def hello():\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(1, 10), end=(1, 11), line=&#39;def hello():\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(1, 11), end=(1, 12), line=&#39;def hello():\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(1, 9), end=(1, 10), line=&#39;def hello():\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(1, 10), end=(1, 11), line=&#39;def hello():\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;:&#39;, start=(1, 11), end=(1, 12), line=&#39;def hello():\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 12), end=(1, 13), line=&#39;def hello():\n&#39;)</span>
 <span class="go">TokenInfo(type=5 (INDENT), string=&#39;    &#39;, start=(2, 0), end=(2, 4), line=&quot;    return &#39;hello world&#39;\n&quot;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;return&#39;, start=(2, 4), end=(2, 10), line=&quot;    return &#39;hello world&#39;\n&quot;)</span>
@@ -421,7 +421,7 @@ Python code use <a class="reference external" href="#nl"><code class="docutils l
 </div>
 <p>Windows-style newlines (<code class="docutils literal notranslate"><span class="pre">\r\n</span></code>) are tokenized as a single token.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;1</span><span class="se">\n</span><span class="s2">2</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 0), end=(1, 1), line=&#39;1\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 1), end=(1, 2), line=&#39;1\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;2&#39;, start=(2, 0), end=(2, 1), line=&#39;2\r\n&#39;)</span>
@@ -438,7 +438,7 @@ in <a class="reference external" href="https://devguide.python.org/#status-of-py
 only”</a>. The examples
 in this document all use the 3.6.7+ behavior. If consistency is desired, one
 can always force the input to end in a newline. This is why every example in
-this file has a newline at the end.</p>
+this document has a newline at the end.</p>
 </div>
 <div class="section" id="indent">
 <h3><code class="docutils literal notranslate"><span class="pre">INDENT</span></code><a class="headerlink" href="#indent" title="Permalink to this headline">¶</a></h3>
@@ -463,8 +463,8 @@ consecutive <code class="docutils literal notranslate"><span class="pre">DEDENT<
 <span class="gp">... </span><span class="s2">5</span>
 <span class="gp">...</span><span class="s2"></span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(2, 0), end=(2, 1), line=&#39;1\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 1), end=(2, 2), line=&#39;1\n&#39;)</span>
 <span class="go">TokenInfo(type=5 (INDENT), string=&#39;    &#39;, start=(3, 0), end=(3, 4), line=&#39;    2\n&#39;)</span>
@@ -479,7 +479,7 @@ consecutive <code class="docutils literal notranslate"><span class="pre">DEDENT<
 <span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(6, 0), end=(6, 0), line=&#39;5\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;5&#39;, start=(6, 0), end=(6, 1), line=&#39;5\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(6, 1), end=(6, 2), line=&#39;5\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(7, 0), end=(7, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(7, 0), end=(7, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(8, 0), end=(8, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
@@ -490,14 +490,14 @@ consecutive <code class="docutils literal notranslate"><span class="pre">DEDENT<
 <span class="gp">... </span><span class="s2">(1 +</span>
 <span class="gp">... </span><span class="s2">    2)</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(2, 0), end=(2, 1), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(2, 0), end=(2, 1), line=&#39;(1 +\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(2, 1), end=(2, 2), line=&#39;(1 +\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(2, 3), end=(2, 4), line=&#39;(1 +\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(2, 4), end=(2, 5), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(2, 3), end=(2, 4), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(2, 4), end=(2, 5), line=&#39;(1 +\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;2&#39;, start=(3, 4), end=(3, 5), line=&#39;    2)\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(3, 5), end=(3, 6), line=&#39;    2)\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(3, 5), end=(3, 6), line=&#39;    2)\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(3, 6), end=(3, 7), line=&#39;    2)\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(4, 0), end=(4, 0), line=&#39;&#39;)</span>
 </pre></div>
@@ -514,40 +514,40 @@ raises <a class="reference external" href="usage.html#indentationerror"><code cl
 <span class="gp">... </span><span class="se">\t\t</span><span class="s2">x -= 1</span>
 <span class="gp">... </span><span class="se">\t</span><span class="s2">print(&#39;Go!&#39;)</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(2, 0), end=(2, 3), line=&#39;def countdown(x):\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;countdown&#39;, start=(2, 4), end=(2, 13), line=&#39;def countdown(x):\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(2, 13), end=(2, 14), line=&#39;def countdown(x):\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(2, 13), end=(2, 14), line=&#39;def countdown(x):\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(2, 14), end=(2, 15), line=&#39;def countdown(x):\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(2, 15), end=(2, 16), line=&#39;def countdown(x):\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(2, 16), end=(2, 17), line=&#39;def countdown(x):\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(2, 15), end=(2, 16), line=&#39;def countdown(x):\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;:&#39;, start=(2, 16), end=(2, 17), line=&#39;def countdown(x):\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 17), end=(2, 18), line=&#39;def countdown(x):\n&#39;)</span>
 <span class="go">TokenInfo(type=5 (INDENT), string=&#39;\t&#39;, start=(3, 0), end=(3, 1), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;assert&#39;, start=(3, 1), end=(3, 7), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(3, 8), end=(3, 9), line=&#39;\tassert x&gt;=0\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;&gt;=&#39;, start=(3, 9), end=(3, 11), line=&#39;\tassert x&gt;=0\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;&gt;=&#39;, start=(3, 9), end=(3, 11), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;0&#39;, start=(3, 11), end=(3, 12), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(3, 12), end=(3, 13), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;while&#39;, start=(4, 1), end=(4, 6), line=&#39;\twhile x:\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(4, 7), end=(4, 8), line=&#39;\twhile x:\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(4, 8), end=(4, 9), line=&#39;\twhile x:\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;:&#39;, start=(4, 8), end=(4, 9), line=&#39;\twhile x:\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(4, 9), end=(4, 10), line=&#39;\twhile x:\n&#39;)</span>
 <span class="go">TokenInfo(type=5 (INDENT), string=&#39;\t\t&#39;, start=(5, 0), end=(5, 2), line=&#39;\t\tprint(x)\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;print&#39;, start=(5, 2), end=(5, 7), line=&#39;\t\tprint(x)\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(5, 7), end=(5, 8), line=&#39;\t\tprint(x)\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(5, 7), end=(5, 8), line=&#39;\t\tprint(x)\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(5, 8), end=(5, 9), line=&#39;\t\tprint(x)\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(5, 9), end=(5, 10), line=&#39;\t\tprint(x)\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(5, 9), end=(5, 10), line=&#39;\t\tprint(x)\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(5, 10), end=(5, 11), line=&#39;\t\tprint(x)\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(6, 2), end=(6, 3), line=&#39;\t\tx -= 1\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;-=&#39;, start=(6, 4), end=(6, 6), line=&#39;\t\tx -= 1\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;-=&#39;, start=(6, 4), end=(6, 6), line=&#39;\t\tx -= 1\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(6, 7), end=(6, 8), line=&#39;\t\tx -= 1\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(6, 8), end=(6, 9), line=&#39;\t\tx -= 1\n&#39;)</span>
 <span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(7, 1), end=(7, 1), line=&quot;\tprint(&#39;Go!&#39;)\n&quot;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;print&#39;, start=(7, 1), end=(7, 6), line=&quot;\tprint(&#39;Go!&#39;)\n&quot;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(7, 6), end=(7, 7), line=&quot;\tprint(&#39;Go!&#39;)\n&quot;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(7, 6), end=(7, 7), line=&quot;\tprint(&#39;Go!&#39;)\n&quot;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;Go!&#39;&quot;, start=(7, 7), end=(7, 12), line=&quot;\tprint(&#39;Go!&#39;)\n&quot;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(7, 12), end=(7, 13), line=&quot;\tprint(&#39;Go!&#39;)\n&quot;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(7, 12), end=(7, 13), line=&quot;\tprint(&#39;Go!&#39;)\n&quot;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(7, 13), end=(7, 14), line=&quot;\tprint(&#39;Go!&#39;)\n&quot;)</span>
 <span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(8, 0), end=(8, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(8, 0), end=(8, 0), line=&#39;&#39;)</span>
@@ -559,33 +559,33 @@ raises <a class="reference external" href="usage.html#indentationerror"><code cl
 <span class="gp">... </span><span class="se">\t\t</span><span class="s2">x -= 1</span>
 <span class="gp">... </span><span class="s2">    print(&#39;Go!&#39;)</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span> 
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(2, 0), end=(2, 3), line=&#39;def countdown(x):\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;countdown&#39;, start=(2, 4), end=(2, 13), line=&#39;def countdown(x):\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(2, 13), end=(2, 14), line=&#39;def countdown(x):\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(2, 13), end=(2, 14), line=&#39;def countdown(x):\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(2, 14), end=(2, 15), line=&#39;def countdown(x):\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(2, 15), end=(2, 16), line=&#39;def countdown(x):\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(2, 16), end=(2, 17), line=&#39;def countdown(x):\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(2, 15), end=(2, 16), line=&#39;def countdown(x):\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;:&#39;, start=(2, 16), end=(2, 17), line=&#39;def countdown(x):\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 17), end=(2, 18), line=&#39;def countdown(x):\n&#39;)</span>
 <span class="go">TokenInfo(type=5 (INDENT), string=&#39;\t&#39;, start=(3, 0), end=(3, 1), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;assert&#39;, start=(3, 1), end=(3, 7), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(3, 8), end=(3, 9), line=&#39;\tassert x&gt;=0\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;&gt;=&#39;, start=(3, 9), end=(3, 11), line=&#39;\tassert x&gt;=0\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;&gt;=&#39;, start=(3, 9), end=(3, 11), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;0&#39;, start=(3, 11), end=(3, 12), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(3, 12), end=(3, 13), line=&#39;\tassert x&gt;=0\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;while&#39;, start=(4, 1), end=(4, 6), line=&#39;\twhile x:\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(4, 7), end=(4, 8), line=&#39;\twhile x:\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(4, 8), end=(4, 9), line=&#39;\twhile x:\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;:&#39;, start=(4, 8), end=(4, 9), line=&#39;\twhile x:\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(4, 9), end=(4, 10), line=&#39;\twhile x:\n&#39;)</span>
 <span class="go">TokenInfo(type=5 (INDENT), string=&#39;\t\t&#39;, start=(5, 0), end=(5, 2), line=&#39;\t\tprint(x)\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;print&#39;, start=(5, 2), end=(5, 7), line=&#39;\t\tprint(x)\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(5, 7), end=(5, 8), line=&#39;\t\tprint(x)\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(5, 7), end=(5, 8), line=&#39;\t\tprint(x)\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(5, 8), end=(5, 9), line=&#39;\t\tprint(x)\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(5, 9), end=(5, 10), line=&#39;\t\tprint(x)\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(5, 9), end=(5, 10), line=&#39;\t\tprint(x)\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(5, 10), end=(5, 11), line=&#39;\t\tprint(x)\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;x&#39;, start=(6, 2), end=(6, 3), line=&#39;\t\tx -= 1\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;-=&#39;, start=(6, 4), end=(6, 6), line=&#39;\t\tx -= 1\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;-=&#39;, start=(6, 4), end=(6, 6), line=&#39;\t\tx -= 1\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(6, 7), end=(6, 8), line=&#39;\t\tx -= 1\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(6, 8), end=(6, 9), line=&#39;\t\tx -= 1\n&#39;)</span>
 <span class="gt">Traceback (most recent call last):</span>
@@ -826,6 +826,9 @@ characters.</p>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> <a class="footnote-reference brackets" href="#f1" id="id2">1</a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">COLONEQUAL</span></code> <a class="footnote-reference brackets" href="#f2" id="id3">2</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:=</span></code></p></td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Footnotes</p>
@@ -834,6 +837,9 @@ characters.</p>
 <dd><p>Due to a <a class="reference external" href="https://bugs.python.org/issue24622">bug</a>, the
 <code class="docutils literal notranslate"><span class="pre">exact_type</span></code> for <code class="docutils literal notranslate"><span class="pre">RARROW</span></code> and <code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> tokens is <code class="docutils literal notranslate"><span class="pre">OP</span></code> in Python
 versions prior to 3.7. See <a class="reference external" href="#rarrow">above</a>.</p>
+</dd>
+<dt class="label" id="f2"><span class="brackets"><a class="fn-backref" href="#id3">2</a></span></dt>
+<dd><p>New in Python 3.8.</p>
 </dd>
 </dl>
 </div>
@@ -909,30 +915,55 @@ and <code class="docutils literal notranslate"><span class="pre">async</span></c
 <span class="gp">... </span><span class="s2">    async with lock:</span>
 <span class="gp">... </span><span class="s2">        await f()</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span> 
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;async&#39;, start=(2, 0), end=(2, 5), line=&#39;async def coro():\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;def&#39;, start=(2, 6), end=(2, 9), line=&#39;async def coro():\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;coro&#39;, start=(2, 10), end=(2, 14), line=&#39;async def coro():\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(2, 14), end=(2, 15), line=&#39;async def coro():\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(2, 15), end=(2, 16), line=&#39;async def coro():\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(2, 16), end=(2, 17), line=&#39;async def coro():\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(2, 14), end=(2, 15), line=&#39;async def coro():\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(2, 15), end=(2, 16), line=&#39;async def coro():\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;:&#39;, start=(2, 16), end=(2, 17), line=&#39;async def coro():\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 17), end=(2, 18), line=&#39;async def coro():\n&#39;)</span>
 <span class="go">TokenInfo(type=5 (INDENT), string=&#39;    &#39;, start=(3, 0), end=(3, 4), line=&#39;    async with lock:\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;async&#39;, start=(3, 4), end=(3, 9), line=&#39;    async with lock:\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;with&#39;, start=(3, 10), end=(3, 14), line=&#39;    async with lock:\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;lock&#39;, start=(3, 15), end=(3, 19), line=&#39;    async with lock:\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;:&#39;, start=(3, 19), end=(3, 20), line=&#39;    async with lock:\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;:&#39;, start=(3, 19), end=(3, 20), line=&#39;    async with lock:\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(3, 20), end=(3, 21), line=&#39;    async with lock:\n&#39;)</span>
 <span class="go">TokenInfo(type=5 (INDENT), string=&#39;        &#39;, start=(4, 0), end=(4, 8), line=&#39;        await f()\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;await&#39;, start=(4, 8), end=(4, 13), line=&#39;        await f()\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;f&#39;, start=(4, 14), end=(4, 15), line=&#39;        await f()\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(4, 15), end=(4, 16), line=&#39;        await f()\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(4, 16), end=(4, 17), line=&#39;        await f()\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(4, 15), end=(4, 16), line=&#39;        await f()\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(4, 16), end=(4, 17), line=&#39;        await f()\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(4, 17), end=(4, 18), line=&#39;        await f()\n&#39;)</span>
 <span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=6 (DEDENT), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
+</pre></div>
+</div>
+<p>In Python 3.8, the <code class="docutils literal notranslate"><span class="pre">ASYNC</span></code> and <code class="docutils literal notranslate"><span class="pre">AWAIT</span></code> tokens have been readded to the <code class="docutils literal notranslate"><span class="pre">token</span></code>
+module, but they are not tokenized by default (the behavior is the same as in
+3.7). They are there only facilitate the new <a class="reference external" href="https://docs.python.org/3/library/ast.html"><code class="docutils literal notranslate"><span class="pre">feature_version</span></code> flag to
+<code class="docutils literal notranslate"><span class="pre">ast.parse()</span></code></a> which allows
+parsing Python as older versions would.</p>
+</div>
+<div class="section" id="type-ignore">
+<h3><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code><a class="headerlink" href="#type-ignore" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="type-comment">
+<h3><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code><a class="headerlink" href="#type-comment" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code> and <code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code> are included here for completeness, since
+they are in the <a class="reference external" href="#the-tok-name-dictionary"><code class="docutils literal notranslate"><span class="pre">tok_name</span></code></a> dictionary. They are
+used in the C tokenizer to tokenize type comments, but the Python tokenizer
+does not yet tokenize them. This presumably will change in the future, as the
+Python tokenizer is generally made to have the same behavior as the C tokenizer.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Python 3.8.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;# type: ignore&#39;</span><span class="p">)</span> 
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=60 (COMMENT), string=&#39;# type: ignore&#39;, start=(1, 0), end=(1, 14), line=&#39;# type: ignore&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;&#39;, start=(1, 14), end=(1, 14), line=&#39;# type: ignore&#39;)</span>
+<span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;&#39;, start=(1, 14), end=(1, 15), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -946,15 +977,15 @@ process extensions to Python syntax (see the
 <a class="reference external" href="examples.html#extending-python-s-syntax">examples</a>). Every unrecognized
 character is tokenized separately.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;1!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 0), end=(1, 1), line=&#39;1!!\n&#39;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&#39;!&#39;, start=(1, 1), end=(1, 2), line=&#39;1!!\n&#39;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&#39;!&#39;, start=(1, 2), end=(1, 3), line=&#39;1!!\n&#39;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&#39;!&#39;, start=(1, 1), end=(1, 2), line=&#39;1!!\n&#39;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&#39;!&#39;, start=(1, 2), end=(1, 3), line=&#39;1!!\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 3), end=(1, 4), line=&#39;1!!\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;💯</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&#39;💯&#39;, start=(1, 0), end=(1, 1), line=&#39;💯\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&#39;💯&#39;, start=(1, 0), end=(1, 1), line=&#39;💯\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 1), end=(1, 2), line=&#39;💯\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 </pre></div>
@@ -962,10 +993,10 @@ character is tokenized separately.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> is also used for single-quoted strings that are not closed before
 a newline. See the <a class="reference external" href="#error-behavior"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a> section for more information.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&#39;unclosed + string</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&quot;&#39;&quot;, start=(1, 0), end=(1, 1), line=&quot;&#39;unclosed + string\n&quot;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&quot;&#39;&quot;, start=(1, 0), end=(1, 1), line=&quot;&#39;unclosed + string\n&quot;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;unclosed&#39;, start=(1, 1), end=(1, 9), line=&quot;&#39;unclosed + string\n&quot;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 10), end=(1, 11), line=&quot;&#39;unclosed + string\n&quot;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 10), end=(1, 11), line=&quot;&#39;unclosed + string\n&quot;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;string&#39;, start=(1, 12), end=(1, 18), line=&quot;&#39;unclosed + string\n&quot;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 18), end=(1, 19), line=&quot;&#39;unclosed + string\n&quot;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
@@ -977,21 +1008,21 @@ error token. Otherwise only the start quote delimiter is.</p>
 <span class="gp">... </span><span class="s2">&#39;unclosed \</span>
 <span class="gp">... </span><span class="s2">continued string</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&quot;&#39;unclosed \\\ncontinued string\n&quot;, start=(2, 0), end=(3, 17), line=&quot;&#39;unclosed \\\n&quot;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&quot;&#39;unclosed \\\ncontinued string\n&quot;, start=(2, 0), end=(3, 17), line=&quot;&#39;unclosed \\\n&quot;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(4, 0), end=(4, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
 <p>In the case of uncontinued unclosed single quoted strings, the spaces before
 the string are also tokenized as <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&#39;an&#39; +  &#39;unclosed string</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;an&#39;&quot;, start=(1, 0), end=(1, 4), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 5), end=(1, 6), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&#39; &#39;, start=(1, 6), end=(1, 7), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&#39; &#39;, start=(1, 7), end=(1, 8), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&quot;&#39;&quot;, start=(1, 8), end=(1, 9), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 5), end=(1, 6), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&#39; &#39;, start=(1, 6), end=(1, 7), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&#39; &#39;, start=(1, 7), end=(1, 8), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&quot;&#39;&quot;, start=(1, 8), end=(1, 9), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;unclosed&#39;, start=(1, 9), end=(1, 17), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;string&#39;, start=(1, 18), end=(1, 24), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(1, 24), end=(1, 25), line=&quot;&#39;an&#39; +  &#39;unclosed string\n&quot;)</span>
@@ -1003,11 +1034,11 @@ the string are also tokenized as <code class="docutils literal notranslate"><spa
 <span class="gp">... </span><span class="s2">&#39;an&#39; +  &#39;unclosed\</span>
 <span class="gp">... </span><span class="s2">continued string</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&quot;&#39;an&#39;&quot;, start=(2, 0), end=(2, 4), line=&quot;&#39;an&#39; +  &#39;unclosed\\\n&quot;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(2, 5), end=(2, 6), line=&quot;&#39;an&#39; +  &#39;unclosed\\\n&quot;)</span>
-<span class="go">TokenInfo(type=54 (ERRORTOKEN), string=&quot;&#39;unclosed\\\ncontinued string\n&quot;, start=(2, 8), end=(3, 17), line=&quot;&#39;an&#39; +  &#39;unclosed\\\n&quot;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(2, 5), end=(2, 6), line=&quot;&#39;an&#39; +  &#39;unclosed\\\n&quot;)</span>
+<span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&quot;&#39;unclosed\\\ncontinued string\n&quot;, start=(2, 8), end=(3, 17), line=&quot;&#39;an&#39; +  &#39;unclosed\\\n&quot;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(4, 0), end=(4, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
@@ -1023,16 +1054,16 @@ lines, each line is tokenized separately.</p>
 <span class="gp">... </span><span class="s2"># This is another comment</span>
 <span class="gp">... </span><span class="s2">f() # This is a third comment</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
-<span class="go">TokenInfo(type=55 (COMMENT), string=&#39;# This is a comment&#39;, start=(2, 0), end=(2, 19), line=&#39;# This is a comment\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(2, 19), end=(2, 20), line=&#39;# This is a comment\n&#39;)</span>
-<span class="go">TokenInfo(type=55 (COMMENT), string=&#39;# This is another comment&#39;, start=(3, 0), end=(3, 25), line=&#39;# This is another comment\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(3, 25), end=(3, 26), line=&#39;# This is another comment\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=60 (COMMENT), string=&#39;# This is a comment&#39;, start=(2, 0), end=(2, 19), line=&#39;# This is a comment\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(2, 19), end=(2, 20), line=&#39;# This is a comment\n&#39;)</span>
+<span class="go">TokenInfo(type=60 (COMMENT), string=&#39;# This is another comment&#39;, start=(3, 0), end=(3, 25), line=&#39;# This is another comment\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(3, 25), end=(3, 26), line=&#39;# This is another comment\n&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;f&#39;, start=(4, 0), end=(4, 1), line=&#39;f() # This is a third comment\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(4, 1), end=(4, 2), line=&#39;f() # This is a third comment\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(4, 2), end=(4, 3), line=&#39;f() # This is a third comment\n&#39;)</span>
-<span class="go">TokenInfo(type=55 (COMMENT), string=&#39;# This is a third comment&#39;, start=(4, 4), end=(4, 29), line=&#39;f() # This is a third comment\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(4, 1), end=(4, 2), line=&#39;f() # This is a third comment\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(4, 2), end=(4, 3), line=&#39;f() # This is a third comment\n&#39;)</span>
+<span class="go">TokenInfo(type=60 (COMMENT), string=&#39;# This is a third comment&#39;, start=(4, 4), end=(4, 29), line=&#39;f() # This is a third comment\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(4, 29), end=(4, 30), line=&#39;f() # This is a third comment\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(5, 0), end=(5, 0), line=&#39;&#39;)</span>
 </pre></div>
@@ -1054,13 +1085,13 @@ area tokenized using the <a class="reference external" href="#newline"><code cla
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;(1 +</span>
 <span class="gp">... </span><span class="s2">2)</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;(&#39;, start=(1, 0), end=(1, 1), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(1, 0), end=(1, 1), line=&#39;(1 +\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 1), end=(1, 2), line=&#39;(1 +\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 3), end=(1, 4), line=&#39;(1 +\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 4), end=(1, 5), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 3), end=(1, 4), line=&#39;(1 +\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 4), end=(1, 5), line=&#39;(1 +\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;2&#39;, start=(2, 0), end=(2, 1), line=&#39;2)\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;)&#39;, start=(2, 1), end=(2, 2), line=&#39;2)\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;)&#39;, start=(2, 1), end=(2, 2), line=&#39;2)\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 2), end=(2, 3), line=&#39;2)\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(3, 0), end=(3, 0), line=&#39;&#39;)</span>
 </pre></div>
@@ -1071,11 +1102,11 @@ area tokenized using the <a class="reference external" href="#newline"><code cla
 <span class="gp">... </span><span class="s2"># Comment line</span>
 <span class="gp">...</span><span class="s2"></span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
-<span class="go">TokenInfo(type=55 (COMMENT), string=&#39;# Comment line&#39;, start=(2, 0), end=(2, 14), line=&#39;# Comment line\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(2, 14), end=(2, 15), line=&#39;# Comment line\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(3, 0), end=(3, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 0), end=(1, 1), line=&#39;\n&#39;)</span>
+<span class="go">TokenInfo(type=60 (COMMENT), string=&#39;# Comment line&#39;, start=(2, 0), end=(2, 14), line=&#39;# Comment line\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(2, 14), end=(2, 15), line=&#39;# Comment line\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(3, 0), end=(3, 1), line=&#39;\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(4, 0), end=(4, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
@@ -1087,9 +1118,9 @@ always use the line numbers in the <code class="docutils literal notranslate"><s
 <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> namedtuple. Never try to determine line numbers by counting
 <a class="reference external" href="#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a> and <code class="docutils literal notranslate"><span class="pre">NL</span></code> tokens.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;1 + </span><span class="se">\\\n</span><span class="s1">2</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 0), end=(1, 1), line=&#39;1 + \\\n&#39;)</span>
-<span class="go">TokenInfo(type=53 (OP), string=&#39;+&#39;, start=(1, 2), end=(1, 3), line=&#39;1 + \\\n&#39;)</span>
+<span class="go">TokenInfo(type=54 (OP), string=&#39;+&#39;, start=(1, 2), end=(1, 3), line=&#39;1 + \\\n&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;2&#39;, start=(2, 0), end=(2, 1), line=&#39;2\n&#39;)</span>
 <span class="go">TokenInfo(type=4 (NEWLINE), string=&#39;\n&#39;, start=(2, 1), end=(2, 2), line=&#39;2\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(3, 0), end=(3, 0), line=&#39;&#39;)</span>
@@ -1120,14 +1151,14 @@ only need the encoding to pass to <code class="docutils literal notranslate"><sp
 <p>The <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> line and column numbers for <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> will always be
 <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;# The default encoding is utf-8</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=55 (COMMENT), string=&#39;# The default encoding is utf-8&#39;, start=(1, 0), end=(1, 31), line=&#39;# The default encoding is utf-8\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 31), end=(1, 32), line=&#39;# The default encoding is utf-8\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=60 (COMMENT), string=&#39;# The default encoding is utf-8&#39;, start=(1, 0), end=(1, 31), line=&#39;# The default encoding is utf-8\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 31), end=(1, 32), line=&#39;# The default encoding is utf-8\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;# -*- coding: ascii -*-</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">TokenInfo(type=57 (ENCODING), string=&#39;ascii&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
-<span class="go">TokenInfo(type=55 (COMMENT), string=&#39;# -*- coding: ascii -*-&#39;, start=(1, 0), end=(1, 23), line=&#39;# -*- coding: ascii -*-\n&#39;)</span>
-<span class="go">TokenInfo(type=56 (NL), string=&#39;\n&#39;, start=(1, 23), end=(1, 24), line=&#39;# -*- coding: ascii -*-\n&#39;)</span>
+<span class="go">TokenInfo(type=62 (ENCODING), string=&#39;ascii&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
+<span class="go">TokenInfo(type=60 (COMMENT), string=&#39;# -*- coding: ascii -*-&#39;, start=(1, 0), end=(1, 23), line=&#39;# -*- coding: ascii -*-\n&#39;)</span>
+<span class="go">TokenInfo(type=61 (NL), string=&#39;\n&#39;, start=(1, 23), end=(1, 24), line=&#39;# -*- coding: ascii -*-\n&#39;)</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
@@ -1151,12 +1182,25 @@ module as well.</p>
 <p>In Python 3.5 and 3.6, <code class="docutils literal notranslate"><span class="pre">token.N_TOKENS</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize.N_TOKENS</span></code> are different,
 because <a class="reference external" href="#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a>, <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>, and <a class="reference external" href="#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> are in
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> but not in <code class="docutils literal notranslate"><span class="pre">token</span></code>. In these versions, <code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code> is also not in
-the <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> dictionary. Additionally, Python 3.7 removed the
-<a class="reference external" href="#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a> and <a class="reference external" href="#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a> tokens, so the value of <code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code> is
-different than in 3.5 and 3.6.</p>
+the <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> dictionary.</p>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code> varies between Python versions. Python 3.7 removed the
+<a class="reference external" href="#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a> and <a class="reference external" href="#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a> tokens. Python 3.8 added the new
+tokens <a class="reference external" href="#op"><code class="docutils literal notranslate"><span class="pre">COLONEQUAL</span></code></a>, <a class="reference external" href="#type-ignore"><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code></a>, and
+<a class="reference external" href="#type-comment"><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code></a>, and re-added <a class="reference external" href="#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a> and
+<a class="reference external" href="#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="c1"># In PYthon 3.5 and 3.6</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">N_TOKENS</span> <span class="c1"># doctest: +SKIP37, +SKIP38</span>
+<span class="mi">60</span>
+</pre></div>
+</div>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">N_TOKENS</span> 
 <span class="go">58</span>
+</pre></div>
+</div>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">N_TOKENS</span> 
+<span class="go">63</span>
 </pre></div>
 </div>
 </div>
@@ -1244,6 +1288,8 @@ different than in 3.5 and 3.6.</p>
 <li class="toctree-l3"><a class="reference internal" href="#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type-ignore"><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type-comment"><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a></li>
@@ -1313,7 +1359,7 @@ different than in 3.5 and 3.6.</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

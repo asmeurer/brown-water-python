@@ -38,20 +38,20 @@ TypeError: startswith first arg must be str or a tuple of str, not bytes
 >>> with open('example.py', 'br') as f:
 ...     for tok in tokenize.tokenize(f.readline):
 ...         print(tok)
-TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=55 (COMMENT), string='# This is a an example file to be tokenized', start=(1, 0), end=(1, 43), line='# This is a an example file to be tokenized\n')
-TokenInfo(type=56 (NL), string='\n', start=(1, 43), end=(1, 44), line='# This is a an example file to be tokenized\n')
-TokenInfo(type=56 (NL), string='\n', start=(2, 0), end=(2, 1), line='\n')
+TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=60 (COMMENT), string='# This is a an example file to be tokenized', start=(1, 0), end=(1, 43), line='# This is a an example file to be tokenized\n')
+TokenInfo(type=61 (NL), string='\n', start=(1, 43), end=(1, 44), line='# This is a an example file to be tokenized\n')
+TokenInfo(type=61 (NL), string='\n', start=(2, 0), end=(2, 1), line='\n')
 TokenInfo(type=1 (NAME), string='def', start=(3, 0), end=(3, 3), line='def two():\n')
 TokenInfo(type=1 (NAME), string='two', start=(3, 4), end=(3, 7), line='def two():\n')
-TokenInfo(type=53 (OP), string='(', start=(3, 7), end=(3, 8), line='def two():\n')
-TokenInfo(type=53 (OP), string=')', start=(3, 8), end=(3, 9), line='def two():\n')
-TokenInfo(type=53 (OP), string=':', start=(3, 9), end=(3, 10), line='def two():\n')
+TokenInfo(type=54 (OP), string='(', start=(3, 7), end=(3, 8), line='def two():\n')
+TokenInfo(type=54 (OP), string=')', start=(3, 8), end=(3, 9), line='def two():\n')
+TokenInfo(type=54 (OP), string=':', start=(3, 9), end=(3, 10), line='def two():\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(3, 10), end=(3, 11), line='def two():\n')
 TokenInfo(type=5 (INDENT), string='    ', start=(4, 0), end=(4, 4), line='    return 1 + 1\n')
 TokenInfo(type=1 (NAME), string='return', start=(4, 4), end=(4, 10), line='    return 1 + 1\n')
 TokenInfo(type=2 (NUMBER), string='1', start=(4, 11), end=(4, 12), line='    return 1 + 1\n')
-TokenInfo(type=53 (OP), string='+', start=(4, 13), end=(4, 14), line='    return 1 + 1\n')
+TokenInfo(type=54 (OP), string='+', start=(4, 13), end=(4, 14), line='    return 1 + 1\n')
 TokenInfo(type=2 (NUMBER), string='1', start=(4, 15), end=(4, 16), line='    return 1 + 1\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(4, 16), end=(4, 17), line='    return 1 + 1\n')
 TokenInfo(type=6 (DEDENT), string='', start=(5, 0), end=(5, 0), line='')
@@ -70,9 +70,9 @@ helper function.
 ...     return tokenize.tokenize(io.BytesIO(s.encode('utf-8')).readline)
 >>> for tok in tokenize_string('hello + tokenize\n'):
 ...     print(tok)
-TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=1 (NAME), string='hello', start=(1, 0), end=(1, 5), line='hello + tokenize\n')
-TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line='hello + tokenize\n')
+TokenInfo(type=54 (OP), string='+', start=(1, 6), end=(1, 7), line='hello + tokenize\n')
 TokenInfo(type=1 (NAME), string='tokenize', start=(1, 8), end=(1, 16), line='hello + tokenize\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 16), end=(1, 17), line='hello + tokenize\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
@@ -97,9 +97,9 @@ typically in the `for` statement:
 ```py
 >>> for toknum, tokval, start, end, line in tokenize_string('hello + tokenize\n'):
 ...     print("toknum:", toknum, "tokval:", repr(tokval), "start:", start, "end:", end, "line:", repr(line))
-toknum: 57 tokval: 'utf-8' start: (0, 0) end: (0, 0) line: ''
+toknum: 62 tokval: 'utf-8' start: (0, 0) end: (0, 0) line: ''
 toknum: 1 tokval: 'hello' start: (1, 0) end: (1, 5) line: 'hello + tokenize\n'
-toknum: 53 tokval: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize\n'
+toknum: 54 tokval: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize\n'
 toknum: 1 tokval: 'tokenize' start: (1, 8) end: (1, 16) line: 'hello + tokenize\n'
 toknum: 4 tokval: '\n' start: (1, 16) end: (1, 17) line: 'hello + tokenize\n'
 toknum: 0 tokval: '' start: (2, 0) end: (2, 0) line: ''
@@ -128,9 +128,9 @@ includes all the names from `token`).
 ```py
 >>> for tok in tokenize_string('hello + tokenize\n'):
 ...     print("type:", tok.type, "string:", repr(tok.string), "start:", tok.start, "end:", tok.end, "line:", repr(tok.line))
-type: 57 string: 'utf-8' start: (0, 0) end: (0, 0) line: ''
+type: 62 string: 'utf-8' start: (0, 0) end: (0, 0) line: ''
 type: 1 string: 'hello' start: (1, 0) end: (1, 5) line: 'hello + tokenize\n'
-type: 53 string: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize\n'
+type: 54 string: '+' start: (1, 6) end: (1, 7) line: 'hello + tokenize\n'
 type: 1 string: 'tokenize' start: (1, 8) end: (1, 16) line: 'hello + tokenize\n'
 type: 4 string: '\n' start: (1, 16) end: (1, 17) line: 'hello + tokenize\n'
 type: 0 string: '' start: (2, 0) end: (2, 0) line: ''
@@ -251,13 +251,13 @@ was not tokenized due to the exception.
    ...     unclosed docstring
    ... """).readline):
    ...     print(tok) # doctest: +SKIP
-   TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-   TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+   TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+   TokenInfo(type=61 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
    TokenInfo(type=1 (NAME), string='def', start=(2, 0), end=(2, 3), line='def f():\n')
    TokenInfo(type=1 (NAME), string='f', start=(2, 4), end=(2, 5), line='def f():\n')
-   TokenInfo(type=53 (OP), string='(', start=(2, 5), end=(2, 6), line='def f():\n')
-   TokenInfo(type=53 (OP), string=')', start=(2, 6), end=(2, 7), line='def f():\n')
-   TokenInfo(type=53 (OP), string=':', start=(2, 7), end=(2, 8), line='def f():\n')
+   TokenInfo(type=54 (OP), string='(', start=(2, 5), end=(2, 6), line='def f():\n')
+   TokenInfo(type=54 (OP), string=')', start=(2, 6), end=(2, 7), line='def f():\n')
+   TokenInfo(type=54 (OP), string=':', start=(2, 7), end=(2, 8), line='def f():\n')
    TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 8), end=(2, 9), line='def f():\n')
    TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line="    '''\n")
    Traceback (most recent call last):
@@ -282,20 +282,20 @@ was not tokenized due to the exception.
    ...     pass
    ... """).readline):
    ...     print(tok) # doctest: +SKIP
-   TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-   TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
-   TokenInfo(type=53 (OP), string='(', start=(2, 0), end=(2, 1), line='(1 +\n')
+   TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+   TokenInfo(type=61 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+   TokenInfo(type=54 (OP), string='(', start=(2, 0), end=(2, 1), line='(1 +\n')
    TokenInfo(type=2 (NUMBER), string='1', start=(2, 1), end=(2, 2), line='(1 +\n')
-   TokenInfo(type=53 (OP), string='+', start=(2, 3), end=(2, 4), line='(1 +\n')
-   TokenInfo(type=56 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
+   TokenInfo(type=54 (OP), string='+', start=(2, 3), end=(2, 4), line='(1 +\n')
+   TokenInfo(type=61 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
    TokenInfo(type=1 (NAME), string='def', start=(3, 0), end=(3, 3), line='def f():\n')
    TokenInfo(type=1 (NAME), string='f', start=(3, 4), end=(3, 5), line='def f():\n')
-   TokenInfo(type=53 (OP), string='(', start=(3, 5), end=(3, 6), line='def f():\n')
-   TokenInfo(type=53 (OP), string=')', start=(3, 6), end=(3, 7), line='def f():\n')
-   TokenInfo(type=53 (OP), string=':', start=(3, 7), end=(3, 8), line='def f():\n')
-   TokenInfo(type=56 (NL), string='\n', start=(3, 8), end=(3, 9), line='def f():\n')
+   TokenInfo(type=54 (OP), string='(', start=(3, 5), end=(3, 6), line='def f():\n')
+   TokenInfo(type=54 (OP), string=')', start=(3, 6), end=(3, 7), line='def f():\n')
+   TokenInfo(type=54 (OP), string=':', start=(3, 7), end=(3, 8), line='def f():\n')
+   TokenInfo(type=61 (NL), string='\n', start=(3, 8), end=(3, 9), line='def f():\n')
    TokenInfo(type=1 (NAME), string='pass', start=(4, 4), end=(4, 8), line='    pass\n')
-   TokenInfo(type=56 (NL), string='\n', start=(4, 8), end=(4, 9), line='    pass\n')
+   TokenInfo(type=61 (NL), string='\n', start=(4, 8), end=(4, 9), line='    pass\n')
    Traceback (most recent call last):
      ...
    tokenize.TokenError: ('EOF in multi-line statement', (5, 0))
@@ -323,13 +323,13 @@ See also the [examples](examples.html).
 ...     '''
 ...     unclosed docstring
 ... """)
-TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=61 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=1 (NAME), string='def', start=(2, 0), end=(2, 3), line='def f():\n')
 TokenInfo(type=1 (NAME), string='f', start=(2, 4), end=(2, 5), line='def f():\n')
-TokenInfo(type=53 (OP), string='(', start=(2, 5), end=(2, 6), line='def f():\n')
-TokenInfo(type=53 (OP), string=')', start=(2, 6), end=(2, 7), line='def f():\n')
-TokenInfo(type=53 (OP), string=':', start=(2, 7), end=(2, 8), line='def f():\n')
+TokenInfo(type=54 (OP), string='(', start=(2, 5), end=(2, 6), line='def f():\n')
+TokenInfo(type=54 (OP), string=')', start=(2, 6), end=(2, 7), line='def f():\n')
+TokenInfo(type=54 (OP), string=':', start=(2, 7), end=(2, 8), line='def f():\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 8), end=(2, 9), line='def f():\n')
 TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line="    '''\n")
 TokenError: Unclosed multi-line string starting at (3, 4)
@@ -338,20 +338,20 @@ TokenError: Unclosed multi-line string starting at (3, 4)
 ... def f():
 ...     pass
 ... """)
-TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
-TokenInfo(type=53 (OP), string='(', start=(2, 0), end=(2, 1), line='(1 +\n')
+TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=61 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=54 (OP), string='(', start=(2, 0), end=(2, 1), line='(1 +\n')
 TokenInfo(type=2 (NUMBER), string='1', start=(2, 1), end=(2, 2), line='(1 +\n')
-TokenInfo(type=53 (OP), string='+', start=(2, 3), end=(2, 4), line='(1 +\n')
-TokenInfo(type=56 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
+TokenInfo(type=54 (OP), string='+', start=(2, 3), end=(2, 4), line='(1 +\n')
+TokenInfo(type=61 (NL), string='\n', start=(2, 4), end=(2, 5), line='(1 +\n')
 TokenInfo(type=1 (NAME), string='def', start=(3, 0), end=(3, 3), line='def f():\n')
 TokenInfo(type=1 (NAME), string='f', start=(3, 4), end=(3, 5), line='def f():\n')
-TokenInfo(type=53 (OP), string='(', start=(3, 5), end=(3, 6), line='def f():\n')
-TokenInfo(type=53 (OP), string=')', start=(3, 6), end=(3, 7), line='def f():\n')
-TokenInfo(type=53 (OP), string=':', start=(3, 7), end=(3, 8), line='def f():\n')
-TokenInfo(type=56 (NL), string='\n', start=(3, 8), end=(3, 9), line='def f():\n')
+TokenInfo(type=54 (OP), string='(', start=(3, 5), end=(3, 6), line='def f():\n')
+TokenInfo(type=54 (OP), string=')', start=(3, 6), end=(3, 7), line='def f():\n')
+TokenInfo(type=54 (OP), string=':', start=(3, 7), end=(3, 8), line='def f():\n')
+TokenInfo(type=61 (NL), string='\n', start=(3, 8), end=(3, 9), line='def f():\n')
 TokenInfo(type=1 (NAME), string='pass', start=(4, 4), end=(4, 8), line='    pass\n')
-TokenInfo(type=56 (NL), string='\n', start=(4, 8), end=(4, 9), line='    pass\n')
+TokenInfo(type=61 (NL), string='\n', start=(4, 8), end=(4, 9), line='    pass\n')
 TokenError: Unclosed brace(s)
 ```
 
@@ -367,11 +367,11 @@ indentation level.
 ...  f
 ... """).readline):
 ...     print(tok) # doctest: +SKIP
-TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=61 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=1 (NAME), string='if', start=(2, 0), end=(2, 2), line='if x:\n')
 TokenInfo(type=1 (NAME), string='x', start=(2, 3), end=(2, 4), line='if x:\n')
-TokenInfo(type=53 (OP), string=':', start=(2, 4), end=(2, 5), line='if x:\n')
+TokenInfo(type=54 (OP), string=':', start=(2, 4), end=(2, 5), line='if x:\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 5), end=(2, 6), line='if x:\n')
 TokenInfo(type=5 (INDENT), string='    ', start=(3, 0), end=(3, 4), line='    pass\n')
 TokenInfo(type=1 (NAME), string='pass', start=(3, 4), end=(3, 8), line='    pass\n')
@@ -403,11 +403,11 @@ tabs and spaces.
 ... \t    pass
 ... """).readline):
 ...     print(tok)
-TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=56 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
+TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=61 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=1 (NAME), string='if', start=(2, 0), end=(2, 2), line='if x:\n')
 TokenInfo(type=1 (NAME), string='x', start=(2, 3), end=(2, 4), line='if x:\n')
-TokenInfo(type=53 (OP), string=':', start=(2, 4), end=(2, 5), line='if x:\n')
+TokenInfo(type=54 (OP), string=':', start=(2, 4), end=(2, 5), line='if x:\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(2, 5), end=(2, 6), line='if x:\n')
 TokenInfo(type=5 (INDENT), string='    \t', start=(3, 0), end=(3, 5), line='    \tpass\n')
 TokenInfo(type=1 (NAME), string='pass', start=(3, 5), end=(3, 9), line='    \tpass\n')

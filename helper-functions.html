@@ -266,7 +266,7 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 <span class="gp">... </span>    <span class="n">toname</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">l</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">))</span> 
 <span class="go">[&#39;eval_input&#39;,</span>
 <span class="go"> [&#39;testlist&#39;,</span>
 <span class="go">  [&#39;test&#39;,</span>
@@ -286,21 +286,22 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 <span class="go">                [&#39;atom&#39;,</span>
 <span class="go">                 [&#39;LPAR&#39;, &#39;(&#39;],</span>
 <span class="go">                 [&#39;testlist_comp&#39;,</span>
-<span class="go">                  [&#39;test&#39;,</span>
-<span class="go">                   [&#39;or_test&#39;,</span>
-<span class="go">                    [&#39;and_test&#39;,</span>
-<span class="go">                     [&#39;not_test&#39;,</span>
-<span class="go">                      [&#39;comparison&#39;,</span>
-<span class="go">                       [&#39;expr&#39;,</span>
-<span class="go">                        [&#39;xor_expr&#39;,</span>
-<span class="go">                         [&#39;and_expr&#39;,</span>
-<span class="go">                          [&#39;shift_expr&#39;,</span>
-<span class="go">                           [&#39;arith_expr&#39;,</span>
-<span class="go">                            [&#39;term&#39;,</span>
-<span class="go">                             [&#39;factor&#39;,</span>
-<span class="go">                              [&#39;power&#39;,</span>
-<span class="go">                               [&#39;atom_expr&#39;,</span>
-<span class="go">                                [&#39;atom&#39;, [&#39;STRING&#39;, &#39;&quot;a&quot;&#39;]]]]]]]]]]]]]]]]],</span>
+<span class="go">                  [&#39;namedexpr_test&#39;,</span>
+<span class="go">                   [&#39;test&#39;,</span>
+<span class="go">                    [&#39;or_test&#39;,</span>
+<span class="go">                     [&#39;and_test&#39;,</span>
+<span class="go">                      [&#39;not_test&#39;,</span>
+<span class="go">                       [&#39;comparison&#39;,</span>
+<span class="go">                        [&#39;expr&#39;,</span>
+<span class="go">                         [&#39;xor_expr&#39;,</span>
+<span class="go">                          [&#39;and_expr&#39;,</span>
+<span class="go">                           [&#39;shift_expr&#39;,</span>
+<span class="go">                            [&#39;arith_expr&#39;,</span>
+<span class="go">                             [&#39;term&#39;,</span>
+<span class="go">                              [&#39;factor&#39;,</span>
+<span class="go">                               [&#39;power&#39;,</span>
+<span class="go">                                [&#39;atom_expr&#39;,</span>
+<span class="go">                                 [&#39;atom&#39;, [&#39;STRING&#39;, &#39;&quot;a&quot;&#39;]]]]]]]]]]]]]]]]]],</span>
 <span class="go">                 [&#39;RPAR&#39;, &#39;)&#39;]]]]]],</span>
 <span class="go">            [&#39;PLUS&#39;, &#39;+&#39;],</span>
 <span class="go">            [&#39;term&#39;,</span>
@@ -312,7 +313,7 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 </div>
 <p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <a class="reference external" href="intro.html">intro</a>,
 or the <code class="docutils literal notranslate"><span class="pre">ast</span></code> representation:</p>
-<!-- This is skipped in Python 3.8 because it changes Num to Constant. --><!-- TODO: When 3.8 is released, change these to skip in 3.5-3.7. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span> 
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span> 
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=Str(s=&#39;a&#39;), op=Add(), right=NameConstant(value=True)))])&quot;</span>
 </pre></div>
 </div>
@@ -430,6 +431,8 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#type-ignore"><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#type-comment"><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tokens.html#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a></li>
@@ -499,7 +502,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
