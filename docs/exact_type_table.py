@@ -32,10 +32,6 @@ def escape(s):
 
 token_types = {num: string for string, num in tokenize.EXACT_TOKEN_TYPES.items()}
 
-# Not included below Python 3.7 for some reason
-token_types[tokenize.ELLIPSIS] = '...'
-token_types[tokenize.RARROW] = '->'
-
 def main():
     if sys.version_info[1] < 8:
         sys.exit("This script should be run with Python 3.8 or newer.")
