@@ -14,7 +14,7 @@ developers may decide to change them in future Python versions. With that
 being said, the CPython developers are generally very conservative about
 changes to the standard library that might break downstream code, even for
 major releases. I will try to keep this guide updated as new Python versions
-are released. [issue
+are released. [Issue
 reports](https://github.com/asmeurer/brown-water-python/issues) and [pull
 requests](https://github.com/asmeurer/brown-water-python/pulls) are most
 welcome.
