@@ -90,9 +90,18 @@ purposes. Not only is this inefficient, it makes it impossible to deal with [exc
 
 ## `TokenInfo`
 
-The `tokenize()` generator yields `TokenInfo` namedtuple objects. There are
-two ways to work with `TokenInfo` objects. One is to unpack the tuple,
-typically in the `for` statement:
+The `tokenize()` generator yields `TokenInfo` namedtuple objects, with the
+following fields:
+
+```py
+>>> tokenize.TokenInfo._fields
+('type', 'string', 'start', 'end', 'line')
+```
+
+The meaning of each field is outlined [below](#tokeninfo-fields).
+
+There are two ways to work with `TokenInfo` objects. One is to unpack the
+tuple, typically in the `for` statement:
 
 ```py
 >>> for toknum, tokval, start, end, line in tokenize_string('hello + tokenize\n'):
@@ -145,12 +154,14 @@ you should use depends on your preference on these tradeoffs. I personally
 recommend the second form (`for tok in tokenize(...): ... tok.type, etc.`),
 unless you have the `(toknum, tokstr, start, end, line)` order memorized.
 
-### `type`
+### TokenInfo Fields
+
+#### `type`
 
 The token types are outlined in detail in the [Token Types](tokens.html)
 section.
 
-### `string`
+#### `string`
 
 The chunk of code that is tokenized. For token types where the string is
 meaningless, such as [`ENDMARKER`](tokens.html#endmarker), the string is
@@ -160,7 +171,7 @@ For the [`ENCODING`](tokens.html#encoding) token, the string is the encoding,
 which does not appear literally in the code, which is why for `ENCODING` the
 line and column numbers are 0 and the `line` is the empty string.
 
-### `start` and `end`
+#### `start` and `end`
 
 `start` and `end` are tuples of (line number, column number) for the line and
 column numbers of the start and end of the tokenized string. **Line numbers
@@ -181,7 +192,7 @@ information. `tokenize()` ignores syntactically irrelevant whitespace, which
 can include newlines (in particular, escaped newlines, see
 [`NL`](tokens.html#nl)).
 
-### `line`
+#### `line`
 
 `line` gives the full line that the token comes from. This is useful for
 reconstructing the whitespace between tokens (never assume that the whitespace

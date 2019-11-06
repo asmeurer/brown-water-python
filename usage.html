@@ -134,9 +134,15 @@ purposes. Not only is this inefficient, it makes it impossible to deal with <a c
 </div>
 <div class="section" id="tokeninfo">
 <h2><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code><a class="headerlink" href="#tokeninfo" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> generator yields <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> namedtuple objects. There are
-two ways to work with <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects. One is to unpack the tuple,
-typically in the <code class="docutils literal notranslate"><span class="pre">for</span></code> statement:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> generator yields <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> namedtuple objects, with the
+following fields:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">TokenInfo</span><span class="o">.</span><span class="n">_fields</span>
+<span class="go">(&#39;type&#39;, &#39;string&#39;, &#39;start&#39;, &#39;end&#39;, &#39;line&#39;)</span>
+</pre></div>
+</div>
+<p>The meaning of each field is outlined <a class="reference external" href="#tokeninfo-fields">below</a>.</p>
+<p>There are two ways to work with <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects. One is to unpack the
+tuple, typically in the <code class="docutils literal notranslate"><span class="pre">for</span></code> statement:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">toknum</span><span class="p">,</span> <span class="n">tokval</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="s1">&#39;hello + tokenize</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;toknum:&quot;</span><span class="p">,</span> <span class="n">toknum</span><span class="p">,</span> <span class="s2">&quot;tokval:&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tokval</span><span class="p">),</span> <span class="s2">&quot;start:&quot;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="s2">&quot;end:&quot;</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="s2">&quot;line:&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 <span class="go">toknum: 62 tokval: &#39;utf-8&#39; start: (0, 0) end: (0, 0) line: &#39;&#39;</span>
@@ -182,13 +188,15 @@ avoids errors from getting the attributes in the wrong order. The form that
 you should use depends on your preference on these tradeoffs. I personally
 recommend the second form (<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">tok</span> <span class="pre">in</span> <span class="pre">tokenize(...):</span> <span class="pre">...</span> <span class="pre">tok.type,</span> <span class="pre">etc.</span></code>),
 unless you have the <code class="docutils literal notranslate"><span class="pre">(toknum,</span> <span class="pre">tokstr,</span> <span class="pre">start,</span> <span class="pre">end,</span> <span class="pre">line)</span></code> order memorized.</p>
+<div class="section" id="tokeninfo-fields">
+<h3>TokenInfo Fields<a class="headerlink" href="#tokeninfo-fields" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="type">
-<h3><code class="docutils literal notranslate"><span class="pre">type</span></code><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h3>
+<h4><code class="docutils literal notranslate"><span class="pre">type</span></code><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h4>
 <p>The token types are outlined in detail in the <a class="reference external" href="tokens.html">Token Types</a>
 section.</p>
 </div>
 <div class="section" id="string">
-<h3><code class="docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
+<h4><code class="docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h4>
 <p>The chunk of code that is tokenized. For token types where the string is
 meaningless, such as <a class="reference external" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a>, the string is
 empty.</p>
@@ -197,7 +205,7 @@ which does not appear literally in the code, which is why for <code class="docut
 line and column numbers are 0 and the <code class="docutils literal notranslate"><span class="pre">line</span></code> is the empty string.</p>
 </div>
 <div class="section" id="start-and-end">
-<h3><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code><a class="headerlink" href="#start-and-end" title="Permalink to this headline">¶</a></h3>
+<h4><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code><a class="headerlink" href="#start-and-end" title="Permalink to this headline">¶</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> are tuples of (line number, column number) for the line and
 column numbers of the start and end of the tokenized string. <strong>Line numbers
 start at 1 and column numbers start at 0</strong>. The line and column numbers for
@@ -214,12 +222,13 @@ can include newlines (in particular, escaped newlines, see
 <a class="reference external" href="tokens.html#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>).</p>
 </div>
 <div class="section" id="line">
-<h3><code class="docutils literal notranslate"><span class="pre">line</span></code><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h3>
+<h4><code class="docutils literal notranslate"><span class="pre">line</span></code><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">line</span></code> gives the full line that the token comes from. This is useful for
 reconstructing the whitespace between tokens (never assume that the whitespace
 between tokens is space characters—it could also consist of escaped newlines
 or tabs). <code class="docutils literal notranslate"><span class="pre">line</span></code> can also be useful for providing contextual error messages
 relating to the tokenization.</p>
+</div>
 </div>
 </div>
 <div class="section" id="exceptions">
@@ -495,10 +504,13 @@ tabs and spaces.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#calling-syntax">Calling Syntax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tokeninfo-fields">TokenInfo Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a><ul>
