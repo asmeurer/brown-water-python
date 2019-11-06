@@ -181,6 +181,12 @@ of a slice. If you want to manipulate higher level abstractions, you might
 want to use the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module instead (see the <a class="reference external" href="alternatives.html">next
 section</a>).</p></li>
 </ul>
+<p>This guide does not detail how things are tokenized, that is, how <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>
+chooses which tokens to use for a given input string, except in the ways that
+this matters as an end-user of <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. For details on how Python is lexed,
+see the page on <a class="reference external" href="https://docs.python.org/3/reference/lexical_analysis.html">lexical
+analysis</a> in the
+official Python documentation.</p>
 </div>
 
 
@@ -232,7 +238,7 @@ section</a>).</p></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage.html#calling-syntax">Calling Syntax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage.html#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="usage.html#tokeninfo-fields">TokenInfo Fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#tokeninfo-fields"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> Fields</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="usage.html#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="usage.html#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>

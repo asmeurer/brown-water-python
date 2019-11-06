@@ -180,7 +180,7 @@ includes all the names from <code class="docutils literal notranslate"><span cla
 <span class="go">type: 0 string: &#39;&#39; start: (2, 0) end: (2, 0) line: &#39;&#39;</span>
 </pre></div>
 </div>
-<p>The advantage of this second way is that the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> object contains an
+<p>One advantage of this second way is that the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> object contains an
 additional attribute, <code class="docutils literal notranslate"><span class="pre">exact_type</span></code>, which contains the exact token type of an
 <a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code> token</a>. However, this can also be determined from the
 <code class="docutils literal notranslate"><span class="pre">string</span></code>. Additionally, the first form is less verbose, but the second form
@@ -189,7 +189,7 @@ you should use depends on your preference on these tradeoffs. I personally
 recommend the second form (<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">tok</span> <span class="pre">in</span> <span class="pre">tokenize(...):</span> <span class="pre">...</span> <span class="pre">tok.type,</span> <span class="pre">etc.</span></code>),
 unless you have the <code class="docutils literal notranslate"><span class="pre">(toknum,</span> <span class="pre">tokstr,</span> <span class="pre">start,</span> <span class="pre">end,</span> <span class="pre">line)</span></code> order memorized.</p>
 <div class="section" id="tokeninfo-fields">
-<h3>TokenInfo Fields<a class="headerlink" href="#tokeninfo-fields" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> Fields<a class="headerlink" href="#tokeninfo-fields" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="type">
 <h4><code class="docutils literal notranslate"><span class="pre">type</span></code><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h4>
 <p>The token types are outlined in detail in the <a class="reference external" href="tokens.html">Token Types</a>
@@ -211,8 +211,8 @@ column numbers of the start and end of the tokenized string. <strong>Line number
 start at 1 and column numbers start at 0</strong>. The line and column numbers for
 the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token, which is always the first token
 emitted, are both <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>.</p>
-<p>Because Python tuples compare lexicographically (<code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b)</span> <span class="pre">&lt;</span> <span class="pre">(c,</span> <span class="pre">d)</span></code> is
-equivalent to <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">c</span> <span class="pre">or</span> <span class="pre">(a</span> <span class="pre">==</span> <span class="pre">c</span> <span class="pre">and</span> <span class="pre">b</span> <span class="pre">&lt;=</span> <span class="pre">d)</span></code>, these tuples can be compared
+<p>Because Python tuples compare lexicographically (i.e., <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b)</span> <span class="pre">&lt;</span> <span class="pre">(c,</span> <span class="pre">d)</span></code> is
+equivalent to <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">c</span> <span class="pre">or</span> <span class="pre">(a</span> <span class="pre">==</span> <span class="pre">c</span> <span class="pre">and</span> <span class="pre">b</span> <span class="pre">&lt;=</span> <span class="pre">d)</span></code>), these tuples can be compared
 directly to determine which comes earlier in the input. The <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>
 tuples as emitted from <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> are always nondecreasing (that is, <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">&lt;=</span> <span class="pre">end</span></code> will always be True for a single <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>, and <code class="docutils literal notranslate"><span class="pre">tok0.start</span> <span class="pre">&lt;=</span> <span class="pre">tok1.start</span></code> and <code class="docutils literal notranslate"><span class="pre">tok0.end</span> <span class="pre">&lt;=</span> <span class="pre">tok1.end</span></code> will be True for consecutive
 <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>s, <code class="docutils literal notranslate"><span class="pre">tok0</span></code> and <code class="docutils literal notranslate"><span class="pre">tok1</span></code>).</p>
@@ -504,7 +504,7 @@ tabs and spaces.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#calling-syntax">Calling Syntax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tokeninfo-fields">TokenInfo Fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tokeninfo-fields"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> Fields</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>

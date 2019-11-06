@@ -145,7 +145,7 @@ type: 4 string: '\n' start: (1, 16) end: (1, 17) line: 'hello + tokenize\n'
 type: 0 string: '' start: (2, 0) end: (2, 0) line: ''
 ```
 
-The advantage of this second way is that the `TokenInfo` object contains an
+One advantage of this second way is that the `TokenInfo` object contains an
 additional attribute, `exact_type`, which contains the exact token type of an
 [`OP` token](tokens.html#op). However, this can also be determined from the
 `string`. Additionally, the first form is less verbose, but the second form
@@ -154,7 +154,7 @@ you should use depends on your preference on these tradeoffs. I personally
 recommend the second form (`for tok in tokenize(...): ... tok.type, etc.`),
 unless you have the `(toknum, tokstr, start, end, line)` order memorized.
 
-### TokenInfo Fields
+### `TokenInfo` Fields
 
 #### `type`
 
@@ -179,8 +179,8 @@ start at 1 and column numbers start at 0**. The line and column numbers for
 the [`ENCODING`](tokens.html#encoding) token, which is always the first token
 emitted, are both `(0, 0)`.
 
-Because Python tuples compare lexicographically (`(a, b) < (c, d)` is
-equivalent to `a < c or (a == c and b <= d)`, these tuples can be compared
+Because Python tuples compare lexicographically (i.e., `(a, b) < (c, d)` is
+equivalent to `a < c or (a == c and b <= d)`), these tuples can be compared
 directly to determine which comes earlier in the input. The `start` and `end`
 tuples as emitted from `tokenize()` are always nondecreasing (that is, `start
 <= end` will always be True for a single `TokenInfo`, and `tok0.start <=
