@@ -13,8 +13,8 @@ Python Versions Supported
 =========================
 
 The contents of this guide apply to Python 3.5 and up. Several minor changes
-were made to the ``tokenize`` module in Python 3.7, and they have been noted
-where appropriate.
+were made to the ``tokenize`` module in various Python versions between 3.5
+and 3.8, and they have been noted where appropriate.
 
 The ``tokenize`` module tokenizes code according to the version of Python that
 it is being run under. For example, some new syntax features in 3.6 affect
