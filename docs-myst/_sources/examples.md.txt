@@ -213,7 +213,7 @@ True
 ### `line_numbers()`
 
 Let's go back to our motivating example from the [`tokenize` vs.
-Alternatives](alternatives.html) section, a function that prints the line
+Alternatives](alternatives) section, a function that prints the line
 numbers of every function definition. [Our
 function](alternatives.html#tokenize) looked like this (rewritten to use our
 `tokenize_string()` helper):
@@ -813,17 +813,13 @@ we can use 5-tuples and keep the column offsets intact, making
 the whitespace of the input.
 
 
-```eval_rst
-
-.. note::
-
-   These emoji may often appear as two characters, for instance, ✖ may often
-   appear instead as ✖️, which is ✖ (``HEAVY MULTIPLICATION X``) + (``VARIATION
-   SELECTOR-16``). The ``VARIATION SELECTOR-16`` is an invisible character which
-   forces it to render as an emoji. The above example does not include the
-   ``VARIATION SELECTOR-16``. An exercise for the reader is to modify the above
-   function to work with this.
-
+```{note}
+These emoji may often appear as two characters, for instance, ✖ may often
+appear instead as ✖️, which is ✖ (`HEAVY MULTIPLICATION X`) + (`VARIATION
+SELECTOR-16`). The `VARIATION SELECTOR-16` is an invisible character which
+forces it to render as an emoji. The above example does not include the
+`VARIATION SELECTOR-16`. An exercise for the reader is to modify the above
+function to work with this.
 ```
 
 #### Backporting Underscores in Numeric Literals

@@ -226,8 +226,8 @@ they are on the same line.</p></li>
 </div>
 <div class="section" id="line-numbers">
 <h3><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code><a class="headerlink" href="#line-numbers" title="Permalink to this headline">¶</a></h3>
-<p>Let’s go back to our motivating example from the <code class="xref any docutils literal notranslate"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> <span class="pre">vs.</span>
-<span class="pre">Alternatives</span></code> section, a function that prints the line
+<p>Let’s go back to our motivating example from the <a class="reference internal" href="alternatives.html"><span class="doc">tokenize vs.
+Alternatives</span></a> section, a function that prints the line
 numbers of every function definition. <a class="reference external" href="alternatives.html#tokenize">Our
 function</a> looked like this (rewritten to use our
 <code class="docutils literal notranslate"><span class="pre">tokenize_string()</span></code> helper):</p>
@@ -762,17 +762,13 @@ symbols ➕, ➖, ➗, and ✖ to be used instead of their ASCII counterparts.</
 we can use 5-tuples and keep the column offsets intact, making
 <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> maintain
 the whitespace of the input.</p>
-<div class="highlight-eval_rst notranslate"><div class="highlight"><pre><span></span>
-.. note::
-
-   These emoji may often appear as two characters, for instance, ✖ may often
-   appear instead as ✖️, which is ✖ (``HEAVY MULTIPLICATION X``) + (``VARIATION
-   SELECTOR-16``). The ``VARIATION SELECTOR-16`` is an invisible character which
-   forces it to render as an emoji. The above example does not include the
-   ``VARIATION SELECTOR-16``. An exercise for the reader is to modify the above
-   function to work with this.
-
-</pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These emoji may often appear as two characters, for instance, ✖ may often
+appear instead as ✖️, which is ✖ (<code class="docutils literal notranslate"><span class="pre">HEAVY</span> <span class="pre">MULTIPLICATION</span> <span class="pre">X</span></code>) + (<code class="docutils literal notranslate"><span class="pre">VARIATION</span> <span class="pre">SELECTOR-16</span></code>). The <code class="docutils literal notranslate"><span class="pre">VARIATION</span> <span class="pre">SELECTOR-16</span></code> is an invisible character which
+forces it to render as an emoji. The above example does not include the
+<code class="docutils literal notranslate"><span class="pre">VARIATION</span> <span class="pre">SELECTOR-16</span></code>. An exercise for the reader is to modify the above
+function to work with this.</p>
 </div>
 </div>
 <div class="section" id="backporting-underscores-in-numeric-literals">

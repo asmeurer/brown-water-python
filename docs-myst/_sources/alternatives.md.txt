@@ -209,8 +209,8 @@ header-rows: 1
     actually is inside of a string.
   - Edge cases can be avoided. Differentiates between actual code and code
     inside a comment or string. Can still be fooled by invalid Python (though this can
-    often be considered a `garbage in, garbage out
-    <https://en.wikipedia.org/wiki/Garbage_in,_garbage_out>`_ scenario).
+    often be considered a [garbage in, garbage
+    out](https://en.wikipedia.org/wiki/Garbage_in,_garbage_out) scenario).
   - Edge cases can be avoided effortlessly, as only valid Python can even
     be parsed, and each node class represents that syntactic construct
     exactly.
