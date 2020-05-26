@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import sys
 import tokenize
 
 HEADER = """
@@ -23,6 +23,8 @@ FOOTER = """
    ``exact_type`` for ``RARROW`` and ``ELLIPSIS`` tokens is ``OP`` in Python
    versions prior to 3.7. See `above <#rarrow>`_.
 
+.. [#f2] New in Python 3.8.
+
 """
 
 def escape(s):
@@ -30,11 +32,10 @@ def escape(s):
 
 token_types = {num: string for string, num in tokenize.EXACT_TOKEN_TYPES.items()}
 
-# Not included below Python 3.7 for some reason
-token_types[tokenize.ELLIPSIS] = '...'
-token_types[tokenize.RARROW] = '->'
-
 def main():
+    if sys.version_info[1] < 8:
+        sys.exit("This script should be run with Python 3.8 or newer.")
+
     print("Generating exact_type_table.txt")
     with open('exact_type_table.txt', 'w') as f:
         f.write(HEADER)
@@ -42,6 +43,8 @@ def main():
             token_string = token_types[token_type]
             if token_type in [tokenize.RARROW, tokenize.ELLIPSIS]:
                 note = " [#f1]_"
+            elif token_type == tokenize.COLONEQUAL:
+                note = " [#f2]_"
             else:
                 note = ''
 

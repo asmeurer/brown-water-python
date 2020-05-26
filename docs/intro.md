@@ -16,13 +16,13 @@ An example should clarify things. Consider the string of partial Python code,
 >>> string = '("a") + True -\n'
 >>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
 ...     print(tok)
-TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='("a") + True -\n')
+TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+TokenInfo(type=54 (OP), string='(', start=(1, 0), end=(1, 1), line='("a") + True -\n')
 TokenInfo(type=3 (STRING), string='"a"', start=(1, 1), end=(1, 4), line='("a") + True -\n')
-TokenInfo(type=53 (OP), string=')', start=(1, 4), end=(1, 5), line='("a") + True -\n')
-TokenInfo(type=53 (OP), string='+', start=(1, 6), end=(1, 7), line='("a") + True -\n')
+TokenInfo(type=54 (OP), string=')', start=(1, 4), end=(1, 5), line='("a") + True -\n')
+TokenInfo(type=54 (OP), string='+', start=(1, 6), end=(1, 7), line='("a") + True -\n')
 TokenInfo(type=1 (NAME), string='True', start=(1, 8), end=(1, 12), line='("a") + True -\n')
-TokenInfo(type=53 (OP), string='-', start=(1, 13), end=(1, 14), line='("a") + True -\n')
+TokenInfo(type=54 (OP), string='-', start=(1, 13), end=(1, 14), line='("a") + True -\n')
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 14), end=(1, 15), line='("a") + True -\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 ```
@@ -67,12 +67,12 @@ I chose this example to demonstrate a few things:
     >>> string = '("a" + True -'
     >>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
     ...     print(tok) # doctest: +SKIP
-    TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
-    TokenInfo(type=53 (OP), string='(', start=(1, 0), end=(1, 1), line='("a" + True -')
+    TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+    TokenInfo(type=54 (OP), string='(', start=(1, 0), end=(1, 1), line='("a" + True -')
     TokenInfo(type=3 (STRING), string='"a"', start=(1, 1), end=(1, 4), line='("a" + True -')
-    TokenInfo(type=53 (OP), string='+', start=(1, 5), end=(1, 6), line='("a" + True -')
+    TokenInfo(type=54 (OP), string='+', start=(1, 5), end=(1, 6), line='("a" + True -')
     TokenInfo(type=1 (NAME), string='True', start=(1, 7), end=(1, 11), line='("a" + True -')
-    TokenInfo(type=53 (OP), string='-', start=(1, 12), end=(1, 13), line='("a" + True -')
+    TokenInfo(type=54 (OP), string='-', start=(1, 12), end=(1, 13), line='("a" + True -')
     Traceback (most recent call last):
     ...
     tokenize.TokenError: ('EOF in multi-line statement', (2, 0))
@@ -121,9 +121,9 @@ I chose this example to demonstrate a few things:
     >>> string = 'a$b\n'
     >>> for tok in tokenize.tokenize(io.BytesIO(string.encode('utf-8')).readline):
     ...     print(tok)
-    TokenInfo(type=57 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
+    TokenInfo(type=62 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
     TokenInfo(type=1 (NAME), string='a', start=(1, 0), end=(1, 1), line='a$b\n')
-    TokenInfo(type=54 (ERRORTOKEN), string='$', start=(1, 1), end=(1, 2), line='a$b\n')
+    TokenInfo(type=59 (ERRORTOKEN), string='$', start=(1, 1), end=(1, 2), line='a$b\n')
     TokenInfo(type=1 (NAME), string='b', start=(1, 2), end=(1, 3), line='a$b\n')
     TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 3), end=(1, 4), line='a$b\n')
     TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
@@ -146,3 +146,10 @@ I chose this example to demonstrate a few things:
     of a slice. If you want to manipulate higher level abstractions, you might
     want to use the `ast` module instead (see the [next
     section](alternatives.html)).
+
+This guide does not detail how things are tokenized, that is, how `tokenize`
+chooses which tokens to use for a given input string, except in the ways that
+this matters as an end-user of `tokenize`. For details on how Python is lexed,
+see the page on [lexical
+analysis](https://docs.python.org/3/reference/lexical_analysis.html) in the
+official Python documentation.
