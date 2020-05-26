@@ -1015,6 +1015,7 @@ of `tokenize`. The C implementation used by the interpreter only has
 importable from `tokenize` module. In 3.7, it is added to the `token` module
 as well.
 
+(encoding)=
 ### `ENCODING`
 
 `ENCODING` is a special token type that represents the encoding of the input.
