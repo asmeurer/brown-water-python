@@ -31,7 +31,7 @@ install:
   - pip install -U git+https://github.com/asmeurer/alabaster/@rellinks-classes
 
 script:
-  - set -e
+  # - set -e
   - cd docs
   - make doctest # tests rst files only
   - ./run_doctests *.md
