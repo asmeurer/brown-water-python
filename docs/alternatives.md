@@ -178,42 +178,42 @@ cons" because some things may be pros (like the ability to work with
 incomplete code) or cons (like accepting invalid Python), depending on
 what you are trying to do.
 
-```eval_rst
+```{list-table}
+---
+header-rows: 1
+---
 
-.. list-table::
-   :header-rows: 1
-
-   * - Regular expressions
-     - ``tokenize``
-     - ``ast``
-   * - Can work with incomplete or invalid Python.
-     - Can work with incomplete or invalid Python, though you may need to
-       watch for ``ERRORTOKEN`` and exceptions.
-     - Requires syntactically valid Python (with a few minor exceptions).
-   * - Regular expressions can be difficult to write correctly and maintain.
-     - Token types are easy to detect. Larger patterns must be amalgamated
-       from the tokens. Some tokens mean different things in different contexts.
-     - AST has high-level abstractions such as ``ast.walk`` and
-       ``NodeTransformer`` that make visiting and transforming nodes easy,
-       even in complicated ways.
-   * - Regular expressions work directly on the source code, so it is trivial
-       to do lossless source code transformations with them.
-     - Lossless source code transformations are possible with ``tokenize``, as all the
-       whitespace can be inferred from the ``TokenInfo`` tuples. However, it can
-       often be tricky to do in practice, as it requires manually accounting
-       for column offsets.
-     - Lossless source code transformations are impossible with ``ast``, as it completely
-       drops whitespace, redundant parentheses, and comments (among other
-       things).
-   * - Impossible to detect edge cases in all circumstances, such as code that
-       actually is inside of a string.
-     - Edge cases can be avoided. Differentiates between actual code and code
-       inside a comment or string. Can still be fooled by invalid Python (though this can
-       often be considered a `garbage in, garbage out
-       <https://en.wikipedia.org/wiki/Garbage_in,_garbage_out>`_ scenario).
-     - Edge cases can be avoided effortlessly, as only valid Python can even
-       be parsed, and each node class represents that syntactic construct
-       exactly.
+* - Regular expressions
+  - ``tokenize``
+  - ``ast``
+* - Can work with incomplete or invalid Python.
+  - Can work with incomplete or invalid Python, though you may need to
+    watch for ``ERRORTOKEN`` and exceptions.
+  - Requires syntactically valid Python (with a few minor exceptions).
+* - Regular expressions can be difficult to write correctly and maintain.
+  - Token types are easy to detect. Larger patterns must be amalgamated
+    from the tokens. Some tokens mean different things in different contexts.
+  - AST has high-level abstractions such as ``ast.walk`` and
+    ``NodeTransformer`` that make visiting and transforming nodes easy,
+    even in complicated ways.
+* - Regular expressions work directly on the source code, so it is trivial
+    to do lossless source code transformations with them.
+  - Lossless source code transformations are possible with ``tokenize``, as all the
+    whitespace can be inferred from the ``TokenInfo`` tuples. However, it can
+    often be tricky to do in practice, as it requires manually accounting
+    for column offsets.
+  - Lossless source code transformations are impossible with ``ast``, as it completely
+    drops whitespace, redundant parentheses, and comments (among other
+    things).
+* - Impossible to detect edge cases in all circumstances, such as code that
+    actually is inside of a string.
+  - Edge cases can be avoided. Differentiates between actual code and code
+    inside a comment or string. Can still be fooled by invalid Python (though this can
+    often be considered a `garbage in, garbage out
+    <https://en.wikipedia.org/wiki/Garbage_in,_garbage_out>`_ scenario).
+  - Edge cases can be avoided effortlessly, as only valid Python can even
+    be parsed, and each node class represents that syntactic construct
+    exactly.
 ```
 
 As you can see, all three can be valid depending on what you are trying to do.
