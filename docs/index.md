@@ -75,7 +75,9 @@ code](https://github.com/python/cpython/blob/master/Lib/tokenize.py).
 ## Table of Contents
 
 ```{toctree}
-:maxdepth: 3
+---
+maxdepth: 3
+---
 
 intro
 alternatives
