@@ -613,6 +613,7 @@ maintaining a stack of the `INDENT` strings
 that Python allows different indentation levels to use a different number of
 spaces). See the [examples](examples.html#indentation-level). T
 
+(rarrow)=
 ### `RARROW`
 ### `ELLIPSIS`
 
@@ -699,9 +700,7 @@ characters.
 
 <!-- The table below is generated with exact_type_table.py -->
 
-```eval_rst
-
-.. include:: exact_type_table.txt
+```{include} exact_type_table.txt
 ```
 
 ### `AWAIT`
