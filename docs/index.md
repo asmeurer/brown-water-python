@@ -56,7 +56,7 @@ Another difference is that the result of this function is a regular tuple, not
 a `namedtuple`, so you will not be able to use attributes to access the
 members. Instead use something like `for toknum, tokval, start, end, line in
 tokenize.generate_tokens(...):` (this pattern can be used in Python 3 as
-well, see the [Usage](usage.html#calling-syntax) section).
+well, see the [Usage](calling-syntax) section).
 
 
 ## Contributing
