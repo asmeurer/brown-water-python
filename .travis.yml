@@ -24,6 +24,9 @@ matrix:
       dist: xenial
       sudo: true
 
+  allow_failures:
+    - python: "nightly"
+
 install:
   - pip install sphinx doctr myst_parser
   - source activate test-environment
