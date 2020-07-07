@@ -29,9 +29,9 @@ Most of what is written here will also apply to earlier Python 3 versions,
 with obvious exceptions (like tokens that were added for new syntax), though
 none of it has been tested.
 
-I don't have any interest in supporting Python 2 in this guide. [Its lifetime](https://devguide.python.org/#status-of-python-branches) is quickly coming
-to an end, so you should strongly consider being Python 3-only for most new
-code that is written.
+I don't have any interest in supporting Python 2 in this guide. [Its lifetime](https://devguide.python.org/#status-of-python-branches) has officially come
+to an end, so you should strongly consider being Python 3-only for new code
+that is written.
 
 With that being said, I will point out one important difference in Python 2:
 the `tokenize()` function in Python 2 *prints* the tokens instead of
@@ -52,11 +52,11 @@ which works like `tokenize()` in Python 3 (see the [docs](https://docs.python.or
 (0, '', (2, 0), (2, 0), '')
 ```
 
-Another difference is that the result of this function is a regular tuple, not
-a `namedtuple`, so you will not be able to use attributes to access the
-members. Instead use something like `for toknum, tokval, start, end, line in
-tokenize.generate_tokens(...):` (this pattern can be used in Python 3 as
-well, see the [Usage](calling-syntax) section).
+Another difference is that the result of this function in Python 2 is a
+regular tuple, not a `namedtuple`, so you will not be able to use attributes
+to access the members. Instead use something like `for toknum, tokval, start,
+end, line in tokenize.generate_tokens(...):` (this pattern can be used in
+Python 3 as well, see the [Usage](calling-syntax) section).
 
 
 ## Contributing

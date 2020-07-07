@@ -120,7 +120,7 @@ method to test if a token should be a `NAME` token. The full rules for what
 makes a [valid
 identifier](https://docs.python.org/3/reference/lexical_analysis.html?highlight=identifiers#identifiers)
 are somewhat complicated, as they involve a large table of [Unicode
-characters](https://www.dcl.hpi.uni-potsdam.de/home/loewis/table-3131.html).
+characters](https://web.archive.org/web/20200312045240/https://www.dcl.hpi.uni-potsdam.de/home/loewis/table-3131.html).
 One should always use the `str.isidentifier()` method to test if a string is a
 valid Python identifier, combined with a `keyword.iskeyword()` check. Testing
 if a string is an identifier using regular expressions is highly
