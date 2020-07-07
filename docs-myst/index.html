@@ -48,11 +48,10 @@
             
   <div class="section" id="brown-water-python-better-docs-for-the-python-tokenize-module">
 <h1>Brown Water Python: Better Docs for the Python <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> Module.<a class="headerlink" href="#brown-water-python-better-docs-for-the-python-tokenize-module" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module in the Python standard library is very powerful, but its
-<a class="reference external" href="https://docs.python.org/3/library/tokenize.html">documentation</a> is somewhat
-limited. In the spirit of Thomas Kluyver’s <a class="reference external" href="https://greentreesnakes.readthedocs.io/">Green Tree
-Snakes</a> project, which provides
-similar extended documentation for the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module, I am providing here some
+<p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module in the Python standard library is very powerful, but
+its <a class="reference external" href="https://docs.python.org/3/library/tokenize.html">documentation</a> is
+somewhat limited. In the spirit of Thomas Kluyver’s <a class="reference external" href="https://greentreesnakes.readthedocs.io/">Green Tree Snakes</a> project, which provides similar
+extended documentation for the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module, I am providing here some
 extended documentation for effectively working with the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module.</p>
 <div class="section" id="python-versions-supported">
 <h2>Python Versions Supported<a class="headerlink" href="#python-versions-supported" title="Permalink to this headline">¶</a></h2>
@@ -61,25 +60,23 @@ were made to the <code class="docutils literal notranslate"><span class="pre">to
 and 3.8, and they have been noted where appropriate.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module tokenizes code according to the version of Python that
 it is being run under. For example, some new syntax features in 3.6 affect
-tokenization (in particular,
-<a class="reference external" href="https://docs.python.org/3.6/whatsnew/3.6.html#pep-498-formatted-string-literals">f-strings</a>
-and <a class="reference external" href="https://docs.python.org/3.6/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals">underscores in numeric
-literals</a>).
-Take <code class="docutils literal notranslate"><span class="pre">123_456</span></code>. This will tokenize as a single token in Python 3.6+, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code>
-(<code class="docutils literal notranslate"><span class="pre">123_456</span></code>), but in Python 3.5, it tokenizes as two tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123</span></code>)
-and <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>) (see the reference for the <a class="reference internal" href="tokens.html#number"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></span></a>
-token type for more info).</p>
+tokenization (in particular, <a class="reference external" href="https://docs.python.org/3.6/whatsnew/3.6.html#pep-498-formatted-string-literals">f-strings</a>
+and <a class="reference external" href="https://docs.python.org/3.6/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals">underscores in numeric literals</a>).
+Take <code class="docutils literal notranslate"><span class="pre">123_456</span></code>. This will tokenize as a single token in Python 3.6+,
+<code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123_456</span></code>), but in Python 3.5, it tokenizes as two tokens,
+<code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>) (see the reference for the
+<a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> token type for more info).</p>
 <p>Most of what is written here will also apply to earlier Python 3 versions,
 with obvious exceptions (like tokens that were added for new syntax), though
 none of it has been tested.</p>
-<p>I don’t have any interest in supporting Python 2 in this guide. <a class="reference external" href="https://devguide.python.org/#status-of-python-branches">Its lifetime</a> is quickly coming
-to an end, so you should strongly consider being Python 3-only for most new
-code that is written.</p>
+<p>I don’t have any interest in supporting Python 2 in this guide. <a class="reference external" href="https://devguide.python.org/#status-of-python-branches">Its lifetime</a> has officially come
+to an end, so you should strongly consider being Python 3-only for new code
+that is written.</p>
 <p>With that being said, I will point out one important difference in Python 2:
 the <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> function in Python 2 <em>prints</em> the tokens instead of
 returning them. Instead, you should use the <code class="docutils literal notranslate"><span class="pre">generate_tokens()</span></code> function,
 which works like <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> in Python 3 (see the <a class="reference external" href="https://docs.python.org/2.7/library/tokenize.html">docs</a>).</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Python 2.7 tokenize example</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Python 2.7 tokenize example</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">generate_tokens</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="s1">&#39;1 + 2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
@@ -91,23 +88,21 @@ which works like <code class="docutils literal notranslate"><span class="pre">to
 <span class="go">(0, &#39;&#39;, (2, 0), (2, 0), &#39;&#39;)</span>
 </pre></div>
 </div>
-<p>Another difference is that the result of this function is a regular tuple, not
-a <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code>, so you will not be able to use attributes to access the
-members. Instead use something like <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">toknum,</span> <span class="pre">tokval,</span> <span class="pre">start,</span> <span class="pre">end,</span> <span class="pre">line</span> <span class="pre">in</span> <span class="pre">tokenize.generate_tokens(...):</span></code> (this pattern can be used in Python 3 as
-well, see the <a class="reference internal" href="usage.html#calling-syntax"><span class="std std-ref">Usage</span></a> section).</p>
+<p>Another difference is that the result of this function in Python 2 is a
+regular tuple, not a <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code>, so you will not be able to use attributes
+to access the members. Instead use something like <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">toknum,</span> <span class="pre">tokval,</span> <span class="pre">start,</span>
+<span class="pre">end,</span> <span class="pre">line</span> <span class="pre">in</span> <span class="pre">tokenize.generate_tokens(...):</span></code> (this pattern can be used in
+Python 3 as well, see the <a class="reference external" href="usage.html#calling-syntax">Usage</a> section).</p>
 </div>
 <div class="section" id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/asmeurer/brown-water-python">Contributions</a> are welcome.
-So are <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">questions</a>. My
-goal here is to help people to understand the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module, so if
-something is not clear, <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">please let me
-know</a>. If you see
-something written here that is wrong, please make a <a class="reference external" href="https://github.com/asmeurer/brown-water-python/pulls">pull
-request</a> correcting it.
-I’m not an expert at <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. I mainly know what is written here from trial
-and error and from reading the <a class="reference external" href="https://github.com/python/cpython/blob/master/Lib/tokenize.py">source
-code</a>.</p>
+So are <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">questions</a>.
+My goal here is to help people to understand the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module, so if
+something is not clear, <a class="reference external" href="https://github.com/asmeurer/brown-water-python/issues">please let me know</a>. If you see
+something written here that is wrong, please make a <a class="reference external" href="https://github.com/asmeurer/brown-water-python/pulls">pull request</a> correcting it. I’m
+not an expert at <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. I mainly know what is written here from trial
+and error and from reading the <a class="reference external" href="https://github.com/python/cpython/blob/master/Lib/tokenize.py">source code</a>.</p>
 </div>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
@@ -201,8 +196,7 @@ code</a>.</p>
 from Melbourne, Australia <a
 href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>, via <a
 href="https://commons.wikimedia.org/wiki/File:Water_Python_(Liasis_mackloti)_(8692394648).jpg">Wikimedia
-Commons</a></div><p>
-</div>
+Commons</a></div><p></div>
 </div>
 
 
@@ -360,7 +354,7 @@ Commons</a></div><p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/index.md.txt"
+      <a href="_sources/index.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
