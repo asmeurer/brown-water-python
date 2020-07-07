@@ -210,6 +210,7 @@ True
   [parso](https://parso.readthedocs.io/en/latest/)'s tokenizer
   (`parso.python.tokenize.tokenize()`).
 
+(line-numbers)=
 ### `line_numbers()`
 
 Let's go back to our motivating example from the [`tokenize` vs.
@@ -402,8 +403,8 @@ which `tokenize` is based on, ignores [comments](comment), so true
 indentations with [`INDENT`](indent) must occur on lines with real
 code.
 
+(mismatched-parentheses)=
 ### Mismatched Parentheses
-
 
 This example shows how to use a very important tool when processing tokens, a
 stack. A [*stack*](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))

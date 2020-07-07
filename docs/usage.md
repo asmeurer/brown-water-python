@@ -280,7 +280,6 @@ was not tokenized due to the exception.
    Traceback (most recent call last):
      ...
    tokenize.TokenError: ('EOF in multi-line string', (3, 4))
-
    ```
 
 2. **EOF in multi-line statement**
@@ -316,7 +315,6 @@ was not tokenized due to the exception.
    Traceback (most recent call last):
      ...
    tokenize.TokenError: ('EOF in multi-line statement', (5, 0))
-
    ```
 
 The following example shows how `TokenError` might be caught and processed.
@@ -400,7 +398,6 @@ Traceback (most recent call last):
     f
     ^
 IndentationError: unindent does not match any outer indentation level
-
 ```
 
 This error is difficult to recover from. If you need to handle tokenizing
