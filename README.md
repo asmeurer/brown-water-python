@@ -20,8 +20,7 @@ To build the HTML pages, first install `sphinx` and `recommonmark`.
 At the moment, you also need the git versions of Sphinx and alabaster (this
 will not be required once they do releases).
 
-    pip install git+https://github.com/sphinx-doc/sphinx@1.7
-    pip install -U git+https://github.com/bitprophet/alabaster/
+    pip install -U git+https://github.com/asmeurer/alabaster/@rellinks-classes
 
 Then run
 
@@ -38,9 +37,9 @@ The examples in are all doctested. You can run the doctests with
     ./run_doctests
 
 I have extended to doctests to add flags to skip doctests in Python 3.5, 3.6,
-and 3.7, to help test differences in the three language versions. The flags
-are `SKIP35`, `SKIP36`, and `SKIP37`, respectively. For example, to make a
-doctest that doesn't run in Python 3.5, use
+3.7, and 3.8, to help test differences in the three language versions. The
+flags are `SKIP35`, `SKIP36`, `SKIP37`, and `SKIP38`, respectively. For
+example, to make a doctest that doesn't run in Python 3.5, use
 
 ```py
 >>> # This is only valid syntax in Python 3.6+
