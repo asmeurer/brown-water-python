@@ -95,7 +95,7 @@ character (like <code class="docutils literal notranslate"><span class="pre">r</
 </pre></div>
 </div>
 <p>Let’s walk through the code.</p>
-<p>We don’t want the function to raise <a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a> on
+<p>We don’t want the function to raise <a class="reference internal" href="usage.html#tokenerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></span></a> on
 uncompleted delimiters or unclosed multi-line strings, so we wrap the loop in
 a <code class="docutils literal notranslate"><span class="pre">try</span></code> block.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
@@ -107,10 +107,10 @@ instead to indicate it isn’t used.</p>
 </pre></div>
 </div>
 <p>The idea is to loop through the tokens until we find one that <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is
-contained in (it is between the <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and
-<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a> tokens). This may not actually happen, for
+contained in (it is between the <a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">start</span></code></span></a> and
+<a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">end</span></code></span></a> tokens). This may not actually happen, for
 instance, if the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is inside whitespace that isn’t tokenized.</p>
-<p>The first thing to check for is an <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>
+<p>The first thing to check for is an <a class="reference internal" href="tokens.html#errortoken"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></span></a>
 caused by an unclosed single-quoted string. If an unclosed single-quoted (not
 multi-line) string is encountered, that is, it is closed by a newline, like
 <code class="docutils literal notranslate"><span class="pre">&quot;an</span> <span class="pre">unclosed</span> <span class="pre">string</span></code>, and we haven’t reached our <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> yet, then we
@@ -124,7 +124,7 @@ modify this to only assume the rest of the line is inside the unclosed string.</
 </pre></div>
 </div>
 <p>Now we have the main condition. If the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> is between the
-<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a> of a
+<a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">start</span></code></span></a> and <a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">end</span></code></span></a> of a
 token, we have gone as far as we need to.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span>         <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">:</span>
 </pre></div>
@@ -135,13 +135,13 @@ token and we can return <code class="docutils literal notranslate"><span class="
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span>             <span class="k">return</span> <span class="n">toknum</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">STRING</span>
 </pre></div>
 </div>
-<p>Now the exceptional case. If we see a <a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a>,
+<p>Now the exceptional case. If we see a <a class="reference internal" href="usage.html#tokenerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></span></a>,
 we don’t want the function to fail.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">except</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">TokenError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 </pre></div>
 </div>
 <p>Remember that there are two possibilities for a
-<a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a>. If <code class="docutils literal notranslate"><span class="pre">'statement'</span></code> is in the error
+<a class="reference internal" href="usage.html#tokenerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></span></a>. If <code class="docutils literal notranslate"><span class="pre">'statement'</span></code> is in the error
 message, there is an unclosed brace somewhere. This case only happens when
 <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> has reached the end of the token stream, so if the above checks
 haven’t returned <code class="docutils literal notranslate"><span class="pre">True</span></code> yet, then <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> must not be inside a <code class="docutils literal notranslate"><span class="pre">STRING</span></code>
@@ -149,7 +149,7 @@ token, so we should return <code class="docutils literal notranslate"><span clas
 <p>If <code class="docutils literal notranslate"><span class="pre">'string'</span></code> is inside the error message, there is an unclosed multi-line
 string. In this case, we want to check if we are inside this string. We can
 check the start of the multi-line string in the
-<a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a>. Remember that the message is in
+<a class="reference internal" href="usage.html#tokenerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></span></a>. Remember that the message is in
 <code class="docutils literal notranslate"><span class="pre">e.args[0]</span></code> and the start is in <code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>. So we should return <code class="docutils literal notranslate"><span class="pre">True</span></code> in
 this case if the <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">col)</span></code> are after the <code class="docutils literal notranslate"><span class="pre">e.args[1]</span></code>, and <code class="docutils literal notranslate"><span class="pre">False</span></code>
 otherwise.</p>
@@ -229,8 +229,8 @@ they are on the same line.</p></li>
 <h3><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code><a class="headerlink" href="#line-numbers" title="Permalink to this headline">¶</a></h3>
 <p>Let’s go back to our motivating example from the <a class="reference internal" href="alternatives.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs.
 Alternatives</span></a> section, a function that prints the line
-numbers of every function definition. <a class="reference external" href="alternatives.html#tokenize">Our
-function</a> looked like this (rewritten to use our
+numbers of every function definition. <a class="reference internal" href="alternatives.html#tokenize"><span class="std std-ref">Our
+function</span></a> looked like this (rewritten to use our
 <code class="docutils literal notranslate"><span class="pre">tokenize_string()</span></code> helper):</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -239,15 +239,15 @@ function</a> looked like this (rewritten to use our
 </pre></div>
 </div>
 <p>As we noted, this function works, but it doesn’t handle any of our
-<a class="reference external" href="tokens.html#errortoken">error</a> <a class="reference external" href="usage.html#exceptions">conditions</a>.</p>
-<p>Looking at our exceptions list, <a class="reference external" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SynatxError</span></code></a> and
-<a class="reference external" href="usage.html#indentationerror"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></a> are unrecoverable, so we
-will just let them bubble up. However, <a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a>
+<a class="reference internal" href="tokens.html#errortoken"><span class="std std-ref">error</span></a> <a class="reference internal" href="usage.html#exceptions"><span class="std std-ref">conditions</span></a>.</p>
+<p>Looking at our exceptions list, <a class="reference internal" href="usage.html#syntaxerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">SynatxError</span></code></span></a> and
+<a class="reference internal" href="usage.html#indentationerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></span></a> are unrecoverable, so we
+will just let them bubble up. However, <a class="reference internal" href="usage.html#tokenerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></span></a>
 simply means that the input had an unclosed brace or multi-line string. In the
 former case, the tokenization reaches the end of the input before the
 exception is raised, and in the latter case, the remainder of the input is
 inside the unclosed multi-line string, so we can safely ignore
-<a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a> in either case.</p>
+<a class="reference internal" href="usage.html#tokenerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></span></a> in either case.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -257,10 +257,10 @@ inside the unclosed multi-line string, so we can safely ignore
 <span class="gp">... </span>        <span class="k">pass</span>
 </pre></div>
 </div>
-<p>Finally, let’s consider <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> due to unclosed
+<p>Finally, let’s consider <a class="reference internal" href="tokens.html#errortoken"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></span></a> due to unclosed
 single-quoted strings. Our motivation for using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to solve this
 problem is to handle incomplete or invalid Python (otherwise, we should use
-the <a class="reference external" href="alternatives.html#ast"><code class="docutils literal notranslate"><span class="pre">ast</span></code> implementation</a>, which is much simpler).
+the <a class="reference internal" href="alternatives.html#ast"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ast</span></code> implementation</span></a>, which is much simpler).
 Thus, it makes sense to treat unclosed single-quoted strings as if they were
 closed at the end of the line.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -328,10 +328,10 @@ behavior.</p>
 </div>
 </div>
 <div class="section" id="indentation-level">
-<h3>Indentation Level<a class="headerlink" href="#indentation-level" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="tokens.html#indent"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></a> and <a class="reference external" href="tokens.html#dedent"><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code></a> tokens are
+<span id="id1"></span><h3>Indentation Level<a class="headerlink" href="#indentation-level" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="tokens.html#indent"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></span></a> and <a class="reference internal" href="tokens.html#dedent"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code></span></a> tokens are
 always balanced in the token stream (unless there is an
-<a class="reference external" href="usage.html#indentationerror"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></a>), so it is easy to detect the
+<a class="reference internal" href="usage.html#indentationerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></span></a>), so it is easy to detect the
 indentation level of a block of code by incrementing and decrementing a
 counter.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">indentation_level</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
@@ -398,8 +398,8 @@ counter.</p>
 </div>
 <p>An oddity worth mentioning: the comment near the end of the function is not
 considered indented more than the <code class="docutils literal notranslate"><span class="pre">except</span></code> line. Remember that the C parser,
-which <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> is based on, ignores <a class="reference external" href="tokens.html#comment">comments</a>, so true
-indentations with <a class="reference external" href="tokens.html#indent"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></a> must occur on lines with real
+which <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> is based on, ignores <a class="reference internal" href="tokens.html#comment"><span class="std std-ref">comments</span></a>, so true
+indentations with <a class="reference internal" href="tokens.html#indent"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></span></a> must occur on lines with real
 code.</p>
 </div>
 <div class="section" id="mismatched-parentheses">
@@ -615,13 +615,12 @@ in the <code class="docutils literal notranslate"><span class="pre">matching</sp
 <p>These examples show some ways that you can modify the token stream.</p>
 <p>The general pattern we will apply here is to get the token stream from
 <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, modify it in some way, and convert it back to a bytes string
-with <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a>.</p>
-<p>When new tokens are added,
-<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> does not maintain
+with <a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></span></a>.</p>
+<p>When new tokens are added, <a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></span></a> does not maintain
 whitespace between tokens in a human-readable way. Doing this is possible, by
 keeping track of column offsets, but we will not bother with it here except
-where it is convenient. See the discussion in the
-<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> section.</p>
+where it is convenient. See the discussion in the <a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></span></a>
+section.</p>
 <div class="section" id="converting-to">
 <h3>Converting <code class="docutils literal notranslate"><span class="pre">^</span></code> to <code class="docutils literal notranslate"><span class="pre">**</span></code><a class="headerlink" href="#converting-to" title="Permalink to this headline">¶</a></h3>
 <p>Python’s syntax uses <code class="docutils literal notranslate"><span class="pre">**</span></code> for exponentiation, although many might expect it to
@@ -648,8 +647,8 @@ this will not work, because <code class="docutils literal notranslate"><span cla
 like <code class="docutils literal notranslate"><span class="pre">(x**2)</span> <span class="pre">+</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">x^2</span> <span class="pre">+</span> <span class="pre">1</span></code> is parsed like <code class="docutils literal notranslate"><span class="pre">x^(2</span> <span class="pre">+</span> <span class="pre">1)</span></code>. There’s no way to
 distinguish the two in the AST representation, because it does not keep track
 of redundant parentheses.</p>
-<p>We could do a simple <code class="docutils literal notranslate"><span class="pre">s.replace('^',</span> <span class="pre">'**')</span></code>, but this would <a class="reference external" href="alternatives.html#regular-expressions">also
-replace</a> any occurrences of <code class="docutils literal notranslate"><span class="pre">^</span></code> in
+<p>We could do a simple <code class="docutils literal notranslate"><span class="pre">s.replace('^',</span> <span class="pre">'**')</span></code>, but this would <a class="reference internal" href="alternatives.html#regular-expressions"><span class="std std-ref">also
+replace</span></a> any occurrences of <code class="docutils literal notranslate"><span class="pre">^</span></code> in
 strings and comments.</p>
 <p>Instead, we can use <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. The replacement is quite easy to do:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">xor_to_pow</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -668,13 +667,13 @@ strings and comments.</p>
 </pre></div>
 </div>
 <p>Because we are replacing a 1-character token with a 2-character token,
-<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> removes the
+<a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></span></a> removes the
 original whitespace and replaces it with its own. An exercise for the reader
 is to redefine the column offsets for the new token and all subsequent tokens
 on that line to avoid this issue.</p>
 </div>
 <div class="section" id="wrapping-floats-with-decimal-decimal">
-<h3>Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code><a class="headerlink" href="#wrapping-floats-with-decimal-decimal" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h3>Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code><a class="headerlink" href="#wrapping-floats-with-decimal-decimal" title="Permalink to this headline">¶</a></h3>
 <p>This example is modified from the <a class="reference external" href="https://docs.python.org/3/library/tokenize.html#examples">example in the standard library
 docs</a> for
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. It is a good example for modifying tokens because the logic is not
@@ -721,8 +720,8 @@ avoid rounding the input. An exercise for the reader is to extend
 </div>
 </div>
 <div class="section" id="extending-python-s-syntax">
-<h3>Extending Python’s Syntax<a class="headerlink" href="#extending-python-s-syntax" title="Permalink to this headline">¶</a></h3>
-<p>Because <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> emits <a class="reference external" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a> on any
+<span id="extending-pythons-syntax"></span><h3>Extending Python’s Syntax<a class="headerlink" href="#extending-python-s-syntax" title="Permalink to this headline">¶</a></h3>
+<p>Because <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> emits <a class="reference internal" href="tokens.html#errortoken"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></span></a> on any
 unrecognized operators, it can be used to add extensions to the Python syntax.
 This can be challenging to do in general, as you may need to do significant
 parsing of the tokens to ensure that your new “operator” has the correct
@@ -759,10 +758,9 @@ symbols ➕, ➖, ➗, and ✖ to be used instead of their ASCII counterparts.</
 <span class="go">&#39;1 + 2 - 3/4*5&#39;</span>
 </pre></div>
 </div>
-<p>Because we are replacing a single character with a single character,
-we can use 5-tuples and keep the column offsets intact, making
-<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> maintain
-the whitespace of the input.</p>
+<p>Because we are replacing a single character with a single character, we can
+use 5-tuples and keep the column offsets intact, making
+<a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></span></a> maintain the whitespace of the input.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>These emoji may often appear as two characters, for instance, ✖ may often
@@ -771,9 +769,10 @@ forces it to render as an emoji. The above example does not include the
 <code class="docutils literal notranslate"><span class="pre">VARIATION</span> <span class="pre">SELECTOR-16</span></code>. An exercise for the reader is to modify the above
 function to work with this.</p>
 </div>
+<!-- https://github.com/executablebooks/MyST-Parser/issues/181 -->
 </div>
 <div class="section" id="backporting-underscores-in-numeric-literals">
-<h4>Backporting Underscores in Numeric Literals<a class="headerlink" href="#backporting-underscores-in-numeric-literals" title="Permalink to this headline">¶</a></h4>
+<span id="backporting-underscores"></span><h4>Backporting Underscores in Numeric Literals<a class="headerlink" href="#backporting-underscores-in-numeric-literals" title="Permalink to this headline">¶</a></h4>
 <p>Python 3.6 added a new syntactic feature that allows <a class="reference external" href="https://docs.python.org/3/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals">underscores in numeric
 literals</a>.
 To quote the docs, “single underscores are allowed between digits and after
@@ -788,23 +787,23 @@ not allowed.”</p>
 <p>We can write a function using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to backport this feature to Python
 3.5. Some experimentation shows how the new literals tokenize in Python 3.5:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">123_456</span></code> tokenizes as <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and
-<a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>). In general, multiple underscores
+<li><p><code class="docutils literal notranslate"><span class="pre">123_456</span></code> tokenizes as <a class="reference internal" href="tokens.html#number"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></span></a> (<code class="docutils literal notranslate"><span class="pre">123</span></code>) and
+<a class="reference internal" href="tokens.html#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a> (<code class="docutils literal notranslate"><span class="pre">_456</span></code>). In general, multiple underscores
 between tokens will tokenize like this.</p></li>
 <li><p>Additionally, underscores are allowed after base specifiers, like <code class="docutils literal notranslate"><span class="pre">0x_1</span></code>.
-This also tokenizes as <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) and
-<a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">x_1</span></code>). Since <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a> and
-<a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> tokens cannot appear next to one another in valid
+This also tokenizes as <a class="reference internal" href="tokens.html#number"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></span></a> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) and
+<a class="reference internal" href="tokens.html#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a> (<code class="docutils literal notranslate"><span class="pre">x_1</span></code>). Since <a class="reference internal" href="tokens.html#number"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></span></a> and
+<a class="reference internal" href="tokens.html#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a> tokens cannot appear next to one another in valid
 Python, we can simply combine them when they do.</p></li>
 <li><p>Finally, if an underscore appears before the <code class="docutils literal notranslate"><span class="pre">.</span></code> in a floating point
-literal, like <code class="docutils literal notranslate"><span class="pre">1_2.3_4</span></code> it will tokenize <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a>
-(<code class="docutils literal notranslate"><span class="pre">1</span></code>), <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_2</span></code>), <a class="reference external" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a>
-(<code class="docutils literal notranslate"><span class="pre">.3</span></code>), <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> (<code class="docutils literal notranslate"><span class="pre">_4</span></code>).</p></li>
+literal, like <code class="docutils literal notranslate"><span class="pre">1_2.3_4</span></code> it will tokenize <a class="reference internal" href="tokens.html#number"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></span></a>
+(<code class="docutils literal notranslate"><span class="pre">1</span></code>), <a class="reference internal" href="tokens.html#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a> (<code class="docutils literal notranslate"><span class="pre">_2</span></code>), <a class="reference internal" href="tokens.html#number"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></span></a>
+(<code class="docutils literal notranslate"><span class="pre">.3</span></code>), <a class="reference internal" href="tokens.html#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a> (<code class="docutils literal notranslate"><span class="pre">_4</span></code>).</p></li>
 </ul>
-<p>Note that in this example, the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> token allows
+<p>Note that in this example, the <a class="reference internal" href="tokens.html#encoding"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></span></a> token allows
 us to access <code class="docutils literal notranslate"><span class="pre">result[-1]</span></code> unconditionally, as we know there must always be at
-least this token already processed before any <a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a>
-token. This is often a useful property the <a class="reference external" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a>
+least this token already processed before any <a class="reference internal" href="tokens.html#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a>
+token. This is often a useful property the <a class="reference internal" href="tokens.html#encoding"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></span></a>
 allows us to take advantage of.</p>
 <p>We do some basic checks here to not allow spaces before underscores and double
 underscores, which are not allowed in Python 3.6. But for simplicity, this
@@ -865,18 +864,14 @@ still invalid syntax in Python 3.5 (<code class="docutils literal notranslate"><
 <span class="gp">...</span>
 </pre></div>
 </div>
-<p>Note that by reusing the <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and
-<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a> tokens, we are able to make
-<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> keep the
-whitespace, even though characters were removed.
-<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> only uses the
-differences between <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a> and
-<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> to determine how many spaces to add
-between tokens, not their absolute values (remember that
-<a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></a> only requires the
-<a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code></a> and <a class="reference external" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">end</span></code></a>
-tuples to be nondecreasing; it doesn’t care if the actual column values are
-correct).</p>
+<p>Note that by reusing the <a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">start</span></code></span></a> and <a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">end</span></code></span></a>
+tokens, we are able to make <a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></span></a> keep the whitespace,
+even though characters were removed. <a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></span></a> only uses
+the differences between <a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">end</span></code></span></a> and <a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">start</span></code></span></a> to
+determine how many spaces to add between tokens, not their absolute values
+(remember that <a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize()</span></code></span></a> only requires the
+<a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">start</span></code></span></a> and <a class="reference internal" href="usage.html#start-and-end"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">end</span></code></span></a> tuples to be
+nondecreasing; it doesn’t care if the actual column values are correct).</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">underscore_literals</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> 

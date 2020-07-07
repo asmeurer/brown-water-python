@@ -55,7 +55,7 @@
 <h1>The Token Types<a class="headerlink" href="#the-token-types" title="Permalink to this headline">¶</a></h1>
 <p>Every token produced by the tokenizer has a type. These types are represented
 by integer constants. The actual integer value of the token constants is not
-important (except for <a class="reference external" href="#n-tokens"><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code></a>), and should never be used or
+important (except for <a class="reference internal" href="#n-tokens"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code></span></a>), and should never be used or
 relied on. Instead, refer to tokens by their variable names, and use the
 <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> dictionary to get the name of a token type. The exact integer value
 could change between Python versions, for instance, if new tokens are added or
@@ -73,15 +73,15 @@ enumerated types are represented by integers (actually, <code class="docutils li
 large array of the token types. The integer value of each token is its index
 in that array). The <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module is written in pure Python, but the token
 type values and names mirror those from the C tokenizer, with three
-exceptions: <a class="reference external" href="#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a>, <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>, and <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a>.</p>
+exceptions: <a class="reference internal" href="#comment"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></span></a>, <a class="reference internal" href="#nl"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NL</span></code></span></a>, and <a class="reference internal" href="#nl"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></span></a>.</p>
 <p>All token types are defined in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module
 does <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">token</span> <span class="pre">import</span> <span class="pre">*</span></code>, so they can be imported from <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> as well.
 Therefore, it is easiest to just import everything from <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>.
-Furthermore, the aforementioned <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a>, <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>, and
-<a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> tokens are not importable from <code class="docutils literal notranslate"><span class="pre">token</span></code> prior to Python 3.7,
+Furthermore, the aforementioned <a class="reference internal" href="#nl"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></span></a>, <a class="reference internal" href="#nl"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NL</span></code></span></a>, and
+<a class="reference internal" href="#nl"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></span></a> tokens are not importable from <code class="docutils literal notranslate"><span class="pre">token</span></code> prior to Python 3.7,
 only from <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>.</p>
 <div class="section" id="the-tok-name-dictionary">
-<h2>The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary<a class="headerlink" href="#the-tok-name-dictionary" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary<a class="headerlink" href="#the-tok-name-dictionary" title="Permalink to this headline">¶</a></h2>
 <p>The dictionary <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> maps the tokens back to their names:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">STRING</span>
@@ -102,7 +102,7 @@ the examples:</p>
 </pre></div>
 </div>
 <div class="section" id="endmarker">
-<h3><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code><a class="headerlink" href="#endmarker" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h3><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code><a class="headerlink" href="#endmarker" title="Permalink to this headline">¶</a></h3>
 <p>This is always the last token emitted by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, unless it raises an
 exception. The <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">line</span></code> attributes are always <code class="docutils literal notranslate"><span class="pre">''</span></code>. The <code class="docutils literal notranslate"><span class="pre">start</span></code> and
 <code class="docutils literal notranslate"><span class="pre">end</span></code> lines are always one more than the total number of lines in the input,
@@ -126,7 +126,7 @@ yielded.</p>
 </div>
 </div>
 <div class="section" id="name">
-<h3><code class="docutils literal notranslate"><span class="pre">NAME</span></code><a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h3><code class="docutils literal notranslate"><span class="pre">NAME</span></code><a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NAME</span></code> token type is used for any Python identifier, as well as every
 keyword.
 <a class="reference external" href="https://docs.python.org/3/reference/lexical_analysis.html#keywords"><em>Keywords</em></a>
@@ -168,7 +168,7 @@ discouraged.</p>
 </div>
 </div>
 <div class="section" id="number">
-<span id="id1"></span><h3><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code><a class="headerlink" href="#number" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code><a class="headerlink" href="#number" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> token type is used for any numeric literal, including (decimal) integer literals,
 binary, octal, and hexadecimal integer literals, floating point numbers
 (including scientific notation), and imaginary number literals (like <code class="docutils literal notranslate"><span class="pre">1j</span></code>).</p>
@@ -241,7 +241,7 @@ full input.</p>
 <p>This can be used, for instance, to wrap floating point numbers with a type
 that supports arbitrary precision, such as
 <a class="reference external" href="https://docs.python.org/3/library/decimal.html"><code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code></a>. See the
-<a class="reference external" href="examples.html#wrapping-floats-with-decimal-decimal">examples</a>.</p>
+<a class="reference internal" href="examples.html#wrapping-floats-with-decimal-decimal"><span class="std std-ref">examples</span></a>.</p>
 <p>In Python &gt;=3.6, numeric literals can have <a class="reference external" href="https://docs.python.org/3/whatsnew/3.6.html#whatsnew36-pep515">underscore
 separators</a>,
 like <code class="docutils literal notranslate"><span class="pre">123_456</span></code>.</p>
@@ -264,11 +264,11 @@ like <code class="docutils literal notranslate"><span class="pre">123_456</span>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 </pre></div>
 </div>
-<p>In the <a class="reference external" href="examples.html#backporting-underscores-in-numeric-literals">examples</a>
+<p>In the <a class="reference internal" href="examples.html#backporting-underscores"><span class="std std-ref">examples</span></a>
 we will see how to use <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> to backport this feature to Python 3.5.</p>
 </div>
 <div class="section" id="string">
-<h3><code class="docutils literal notranslate"><span class="pre">STRING</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
+<span id="id5"></span><h3><code class="docutils literal notranslate"><span class="pre">STRING</span></code><a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">STRING</span></code> token type matches any string literal, including single quoted,
 double quoted strings, triple- single and double quoted strings (i.e.,
 multi-line strings, or “docstrings”), raw, “unicode”, bytes, and f-strings
@@ -336,9 +336,9 @@ trying to strip the quotes manually, which is error prone, or using raw
 </pre></div>
 </div>
 <div class="section" id="error-behavior">
-<h4>Error Behavior<a class="headerlink" href="#error-behavior" title="Permalink to this headline">¶</a></h4>
+<span id="id6"></span><h4>Error Behavior<a class="headerlink" href="#error-behavior" title="Permalink to this headline">¶</a></h4>
 <p>If a single quoted string is unclosed, the opening string delimiter is
-tokenized as <a class="reference external" href="#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>, and the remainder is tokenized as if
+tokenized as <a class="reference internal" href="#errortoken"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></span></a>, and the remainder is tokenized as if
 it were not in a string.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&#39;unclosed + string</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
@@ -355,7 +355,7 @@ were to build a syntax highlighter using <code class="docutils literal notransla
 want an unclosed string to highlight the rest of the document as a string
 (such things are common in “live” editing environments).</p>
 <p>However, if a triple quoted string (i.e., multi-line string, or “docstring”)
-is not closed, <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> will raise <a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a>
+is not closed, <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> will raise <a class="reference internal" href="usage.html#tokenerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></span></a>
 when it reaches it.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&#39;an &#39; + &#39;&#39;&#39;unclosed multi-line string</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> 
 <span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
@@ -370,7 +370,7 @@ when it reaches it.</p>
 <p>This behavior can be annoying to deal with in practice. For many applications,
 the correct way to handle this scenario is to consider that since the unclosed
 string is multi-line, the remainder of the input from where the
-<a class="reference external" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a> is raised is inside the unclosed string.</p>
+<a class="reference internal" href="usage.html#tokenerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></span></a> is raised is inside the unclosed string.</p>
 <p>As a final note, beware that it is possible to construct string literals that
 tokenize without any errors, but raise <code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code> when parsed by the
 interpreter.</p>
@@ -396,10 +396,10 @@ function, which is safe to use on untrusted input.</p>
 </div>
 </div>
 <div class="section" id="newline">
-<h3><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code><a class="headerlink" href="#newline" title="Permalink to this headline">¶</a></h3>
+<span id="id7"></span><h3><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code><a class="headerlink" href="#newline" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code> token type represents a newline character (<code class="docutils literal notranslate"><span class="pre">\n</span></code> or <code class="docutils literal notranslate"><span class="pre">\r\n</span></code>) that
 ends a logical line of Python code. Newlines that do not end a logical line of
-Python code use <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>.</p>
+Python code use <a class="reference internal" href="#nl"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NL</span></code></span></a>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
 <span class="gp">... </span><span class="s2">def hello():</span>
 <span class="gp">... </span><span class="s2">    return &#39;hello world&#39;</span>
@@ -441,10 +441,10 @@ can always force the input to end in a newline. This is why every example in
 this document has a newline at the end.</p>
 </div>
 <div class="section" id="indent">
-<h3><code class="docutils literal notranslate"><span class="pre">INDENT</span></code><a class="headerlink" href="#indent" title="Permalink to this headline">¶</a></h3>
+<span id="id8"></span><h3><code class="docutils literal notranslate"><span class="pre">INDENT</span></code><a class="headerlink" href="#indent" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="dedent">
-<h3><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code><a class="headerlink" href="#dedent" title="Permalink to this headline">¶</a></h3>
+<span id="id9"></span><h3><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code><a class="headerlink" href="#dedent" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">INDENT</span></code> token type represents the indentation for indented blocks. The
 indentation itself (the text from the beginning of the line to the first
 nonwhitespace character) is in the <code class="docutils literal notranslate"><span class="pre">string</span></code> attribute. <code class="docutils literal notranslate"><span class="pre">INDENT</span></code> is emitted
@@ -505,7 +505,7 @@ consecutive <code class="docutils literal notranslate"><span class="pre">DEDENT<
 <p>Indentation can be any number of spaces or tabs. The only restriction is that
 every unindented indentation level must match a previous outer indentation
 level. If an unindent does not match an outer indentation level, <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>
-raises <a class="reference external" href="usage.html#indentationerror"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></a>.</p>
+raises <a class="reference internal" href="usage.html#indentationerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></span></a>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s2">def countdown(x):</span>
 <span class="gp">... </span><span class="se">\t</span><span class="s2">assert x&gt;=0</span>
@@ -601,14 +601,14 @@ determined by incrementing and decrementing a counter for each <code class="docu
 maintaining a stack of the <code class="docutils literal notranslate"><span class="pre">INDENT</span></code> strings
 (<a class="reference external" href="https://docs.python.org/3/reference/lexical_analysis.html#indentation">recall</a>
 that Python allows different indentation levels to use a different number of
-spaces). See the <a class="reference external" href="examples.html#indentation-level">examples</a>. T</p>
+spaces). See the <a class="reference internal" href="examples.html#indentation-level"><span class="std std-ref">examples</span></a>. T</p>
 </div>
 <div class="section" id="rarrow">
-<h3><code class="docutils literal notranslate"><span class="pre">RARROW</span></code><a class="headerlink" href="#rarrow" title="Permalink to this headline">¶</a></h3>
+<span id="id10"></span><h3><code class="docutils literal notranslate"><span class="pre">RARROW</span></code><a class="headerlink" href="#rarrow" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="ellipsis">
-<h3><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code><a class="headerlink" href="#ellipsis" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">RARROW</span></code> and <code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> tokens tokenize as <a class="reference external" href="#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>. However, due to a
+<span id="id11"></span><h3><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code><a class="headerlink" href="#ellipsis" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">RARROW</span></code> and <code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> tokens tokenize as <a class="reference internal" href="#op"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">OP</span></code></span></a>. However, due to a
 <a class="reference external" href="https://bugs.python.org/issue24622">bug</a> present in Python versions prior to
 3.7, the <code class="docutils literal notranslate"><span class="pre">exact_type</span></code> attribute of these tokens will be <code class="docutils literal notranslate"><span class="pre">OP</span></code> instead of the
 correct type.</p>
@@ -647,10 +647,10 @@ correct type.</p>
 </div>
 </div>
 <div class="section" id="op">
-<h3><code class="docutils literal notranslate"><span class="pre">OP</span></code><a class="headerlink" href="#op" title="Permalink to this headline">¶</a></h3>
+<span id="id12"></span><h3><code class="docutils literal notranslate"><span class="pre">OP</span></code><a class="headerlink" href="#op" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">OP</span></code> is a generic token type for all operators, delimiters, and the ellipsis
 literal. This does not include characters and operators that are not
-recognized by the parser (these are parsed as <a class="reference external" href="#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a>).</p>
+recognized by the parser (these are parsed as <a class="reference internal" href="#errortoken"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></span></a>).</p>
 <p>When using <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, the token type for an operator, delimiter, or
 ellipsis literal token will be <code class="docutils literal notranslate"><span class="pre">OP</span></code>. To get the exact token type, use the
 <code class="docutils literal notranslate"><span class="pre">exact_type</span></code> property of the namedtuple. <code class="docutils literal notranslate"><span class="pre">tok.exact_type</span></code> is equivalent to
@@ -682,16 +682,162 @@ below).</p>
 <p>The following table lists all exact <code class="docutils literal notranslate"><span class="pre">OP</span></code> types and their corresponding
 characters.</p>
 <!-- The table below is generated with exact_type_table.py -->
-<div class="highlight-eval_rst notranslate"><div class="highlight"><pre><span></span>
-.. include:: exact_type_table.txt
-</pre></div>
-</div>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Exact token type</p></th>
+<th class="head"><p>String value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LPAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RPAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LSQB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RSQB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">COLON</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">COMMA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">,</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SEMI</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PLUS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MINUS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SLASH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VBAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">|</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AMPER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&amp;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LESS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GREATER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DOT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PERCENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">%</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LBRACE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RBRACE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">}</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EQEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">==</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NOTEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">!=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LESSEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GREATEREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TILDE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">~</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CIRCUMFLEX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">^</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LEFTSHIFT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RIGHTSHIFT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DOUBLESTAR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">**</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PLUSEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MINEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-=</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STAREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SLASHEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/=</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PERCENTEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">%=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AMPEREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&amp;=</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VBAREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">|=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CIRCUMFLEXEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">^=</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LEFTSHIFTEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;&lt;=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RIGHTSHIFTEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;&gt;=</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DOUBLESTAREQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">**=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DOUBLESLASH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">//</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DOUBLESLASHEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">//=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ATEQUAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RARROW</span></code> <a class="footnote-reference brackets" href="#f1" id="id13">1</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> <a class="footnote-reference brackets" href="#f1" id="id14">1</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">...</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">COLONEQUAL</span></code> <a class="footnote-reference brackets" href="#f2" id="id15">2</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:=</span></code></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="await">
-<h3><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code><a class="headerlink" href="#await" title="Permalink to this headline">¶</a></h3>
+<span id="id16"></span><h3><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code><a class="headerlink" href="#await" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="async">
-<h3><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code><a class="headerlink" href="#async" title="Permalink to this headline">¶</a></h3>
+<span id="id17"></span><h3><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code><a class="headerlink" href="#async" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">AWAIT</span></code> and <code class="docutils literal notranslate"><span class="pre">ASYNC</span></code> token types are used to tokenize the <code class="docutils literal notranslate"><span class="pre">await</span></code> and
 <code class="docutils literal notranslate"><span class="pre">async</span></code> keywords in Python 3.5 and 3.6. They do not exist in Python 3.7+.</p>
 <p>In Python 3.5 and 3.6, <code class="docutils literal notranslate"><span class="pre">await</span></code> and <code class="docutils literal notranslate"><span class="pre">async</span></code> are pseudo-keywords. To aid the
@@ -751,7 +897,7 @@ and <code class="docutils literal notranslate"><span class="pre">async</span></c
 </pre></div>
 </div>
 <p>In Python 3.7, <code class="docutils literal notranslate"><span class="pre">async</span></code> and <code class="docutils literal notranslate"><span class="pre">await</span></code> are proper keywords, and are tokenized as
-<a class="reference external" href="#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a> like all other keywords. In Python 3.7, the <code class="docutils literal notranslate"><span class="pre">AWAIT</span></code> and
+<a class="reference internal" href="#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a> like all other keywords. In Python 3.7, the <code class="docutils literal notranslate"><span class="pre">AWAIT</span></code> and
 <code class="docutils literal notranslate"><span class="pre">ASYNC</span></code> token types have been removed from the <code class="docutils literal notranslate"><span class="pre">token</span></code> module.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># This is the behavior in Python 3.7+</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
@@ -792,12 +938,12 @@ module, but they are not tokenized by default (the behavior is the same as in
 parsing Python as older versions would.</p>
 </div>
 <div class="section" id="type-ignore">
-<h3><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code><a class="headerlink" href="#type-ignore" title="Permalink to this headline">¶</a></h3>
+<span id="id18"></span><h3><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code><a class="headerlink" href="#type-ignore" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="type-comment">
-<h3><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code><a class="headerlink" href="#type-comment" title="Permalink to this headline">¶</a></h3>
+<span id="id19"></span><h3><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code><a class="headerlink" href="#type-comment" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code> and <code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code> are included here for completeness, since
-they are in the <a class="reference external" href="#the-tok-name-dictionary"><code class="docutils literal notranslate"><span class="pre">tok_name</span></code></a> dictionary. They are
+they are in the <a class="reference internal" href="#the-tok-name-dictionary"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">tok_name</span></code></span></a> dictionary. They are
 used in the C tokenizer to tokenize type comments, but the Python tokenizer
 does not yet tokenize them. This presumably will change in the future, as the
 Python tokenizer is generally made to have the same behavior as the C tokenizer.</p>
@@ -812,13 +958,13 @@ Python tokenizer is generally made to have the same behavior as the C tokenizer.
 </div>
 </div>
 <div class="section" id="errortoken">
-<h3><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code><a class="headerlink" href="#errortoken" title="Permalink to this headline">¶</a></h3>
+<span id="id20"></span><h3><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code><a class="headerlink" href="#errortoken" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> type is used for any character that isn’t recognized. Inputs
 that tokenize <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code>s cannot be valid Python, but this token type is
 used so that applications that process tokens can do error recovery, as the
 remainder of the input stream is tokenized normally. It can also be used to
 process extensions to Python syntax (see the
-<a class="reference external" href="examples.html#extending-python-s-syntax">examples</a>). Every unrecognized
+<a class="reference internal" href="examples.html#extending-pythons-syntax"><span class="std std-ref">examples</span></a>). Every unrecognized
 character is tokenized separately.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;1!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
@@ -835,7 +981,7 @@ character is tokenized separately.</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> is also used for single-quoted strings that are not closed before
-a newline. See the <a class="reference external" href="#error-behavior"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a> section for more information.</p>
+a newline. See the <a class="reference internal" href="#error-behavior"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></span></a> section for more information.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&#39;unclosed + string</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&quot;&#39;&quot;, start=(1, 0), end=(1, 1), line=&quot;&#39;unclosed + string\n&quot;)</span>
@@ -890,7 +1036,7 @@ the string are also tokenized as <code class="docutils literal notranslate"><spa
 should check <code class="docutils literal notranslate"><span class="pre">tok.string[0]</span> <span class="pre">in</span> <span class="pre">'&quot;\''</span></code>.</p>
 </div>
 <div class="section" id="comment">
-<h3><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code><a class="headerlink" href="#comment" title="Permalink to this headline">¶</a></h3>
+<span id="id21"></span><h3><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code><a class="headerlink" href="#comment" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">COMMENT</span></code> token type represents a comment. If a comment spans multiple
 lines, each line is tokenized separately.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
@@ -919,10 +1065,10 @@ importable from the <code class="docutils literal notranslate"><span class="pre"
 module as well.</p>
 </div>
 <div class="section" id="nl">
-<h3><code class="docutils literal notranslate"><span class="pre">NL</span></code><a class="headerlink" href="#nl" title="Permalink to this headline">¶</a></h3>
+<span id="id22"></span><h3><code class="docutils literal notranslate"><span class="pre">NL</span></code><a class="headerlink" href="#nl" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">NL</span></code> token type represents newline characters (<code class="docutils literal notranslate"><span class="pre">\n</span></code> or <code class="docutils literal notranslate"><span class="pre">\r\n</span></code>) that do not
 end logical lines of code. Newlines that do end logical lines of Python code
-area tokenized using the <a class="reference external" href="#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a> token type.</p>
+area tokenized using the <a class="reference internal" href="#newline"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></span></a> token type.</p>
 <p>There are two situations where newlines are tokenized as <code class="docutils literal notranslate"><span class="pre">NL</span></code>:</p>
 <ol>
 <li><p>Newlines that end lines that are continued after unclosed braces.</p>
@@ -960,7 +1106,7 @@ area tokenized using the <a class="reference external" href="#newline"><code cla
 whitespace, that is, they do not tokenize at all. Consequently, you should
 always use the line numbers in the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> attributes of the
 <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> namedtuple. Never try to determine line numbers by counting
-<a class="reference external" href="#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a> and <code class="docutils literal notranslate"><span class="pre">NL</span></code> tokens.</p>
+<a class="reference internal" href="#newline"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></span></a> and <code class="docutils literal notranslate"><span class="pre">NL</span></code> tokens.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s1">&#39;1 + </span><span class="se">\\\n</span><span class="s1">2</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=2 (NUMBER), string=&#39;1&#39;, start=(1, 0), end=(1, 1), line=&#39;1 + \\\n&#39;)</span>
@@ -972,26 +1118,26 @@ always use the line numbers in the <code class="docutils literal notranslate"><s
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">NL</span></code> token type exists only in the standard library Python implementation
 of <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. The C implementation used by the interpreter only has
-<a class="reference external" href="#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a>. In Python versions prior to 3.7, <code class="docutils literal notranslate"><span class="pre">NL</span></code> is only
+<a class="reference internal" href="#newline"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></span></a>. In Python versions prior to 3.7, <code class="docutils literal notranslate"><span class="pre">NL</span></code> is only
 importable from <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module. In 3.7, it is added to the <code class="docutils literal notranslate"><span class="pre">token</span></code> module
 as well.</p>
 </div>
 <div class="section" id="encoding">
-<span id="id2"></span><h3><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code><a class="headerlink" href="#encoding" title="Permalink to this headline">¶</a></h3>
+<span id="id23"></span><h3><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code><a class="headerlink" href="#encoding" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> is a special token type that represents the encoding of the input.
 It is always the first token emitted by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, unless the detected
-encoding is invalid, in which case it raises <a class="reference external" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a>. The encoding is detected via either a <a class="reference external" href="https://www.python.org/dev/peps/pep-0263/">PEP
+encoding is invalid, in which case it raises <a class="reference internal" href="usage.html#syntaxerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></span></a>. The encoding is detected via either a <a class="reference external" href="https://www.python.org/dev/peps/pep-0263/">PEP
 263</a> formatted comment in one of
 the first two lines of the input (like <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">-*-</span> <span class="pre">coding:</span> <span class="pre">utf-8</span> <span class="pre">-*-</span></code>; such
-comments are still tokenized as a <a class="reference external" href="#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a> as well), or a
+comments are still tokenized as a <a class="reference internal" href="#comment"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></span></a> as well), or a
 Unicode BOM character.</p>
 <p>The detected encoding is in the <code class="docutils literal notranslate"><span class="pre">string</span></code> attribute of the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>.
 <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> is the only token type where <code class="docutils literal notranslate"><span class="pre">tok.string</span></code> does not appear literally
 in the input. The default encoding is <code class="docutils literal notranslate"><span class="pre">utf-8</span></code>.</p>
 <p>If you only want to detect the encoding and nothing else, use
-<a class="reference external" href="helper-functions.html#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></a>. If you
+<a class="reference internal" href="helper-functions.html#detect-encoding"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">detect_encoding()</span></code></span></a>. If you
 only need the encoding to pass to <code class="docutils literal notranslate"><span class="pre">open()</span></code>, use
-<a class="reference external" href="helper-functions.html#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open()</span></code></a>.</p>
+<a class="reference internal" href="helper-functions.html#tokenize-open"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">tokenize.open()</span></code></span></a>.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> line and column numbers for <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> will always be
 <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;# The default encoding is utf-8</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1007,9 +1153,10 @@ only need the encoding to pass to <code class="docutils literal notranslate"><sp
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> token is not typically used when processing tokens, although
-its guaranteed presence as the first token can be useful when processing tokens
-as it will guarantee that every other token type will have some previous token
-from the stream (see the <a class="reference external" href="examples.html#backporting-underscores-in-numeric-literals">examples</a>).</p>
+its guaranteed presence as the first token can be useful when processing
+tokens as it will guarantee that every other token type will have some
+previous token from the stream (see the
+<a class="reference internal" href="examples.html#backporting-underscores"><span class="std std-ref">examples</span></a>).</p>
 <p>Strictly speaking, the <code class="docutils literal notranslate"><span class="pre">string</span></code> of every token in a token stream should be
 decodable by the encoding of the <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> token (e.g., if the encoding is
 <code class="docutils literal notranslate"><span class="pre">ascii</span></code>, the tokens cannot include any non-ASCII characters).</p>
@@ -1020,18 +1167,18 @@ is only importable from <code class="docutils literal notranslate"><span class="
 module as well.</p>
 </div>
 <div class="section" id="n-tokens">
-<h3><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code><a class="headerlink" href="#n-tokens" title="Permalink to this headline">¶</a></h3>
+<span id="id24"></span><h3><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code><a class="headerlink" href="#n-tokens" title="Permalink to this headline">¶</a></h3>
 <p>The number of token types (not including
-<a class="reference external" href="helper-functions.html#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a> or itself).</p>
+<a class="reference internal" href="helper-functions.html#nt-offset"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></span></a> or itself).</p>
 <p>In Python 3.5 and 3.6, <code class="docutils literal notranslate"><span class="pre">token.N_TOKENS</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize.N_TOKENS</span></code> are different,
-because <a class="reference external" href="#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a>, <a class="reference external" href="#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a>, and <a class="reference external" href="#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a> are in
+because <a class="reference internal" href="#comment"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></span></a>, <a class="reference internal" href="#nl"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NL</span></code></span></a>, and <a class="reference internal" href="#encoding"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></span></a> are in
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> but not in <code class="docutils literal notranslate"><span class="pre">token</span></code>. In these versions, <code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code> is also not in
 the <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> dictionary.</p>
 <p>The value of <code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code> varies between Python versions. Python 3.7 removed the
-<a class="reference external" href="#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a> and <a class="reference external" href="#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a> tokens. Python 3.8 added the new
-tokens <a class="reference external" href="#op"><code class="docutils literal notranslate"><span class="pre">COLONEQUAL</span></code></a>, <a class="reference external" href="#type-ignore"><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code></a>, and
-<a class="reference external" href="#type-comment"><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code></a>, and re-added <a class="reference external" href="#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a> and
-<a class="reference external" href="#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a>.</p>
+<a class="reference internal" href="#await"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></span></a> and <a class="reference internal" href="#async"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></span></a> tokens. Python 3.8 added the new
+tokens <a class="reference internal" href="#op"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">COLONEQUAL</span></code></span></a>, <a class="reference internal" href="#type-ignore"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code></span></a>, and
+<a class="reference internal" href="#type-comment"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code></span></a>, and re-added <a class="reference internal" href="#await"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></span></a> and
+<a class="reference internal" href="#async"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></span></a>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="c1"># In PYthon 3.5 and 3.6</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">N_TOKENS</span> <span class="c1"># doctest: +SKIP37, +SKIP38</span>
 <span class="mi">60</span>
@@ -1047,6 +1194,17 @@ tokens <a class="reference external" href="#op"><code class="docutils literal no
 <span class="go">63</span>
 </pre></div>
 </div>
+<hr class="docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id13">1</a>,<a href="#id14">2</a>)</span></dt>
+<dd><p>Due to a <a class="reference external" href="https://bugs.python.org/issue24622">bug</a>, the <code class="docutils literal notranslate"><span class="pre">exact_type</span></code>
+for <code class="docutils literal notranslate"><span class="pre">RARROW</span></code> and <code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code> tokens is <code class="docutils literal notranslate"><span class="pre">OP</span></code> in Python versions prior to
+3.7. See <a class="reference internal" href="#rarrow"><span class="std std-ref">above</span></a>.</p>
+</dd>
+<dt class="label" id="f2"><span class="brackets"><a class="fn-backref" href="#id15">2</a></span></dt>
+<dd><p>New in Python 3.8.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>

@@ -19,6 +19,7 @@ reports](https://github.com/asmeurer/brown-water-python/issues) and [pull
 requests](https://github.com/asmeurer/brown-water-python/pulls) are most
 welcome.
 
+(calling-syntax)=
 ## Calling Syntax
 
 The first thing you'll notice when using `tokenize()` is that its calling API
@@ -83,10 +84,10 @@ line-by-line on a Python document. This is also why the `tokenize()` function
 returns a generator. The typical pattern when using `tokenize()` is to iterate
 over it with a `for` loop (see the next section). If you are finished doing
 whatever you are doing before you reach the
-[`ENDMARKER`](tokens.html#endmarker) token, you can break early from the loop
+[`ENDMARKER`](endmarker) token, you can break early from the loop
 efficiently without tokenizing the rest of the document. It is not recommended
 to convert the `tokenize()` generator into a list, except for debugging
-purposes. Not only is this inefficient, it makes it impossible to deal with [exceptions](#exceptions).
+purposes. Not only is this inefficient, it makes it impossible to deal with [exceptions](exceptions).
 
 ## `TokenInfo`
 
@@ -98,7 +99,7 @@ following fields:
 ('type', 'string', 'start', 'end', 'line')
 ```
 
-The meaning of each field is outlined [below](#tokeninfo-fields).
+The meaning of each field is outlined [below](tokeninfo-fields).
 
 There are two ways to work with `TokenInfo` objects. One is to unpack the
 tuple, typically in the `for` statement:
@@ -147,36 +148,38 @@ type: 0 string: '' start: (2, 0) end: (2, 0) line: ''
 
 One advantage of this second way is that the `TokenInfo` object contains an
 additional attribute, `exact_type`, which contains the exact token type of an
-[`OP` token](tokens.html#op). However, this can also be determined from the
+[`OP` token](op). However, this can also be determined from the
 `string`. Additionally, the first form is less verbose, but the second form
 avoids errors from getting the attributes in the wrong order. The form that
 you should use depends on your preference on these tradeoffs. I personally
 recommend the second form (`for tok in tokenize(...): ... tok.type, etc.`),
 unless you have the `(toknum, tokstr, start, end, line)` order memorized.
 
+(tokeninfo-fields)=
 ### `TokenInfo` Fields
 
 #### `type`
 
-The token types are outlined in detail in the [Token Types](tokens.html)
+The token types are outlined in detail in the [Token Types](tokens.md)
 section.
 
 #### `string`
 
 The chunk of code that is tokenized. For token types where the string is
-meaningless, such as [`ENDMARKER`](tokens.html#endmarker), the string is
+meaningless, such as [`ENDMARKER`](endmarker), the string is
 empty.
 
-For the [`ENCODING`](tokens.html#encoding) token, the string is the encoding,
+For the [`ENCODING`](encoding) token, the string is the encoding,
 which does not appear literally in the code, which is why for `ENCODING` the
 line and column numbers are 0 and the `line` is the empty string.
 
+(start-and-end)=
 #### `start` and `end`
 
 `start` and `end` are tuples of (line number, column number) for the line and
 column numbers of the start and end of the tokenized string. **Line numbers
 start at 1 and column numbers start at 0**. The line and column numbers for
-the [`ENCODING`](tokens.html#encoding) token, which is always the first token
+the [`ENCODING`](encoding) token, which is always the first token
 emitted, are both `(0, 0)`.
 
 Because Python tuples compare lexicographically (i.e., `(a, b) < (c, d)` is
@@ -190,7 +193,7 @@ tok1.start` and `tok0.end <= tok1.end` will be True for consecutive
 You should always use the `start` and `end` tuples to deduce line or column
 information. `tokenize()` ignores syntactically irrelevant whitespace, which
 can include newlines (in particular, escaped newlines, see
-[`NL`](tokens.html#nl)).
+[`NL`](nl)).
 
 #### `line`
 
@@ -200,27 +203,29 @@ between tokens is space characters---it could also consist of escaped newlines
 or tabs). `line` can also be useful for providing contextual error messages
 relating to the tokenization.
 
+(exceptions)=
 ## Exceptions
 
-`tokenize()` has two failure modes: [`ERRORTOKEN`](tokens.html#errortoken) and
+`tokenize()` has two failure modes: [`ERRORTOKEN`](errortoken) and
 exceptions. When a non-fatal error occurs, some text will be tokenized as an
-[`ERRORTOKEN`](tokens.html#errortoken), and tokenizing will continue on the
+[`ERRORTOKEN`](errortoken), and tokenizing will continue on the
 remainder of the input. This happens, for instance, for unrecognized
 characters, such as `$`, and unclosed single-quoted strings. See the
-[`ERRORTOKEN`](tokens.html#errortoken) and
-[`STRING`](tokens.html#error-behavior) references for more information.
+[`ERRORTOKEN`](errortoken) and
+[`STRING`](error-behavior) references for more information.
 
 Other failures are so fatal that tokenization cannot continue, causing an
 exception to be raised. Depending on what you are doing, you may want to catch
 the exception and deal with it or let it bubble up to the caller.
 
 These are the exceptions that can be raised from `tokenize()`. An exception
-other than these likely indicates incorrect [input](#calling-syntax).
+other than these likely indicates incorrect [input](calling-syntax).
 
+(syntaxerror)=
 ### `SyntaxError`
 
 `SyntaxError` is raised when the input has an invalid encoding. The encoding
-is detected using the [`detect_encoding()`](helper-functions.html#detect-encoding-readline)
+is detected using the [`detect_encoding()`](detect-encoding)
 function, which uses either a [PEP
 263](https://www.python.org/dev/peps/pep-0263/) formatted comment at the
 beginning of the input (like `# -*- coding: utf-8 -*-`), or a Unicode BOM
@@ -234,8 +239,9 @@ Traceback (most recent call last):
 SyntaxError: unknown encoding: invalid
 ```
 
-See also [`ENCODING`](tokens.html#encoding).
+See also [`ENCODING`](encoding).
 
+(tokenerror)=
 ### `TokenError`
 
 `tokenize.TokenError` is raised in two situations. The only way to distinguish
@@ -246,7 +252,7 @@ typically desirable to process the tokens from `tokenize()` and handle
 `TokenError` as an end of input condition.
 
 The second argument of the exception (`e.args[1]`) is a tuple of the
-[start](#start-and-end) line and column number for the part of the input that
+[start](start-and-end) line and column number for the part of the input that
 was not tokenized due to the exception.
 
 1. **EOF in multi-line string**
@@ -283,7 +289,7 @@ was not tokenized due to the exception.
    does not necessarily stop parsing as soon as the input is syntactically
    invalid, as it only has limited knowledge of Python syntax. In fact, in the
    current implementation, this exception is only raised after all tokens have
-   been emitted, except possibly [`DEDENT`](tokens.html#dedent) tokens. This
+   been emitted, except possibly [`DEDENT`](dedent) tokens. This
    exception can be detected by checking `'statement' in e.args[0]`.
 
    ```py
@@ -314,7 +320,7 @@ was not tokenized due to the exception.
    ```
 
 The following example shows how `TokenError` might be caught and processed.
-See also the [examples](examples.html).
+See also the [examples](examples.md).
 
 ```py
 >>> def tokens_with_errors(s):
@@ -366,6 +372,7 @@ TokenInfo(type=61 (NL), string='\n', start=(4, 8), end=(4, 9), line='    pass\n'
 TokenError: Unclosed brace(s)
 ```
 
+(indentationerror)=
 ### `IndentationError`
 
 `tokenize()` raises `IndentationError` if an unindent does not match an outer
@@ -400,7 +407,7 @@ This error is difficult to recover from. If you need to handle tokenizing
 input with invalid indentation, my best recommendation is to instead use the
 [parso](https://parso.readthedocs.io/en/latest/) library, which does not raise
 `IndentationError` (it also does not raise any of the other exceptions
-discussed here). See also the [discussion](alternatives.html#parso) of parso in the
+discussed here). See also the [discussion](parso) of parso in the
 alternatives section.
 
 This is the only indentation error `tokenize` cares about. It does not care

@@ -56,7 +56,7 @@ I chose this example to demonstrate a few things:
     generator.
 
     However, it should be noted that tokenize does raise
-    [exceptions](usage.html#exceptions) on certain incomplete or invalid
+    [exceptions](exceptions) on certain incomplete or invalid
     Python statements. For example, if we omit the closing parenthesis,
     tokenize produces all the tokens as before, but then raises `TokenError`:
 
@@ -86,7 +86,7 @@ I chose this example to demonstrate a few things:
     parentheses are maintained. The parentheses around the `"a"` in the input
     string are completely unnecessary, but they are included as tokens anyway.
     This does not apply to whitespace, however
-    ([indentation](tokens.html#indent) is an exception to this, as we will see
+    ([indentation](indent) is an exception to this, as we will see
     later), although the whitespace between tokens can generally be deduced
     from the additional information procided in the `TokenInfo`.
 
@@ -105,14 +105,13 @@ I chose this example to demonstrate a few things:
     an example, consider that `1jand2` is valid Python---it's tokenized
     into three tokens, `NUMBER` (`1j`), `NAME` (`and`), and `NUMBER` (`2`)).
     One use-case of the `tokenize` module is to combine tokens into valid
-    Python using the [`untokenize`](helper-functions.html#untokenize-iterable)
+    Python using the [`untokenize`](untokenize)
     function, which handles these details automatically.
 
--   All parentheses and operators are tokenized as [`OP`](tokens.html#op).
-    Both variable names and keywords are tokenized as
-    [`NAME`](tokens.html#name). To determine the exact type of a token often
-    requires further inspection than simply looking at the `type` (this guide
-    will detail exactly how to do this).
+-   All parentheses and operators are tokenized as [`OP`](op). Both variable
+    names and keywords are tokenized as [`NAME`](name). To determine the exact
+    type of a token often requires further inspection than simply looking at
+    the `type` (this guide will detail exactly how to do this).
 
 -   The above example does not show it, but even code that can never be valid
     Python is often tokenized. For example:

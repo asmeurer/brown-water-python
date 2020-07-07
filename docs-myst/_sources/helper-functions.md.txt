@@ -4,6 +4,7 @@ Helper Functions
 In addition to the primary [`tokenize()`](usage.md) entry-point, the
 `tokenize` module has several additional helper functions.
 
+(untokenize)=
 ## `untokenize(iterable)`
 
 Converts an iterable of tokens into a bytes string. The string is encoded
@@ -49,8 +50,8 @@ b'sum ([[1 ,2 ]][0 ])'
 list of `TokenInfo` objects using only 2-tuples), but in this case, it will
 ignore the column information for the 5-tuples.
 
-Consider this simple example which replaces all [`STRING`](tokens.html#string)
-tokens with a list of [`STRING`](tokens.html#string) tokens of individual
+Consider this simple example which replaces all [`STRING`](string)
+tokens with a list of [`STRING`](string) tokens of individual
 characters (making use of implicit string concatenation). Once `untokenize()`
 encounters the newly added 2-tuple tokens, it ignores the column information
 and uses its own spacing.
@@ -82,19 +83,20 @@ is to translate code in a human-readable way, you must keep track of line and
 column information near the tokens you modify. The `tokenize` module does not
 provide any tools to help with this.
 
+(detect-encoding)=
 ## `detect_encoding(readline)`
 
 The [official
 docs](https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding)
 for this function are helpful. This is the function used by `tokenize()` to
-generate the [`ENCODING`](tokens.html#encoding) token. It can be used separately to
+generate the [`ENCODING`](encoding) token. It can be used separately to
 determine the encoding of some Python code. The calling syntax is the [same as
-for `tokenize()`](usage.html#calling-syntax).
+for `tokenize()`](calling-syntax).
 
 Returns a tuple of the encoding, and a list of any lines (in bytes) that it
 has read from the function (it will read at most two lines from the file).
 Invalid encodings will cause it to raise a
-[`SyntaxError`](usage.html#syntaxerror).
+[`SyntaxError`](syntaxerror).
 
 ```py
 >>> tokenize.detect_encoding(io.BytesIO(b'# -*- coding: ascii -*-').readline)
@@ -118,11 +120,12 @@ encoding. For example, if a file starts with a [Unicode BOM
 character](https://en.wikipedia.org/wiki/Byte_order_mark), `ast.parse` will
 fail if the file is not opened with the proper encoding.
 
+(tokenize-open)=
 ## `tokenize.open(filename)`
 
 This is an alternative to the built-in `open()` function that automatically
 opens a Python file in text mode with the correct encoding, as detected by
-[`detect_encoding()`](#detect-encoding-readline).
+[`detect_encoding()`](detect-encoding).
 
 This function is not particularly useful in conjunction with the `tokenize()`
 function (remember that `tokenize()` requires opening a file in binary mode,
@@ -138,7 +141,7 @@ The `tokenize` module can be called from the command line using `python -m
 tokenize filename.py`. This prints three columns, representing the start-end
 line and column positions, the token type, and the token string. If the `-e`
 flag is used, the token type for operators is the exact type. Otherwise the
-[`OP`](tokens.html#op) type is used.
+[`OP`](op) type is used.
 
 ```bash
 $ python -m tokenize example.py
@@ -197,7 +200,7 @@ file](https://github.com/python/cpython/blob/master/Grammar/Grammar) are
 represented by their string value (for instance, the grammar references `'('`
 instead of `LPAR`). The C parser re-uses the tokenize node types when it
 constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
-[`NT_OFFSET`](#nt-offset). You can see the list of nonterminal nodes
+[`NT_OFFSET`](nt-offset). You can see the list of nonterminal nodes
 in the
 [`graminit.h`](https://github.com/python/cpython/blob/master/Include/graminit.h)
 file, or by using the
@@ -293,6 +296,7 @@ or the `ast` representation:
 The following are included in the `token` module, but aren't particularly
 useful outside of the `parser` module.
 
+(nt-offset)=
 ### `NT_OFFSET`
 
 The greatest possible terminal token number. This is not useful unless you

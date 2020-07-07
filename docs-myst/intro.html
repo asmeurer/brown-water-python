@@ -101,7 +101,7 @@ from the point of view of a user of <code class="docutils literal notranslate"><
 processed as it is seen). This is why <code class="docutils literal notranslate"><span class="pre">tokenize.tokenize</span></code> produces a
 generator.</p>
 <p>However, it should be noted that tokenize does raise
-<a class="reference external" href="usage.html#exceptions">exceptions</a> on certain incomplete or invalid
+<a class="reference internal" href="usage.html#exceptions"><span class="std std-ref">exceptions</span></a> on certain incomplete or invalid
 Python statements. For example, if we omit the closing parenthesis,
 tokenize produces all the tokens as before, but then raises <code class="docutils literal notranslate"><span class="pre">TokenError</span></code>:</p>
 <!-- We have to skip this doctest, as it doesn't support output and an
@@ -128,7 +128,7 @@ Python code can deal with them properly.</p>
 parentheses are maintained. The parentheses around the <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> in the input
 string are completely unnecessary, but they are included as tokens anyway.
 This does not apply to whitespace, however
-(<a class="reference external" href="tokens.html#indent">indentation</a> is an exception to this, as we will see
+(<a class="reference internal" href="tokens.html#indent"><span class="std std-ref">indentation</span></a> is an exception to this, as we will see
 later), although the whitespace between tokens can generally be deduced
 from the additional information procided in the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>.</p></li>
 <li><p>The input need not be semantically meaningful in anyway. The input string,
@@ -145,13 +145,12 @@ especially when multi-line statements with indentation are considered (as
 an example, consider that <code class="docutils literal notranslate"><span class="pre">1jand2</span></code> is valid Python—it’s tokenized
 into three tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1j</span></code>), <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">and</span></code>), and <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code>)).
 One use-case of the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module is to combine tokens into valid
-Python using the <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize</span></code></a>
+Python using the <a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize</span></code></span></a>
 function, which handles these details automatically.</p></li>
-<li><p>All parentheses and operators are tokenized as <a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>.
-Both variable names and keywords are tokenized as
-<a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a>. To determine the exact type of a token often
-requires further inspection than simply looking at the <code class="docutils literal notranslate"><span class="pre">type</span></code> (this guide
-will detail exactly how to do this).</p></li>
+<li><p>All parentheses and operators are tokenized as <a class="reference internal" href="tokens.html#op"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">OP</span></code></span></a>. Both variable
+names and keywords are tokenized as <a class="reference internal" href="tokens.html#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a>. To determine the exact
+type of a token often requires further inspection than simply looking at
+the <code class="docutils literal notranslate"><span class="pre">type</span></code> (this guide will detail exactly how to do this).</p></li>
 <li><p>The above example does not show it, but even code that can never be valid
 Python is often tokenized. For example:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;a$b</span><span class="se">\n</span><span class="s1">&#39;</span>

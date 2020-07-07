@@ -58,7 +58,7 @@ character (like `r` or `f`) of the string.
 
 Let's walk through the code.
 
-We don't want the function to raise [`TokenError`](usage.html#tokenerror) on
+We don't want the function to raise [`TokenError`](tokenerror) on
 uncompleted delimiters or unclosed multi-line strings, so we wrap the loop in
 a `try` block.
 
@@ -74,11 +74,11 @@ instead to indicate it isn't used.
 ```
 
 The idea is to loop through the tokens until we find one that `(row, col)` is
-contained in (it is between the [`start`](usage.html#start-and-end) and
-[`end`](usage.html#start-and-end) tokens). This may not actually happen, for
+contained in (it is between the [`start`](start-and-end) and
+[`end`](start-and-end) tokens). This may not actually happen, for
 instance, if the `(row, col)` is inside whitespace that isn't tokenized.
 
-The first thing to check for is an [`ERRORTOKEN`](tokens.html#errortoken)
+The first thing to check for is an [`ERRORTOKEN`](errortoken)
 caused by an unclosed single-quoted string. If an unclosed single-quoted (not
 multi-line) string is encountered, that is, it is closed by a newline, like
 `"an unclosed string`, and we haven't reached our `(row, col)` yet, then we
@@ -95,7 +95,7 @@ modify this to only assume the rest of the line is inside the unclosed string.
 ```
 
 Now we have the main condition. If the `(row, col)` is between the
-[`start`](usage.html#start-and-end) and [`end`](usage.html#start-and-end) of a
+[`start`](start-and-end) and [`end`](start-and-end) of a
 token, we have gone as far as we need to.
 
 ```py
@@ -110,7 +110,7 @@ token and we can return `False`. This can be written as simply:
              return toknum == tokenize.STRING
 ```
 
-Now the exceptional case. If we see a [`TokenError`](usage.html#tokenerror),
+Now the exceptional case. If we see a [`TokenError`](tokenerror),
 we don't want the function to fail.
 
 ```py
@@ -118,7 +118,7 @@ except tokenize.TokenError as e:
 ```
 
 Remember that there are two possibilities for a
-[`TokenError`](usage.html#tokenerror). If `'statement'` is in the error
+[`TokenError`](tokenerror). If `'statement'` is in the error
 message, there is an unclosed brace somewhere. This case only happens when
 `tokenize()` has reached the end of the token stream, so if the above checks
 haven't returned `True` yet, then `(row, col)` must not be inside a `STRING`
@@ -127,7 +127,7 @@ token, so we should return `False`.
 If `'string'` is inside the error message, there is an unclosed multi-line
 string. In this case, we want to check if we are inside this string. We can
 check the start of the multi-line string in the
-[`TokenError`](usage.html#tokenerror). Remember that the message is in
+[`TokenError`](tokenerror). Remember that the message is in
 `e.args[0]` and the start is in `e.args[1]`. So we should return `True` in
 this case if the `(row, col)` are after the `e.args[1]`, and `False`
 otherwise.
@@ -215,7 +215,7 @@ True
 Let's go back to our motivating example from the [`tokenize` vs.
 Alternatives](alternatives) section, a function that prints the line
 numbers of every function definition. [Our
-function](alternatives.html#tokenize) looked like this (rewritten to use our
+function](tokenize) looked like this (rewritten to use our
 `tokenize_string()` helper):
 
 ```py
@@ -226,16 +226,16 @@ function](alternatives.html#tokenize) looked like this (rewritten to use our
 ```
 
 As we noted, this function works, but it doesn't handle any of our
-[error](tokens.html#errortoken) [conditions](usage.html#exceptions).
+[error](errortoken) [conditions](exceptions).
 
-Looking at our exceptions list, [`SynatxError`](usage.html#syntaxerror) and
-[`IndentationError`](usage.html#indentationerror) are unrecoverable, so we
-will just let them bubble up. However, [`TokenError`](usage.html#tokenerror)
+Looking at our exceptions list, [`SynatxError`](syntaxerror) and
+[`IndentationError`](indentationerror) are unrecoverable, so we
+will just let them bubble up. However, [`TokenError`](tokenerror)
 simply means that the input had an unclosed brace or multi-line string. In the
 former case, the tokenization reaches the end of the input before the
 exception is raised, and in the latter case, the remainder of the input is
 inside the unclosed multi-line string, so we can safely ignore
-[`TokenError`](usage.html#tokenerror) in either case.
+[`TokenError`](tokenerror) in either case.
 
 
 ```py
@@ -248,10 +248,10 @@ inside the unclosed multi-line string, so we can safely ignore
 ...         pass
 ```
 
-Finally, let's consider [`ERRORTOKEN`](tokens.html#errortoken) due to unclosed
+Finally, let's consider [`ERRORTOKEN`](errortoken) due to unclosed
 single-quoted strings. Our motivation for using `tokenize` to solve this
 problem is to handle incomplete or invalid Python (otherwise, we should use
-the [`ast` implementation](alternatives.html#ast), which is much simpler).
+the [`ast` implementation](ast), which is much simpler).
 Thus, it makes sense to treat unclosed single-quoted strings as if they were
 closed at the end of the line.
 
@@ -322,11 +322,12 @@ behavior.
 3
 ```
 
+(indentation-level)=
 ### Indentation Level
 
-[`INDENT`](tokens.html#indent) and [`DEDENT`](tokens.html#dedent) tokens are
+[`INDENT`](indent) and [`DEDENT`](dedent) tokens are
 always balanced in the token stream (unless there is an
-[`IndentationError`](usage.html#indentationerror)), so it is easy to detect the
+[`IndentationError`](indentationerror)), so it is easy to detect the
 indentation level of a block of code by incrementing and decrementing a
 counter.
 
@@ -397,8 +398,8 @@ To demonstrate the function, let's apply it to itself.
 
 An oddity worth mentioning: the comment near the end of the function is not
 considered indented more than the `except` line. Remember that the C parser,
-which `tokenize` is based on, ignores [comments](tokens.html#comment), so true
-indentations with [`INDENT`](tokens.html#indent) must occur on lines with real
+which `tokenize` is based on, ignores [comments](comment), so true
+indentations with [`INDENT`](indent) must occur on lines with real
 code.
 
 ### Mismatched Parentheses
@@ -643,14 +644,13 @@ These examples show some ways that you can modify the token stream.
 
 The general pattern we will apply here is to get the token stream from
 `tokenize()`, modify it in some way, and convert it back to a bytes string
-with [`untokenize()`](helper-functions.html#untokenize-iterable).
+with [`untokenize()`](untokenize).
 
-When new tokens are added,
-[`untokenize()`](helper-functions.html#untokenize-iterable) does not maintain
+When new tokens are added, [`untokenize()`](untokenize) does not maintain
 whitespace between tokens in a human-readable way. Doing this is possible, by
 keeping track of column offsets, but we will not bother with it here except
-where it is convenient. See the discussion in the
-[`untokenize()`](helper-functions.html#untokenize-iterable) section.
+where it is convenient. See the discussion in the [`untokenize()`](untokenize)
+section.
 
 ### Converting `^` to `**`
 
@@ -684,7 +684,7 @@ distinguish the two in the AST representation, because it does not keep track
 of redundant parentheses.
 
 We could do a simple `s.replace('^', '**')`, but this would [also
-replace](alternatives.html#regular-expressions) any occurrences of `^` in
+replace](regular-expressions) any occurrences of `^` in
 strings and comments.
 
 Instead, we can use `tokenize`. The replacement is quite easy to do:
@@ -706,11 +706,12 @@ Instead, we can use `tokenize`. The replacement is quite easy to do:
 ```
 
 Because we are replacing a 1-character token with a 2-character token,
-[`untokenize()`](helper-functions.html#untokenize-iterable) removes the
+[`untokenize()`](untokenize) removes the
 original whitespace and replaces it with its own. An exercise for the reader
 is to redefine the column offsets for the new token and all subsequent tokens
 on that line to avoid this issue.
 
+(wrapping-floats-with-decimal-decimal)=
 ### Wrapping floats with `decimal.Decimal`
 
 This example is modified from the [example in the standard library
@@ -764,9 +765,10 @@ avoid rounding the input. An exercise for the reader is to extend
 Decimal('1.0000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001')
 ```
 
+(extending-pythons-syntax)=
 ### Extending Python's Syntax
 
-Because `tokenize()` emits [`ERRORTOKEN`](tokens.html#errortoken) on any
+Because `tokenize()` emits [`ERRORTOKEN`](errortoken) on any
 unrecognized operators, it can be used to add extensions to the Python syntax.
 This can be challenging to do in general, as you may need to do significant
 parsing of the tokens to ensure that your new "operator" has the correct
@@ -807,10 +809,9 @@ symbols ➕, ➖, ➗, and ✖ to be used instead of their ASCII counterparts.
 '1 + 2 - 3/4*5'
 ```
 
-Because we are replacing a single character with a single character,
-we can use 5-tuples and keep the column offsets intact, making
-[`untokenize()`](helper-functions.html#untokenize-iterable) maintain
-the whitespace of the input.
+Because we are replacing a single character with a single character, we can
+use 5-tuples and keep the column offsets intact, making
+[`untokenize()`](untokenize) maintain the whitespace of the input.
 
 
 ```{note}
@@ -822,6 +823,8 @@ forces it to render as an emoji. The above example does not include the
 function to work with this.
 ```
 
+<!-- https://github.com/executablebooks/MyST-Parser/issues/181 -->
+(backporting-underscores)=
 #### Backporting Underscores in Numeric Literals
 
 Python 3.6 added a new syntactic feature that allows [underscores in numeric
@@ -841,25 +844,25 @@ For example,
 We can write a function using `tokenize` to backport this feature to Python
 3.5. Some experimentation shows how the new literals tokenize in Python 3.5:
 
-- `123_456` tokenizes as [`NUMBER`](tokens.html#number) (`123`) and
-  [`NAME`](tokens.html#name) (`_456`). In general, multiple underscores
+- `123_456` tokenizes as [`NUMBER`](number) (`123`) and
+  [`NAME`](name) (`_456`). In general, multiple underscores
   between tokens will tokenize like this.
 
 - Additionally, underscores are allowed after base specifiers, like `0x_1`.
-  This also tokenizes as [`NUMBER`](tokens.html#number) (`0`) and
-  [`NAME`](tokens.html#name) (`x_1`). Since [`NUMBER`](tokens.html#number) and
-  [`NAME`](tokens.html#name) tokens cannot appear next to one another in valid
+  This also tokenizes as [`NUMBER`](number) (`0`) and
+  [`NAME`](name) (`x_1`). Since [`NUMBER`](number) and
+  [`NAME`](name) tokens cannot appear next to one another in valid
   Python, we can simply combine them when they do.
 
 - Finally, if an underscore appears before the `.` in a floating point
-  literal, like `1_2.3_4` it will tokenize [`NUMBER`](tokens.html#number)
-  (`1`), [`NAME`](tokens.html#name) (`_2`), [`NUMBER`](tokens.html#number)
-  (`.3`), [`NAME`](tokens.html#name) (`_4`).
+  literal, like `1_2.3_4` it will tokenize [`NUMBER`](number)
+  (`1`), [`NAME`](name) (`_2`), [`NUMBER`](number)
+  (`.3`), [`NAME`](name) (`_4`).
 
-Note that in this example, the [`ENCODING`](tokens.html#encoding) token allows
+Note that in this example, the [`ENCODING`](encoding) token allows
 us to access `result[-1]` unconditionally, as we know there must always be at
-least this token already processed before any [`NAME`](tokens.html#name)
-token. This is often a useful property the [`ENCODING`](tokens.html#encoding)
+least this token already processed before any [`NAME`](name)
+token. This is often a useful property the [`ENCODING`](encoding)
 allows us to take advantage of.
 
 We do some basic checks here to not allow spaces before underscores and double
@@ -923,18 +926,14 @@ still invalid syntax in Python 3.5 (`123abc`).
 ...
 ```
 
-Note that by reusing the [`start`](usage.html#start-and-end) and
-[`end`](usage.html#start-and-end) tokens, we are able to make
-[`untokenize()`](helper-functions.html#untokenize-iterable) keep the
-whitespace, even though characters were removed.
-[`untokenize()`](helper-functions.html#untokenize-iterable) only uses the
-differences between [`end`](usage.html#start-and-end) and
-[`start`](usage.html#start-and-end) to determine how many spaces to add
-between tokens, not their absolute values (remember that
-[`untokenize()`](helper-functions.html#untokenize-iterable) only requires the
-[`start`](usage.html#start-and-end) and [`end`](usage.html#start-and-end)
-tuples to be nondecreasing; it doesn't care if the actual column values are
-correct).
+Note that by reusing the [`start`](start-and-end) and [`end`](start-and-end)
+tokens, we are able to make [`untokenize()`](untokenize) keep the whitespace,
+even though characters were removed. [`untokenize()`](untokenize) only uses
+the differences between [`end`](start-and-end) and [`start`](start-and-end) to
+determine how many spaces to add between tokens, not their absolute values
+(remember that [`untokenize()`](untokenize) only requires the
+[`start`](start-and-end) and [`end`](start-and-end) tuples to be
+nondecreasing; it doesn't care if the actual column values are correct).
 
 ```py
 >>> s = '1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.'
