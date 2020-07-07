@@ -158,7 +158,7 @@ unless you have the `(toknum, tokstr, start, end, line)` order memorized.
 
 #### `type`
 
-The token types are outlined in detail in the [Token Types](tokens.html)
+The token types are outlined in detail in the [Token Types](tokens.md)
 section.
 
 #### `string`
@@ -314,7 +314,7 @@ was not tokenized due to the exception.
    ```
 
 The following example shows how `TokenError` might be caught and processed.
-See also the [examples](examples.html).
+See also the [examples](examples.md).
 
 ```py
 >>> def tokens_with_errors(s):
