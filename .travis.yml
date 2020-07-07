@@ -25,7 +25,7 @@ matrix:
       sudo: true
 
 install:
-  - pip install sphinx=2 doctr recommonmark
+  - pip install sphinx==2 doctr recommonmark
   - source activate test-environment
   # Needed for show_relabars, https://github.com/bitprophet/alabaster/pull/135
   - pip install -U git+https://github.com/asmeurer/alabaster/@rellinks-classes
