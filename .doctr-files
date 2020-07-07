@@ -1,7 +1,7 @@
 ./_sources/alternatives.md.txt
 ./_sources/examples.md.txt
 ./_sources/helper-functions.md.txt
-./_sources/index.rst.txt
+./_sources/index.md.txt
 ./_sources/intro.md.txt
 ./_sources/tokens.md.txt
 ./_sources/usage.md.txt
@@ -13,7 +13,7 @@
 ./_static/doctools.js
 ./_static/documentation_options.js
 ./_static/file.png
-./_static/jquery-3.4.1.js
+./_static/jquery-3.5.1.js
 ./_static/jquery.js
 ./_static/language_data.js
 ./_static/minus.png

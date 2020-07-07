@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>What is Tokenization? &#8212; Brown Water Python  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="tokenize vs. Alternatives" href="alternatives.html" />
@@ -63,7 +64,7 @@ language.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;(&quot;a&quot;) + True -</span><span class="se">\n</span><span class="s1">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
 <span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(1, 0), end=(1, 1), line=&#39;(&quot;a&quot;) + True -\n&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&#39;&quot;a&quot;&#39;, start=(1, 1), end=(1, 4), line=&#39;(&quot;a&quot;) + True -\n&#39;)</span>
@@ -100,13 +101,14 @@ from the point of view of a user of <code class="docutils literal notranslate"><
 processed as it is seen). This is why <code class="docutils literal notranslate"><span class="pre">tokenize.tokenize</span></code> produces a
 generator.</p>
 <p>However, it should be noted that tokenize does raise
-<a class="reference external" href="usage.html#exceptions">exceptions</a> on certain incomplete or invalid
+<a class="reference internal" href="usage.html#exceptions"><span class="std std-ref">exceptions</span></a> on certain incomplete or invalid
 Python statements. For example, if we omit the closing parenthesis,
 tokenize produces all the tokens as before, but then raises <code class="docutils literal notranslate"><span class="pre">TokenError</span></code>:</p>
 <!-- We have to skip this doctest, as it doesn't support output and an
-exception in the same snippet. --><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;(&quot;a&quot; + True -&#39;</span>
+exception in the same snippet. -->
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;(&quot;a&quot; + True -&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span> 
 <span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=54 (OP), string=&#39;(&#39;, start=(1, 0), end=(1, 1), line=&#39;(&quot;a&quot; + True -&#39;)</span>
 <span class="go">TokenInfo(type=3 (STRING), string=&#39;&quot;a&quot;&#39;, start=(1, 1), end=(1, 4), line=&#39;(&quot;a&quot; + True -&#39;)</span>
@@ -126,7 +128,7 @@ Python code can deal with them properly.</p>
 parentheses are maintained. The parentheses around the <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> in the input
 string are completely unnecessary, but they are included as tokens anyway.
 This does not apply to whitespace, however
-(<a class="reference external" href="tokens.html#indent">indentation</a> is an exception to this, as we will see
+(<a class="reference internal" href="tokens.html#indent"><span class="std std-ref">indentation</span></a> is an exception to this, as we will see
 later), although the whitespace between tokens can generally be deduced
 from the additional information procided in the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code>.</p></li>
 <li><p>The input need not be semantically meaningful in anyway. The input string,
@@ -143,18 +145,17 @@ especially when multi-line statements with indentation are considered (as
 an example, consider that <code class="docutils literal notranslate"><span class="pre">1jand2</span></code> is valid Python—it’s tokenized
 into three tokens, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">1j</span></code>), <code class="docutils literal notranslate"><span class="pre">NAME</span></code> (<code class="docutils literal notranslate"><span class="pre">and</span></code>), and <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code>)).
 One use-case of the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module is to combine tokens into valid
-Python using the <a class="reference external" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize</span></code></a>
+Python using the <a class="reference internal" href="helper-functions.html#untokenize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">untokenize</span></code></span></a>
 function, which handles these details automatically.</p></li>
-<li><p>All parentheses and operators are tokenized as <a class="reference external" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a>.
-Both variable names and keywords are tokenized as
-<a class="reference external" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a>. To determine the exact type of a token often
-requires further inspection than simply looking at the <code class="docutils literal notranslate"><span class="pre">type</span></code> (this guide
-will detail exactly how to do this).</p></li>
+<li><p>All parentheses and operators are tokenized as <a class="reference internal" href="tokens.html#op"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">OP</span></code></span></a>. Both variable
+names and keywords are tokenized as <a class="reference internal" href="tokens.html#name"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></span></a>. To determine the exact
+type of a token often requires further inspection than simply looking at
+the <code class="docutils literal notranslate"><span class="pre">type</span></code> (this guide will detail exactly how to do this).</p></li>
 <li><p>The above example does not show it, but even code that can never be valid
 Python is often tokenized. For example:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;a$b</span><span class="se">\n</span><span class="s1">&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="p">)</span>
 <span class="go">TokenInfo(type=62 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
 <span class="go">TokenInfo(type=1 (NAME), string=&#39;a&#39;, start=(1, 0), end=(1, 1), line=&#39;a$b\n&#39;)</span>
 <span class="go">TokenInfo(type=59 (ERRORTOKEN), string=&#39;$&#39;, start=(1, 1), end=(1, 2), line=&#39;a$b\n&#39;)</span>
@@ -178,8 +179,8 @@ a very low level abstraction of the Python syntax. The same token may have
 different meanings in different contexts. For example, in <code class="docutils literal notranslate"><span class="pre">[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code>
 token is part of a list literal, whereas in <code class="docutils literal notranslate"><span class="pre">a[1]</span></code>, the <code class="docutils literal notranslate"><span class="pre">[</span></code> token is part
 of a slice. If you want to manipulate higher level abstractions, you might
-want to use the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module instead (see the <a class="reference external" href="alternatives.html">next
-section</a>).</p></li>
+want to use the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module instead (see the <a class="reference internal" href="alternatives.html"><span class="doc std std-doc">next
+section</span></a>).</p></li>
 </ul>
 <p>This guide does not detail how things are tokenized, that is, how <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>
 chooses which tokens to use for a given input string, except in the ways that
@@ -335,7 +336,7 @@ official Python documentation.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -344,7 +345,7 @@ official Python documentation.</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

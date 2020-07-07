@@ -15,6 +15,7 @@ definition, that is, every occurrence of the `def` keyword. Such a tool
 could be used by a text editor to aid in jumping to function
 definitions, for instance.
 
+(regular-expressions)=
 ## Regular Expressions
 
 Using naive regular expression parsing, you might start with something
@@ -86,8 +87,9 @@ a piece of (incomplete) Python code has any mismatched parentheses or braces.
 In this case, you definitely don't want to do a naive matching of parentheses
 in the source as a whole, as a single "mismatched" parenthesis in a string
 could confuse the entire engine, even if the source as Python is itself valid.
-We will see this example in more detail [later](examples.html#mismatched-parentheses).
+We will see this example in more detail [later](mismatched-parentheses).
 
+(tokenize)=
 ## Tokenize
 
 Now let's consider the tokenize module. It's quite easy to search for
@@ -121,17 +123,18 @@ depends on what your use-case is and what trade-offs you are willing to
 accept.
 
 It should also be noted that the above function is not fully correct, as it
-does not properly handle [`ERRORTOKEN`](tokens.html#errortoken)s or
-[exceptions](usage.html#exceptions). We will see
-[later](examples.html#line-numbers) how to fix it.
+does not properly handle [`ERRORTOKEN`](errortoken)s or
+[exceptions](exceptions). We will see
+[later](line-numbers) how to fix it.
 
+(ast)=
 ## AST
 
 The `ast` module can also be used to avoid the pitfalls of detecting false
 positives. In fact, the `ast` module will have NO false positives. The price
 that is paid for this is that the input code to the `ast` module must be
 completely valid Python code. Incomplete or syntactically invalid code will
-cause `ast.parse` to raise a `SyntaxError`. <sup id="a1" style="font-size:12px">[1](#f1)</sup>
+cause `ast.parse` to raise a `SyntaxError`.[^a1]
 
 ```py
 >>> import ast
@@ -178,42 +181,42 @@ cons" because some things may be pros (like the ability to work with
 incomplete code) or cons (like accepting invalid Python), depending on
 what you are trying to do.
 
-```eval_rst
+```{list-table}
+---
+header-rows: 1
+---
 
-.. list-table::
-   :header-rows: 1
-
-   * - Regular expressions
-     - ``tokenize``
-     - ``ast``
-   * - Can work with incomplete or invalid Python.
-     - Can work with incomplete or invalid Python, though you may need to
-       watch for ``ERRORTOKEN`` and exceptions.
-     - Requires syntactically valid Python (with a few minor exceptions).
-   * - Regular expressions can be difficult to write correctly and maintain.
-     - Token types are easy to detect. Larger patterns must be amalgamated
-       from the tokens. Some tokens mean different things in different contexts.
-     - AST has high-level abstractions such as ``ast.walk`` and
-       ``NodeTransformer`` that make visiting and transforming nodes easy,
-       even in complicated ways.
-   * - Regular expressions work directly on the source code, so it is trivial
-       to do lossless source code transformations with them.
-     - Lossless source code transformations are possible with ``tokenize``, as all the
-       whitespace can be inferred from the ``TokenInfo`` tuples. However, it can
-       often be tricky to do in practice, as it requires manually accounting
-       for column offsets.
-     - Lossless source code transformations are impossible with ``ast``, as it completely
-       drops whitespace, redundant parentheses, and comments (among other
-       things).
-   * - Impossible to detect edge cases in all circumstances, such as code that
-       actually is inside of a string.
-     - Edge cases can be avoided. Differentiates between actual code and code
-       inside a comment or string. Can still be fooled by invalid Python (though this can
-       often be considered a `garbage in, garbage out
-       <https://en.wikipedia.org/wiki/Garbage_in,_garbage_out>`_ scenario).
-     - Edge cases can be avoided effortlessly, as only valid Python can even
-       be parsed, and each node class represents that syntactic construct
-       exactly.
+* - Regular expressions
+  - ``tokenize``
+  - ``ast``
+* - Can work with incomplete or invalid Python.
+  - Can work with incomplete or invalid Python, though you may need to
+    watch for ``ERRORTOKEN`` and exceptions.
+  - Requires syntactically valid Python (with a few minor exceptions).
+* - Regular expressions can be difficult to write correctly and maintain.
+  - Token types are easy to detect. Larger patterns must be amalgamated
+    from the tokens. Some tokens mean different things in different contexts.
+  - AST has high-level abstractions such as ``ast.walk`` and
+    ``NodeTransformer`` that make visiting and transforming nodes easy,
+    even in complicated ways.
+* - Regular expressions work directly on the source code, so it is trivial
+    to do lossless source code transformations with them.
+  - Lossless source code transformations are possible with ``tokenize``, as all the
+    whitespace can be inferred from the ``TokenInfo`` tuples. However, it can
+    often be tricky to do in practice, as it requires manually accounting
+    for column offsets.
+  - Lossless source code transformations are impossible with ``ast``, as it completely
+    drops whitespace, redundant parentheses, and comments (among other
+    things).
+* - Impossible to detect edge cases in all circumstances, such as code that
+    actually is inside of a string.
+  - Edge cases can be avoided. Differentiates between actual code and code
+    inside a comment or string. Can still be fooled by invalid Python (though this can
+    often be considered a [garbage in, garbage
+    out](https://en.wikipedia.org/wiki/Garbage_in,_garbage_out) scenario).
+  - Edge cases can be avoided effortlessly, as only valid Python can even
+    be parsed, and each node class represents that syntactic construct
+    exactly.
 ```
 
 As you can see, all three can be valid depending on what you are trying to do.
@@ -228,6 +231,7 @@ In addition to `tokenize` and `ast`, the Python standard library has several
 [other modules](https://docs.python.org/3/library/language.html) which can aid
 in inspecting and manipulating Python source code.
 
+(parso)=
 ### Parso
 
 As a final note, David Halter's
@@ -235,7 +239,7 @@ As a final note, David Halter's
 alternative implementation of the standard library `tokenize` and `ast`
 modules for Python. Parso has many advantages over the standard library, such
 as round-trippable AST, a `tokenize()` function that has fewer \"gotchas\" and
-doesn't raise [exceptions](usage.html#exceptions), the ability to detect
+doesn't raise [exceptions](exceptions), the ability to detect
 multiple syntax errors in a single block of code, the ability to parse Python
 code for a different version of Python than the one that is running, and more.
 If you don\'t mind an external dependency and want to save yourself potential
@@ -246,7 +250,6 @@ library `tokenize` or `ast`. Parso's tokenizer
 it.
 
 
-<small>[1.](#a1) <span id="f1"></span> Actually there are a handful of syntax errors that
-     cannot be detected by the AST due to their context sensitive nature, such
-     as `break` outside of a loop. These are found only after compiling the
-     AST.</small>
+[^a1]: Actually there are a handful of syntax errors that cannot be detected
+       by the AST due to their context sensitive nature, such as `break`
+       outside of a loop. These are found only after compiling the AST.
