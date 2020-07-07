@@ -226,7 +226,7 @@ they are on the same line.</p></li>
 </div>
 </div>
 <div class="section" id="line-numbers">
-<h3><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code><a class="headerlink" href="#line-numbers" title="Permalink to this headline">¶</a></h3>
+<span id="id1"></span><h3><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code><a class="headerlink" href="#line-numbers" title="Permalink to this headline">¶</a></h3>
 <p>Let’s go back to our motivating example from the <a class="reference internal" href="alternatives.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs.
 Alternatives</span></a> section, a function that prints the line
 numbers of every function definition. <a class="reference internal" href="alternatives.html#tokenize"><span class="std std-ref">Our
@@ -328,7 +328,7 @@ behavior.</p>
 </div>
 </div>
 <div class="section" id="indentation-level">
-<span id="id1"></span><h3>Indentation Level<a class="headerlink" href="#indentation-level" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h3>Indentation Level<a class="headerlink" href="#indentation-level" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="tokens.html#indent"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></span></a> and <a class="reference internal" href="tokens.html#dedent"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code></span></a> tokens are
 always balanced in the token stream (unless there is an
 <a class="reference internal" href="usage.html#indentationerror"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></span></a>), so it is easy to detect the
@@ -403,7 +403,7 @@ indentations with <a class="reference internal" href="tokens.html#indent"><span 
 code.</p>
 </div>
 <div class="section" id="mismatched-parentheses">
-<h3>Mismatched Parentheses<a class="headerlink" href="#mismatched-parentheses" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h3>Mismatched Parentheses<a class="headerlink" href="#mismatched-parentheses" title="Permalink to this headline">¶</a></h3>
 <p>This example shows how to use a very important tool when processing tokens, a
 stack. A <a class="reference external" href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)"><em>stack</em></a>
 is a data structure that operates as Last In, First Out. A stack has two basic
@@ -673,7 +673,7 @@ is to redefine the column offsets for the new token and all subsequent tokens
 on that line to avoid this issue.</p>
 </div>
 <div class="section" id="wrapping-floats-with-decimal-decimal">
-<span id="id2"></span><h3>Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code><a class="headerlink" href="#wrapping-floats-with-decimal-decimal" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3>Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code><a class="headerlink" href="#wrapping-floats-with-decimal-decimal" title="Permalink to this headline">¶</a></h3>
 <p>This example is modified from the <a class="reference external" href="https://docs.python.org/3/library/tokenize.html#examples">example in the standard library
 docs</a> for
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>. It is a good example for modifying tokens because the logic is not
