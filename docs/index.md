@@ -22,7 +22,7 @@ and [underscores in numeric
 literals](https://docs.python.org/3.6/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals)).
 Take `123_456`. This will tokenize as a single token in Python 3.6+, `NUMBER`
 (`123_456`), but in Python 3.5, it tokenizes as two tokens, `NUMBER` (`123`)
-and `NAME` (`_456`) (see the reference for the [`NUMBER`](tokens.html#number)
+and `NAME` (`_456`) (see the reference for the [`NUMBER`](number)
 token type for more info).
 
 Most of what is written here will also apply to earlier Python 3 versions,

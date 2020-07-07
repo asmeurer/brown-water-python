@@ -1,7 +1,7 @@
 Helper Functions
 ================
 
-In addition to the primary [`tokenize()`](usage.html) entry-point, the
+In addition to the primary [`tokenize()`](usage.md) entry-point, the
 `tokenize` module has several additional helper functions.
 
 ## `untokenize(iterable)`
@@ -207,7 +207,7 @@ The [`parser`](https://docs.python.org/3/library/parser.html) module can be
 used from within Python to access the parse tree. The `parser` and `symbol`
 modules aren't discussed further in this guide because the `tokenize` and
 `ast` modules are generally preferable for almost all use-cases (see the
-[alternatives](alternatives.html) section). In particular, the `parser` module
+[alternatives](alternatives.md) section). In particular, the `parser` module
 has all the same limitations as the `ast` module (it requires complete,
 syntactically valid Python code), but is much more difficult to work with. The
 `parser` module exists mainly as a relic from before the `ast` module existed
@@ -282,7 +282,7 @@ like for the code `("a") + True`.
  ['ENDMARKER', '']]
 ```
 
-Compare this to the `tokenize` representation seen in the [intro](intro.html),
+Compare this to the `tokenize` representation seen in the [intro](intro.md),
 or the `ast` representation:
 
 ```py

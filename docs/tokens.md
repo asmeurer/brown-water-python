@@ -130,6 +130,7 @@ True
 True
 ```
 
+(number)=
 ### `NUMBER`
 
 The `NUMBER` token type is used for any numeric literal, including (decimal) integer literals,
