@@ -33,7 +33,6 @@ install:
 script:
   # - set -e
   - cd docs
-  - make doctest # tests rst files only
   - ./run_doctests *.md
   - if [[ "${BUILD}" == "true" ]]; then
         make html;
