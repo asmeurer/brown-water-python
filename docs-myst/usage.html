@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usage &#8212; Brown Water Python  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -192,7 +193,7 @@ unless you have the <code class="docutils literal notranslate"><span class="pre"
 <h3><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> Fields<a class="headerlink" href="#tokeninfo-fields" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="type">
 <h4><code class="docutils literal notranslate"><span class="pre">type</span></code><a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h4>
-<p>The token types are outlined in detail in the <code class="xref any docutils literal notranslate"><span class="pre">Token</span> <span class="pre">Types</span></code>
+<p>The token types are outlined in detail in the <span class="xref myst">Token Types</span>
 section.</p>
 </div>
 <div class="section" id="string">
@@ -336,7 +337,7 @@ exception can be detected by checking <code class="docutils literal notranslate"
 </li>
 </ol>
 <p>The following example shows how <code class="docutils literal notranslate"><span class="pre">TokenError</span></code> might be caught and processed.
-See also the <code class="xref any docutils literal notranslate"><span class="pre">examples</span></code>.</p>
+See also the <span class="xref myst">examples</span>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">tokens_with_errors</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
@@ -613,7 +614,7 @@ tabs and spaces.</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

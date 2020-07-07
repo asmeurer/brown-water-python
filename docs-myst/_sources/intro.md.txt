@@ -145,7 +145,7 @@ I chose this example to demonstrate a few things:
     token is part of a list literal, whereas in `a[1]`, the `[` token is part
     of a slice. If you want to manipulate higher level abstractions, you might
     want to use the `ast` module instead (see the [next
-    section](alternatives.html)).
+    section](alternatives.md)).
 
 This guide does not detail how things are tokenized, that is, how `tokenize`
 chooses which tokens to use for a given input string, except in the ways that

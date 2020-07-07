@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helper Functions &#8212; Brown Water Python  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -52,12 +53,12 @@
             
   <div class="section" id="helper-functions">
 <h1>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h1>
-<p>In addition to the primary <code class="xref any docutils literal notranslate"><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code></code> entry-point, the
+<p>In addition to the primary <a class="reference internal" href="usage.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">tokenize()</span></code></span></a> entry-point, the
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module has several additional helper functions.</p>
 <div class="section" id="untokenize-iterable">
 <h2><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code><a class="headerlink" href="#untokenize-iterable" title="Permalink to this headline">¶</a></h2>
 <p>Converts an iterable of tokens into a bytes string. The string is encoded
-using the encoding of the <a class="reference internal" href="tokens.html#encoding"><span class="std std-ref">ENCODING</span></a> token. If there
+using the encoding of the <a class="reference internal" href="tokens.html#encoding"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></span></a> token. If there
 is no <code class="docutils literal notranslate"><span class="pre">ENCODING</span></code> token present, the string is returned decoded (a <code class="docutils literal notranslate"><span class="pre">str</span></code>
 instead of <code class="docutils literal notranslate"><span class="pre">bytes</span></code>). The iterable can be <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> objects, or tuples of
 <code class="docutils literal notranslate"><span class="pre">(TOKEN_TYPE,</span> <span class="pre">TOKEN_STRING)</span></code>.</p>
@@ -239,7 +240,7 @@ file, or by using the
 used from within Python to access the parse tree. The <code class="docutils literal notranslate"><span class="pre">parser</span></code> and <code class="docutils literal notranslate"><span class="pre">symbol</span></code>
 modules aren’t discussed further in this guide because the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and
 <code class="docutils literal notranslate"><span class="pre">ast</span></code> modules are generally preferable for almost all use-cases (see the
-<code class="xref any docutils literal notranslate"><span class="pre">alternatives</span></code> section). In particular, the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module
+<a class="reference internal" href="alternatives.html"><span class="doc std std-doc">alternatives</span></a> section). In particular, the <code class="docutils literal notranslate"><span class="pre">parser</span></code> module
 has all the same limitations as the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module (it requires complete,
 syntactically valid Python code), but is much more difficult to work with. The
 <code class="docutils literal notranslate"><span class="pre">parser</span></code> module exists mainly as a relic from before the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module existed
@@ -311,7 +312,7 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 <span class="go"> [&#39;ENDMARKER&#39;, &#39;&#39;]]</span>
 </pre></div>
 </div>
-<p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <code class="xref any docutils literal notranslate"><span class="pre">intro</span></code>,
+<p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <a class="reference internal" href="intro.html"><span class="doc std std-doc">intro</span></a>,
 or the <code class="docutils literal notranslate"><span class="pre">ast</span></code> representation:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span> 
 <span class="go">&quot;Module(body=[Expr(value=BinOp(left=Str(s=&#39;a&#39;), op=Add(), right=NameConstant(value=True)))])&quot;</span>
@@ -505,7 +506,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
