@@ -18,7 +18,7 @@ help:
 html: exact_type_table.txt
 
 livehtml: exact_type_table.txt
-	sphinx-autobuild -b html $(ALLSPHINXOPTS) "$(SOURCEDIR)" $(BUILDDIR)/html
+	sphinx-autobuild -B -p 0 -b html $(ALLSPHINXOPTS) "$(SOURCEDIR)" $(BUILDDIR)/html
 
 exact_type_table.txt: exact_type_table.py
 	python exact_type_table.py

@@ -39,22 +39,12 @@ release = ''
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'myst_parser',
     'sphinx.ext.doctest',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
-
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-from recommonmark.parser import CommonMarkParser
-from recommonmark.transform import AutoStructify
-
-source_parsers = {
-    '.md': CommonMarkParser,
-}
 
 enable_eval_rst = True
 source_suffix = ['.rst', '.md']
@@ -125,7 +115,7 @@ html_theme_options = {
     # Fonts
     'font_family': "Palatino, 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif",
     'font_size': '18px',
-    'code_font_family': "'Menlo', 'Deja Vu Sans Mono', 'Consolas', 'Bitstream Vera Sans Mono', monospace",
+    'code_font_family': "'Menlo', 'DejaVu Sans Mono', 'Consolas', 'Bitstream Vera Sans Mono', monospace",
     'code_font_size': '0.8em',
     }
 
@@ -203,15 +193,3 @@ texinfo_documents = [
      author, 'BrownWaterPython', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-# -- Extension configuration -------------------------------------------------
-
-def setup(app):
-    app.add_config_value('recommonmark_config', {
-        'enable_eval_rst': True,
-        'auto_toc_tree_section': 'Contents',
-        'enable_math': False,
-        'enable_inline_math': False,
-        }, True)
-    app.add_transform(AutoStructify)
