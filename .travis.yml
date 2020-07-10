@@ -24,20 +24,26 @@ matrix:
       dist: xenial
       sudo: true
 
+  allow_failures:
+    - python: "nightly"
+
 install:
-  - pip install sphinx==2 doctr recommonmark
+  - pip install sphinx doctr myst_parser
   - source activate test-environment
   # Needed for show_relabars, https://github.com/bitprophet/alabaster/pull/135
   - pip install -U git+https://github.com/asmeurer/alabaster/@rellinks-classes
 
 script:
-  - set -e
+  # - set -e
   - cd docs
-  - make doctest # tests rst files only
   - ./run_doctests *.md
   - if [[ "${BUILD}" == "true" ]]; then
         make html;
         make linkcheck;
         cd ..;
-        doctr deploy --built-docs docs/_build/html .;
+        if [[ "${TRAVIS_BRANCH}" == "master" ]]; then
+            doctr deploy --built-docs docs/_build/html .;
+        else
+            doctr deploy --no-require-master --built-docs docs/_build/html "docs-$TRAVIS_BRANCH";
+        fi
     fi
