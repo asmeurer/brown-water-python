@@ -100,9 +100,9 @@ the examples:</p>
 <div class="section" id="endmarker">
 <span id="id2"></span><h3><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code><a class="headerlink" href="#endmarker" title="Permalink to this headline">¶</a></h3>
 <p>This is always the last token emitted by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, unless it raises an
-exception. The <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">line</span></code> attributes are always <code class="docutils literal notranslate"><span class="pre">''</span></code>. The <code class="docutils literal notranslate"><span class="pre">start</span></code> and
-<code class="docutils literal notranslate"><span class="pre">end</span></code> lines are always one more than the total number of lines in the input,
-and the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> columns are always 0.</p>
+<a class="reference internal" href="usage.html#exceptions"><span class="std std-ref">exception</span></a>. The <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">line</span></code> attributes are always <code class="docutils literal notranslate"><span class="pre">''</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> lines are always one more than the total number of lines
+in the input, and the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> columns are always 0.</p>
 <p>For most applications it is not necessary to explicitly worry about
 <code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code>, because <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> stops iteration after the last token is
 yielded.</p>
