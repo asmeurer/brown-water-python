@@ -86,7 +86,8 @@ html_theme = 'alabaster'
 html_theme_options = {
     'github_user': 'asmeurer',
     'github_repo': 'brown-water-python',
-    'github_banner': True,
+    'github_banner': False,
+    'github_button': False,
     'logo': 'water-python.jpg',
     'logo_name': True,
     'show_related': True,
@@ -122,6 +123,7 @@ html_theme_options = {
     'code_font_size': '0.8em',
     }
 
+html_favicon = "_static/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
