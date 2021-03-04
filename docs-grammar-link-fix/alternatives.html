@@ -1,0 +1,466 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tokenize vs. Alternatives &#8212; Brown Water Python  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="What is Tokenization?" href="intro.html" />
+ 
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+    <script type="text/javascript" src="_static/copybutton.js"></script>
+ 
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="intro.html" title="Previous document">What is Tokenization?</a>
+        </li>
+        <li>
+          <a href="usage.html" title="Next document">Usage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="tokenize-vs-alternatives">
+<h1><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. Alternatives<a class="headerlink" href="#tokenize-vs-alternatives" title="Permalink to this headline">¶</a></h1>
+<p>There are generally three methods one might use when trying to find or
+modify syntactic constructs in Python source code:</p>
+<ul class="simple">
+<li><p>Naive matching with regular expressions</p></li>
+<li><p>Using a lexical tokenizer (i.e., the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module)</p></li>
+<li><p>Using an abstract syntax tree (AST) (i.e, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module)</p></li>
+</ul>
+<p>Let us look at each of these three options to see the strengths and
+weaknesses of each. Suppose you wanted to write a tool that takes a
+piece of Python code and prints the line number of every function
+definition, that is, every occurrence of the <code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. Such a tool
+could be used by a text editor to aid in jumping to function
+definitions, for instance.</p>
+<div class="section" id="regular-expressions">
+<span id="id1"></span><h2>Regular Expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h2>
+<p>Using naive regular expression parsing, you might start with something
+like</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">re</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FUNCTION</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;def &#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then using regular expression matching, find all lines that match and
+print their line numbers.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_regex</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">FUNCTION</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<span class="gp">... </span>            <span class="nb">print</span><span class="p">(</span><span class="n">lineno</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="gp">... </span><span class="s2">def f(x):</span>
+<span class="gp">... </span><span class="s2">    pass</span>
+<span class="gp">...</span><span class="s2"></span>
+<span class="gp">... </span><span class="s2">class MyClass:</span>
+<span class="gp">... </span><span class="s2">    def g(self):</span>
+<span class="gp">... </span><span class="s2">        pass</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_regex</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>You might notice some issues with this approach. First off, the regular
+expression is not correct. It will also match lines like <code class="docutils literal notranslate"><span class="pre">undef</span> <span class="pre">+</span> <span class="pre">1</span></code>.
+You could modify the regex to make it more correct, for instance,
+<code class="docutils literal notranslate"><span class="pre">r'^</span> <span class="pre">*def</span> <span class="pre">'</span></code> (this is still not completely right; do you see why?).</p>
+<p>Getting the regular expression correct to match even this simple language
+construct is challenging, but there is a more serious issue. Say you had a
+string template to generate some Python code.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">code_tricky</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
+<span class="gp">... </span><span class="s1">FUNCTION_SKELETON = &quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s1">def </span><span class="si">{name}</span><span class="s1">(</span><span class="si">{args}</span><span class="s1">):</span>
+<span class="gp">... </span><span class="s1">    </span><span class="si">{body}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The regular expression would detect this as a function.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_regex</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>In general, it’s very difficult, if not impossible, for a regular
+expression to distinguish between a text that is inside a string and
+text that isn’t.</p>
+<p>This may or may not actually bother you, depending on your application.
+Function definitions may not appear inside of strings very often, but other
+code constructs appear in strings (and comments) quite often. To quickly
+digress to a secondary example, the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module can be used to check if
+a piece of (incomplete) Python code has any mismatched parentheses or braces.
+In this case, you definitely don’t want to do a naive matching of parentheses
+in the source as a whole, as a single “mismatched” parenthesis in a string
+could confuse the entire engine, even if the source as Python is itself valid.
+We will see this example in more detail <a class="reference internal" href="examples.html#mismatched-parentheses"><span class="std std-ref">later</span></a>.</p>
+</div>
+<div class="section" id="tokenize">
+<span id="id2"></span><h2>Tokenize<a class="headerlink" href="#tokenize" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s consider the tokenize module. It’s quite easy to search for
+the <code class="docutils literal notranslate"><span class="pre">def</span></code> keyword. We just look for <code class="docutils literal notranslate"><span class="pre">NAME</span></code> tokens where the token string
+is <code class="docutils literal notranslate"><span class="pre">'def'</span></code>. Let’s write a function that does this and look at what it
+produces for the above code examples:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tokenize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_numbers_tokenize</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">inputcode</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">and</span> <span class="n">tok</span><span class="o">.</span><span class="n">string</span> <span class="o">==</span> <span class="s1">&#39;def&#39;</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="nb">print</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_tokenize</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_numbers_tokenize</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span> <span class="c1"># No lines are printed</span>
+</pre></div>
+</div>
+<p>We see that it isn’t fooled by the code that is in a string, because
+strings are tokenized as separate entities.</p>
+<p>As noted above, tokenize can handle incomplete or invalid Python. Our
+regex solution is also capable of this. This can be a boon (code that is
+being input into a text editor is generally incomplete if the user
+hasn’t finished typing it yet), or a bane (incorrect Python code, such
+as <code class="docutils literal notranslate"><span class="pre">def</span></code> used as a variable, could trick the above function). It really
+depends on what your use-case is and what trade-offs you are willing to
+accept.</p>
+<p>It should also be noted that the above function is not fully correct, as it
+does not properly handle <a class="reference internal" href="tokens.html#errortoken"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></span></a>s or
+<a class="reference internal" href="usage.html#exceptions"><span class="std std-ref">exceptions</span></a>. We will see
+<a class="reference internal" href="examples.html#line-numbers"><span class="std std-ref">later</span></a> how to fix it.</p>
+</div>
+<div class="section" id="ast">
+<span id="id3"></span><h2>AST<a class="headerlink" href="#ast" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ast</span></code> module can also be used to avoid the pitfalls of detecting false
+positives. In fact, the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module will have NO false positives. The price
+that is paid for this is that the input code to the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module must be
+completely valid Python code. Incomplete or syntactically invalid code will
+cause <code class="docutils literal notranslate"><span class="pre">ast.parse</span></code> to raise a <code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>.<a class="footnote-reference brackets" href="#a1" id="id4">1</a></p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">line_number_ast</span><span class="p">(</span><span class="n">inputcode</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">p</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inputcode</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">):</span>
+<span class="gp">... </span>            <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span> <span class="c1"># No lines are printed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="gp">... </span><span class="s2">def test(</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+  File <span class="nb">&quot;&lt;unknown&gt;&quot;</span>, line <span class="m">1</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span>
+             <span class="o">^</span>
+<span class="gr">SyntaxError</span>: <span class="n">unexpected EOF while parsing</span>
+</pre></div>
+</div>
+<p>Another thing to note about the <code class="docutils literal notranslate"><span class="pre">ast</span></code> module is that certain semantically
+irrelevant constructs such as redundant parentheses and extraneous whitespace
+are lost in the AST representation. This can be an advantage if you don’t care
+about them, or a disadvantage if you do. <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> does not remove redundant
+parentheses. It does remove whitespace, but it can easily be reconstructed
+from the information in the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> tuple.</p>
+<p>If you want to learn more about the AST module, look at Thomas Kluyver’s
+<a class="reference external" href="https://greentreesnakes.readthedocs.io/en/latest/">Green Tree Snakes</a>, which
+is this guide’s counterpart for the Python <code class="docutils literal notranslate"><span class="pre">ast</span></code> module.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>The following table outlines the differences between using regular
+expression matching, <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, and <code class="docutils literal notranslate"><span class="pre">ast</span></code> to find or modify constructs
+in Python source code. No one method is the correct solution. It depends
+on what trade-offs you want to make between false positives, false
+negatives, maintainability, and the ability or inability to work with
+invalid or incomplete code. The table is not organized as “pros and
+cons” because some things may be pros (like the ability to work with
+incomplete code) or cons (like accepting invalid Python), depending on
+what you are trying to do.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Regular expressions</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">tokenize</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">ast</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Can work with incomplete or invalid Python.</p></td>
+<td><p>Can work with incomplete or invalid Python, though you may need to
+watch for <code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code> and exceptions.</p></td>
+<td><p>Requires syntactically valid Python (with a few minor exceptions).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Regular expressions can be difficult to write correctly and maintain.</p></td>
+<td><p>Token types are easy to detect. Larger patterns must be amalgamated
+from the tokens. Some tokens mean different things in different contexts.</p></td>
+<td><p>AST has high-level abstractions such as <code class="docutils literal notranslate"><span class="pre">ast.walk</span></code> and
+<code class="docutils literal notranslate"><span class="pre">NodeTransformer</span></code> that make visiting and transforming nodes easy,
+even in complicated ways.</p></td>
+</tr>
+<tr class="row-even"><td><p>Regular expressions work directly on the source code, so it is trivial
+to do lossless source code transformations with them.</p></td>
+<td><p>Lossless source code transformations are possible with <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, as all the
+whitespace can be inferred from the <code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> tuples. However, it can
+often be tricky to do in practice, as it requires manually accounting
+for column offsets.</p></td>
+<td><p>Lossless source code transformations are impossible with <code class="docutils literal notranslate"><span class="pre">ast</span></code>, as it completely
+drops whitespace, redundant parentheses, and comments (among other
+things).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Impossible to detect edge cases in all circumstances, such as code that
+actually is inside of a string.</p></td>
+<td><p>Edge cases can be avoided. Differentiates between actual code and code
+inside a comment or string. Can still be fooled by invalid Python (though this can
+often be considered a <a class="reference external" href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out">garbage in, garbage
+out</a> scenario).</p></td>
+<td><p>Edge cases can be avoided effortlessly, as only valid Python can even
+be parsed, and each node class represents that syntactic construct
+exactly.</p></td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, all three can be valid depending on what you are trying to do.
+With that being said, I hope I can convince you that using <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> is
+almost always preferable to using regular expressions to match Python code.
+Code written using the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module will be more correct on edge cases,
+more maintainable, and easier to extend.</p>
+<div class="section" id="other-standard-library-modules">
+<h3>Other Standard Library Modules<a class="headerlink" href="#other-standard-library-modules" title="Permalink to this headline">¶</a></h3>
+<p>In addition to <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code>, the Python standard library has several
+<a class="reference external" href="https://docs.python.org/3/library/language.html">other modules</a> which can aid
+in inspecting and manipulating Python source code.</p>
+</div>
+<div class="section" id="parso">
+<span id="id5"></span><h3>Parso<a class="headerlink" href="#parso" title="Permalink to this headline">¶</a></h3>
+<p>As a final note, David Halter’s
+<a class="reference external" href="https://parso.readthedocs.io/en/latest/">parso</a> library contains an
+alternative implementation of the standard library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> and <code class="docutils literal notranslate"><span class="pre">ast</span></code>
+modules for Python. Parso has many advantages over the standard library, such
+as round-trippable AST, a <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> function that has fewer “gotchas” and
+doesn’t raise <a class="reference internal" href="usage.html#exceptions"><span class="std std-ref">exceptions</span></a>, the ability to detect
+multiple syntax errors in a single block of code, the ability to parse Python
+code for a different version of Python than the one that is running, and more.
+If you don’t mind an external dependency and want to save yourself potential
+headaches, it is worth considering using <code class="docutils literal notranslate"><span class="pre">parso</span></code> instead of the standard
+library <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> or <code class="docutils literal notranslate"><span class="pre">ast</span></code>. Parso’s tokenizer
+(<code class="docutils literal notranslate"><span class="pre">parso.python.tokenize.tokenize()</span></code>) is based on the standard library
+<code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, so even if you use it, this guide may be helpful in understanding
+it.</p>
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="a1"><span class="brackets"><a class="fn-backref" href="#id4">1</a></span></dt>
+<dd><p>Actually there are a handful of syntax errors that cannot be detected
+by the AST due to their context sensitive nature, such as <code class="docutils literal notranslate"><span class="pre">break</span></code>
+outside of a loop. These are found only after compiling the AST.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="intro.html" title="Previous document">What is Tokenization?</a>
+        </li>
+        <li>
+          <a href="usage.html" title="Next document">Usage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/water-python.jpg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Brown Water Python</h1>
+    
+  </a>
+</p>
+
+
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Tokenization?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code> vs. Alternatives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#regular-expressions">Regular Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tokenize">Tokenize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ast">AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#other-standard-library-modules">Other Standard Library Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parso">Parso</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#calling-syntax">Calling Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#tokeninfo"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#tokeninfo-fields"><code class="docutils literal notranslate"><span class="pre">TokenInfo</span></code> Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usage.html#type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="usage.html#string"><code class="docutils literal notranslate"><span class="pre">string</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="usage.html#start-and-end"><code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="usage.html#line"><code class="docutils literal notranslate"><span class="pre">line</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#syntaxerror"><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#tokenerror"><code class="docutils literal notranslate"><span class="pre">TokenError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#indentationerror"><code class="docutils literal notranslate"><span class="pre">IndentationError</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tokens.html">The Token Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tok-name-dictionary">The <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokens.html#the-tokens">The Tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#endmarker"><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#name"><code class="docutils literal notranslate"><span class="pre">NAME</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#number"><code class="docutils literal notranslate"><span class="pre">NUMBER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#string"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tokens.html#error-behavior">Error Behavior</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#newline"><code class="docutils literal notranslate"><span class="pre">NEWLINE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#indent"><code class="docutils literal notranslate"><span class="pre">INDENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#dedent"><code class="docutils literal notranslate"><span class="pre">DEDENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#rarrow"><code class="docutils literal notranslate"><span class="pre">RARROW</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#ellipsis"><code class="docutils literal notranslate"><span class="pre">ELLIPSIS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#op"><code class="docutils literal notranslate"><span class="pre">OP</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#await"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#async"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#type-ignore"><code class="docutils literal notranslate"><span class="pre">TYPE_IGNORE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#type-comment"><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#errortoken"><code class="docutils literal notranslate"><span class="pre">ERRORTOKEN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#comment"><code class="docutils literal notranslate"><span class="pre">COMMENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#nl"><code class="docutils literal notranslate"><span class="pre">NL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#encoding"><code class="docutils literal notranslate"><span class="pre">ENCODING</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tokens.html#n-tokens"><code class="docutils literal notranslate"><span class="pre">N_TOKENS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="helper-functions.html">Helper Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="helper-functions.html#untokenize-iterable"><code class="docutils literal notranslate"><span class="pre">untokenize(iterable)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helper-functions.html#detect-encoding-readline"><code class="docutils literal notranslate"><span class="pre">detect_encoding(readline)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helper-functions.html#tokenize-open-filename"><code class="docutils literal notranslate"><span class="pre">tokenize.open(filename)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="helper-functions.html#command-line-usage">Command Line Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="helper-functions.html#helper-functions-related-to-the-parser-module">Helper Functions Related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="helper-functions.html#nt-offset"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="helper-functions.html#isterminal-x"><code class="docutils literal notranslate"><span class="pre">ISTERMINAL(x)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="helper-functions.html#isnonterminal-x"><code class="docutils literal notranslate"><span class="pre">ISNONTERMINAL(x)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="helper-functions.html#iseof-x"><code class="docutils literal notranslate"><span class="pre">ISEOF(x)</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#processing-tokens">Processing Tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#inside-string"><code class="docutils literal notranslate"><span class="pre">inside_string()</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#exercises">Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#line-numbers"><code class="docutils literal notranslate"><span class="pre">line_numbers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#indentation-level">Indentation Level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#mismatched-parentheses">Mismatched Parentheses</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#exercise">Exercise</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#modifying-tokens">Modifying Tokens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#converting-to">Converting <code class="docutils literal notranslate"><span class="pre">^</span></code> to <code class="docutils literal notranslate"><span class="pre">**</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#wrapping-floats-with-decimal-decimal">Wrapping floats with <code class="docutils literal notranslate"><span class="pre">decimal.Decimal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#extending-python-s-syntax">Extending Python’s Syntax</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#emoji-math">Emoji Math</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples.html#backporting-underscores-in-numeric-literals">Backporting Underscores in Numeric Literals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    
+    <div class="footer">
+      &copy;2018, Aaron Meurer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/alternatives.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+    <span id="forkongithub"><a href="https://github.com/asmeurer/brown-water-python">Fork me on GitHub</a></span>
+  </body>
+</html>
