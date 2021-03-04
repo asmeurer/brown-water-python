@@ -38,6 +38,7 @@ SKIP35 = register_optionflag("SKIP35")
 SKIP36 = register_optionflag("SKIP36")
 SKIP37 = register_optionflag("SKIP37")
 SKIP38 = register_optionflag("SKIP38")
+SKIP39 = register_optionflag("SKIP39")
 
 PY37 = sys.version_info[1] >= 7
 PY38 = sys.version_info[1] >= 8
@@ -50,9 +51,11 @@ elif sys.version_info[1] == 7:
     SKIP_THIS_VERSION = SKIP37
 elif sys.version_info[1] == 8:
     SKIP_THIS_VERSION = SKIP38
+elif sys.version_info[1] == 9:
+    SKIP_THIS_VERSION = SKIP39
 else:
     warnings.warn("Unrecognized Python version: %s.%s" % sys.version_info[:2])
-    SKIP_THIS_VERSION = SKIP38
+    SKIP_THIS_VERSION = SKIP39
 
 orig_run = DocTestRunner.run
 

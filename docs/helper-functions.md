@@ -185,6 +185,12 @@ $ python -m tokenize -e example.py
 ```
 ## Helper Functions Related to the `parser` Module
 
+```{warning}
+The [`symbol`](https://docs.python.org/3/library/symbol.html) and
+[`parser`](https://docs.python.org/3/library/parser.html) modules are
+deprecated as of Python 3.9.
+```
+
 The `token` and `tokenize` module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.
@@ -220,10 +226,10 @@ The following example gives an idea of what the `parser` syntax trees look
 like for the code `("a") + True`.
 
 ```py
->>> import parser
+>>> import parser # doctest: +SKIP39
 >>> import pprint
 >>> import token
->>> import symbol
+>>> import symbol # doctest: +SKIP39
 >>> def pretty(st):
 ...     l = st.tolist()
 ...
@@ -239,8 +245,8 @@ like for the code `("a") + True`.
 ...
 ...     toname(l)
 ...     return l
->>> st = parser.expr('("a") + True')
->>> pprint.pprint(pretty(st)) # doctest: +SKIP35, +SKIP36, +SKIP37
+>>> st = parser.expr('("a") + True') # doctest: +SKIP39
+>>> pprint.pprint(pretty(st)) # doctest: +SKIP35, +SKIP36, +SKIP37, +SKIP39
 ['eval_input',
  ['testlist',
   ['test',
@@ -289,8 +295,8 @@ Compare this to the `tokenize` representation seen in the [intro](intro.md),
 or the `ast` representation:
 
 ```py
->>> ast.dump(ast.parse('("a") + True')) # doctest: +SKIP38
-"Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
+>>> ast.dump(ast.parse('("a") + True')) # doctest: +SKIP35, +SKIP36, +SKIP37, +SKIP38
+"Module(body=[Expr(value=BinOp(left=Constant(value='a'), op=Add(), right=Constant(value=True)))], type_ignores=[])"
 ```
 
 The following are included in the `token` module, but aren't particularly
