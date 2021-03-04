@@ -36,11 +36,11 @@
                 &nbsp;
   <nav id="rellinks">
     <ul>
-        <li>
+        <li class="related prev">
           &larr;
           <a href="tokens.html" title="Previous document">The Token Types</a>
         </li>
-        <li>
+        <li class="related next">
           <a href="examples.html" title="Next document">Examples</a>
           &rarr;
         </li>
@@ -221,7 +221,8 @@ $ python -m tokenize -e example.py
 <p class="admonition-title">Warning</p>
 <p>The <a class="reference external" href="https://docs.python.org/3/library/symbol.html"><code class="docutils literal notranslate"><span class="pre">symbol</span></code></a> and
 <a class="reference external" href="https://docs.python.org/3/library/parser.html"><code class="docutils literal notranslate"><span class="pre">parser</span></code></a> modules are
-deprecated as of Python 3.9.</p>
+deprecated as of Python 3.9, as it has moved to a PEG parser. The below does
+not necessarily apply to newer Python versions.</p>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
@@ -232,14 +233,14 @@ outside of the C parser.</p>
 the parsing (they are leaf nodes, that is, no other node in the grammar can be
 contained in them). These nodes are represented in uppercase. Every terminal
 node in the grammar is a token type, for example, <code class="docutils literal notranslate"><span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">NUMBER</span></code>, or
-<code class="docutils literal notranslate"><span class="pre">STRING</span></code>. Most terminal nodes in the <a class="reference external" href="https://github.com/python/cpython/blob/master/Grammar/Grammar">grammar
+<code class="docutils literal notranslate"><span class="pre">STRING</span></code>. Most terminal nodes in the <a class="reference external" href="https://github.com/python/cpython/blob/3.9/Grammar/Grammar">grammar
 file</a> are
 represented by their string value (for instance, the grammar references <code class="docutils literal notranslate"><span class="pre">'('</span></code>
 instead of <code class="docutils literal notranslate"><span class="pre">LPAR</span></code>). The C parser re-uses the tokenize node types when it
 constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
 <a class="reference internal" href="#nt-offset"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">NT_OFFSET</span></code></span></a>. You can see the list of nonterminal nodes
 in the
-<a class="reference external" href="https://github.com/python/cpython/blob/master/Include/graminit.h"><code class="docutils literal notranslate"><span class="pre">graminit.h</span></code></a>
+<a class="reference external" href="https://github.com/python/cpython/blob/3.9/Include/graminit.h"><code class="docutils literal notranslate"><span class="pre">graminit.h</span></code></a>
 file, or by using the
 <a class="reference external" href="https://docs.python.org/3/library/symbol.html"><code class="docutils literal notranslate"><span class="pre">symbol</span></code></a> module.</p>
 <p>The <a class="reference external" href="https://docs.python.org/3/library/parser.html"><code class="docutils literal notranslate"><span class="pre">parser</span></code></a> module can be
@@ -363,11 +364,11 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
                 &nbsp;
   <nav id="rellinks">
     <ul>
-        <li>
+        <li class="related prev">
           &larr;
           <a href="tokens.html" title="Previous document">The Token Types</a>
         </li>
-        <li>
+        <li class="related next">
           <a href="examples.html" title="Next document">Examples</a>
           &rarr;
         </li>
