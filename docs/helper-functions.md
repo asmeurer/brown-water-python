@@ -188,7 +188,8 @@ $ python -m tokenize -e example.py
 ```{warning}
 The [`symbol`](https://docs.python.org/3/library/symbol.html) and
 [`parser`](https://docs.python.org/3/library/parser.html) modules are
-deprecated as of Python 3.9.
+deprecated as of Python 3.9, as it has moved to a PEG parser. The below does
+not necessarily apply to newer Python versions.
 ```
 
 The `token` and `tokenize` module mimic the modules in the C parser. Some
@@ -202,13 +203,13 @@ the parsing (they are leaf nodes, that is, no other node in the grammar can be
 contained in them). These nodes are represented in uppercase. Every terminal
 node in the grammar is a token type, for example, `NAME`, `NUMBER`, or
 `STRING`. Most terminal nodes in the [grammar
-file](https://github.com/python/cpython/blob/master/Grammar/Grammar) are
+file](https://github.com/python/cpython/blob/3.9/Grammar/Grammar) are
 represented by their string value (for instance, the grammar references `'('`
 instead of `LPAR`). The C parser re-uses the tokenize node types when it
 constructs its internal parse tree. Nonterminal nodes are represented by numbers greater than
 [`NT_OFFSET`](nt-offset). You can see the list of nonterminal nodes
 in the
-[`graminit.h`](https://github.com/python/cpython/blob/master/Include/graminit.h)
+[`graminit.h`](https://github.com/python/cpython/blob/3.9/Include/graminit.h)
 file, or by using the
 [`symbol`](https://docs.python.org/3/library/symbol.html) module.
 

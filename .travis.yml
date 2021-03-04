@@ -28,10 +28,9 @@ matrix:
     - python: "nightly"
 
 install:
-  - pip install sphinx doctr myst_parser
+  # The git alabster is needed for show_relabars, https://github.com/bitprophet/alabaster/pull/135
+  - pip install sphinx doctr myst_parser git+https://github.com/asmeurer/alabaster/@rellinks-classes
   - source activate test-environment
-  # Needed for show_relabars, https://github.com/bitprophet/alabaster/pull/135
-  - pip install -U git+https://github.com/asmeurer/alabaster/@rellinks-classes
 
 script:
   # - set -e
