@@ -86,7 +86,8 @@ html_theme = 'alabaster'
 html_theme_options = {
     'github_user': 'asmeurer',
     'github_repo': 'brown-water-python',
-    'github_banner': True,
+    'github_banner': False,
+    'github_button': False,
     'logo': 'water-python.jpg',
     'logo_name': True,
     'show_related': True,
