@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Examples &#8212; Brown Water Python  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Helper Functions" href="helper-functions.html" />
@@ -638,9 +637,9 @@ nodes with
 this will not work, because <code class="docutils literal notranslate"><span class="pre">^</span></code> has a different precedence than <code class="docutils literal notranslate"><span class="pre">**</span></code>:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;x**2 + 1&#39;</span><span class="p">))</span> 
-<span class="go">&quot;Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id=&#39;x&#39;, ctx=Load()), op=Pow(), right=Constant(value=2, kind=None)), op=Add(), right=Constant(value=1, kind=None)))], type_ignores=[])&quot;</span>
+<span class="go">&quot;Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id=&#39;x&#39;, ctx=Load()), op=Pow(), right=Constant(value=2)), op=Add(), right=Constant(value=1)))], type_ignores=[])&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;x^2 + 1&#39;</span><span class="p">))</span> 
-<span class="go">&quot;Module(body=[Expr(value=BinOp(left=Name(id=&#39;x&#39;, ctx=Load()), op=BitXor(), right=BinOp(left=Constant(value=2, kind=None), op=Add(), right=Constant(value=1, kind=None))))], type_ignores=[])&quot;</span>
+<span class="go">&quot;Module(body=[Expr(value=BinOp(left=Name(id=&#39;x&#39;, ctx=Load()), op=BitXor(), right=BinOp(left=Constant(value=2), op=Add(), right=Constant(value=1))))], type_ignores=[])&quot;</span>
 </pre></div>
 </div>
 <p>This is difficult to read, but it basically says that <code class="docutils literal notranslate"><span class="pre">x**2</span> <span class="pre">+</span> <span class="pre">1</span></code> is parsed
@@ -1034,7 +1033,7 @@ nondecreasing; it doesn’t care if the actual column values are correct).</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

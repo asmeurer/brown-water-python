@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tokenize vs. Alternatives &#8212; Brown Water Python  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Usage" href="usage.html" />
@@ -179,11 +178,11 @@ cause <code class="docutils literal notranslate"><span class="pre">ast.parse</sp
 <span class="go">5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="n">code_tricky</span><span class="p">)</span> <span class="c1"># No lines are printed</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">line_number_ast</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
-<span class="gp">... </span><span class="s2">def test():</span>
+<span class="gp">... </span><span class="s2">def test(</span>
 <span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
   File <span class="nb">&quot;&lt;unknown&gt;&quot;</span>, line <span class="m">1</span>
-    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-              <span class="o">^</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span>
+             <span class="o">^</span>
 <span class="gr">SyntaxError</span>: <span class="n">unexpected EOF while parsing</span>
 </pre></div>
 </div>
@@ -282,7 +281,7 @@ library <code class="docutils literal notranslate"><span class="pre">tokenize</s
 (<code class="docutils literal notranslate"><span class="pre">parso.python.tokenize.tokenize()</span></code>) is based on the standard library
 <code class="docutils literal notranslate"><span class="pre">tokenize</span></code>, so even if you use it, this guide may be helpful in understanding
 it.</p>
-<hr class="docutils" />
+<hr class="footnotes docutils" />
 <dl class="footnote brackets">
 <dt class="label" id="a1"><span class="brackets"><a class="fn-backref" href="#id4">1</a></span></dt>
 <dd><p>Actually there are a handful of syntax errors that cannot be detected
@@ -449,7 +448,7 @@ outside of a loop. These are found only after compiling the AST.</p>
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

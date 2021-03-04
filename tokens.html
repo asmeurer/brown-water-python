@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Token Types &#8212; Brown Water Python  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Helper Functions" href="helper-functions.html" />
@@ -60,10 +59,7 @@ relied on. Instead, refer to tokens by their variable names, and use the
 <code class="docutils literal notranslate"><span class="pre">tok_name</span></code> dictionary to get the name of a token type. The exact integer value
 could change between Python versions, for instance, if new tokens are added or
 removed (and indeed, in recent versions of Python, they have). In the examples
-below, the token number shown in the output is the number from Python 3.8
-(except in the examples that do not run in Python 3.8). I note this only for
-clarity: one should always use the token variable names and never use the
-integer value of a token directly.</p>
+below, the token number shown in the output is the number from Python 3.9.</p>
 <p>The reason the token types are represented this way is that the actual
 tokenizer used by the Python interpreter is not the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module; it is a
 much more <a class="reference external" href="https://github.com/python/cpython/blob/master/Parser/tokenizer.c">efficient, but equivalent
@@ -104,9 +100,9 @@ the examples:</p>
 <div class="section" id="endmarker">
 <span id="id2"></span><h3><code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code><a class="headerlink" href="#endmarker" title="Permalink to this headline">¶</a></h3>
 <p>This is always the last token emitted by <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code>, unless it raises an
-exception. The <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">line</span></code> attributes are always <code class="docutils literal notranslate"><span class="pre">''</span></code>. The <code class="docutils literal notranslate"><span class="pre">start</span></code> and
-<code class="docutils literal notranslate"><span class="pre">end</span></code> lines are always one more than the total number of lines in the input,
-and the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> columns are always 0.</p>
+<a class="reference internal" href="usage.html#exceptions"><span class="std std-ref">exception</span></a>. The <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">line</span></code> attributes are always <code class="docutils literal notranslate"><span class="pre">''</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> lines are always one more than the total number of lines
+in the input, and the <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> columns are always 0.</p>
 <p>For most applications it is not necessary to explicitly worry about
 <code class="docutils literal notranslate"><span class="pre">ENDMARKER</span></code>, because <code class="docutils literal notranslate"><span class="pre">tokenize()</span></code> stops iteration after the last token is
 yielded.</p>
@@ -235,7 +231,7 @@ full input.</p>
 <span class="go">TokenInfo(type=0 (ENDMARKER), string=&#39;&#39;, start=(2, 0), end=(2, 0), line=&#39;&#39;)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ast</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;1.0000000000000001&#39;</span><span class="p">))</span> 
-<span class="go">&#39;Module(body=[Expr(value=Constant(value=1.0, kind=None))], type_ignores=[])&#39;</span>
+<span class="go">&#39;Module(body=[Expr(value=Constant(value=1.0))], type_ignores=[])&#39;</span>
 </pre></div>
 </div>
 <p>This can be used, for instance, to wrap floating point numbers with a type
@@ -843,7 +839,7 @@ characters.</p>
 <p>In Python 3.5 and 3.6, <code class="docutils literal notranslate"><span class="pre">await</span></code> and <code class="docutils literal notranslate"><span class="pre">async</span></code> are pseudo-keywords. To aid the
 transition in the addition of new keywords, <code class="docutils literal notranslate"><span class="pre">await</span></code> and <code class="docutils literal notranslate"><span class="pre">async</span></code> were kept as
 valid variable names outside of an <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">def</span></code> blocks.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># This is valid Python in Python 3.5 and 3.6. It isn&#39;t in Python 3.7.</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># This is valid Python in Python 3.5 and 3.6. It isn&#39;t in Python 3.7+.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">async</span> <span class="o">=</span> <span class="mi">1</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">print_tokens</span><span class="p">(</span><span class="s2">&quot;async = 1</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> 
 <span class="go">TokenInfo(type=59 (ENCODING), string=&#39;utf-8&#39;, start=(0, 0), end=(0, 0), line=&#39;&#39;)</span>
@@ -1180,7 +1176,7 @@ tokens <a class="reference internal" href="#op"><span class="std std-ref"><code 
 <a class="reference internal" href="#type-comment"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TYPE_COMMENT</span></code></span></a>, and re-added <a class="reference internal" href="#await"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">AWAIT</span></code></span></a> and
 <a class="reference internal" href="#async"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">ASYNC</span></code></span></a>.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="c1"># In PYthon 3.5 and 3.6</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">N_TOKENS</span> <span class="c1"># doctest: +SKIP37, +SKIP38</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tokenize</span><span class="o">.</span><span class="n">N_TOKENS</span> <span class="c1"># doctest: +SKIP37, +SKIP38, +SKIP39</span>
 <span class="mi">60</span>
 </pre></div>
 </div>
@@ -1189,12 +1185,12 @@ tokens <a class="reference internal" href="#op"><span class="std std-ref"><code 
 <span class="go">58</span>
 </pre></div>
 </div>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.8</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># In Python 3.8 and 3.9</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tokenize</span><span class="o">.</span><span class="n">N_TOKENS</span> 
 <span class="go">63</span>
 </pre></div>
 </div>
-<hr class="docutils" />
+<hr class="footnotes docutils" />
 <dl class="footnote brackets">
 <dt class="label" id="f1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id13">1</a>,<a href="#id14">2</a>)</span></dt>
 <dd><p>Due to a <a class="reference external" href="https://bugs.python.org/issue24622">bug</a>, the <code class="docutils literal notranslate"><span class="pre">exact_type</span></code>
@@ -1364,7 +1360,7 @@ for <code class="docutils literal notranslate"><span class="pre">RARROW</span></
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

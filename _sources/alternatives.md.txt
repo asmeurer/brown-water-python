@@ -148,13 +148,13 @@ cause `ast.parse` to raise a `SyntaxError`.[^a1]
 5
 >>> line_number_ast(code_tricky) # No lines are printed
 >>> line_number_ast("""\
-... def test():
+... def test(
 ... """)
 Traceback (most recent call last):
   ...
   File "<unknown>", line 1
-    def test():
-              ^
+    def test(
+             ^
 SyntaxError: unexpected EOF while parsing
 ```
 

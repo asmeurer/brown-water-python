@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Helper Functions &#8212; Brown Water Python  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Examples" href="examples.html" />
@@ -217,6 +216,12 @@ $ python -m tokenize -e example.py
 </div>
 <div class="section" id="helper-functions-related-to-the-parser-module">
 <h2>Helper Functions Related to the <code class="docutils literal notranslate"><span class="pre">parser</span></code> Module<a class="headerlink" href="#helper-functions-related-to-the-parser-module" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <a class="reference external" href="https://docs.python.org/3/library/symbol.html"><code class="docutils literal notranslate"><span class="pre">symbol</span></code></a> and
+<a class="reference external" href="https://docs.python.org/3/library/parser.html"><code class="docutils literal notranslate"><span class="pre">parser</span></code></a> modules are
+deprecated as of Python 3.9.</p>
+</div>
 <p>The <code class="docutils literal notranslate"><span class="pre">token</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.</p>
@@ -247,10 +252,10 @@ syntactically valid Python code), but is much more difficult to work with. The
 in the standard library (<code class="docutils literal notranslate"><span class="pre">ast</span></code> was introduced in Python 2.5).</p>
 <p>The following example gives an idea of what the <code class="docutils literal notranslate"><span class="pre">parser</span></code> syntax trees look
 like for the code <code class="docutils literal notranslate"><span class="pre">(&quot;a&quot;)</span> <span class="pre">+</span> <span class="pre">True</span></code>.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">parser</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">parser</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">token</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">symbol</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">symbol</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">l</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="gp">...</span>
@@ -266,7 +271,7 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="n">toname</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">l</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">pretty</span><span class="p">(</span><span class="n">st</span><span class="p">))</span> 
 <span class="go">[&#39;eval_input&#39;,</span>
 <span class="go"> [&#39;testlist&#39;,</span>
@@ -315,7 +320,7 @@ like for the code <code class="docutils literal notranslate"><span class="pre">(
 <p>Compare this to the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> representation seen in the <a class="reference internal" href="intro.html"><span class="doc std std-doc">intro</span></a>,
 or the <code class="docutils literal notranslate"><span class="pre">ast</span></code> representation:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;(&quot;a&quot;) + True&#39;</span><span class="p">))</span> 
-<span class="go">&quot;Module(body=[Expr(value=BinOp(left=Str(s=&#39;a&#39;), op=Add(), right=NameConstant(value=True)))])&quot;</span>
+<span class="go">&quot;Module(body=[Expr(value=BinOp(left=Constant(value=&#39;a&#39;), op=Add(), right=Constant(value=True)))], type_ignores=[])&quot;</span>
 </pre></div>
 </div>
 <p>The following are included in the <code class="docutils literal notranslate"><span class="pre">token</span></code> module, but aren’t particularly
@@ -506,7 +511,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">x</sp
       &copy;2018, Aaron Meurer.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

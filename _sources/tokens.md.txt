@@ -8,10 +8,7 @@ relied on. Instead, refer to tokens by their variable names, and use the
 `tok_name` dictionary to get the name of a token type. The exact integer value
 could change between Python versions, for instance, if new tokens are added or
 removed (and indeed, in recent versions of Python, they have). In the examples
-below, the token number shown in the output is the number from Python 3.8
-(except in the examples that do not run in Python 3.8). I note this only for
-clarity: one should always use the token variable names and never use the
-integer value of a token directly.
+below, the token number shown in the output is the number from Python 3.9.
 
 The reason the token types are represented this way is that the actual
 tokenizer used by the Python interpreter is not the `tokenize` module; it is a
@@ -60,9 +57,9 @@ the examples:
 ### `ENDMARKER`
 
 This is always the last token emitted by `tokenize()`, unless it raises an
-exception. The `string` and `line` attributes are always `''`. The `start` and
-`end` lines are always one more than the total number of lines in the input,
-and the `start` and `end` columns are always 0.
+[exception](exceptions). The `string` and `line` attributes are always `''`.
+The `start` and `end` lines are always one more than the total number of lines
+in the input, and the `start` and `end` columns are always 0.
 
 For most applications it is not necessary to explicitly worry about
 `ENDMARKER`, because `tokenize()` stops iteration after the last token is
@@ -209,8 +206,8 @@ TokenInfo(type=2 (NUMBER), string='1.0000000000000001', start=(1, 0), end=(1, 18
 TokenInfo(type=4 (NEWLINE), string='\n', start=(1, 18), end=(1, 19), line='1.0000000000000001\n')
 TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
 >>> import ast
->>> ast.dump(ast.parse('1.0000000000000001')) # doctest: +SKIP35, +SKIP36, +SKIP37
-'Module(body=[Expr(value=Constant(value=1.0, kind=None))], type_ignores=[])'
+>>> ast.dump(ast.parse('1.0000000000000001')) # doctest: +SKIP35, +SKIP36, +SKIP37, +SKIP38
+'Module(body=[Expr(value=Constant(value=1.0))], type_ignores=[])'
 ```
 
 This can be used, for instance, to wrap floating point numbers with a type
@@ -236,7 +233,7 @@ In Python 3.5, this will tokenize as two tokens, `NUMBER` (`123`) and `NAME`
 
 ```py
 >>> # The behavior in Python 3.5
->>> print_tokens('123_456\n') # doctest: +SKIP36 +SKIP37, +SKIP38
+>>> print_tokens('123_456\n') # doctest: +SKIP36, +SKIP37, +SKIP38, +SKIP39
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=2 (NUMBER), string='123', start=(1, 0), end=(1, 3), line='123_456\n')
 TokenInfo(type=1 (NAME), string='_456', start=(1, 3), end=(1, 7), line='123_456\n')
@@ -635,7 +632,7 @@ correct type.
 ```py
 >>> # Python 3.5 and 3.6 behavior
 >>> for tok in tokenize.tokenize(io.BytesIO(b'def func() -> list: ...\n').readline):
-...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP37, +SKIP38
+...     print(tokenize.tok_name[tok.type], tokenize.tok_name[tok.exact_type], repr(tok.string)) # doctest: +SKIP37, +SKIP38, +SKIP39
 ENCODING ENCODING 'utf-8'
 NAME NAME 'def'
 NAME NAME 'func'
@@ -726,9 +723,9 @@ transition in the addition of new keywords, `await` and `async` were kept as
 valid variable names outside of an `async def` blocks.
 
 ```py
->>> # This is valid Python in Python 3.5 and 3.6. It isn't in Python 3.7.
->>> async = 1 # doctest: +SKIP37, +SKIP38
->>> print_tokens("async = 1\n") # doctest: +SKIP37, +SKIP38
+>>> # This is valid Python in Python 3.5 and 3.6. It isn't in Python 3.7+.
+>>> async = 1 # doctest: +SKIP37, +SKIP38, +SKIP39
+>>> print_tokens("async = 1\n") # doctest: +SKIP37, +SKIP38, +SKIP39
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=1 (NAME), string='async', start=(1, 0), end=(1, 5), line='async = 1\n')
 TokenInfo(type=53 (OP), string='=', start=(1, 6), end=(1, 7), line='async = 1\n')
@@ -750,7 +747,7 @@ and `async` are tokenized as `NAME`, as in the example above.
 ...     async with lock:
 ...         await f()
 ... await = 1
-... """) # doctest: +SKIP37, +SKIP38
+... """) # doctest: +SKIP37, +SKIP38, +SKIP39
 TokenInfo(type=59 (ENCODING), string='utf-8', start=(0, 0), end=(0, 0), line='')
 TokenInfo(type=58 (NL), string='\n', start=(1, 0), end=(1, 1), line='\n')
 TokenInfo(type=55 (ASYNC), string='async', start=(2, 0), end=(2, 5), line='async def coro():\n')
@@ -1101,18 +1098,18 @@ tokens [`COLONEQUAL`](op), [`TYPE_IGNORE`](type-ignore), and
 
 ```py
 >> # In PYthon 3.5 and 3.6
->>> tokenize.N_TOKENS # doctest: +SKIP37, +SKIP38
+>>> tokenize.N_TOKENS # doctest: +SKIP37, +SKIP38, +SKIP39
 60
 ```
 
 ```py
 >>> # In Python 3.7
->>> tokenize.N_TOKENS # doctest: +SKIP35, +SKIP36, +SKIP38
+>>> tokenize.N_TOKENS # doctest: +SKIP35, +SKIP36, +SKIP38, +SKIP39
 58
 ```
 
 ```py
->>> # In Python 3.8
+>>> # In Python 3.8 and 3.9
 >>> tokenize.N_TOKENS # doctest: +SKIP35, +SKIP36, +SKIP37
 63
 ```
