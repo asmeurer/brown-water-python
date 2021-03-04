@@ -206,6 +206,12 @@ in the
 file, or by using the
 [`symbol`](https://docs.python.org/3/library/symbol.html) module.
 
+```{warning}
+The [`symbol`](https://docs.python.org/3/library/symbol.html) and
+[`parser`](https://docs.python.org/3/library/parser.html) modules are
+deprecated as of Python 3.9.
+```
+
 The [`parser`](https://docs.python.org/3/library/parser.html) module can be
 used from within Python to access the parse tree. The `parser` and `symbol`
 modules aren't discussed further in this guide because the `tokenize` and
@@ -220,10 +226,10 @@ The following example gives an idea of what the `parser` syntax trees look
 like for the code `("a") + True`.
 
 ```py
->>> import parser
+>>> import parser # doctest: +SKIP39
 >>> import pprint
 >>> import token
->>> import symbol
+>>> import symbol # doctest: +SKIP39
 >>> def pretty(st):
 ...     l = st.tolist()
 ...
@@ -239,8 +245,8 @@ like for the code `("a") + True`.
 ...
 ...     toname(l)
 ...     return l
->>> st = parser.expr('("a") + True')
->>> pprint.pprint(pretty(st)) # doctest: +SKIP35, +SKIP36, +SKIP37
+>>> st = parser.expr('("a") + True') # doctest: +SKIP39
+>>> pprint.pprint(pretty(st)) # doctest: +SKIP35, +SKIP36, +SKIP37, +SKIP39
 ['eval_input',
  ['testlist',
   ['test',
@@ -290,7 +296,7 @@ or the `ast` representation:
 
 ```py
 >>> ast.dump(ast.parse('("a") + True')) # doctest: +SKIP38
-"Module(body=[Expr(value=BinOp(left=Str(s='a'), op=Add(), right=NameConstant(value=True)))])"
+"Module(body=[Expr(value=BinOp(left=Constant(value='a'), op=Add(), right=Constant(value=True)))], type_ignores=[])"
 ```
 
 The following are included in the `token` module, but aren't particularly

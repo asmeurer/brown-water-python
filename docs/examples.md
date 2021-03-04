@@ -673,10 +673,10 @@ this will not work, because `^` has a different precedence than `**`:
 
 ```py
 >>> import ast
->>> ast.dump(ast.parse('x**2 + 1')) # doctest: +SKIP35, +SKIP36, +SKIP37
-"Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id='x', ctx=Load()), op=Pow(), right=Constant(value=2, kind=None)), op=Add(), right=Constant(value=1, kind=None)))], type_ignores=[])"
->>> ast.dump(ast.parse('x^2 + 1')) # doctest: +SKIP35, +SKIP36, +SKIP37
-"Module(body=[Expr(value=BinOp(left=Name(id='x', ctx=Load()), op=BitXor(), right=BinOp(left=Constant(value=2, kind=None), op=Add(), right=Constant(value=1, kind=None))))], type_ignores=[])"
+>>> ast.dump(ast.parse('x**2 + 1')) # doctest: +SKIP35, +SKIP36, +SKIP37, +SKIP38
+"Module(body=[Expr(value=BinOp(left=BinOp(left=Name(id='x', ctx=Load()), op=Pow(), right=Constant(value=2)), op=Add(), right=Constant(value=1)))], type_ignores=[])"
+>>> ast.dump(ast.parse('x^2 + 1')) # doctest: +SKIP35, +SKIP36, +SKIP37, +SKIP38
+"Module(body=[Expr(value=BinOp(left=Name(id='x', ctx=Load()), op=BitXor(), right=BinOp(left=Constant(value=2), op=Add(), right=Constant(value=1))))], type_ignores=[])"
 ```
 
 This is difficult to read, but it basically says that `x**2 + 1` is parsed
@@ -939,6 +939,6 @@ nondecreasing; it doesn't care if the actual column values are correct).
 ```py
 >>> s = '1_0 + 0b_101 + 0o_1_0 + 0x_a - 1.0_0 + 1e1 + 1.0_0j + 1_2.3_4 + 1_2.'
 >>> # In Python 3.5
->>> underscore_literals(s) # doctest: +SKIP36, +SKIP37, +SKIP38
+>>> underscore_literals(s) # doctest: +SKIP36, +SKIP37, +SKIP38, +SKIP39
 '10 + 0b101 + 0o10 + 0xa - 1.00 + 1e1 + 1.00j + 12.34 + 12.'
 ```
