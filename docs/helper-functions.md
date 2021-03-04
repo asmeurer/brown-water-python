@@ -185,6 +185,12 @@ $ python -m tokenize -e example.py
 ```
 ## Helper Functions Related to the `parser` Module
 
+```{warning}
+The [`symbol`](https://docs.python.org/3/library/symbol.html) and
+[`parser`](https://docs.python.org/3/library/parser.html) modules are
+deprecated as of Python 3.9.
+```
+
 The `token` and `tokenize` module mimic the modules in the C parser. Some
 additional helper functions are included, even though they are mostly useless
 outside of the C parser.
@@ -205,12 +211,6 @@ in the
 [`graminit.h`](https://github.com/python/cpython/blob/master/Include/graminit.h)
 file, or by using the
 [`symbol`](https://docs.python.org/3/library/symbol.html) module.
-
-```{warning}
-The [`symbol`](https://docs.python.org/3/library/symbol.html) and
-[`parser`](https://docs.python.org/3/library/parser.html) modules are
-deprecated as of Python 3.9.
-```
 
 The [`parser`](https://docs.python.org/3/library/parser.html) module can be
 used from within Python to access the parse tree. The `parser` and `symbol`
