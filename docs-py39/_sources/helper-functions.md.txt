@@ -295,7 +295,7 @@ Compare this to the `tokenize` representation seen in the [intro](intro.md),
 or the `ast` representation:
 
 ```py
->>> ast.dump(ast.parse('("a") + True')) # doctest: +SKIP38
+>>> ast.dump(ast.parse('("a") + True')) # doctest: +SKIP35, +SKIP36, +SKIP37, +SKIP38
 "Module(body=[Expr(value=BinOp(left=Constant(value='a'), op=Add(), right=Constant(value=True)))], type_ignores=[])"
 ```
 
