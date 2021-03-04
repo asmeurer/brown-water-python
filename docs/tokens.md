@@ -57,9 +57,9 @@ the examples:
 ### `ENDMARKER`
 
 This is always the last token emitted by `tokenize()`, unless it raises an
-exception. The `string` and `line` attributes are always `''`. The `start` and
-`end` lines are always one more than the total number of lines in the input,
-and the `start` and `end` columns are always 0.
+[exception](exceptions). The `string` and `line` attributes are always `''`.
+The `start` and `end` lines are always one more than the total number of lines
+in the input, and the `start` and `end` columns are always 0.
 
 For most applications it is not necessary to explicitly worry about
 `ENDMARKER`, because `tokenize()` stops iteration after the last token is
