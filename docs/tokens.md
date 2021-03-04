@@ -8,10 +8,7 @@ relied on. Instead, refer to tokens by their variable names, and use the
 `tok_name` dictionary to get the name of a token type. The exact integer value
 could change between Python versions, for instance, if new tokens are added or
 removed (and indeed, in recent versions of Python, they have). In the examples
-below, the token number shown in the output is the number from Python 3.8
-(except in the examples that do not run in Python 3.8). I note this only for
-clarity: one should always use the token variable names and never use the
-integer value of a token directly.
+below, the token number shown in the output is the number from Python 3.9.
 
 The reason the token types are represented this way is that the actual
 tokenizer used by the Python interpreter is not the `tokenize` module; it is a
